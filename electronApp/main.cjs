@@ -15,9 +15,9 @@ function createWindow() {
     win.loadFile( path.join(__dirname, '../dist/index.html'));
 
     // Open the DevTools in development mode
-    if (process.env.NODE_ENV === 'development') {
+   //if (process.env.NODE_ENV === 'development') {
         win.webContents.openDevTools();
-    }
+    //}
 }
 
 app.whenReady().then(() => {
