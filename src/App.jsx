@@ -3,10 +3,11 @@ import { useImmer } from 'use-immer';
 import './index.css';
 import './sideSectionButton.jsx';
 import SideSectionButton from './sideSectionButton.jsx';
+import MainPage from './mainPage.jsx';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faHouse, faChartLine, faBuildingColumns, faTicketSimple } from '@fortawesome/free-solid-svg-icons';
-library.add(faHouse, faChartLine, faBuildingColumns, faTicketSimple);
+import { faHouse, faChartLine, faBuildingColumns, faTicketSimple, faFilter, faSort } from '@fortawesome/free-solid-svg-icons';
+library.add(faHouse, faChartLine, faBuildingColumns, faTicketSimple, faFilter, faSort);
 
 function App() {
   const [activeTab, setActiveTab] = useImmer({
@@ -15,6 +16,10 @@ function App() {
                                              bankPage: false,
                                              cardPage: false,
                                             });
+
+  const mainPageSvgIcons = { faFilter,
+                              faSort,
+                           };
 
   const changeActiveTab = (tabName) => {
     setActiveTab(draft => {
@@ -33,8 +38,8 @@ function App() {
         <SideSectionButton svgIcon={faBuildingColumns} tabName="bankPage" onClickHandler={changeActiveTab} isActive={activeTab.bankPage}/>
         <SideSectionButton svgIcon={faTicketSimple} tabName="cardPage" onClickHandler={changeActiveTab} isActive={activeTab.cardPage}/>
       </div>
-      <div className="flex flex-row flex-wrap h-[100%] w-auto">
-        
+      <div className="flex flex-row flex-wrap h-[100%] min-h-[500px] min-w-[600px]" style={{ width: 'calc(100% - 50px)' }}>
+        <MainPage svgIcons={mainPageSvgIcons}/>
       </div>
     </div>
   );
