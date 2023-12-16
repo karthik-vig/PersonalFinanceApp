@@ -5,13 +5,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function SideSectionButton({ svgIcon, tabName, onClickHandler, isActive=false, isTop=false }) {
     
-    let currentBGColor = "bg-lime-100";
+    let currentBGColor = "bg-secondary-cl";
     let marginTop = "mt-5";
     if (isTop) {
         marginTop = "mt-10";
     }
     if (isActive) { 
-        currentBGColor = "bg-secondary-cl";
+        currentBGColor = "bg-lime-100";
     }
 
     return (
