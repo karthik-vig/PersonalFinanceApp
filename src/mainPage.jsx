@@ -27,7 +27,7 @@ SideBar.propTypes = {
 
 function TopBarButton({ svgIcon, btnName, onClickHandler }) {
     return (
-        <button className="my-3 mx-3 p-0.5 w-7 h-7 rounded-lg hover:bg-hover-cl outline outline-1 outline-gray-400 outline-offset-2 bg-secondary-cl hover:bg-hover-cl" onClick={()=>onClickHandler(btnName)}>
+        <button className="my-3 mx-3 p-0.5 w-7 h-7 rounded-lg outline outline-1 outline-gray-400 outline-offset-2 bg-secondary-cl hover:bg-hover-cl" onClick={()=>onClickHandler(btnName)}>
             <FontAwesomeIcon className="m-[0%] p-[0%] w-[100%] h-[100%]" icon={svgIcon} />
         </button>
     );
