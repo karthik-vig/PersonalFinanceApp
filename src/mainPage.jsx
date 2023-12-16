@@ -57,7 +57,7 @@ function TopBar({ svgIcons, handleSearch }) {
 
     return (
         <div className="flex flex-row flex-wrap justify-center h-14 mx-7 mt-10 mb-4 rounded-lg border bg-surface-cl drop-shadow-lg " style={{ width: 'calc(100% - 56px)' }}>
-           <input type="text" placeholder="Search" className="h-10 w-[50%] mx-4 mt-2 mb-2 rounded-lg border bg-surface-cl" onKeyDown={ (event) => handleSearch(event, searchParams) }/>
+           <input type="text" placeholder="Search" className="h-10 w-[50%] mx-4 mt-2 mb-2 rounded-lg border bg-background-cl" onKeyDown={ (event) => handleSearch(event, searchParams) }/>
            <TopBarButton svgIcon={svgIcons.faFilter} btnName="filter" onClickHandler={ handleFilterClick }/>
            <TopBarButton svgIcon={svgIcons.faSort} btnName="sort" onClickHandler={ handleSortClick }/>
         </div>
