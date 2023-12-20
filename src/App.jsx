@@ -6,8 +6,8 @@ import SideSectionButton from './sideSectionButton.jsx';
 import MainPage from './mainPage.jsx';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faHouse, faChartLine, faBuildingColumns, faTicketSimple, faFilter, faSort } from '@fortawesome/free-solid-svg-icons';
-library.add(faHouse, faChartLine, faBuildingColumns, faTicketSimple, faFilter, faSort);
+import { faHouse, faChartLine, faBuildingColumns, faTicketSimple, faFilter, faSort, faPlus, faTrashCan, faEdit, faRefresh } from '@fortawesome/free-solid-svg-icons';
+library.add(faHouse, faChartLine, faBuildingColumns, faTicketSimple, faFilter, faSort, faPlus, faTrashCan, faEdit, faRefresh);
 
 function App() {
   const [activeTab, setActiveTab] = useImmer({
@@ -19,6 +19,10 @@ function App() {
 
   const mainPageSvgIcons = { faFilter,
                               faSort,
+                              faPlus,
+                              faEdit,
+                              faTrashCan,
+                              faRefresh,
                            };
 
   const changeActiveTab = (tabName) => {

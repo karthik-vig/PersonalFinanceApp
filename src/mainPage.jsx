@@ -37,8 +37,9 @@ SideBar.propTypes = {
 
 function TopBarButton({ svgIcon, btnName, onClickHandler }) {
     return (
-        <button className="my-3 mx-3 p-0.5 w-7 h-7 rounded-lg outline outline-1 outline-gray-400 outline-offset-2 bg-secondary-cl hover:bg-hover-cl" onClick={()=>onClickHandler(btnName)}>
-            <FontAwesomeIcon className="m-[0%] p-[0%] w-[100%] h-[100%]" icon={svgIcon} />
+        <button className="flex flex-nowrap flex-row my-3 mx-3 p-0.5 w-24 h-7 rounded-lg outline-1 hover:outline hover:outline-gray-800 hover:outline-offset-2 hover:bg-secondary-cl" onClick={()=>onClickHandler(btnName)}>
+            <FontAwesomeIcon className="m-[5%] p-[0%] w-[30%] h-[80%] " icon={svgIcon} />
+            <p className="w-auto h-[80%] text-start font-light antialiased truncate">{btnName}</p>
         </button>
     );
 }
@@ -66,10 +67,14 @@ function TopBar({ svgIcons, handleSearch }) {
     };
 
     return (
-        <div className="flex flex-row flex-wrap justify-center h-14 mx-7 mt-10 mb-4 rounded-lg border bg-surface-cl drop-shadow-lg " style={{ width: 'calc(100% - 56px)' }}>
-           <input type="text" placeholder="Search" className="h-10 w-[50%] mx-4 mt-2 mb-2 rounded-lg border bg-background-cl" onKeyDown={ (event) => handleSearch(event, searchParams) }/>
-           <TopBarButton svgIcon={svgIcons.faFilter} btnName="filter" onClickHandler={ handleFilterClick }/>
-           <TopBarButton svgIcon={svgIcons.faSort} btnName="sort" onClickHandler={ handleSortClick }/>
+        <div className="flex flex-row flex-nowrap justify-center h-14 mx-7 mt-10 mb-4 rounded-lg border bg-surface-cl drop-shadow-lg " style={{ width: 'calc(100% - 56px)' }}>
+            <TopBarButton svgIcon={svgIcons.faPlus} btnName="Create" onClickHandler={ (btnName) => {return btnName;} }/>
+            <TopBarButton svgIcon={svgIcons.faEdit} btnName="Modify" onClickHandler={ (btnName) => {return btnName;} }/>
+            <TopBarButton svgIcon={svgIcons.faTrashCan} btnName="Delete" onClickHandler={ (btnName) => {return btnName;} }/>
+            <input type="text" placeholder="Search" className="h-10 w-[50%] mx-4 mt-2 mb-2 rounded-lg border bg-background-cl" onKeyDown={ (event) => handleSearch(event, searchParams) }/>
+            <TopBarButton svgIcon={svgIcons.faFilter} btnName="Filter" onClickHandler={ handleFilterClick }/>
+            <TopBarButton svgIcon={svgIcons.faSort} btnName="Sort" onClickHandler={ handleSortClick }/>
+            <TopBarButton svgIcon={svgIcons.faRefresh} btnName="Refresh" onClickHandler={ (btnName) => {return btnName;} }/>
         </div>
     );
 }
