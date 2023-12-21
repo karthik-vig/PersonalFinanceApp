@@ -18,8 +18,8 @@ function SideBar({ items, handleItemClick}) {
                             <button  className="flex flex-row flex-wrap w-[100%] h-20 border-t-2 p-4" onClick={() => handleItemClick(item.id)}>
                                 <FontAwesomeIcon className="m-2 w-10 h-10 border rounded-full outline outline-cyan-950" icon={item.icon} />
                                 <section className="flex flex-row flex-wrap h-[100%] ml-4" style={{ width: 'calc(100% - 76px)' }}>
-                                    <h6 className={"w-[100%] h-[60%] text-start font-bold font-serif antialiased tracking-widest truncate " + fontColor}>{item.title + " (" + item.transactionType + ")"}</h6>
-                                    <p className="w-[100%] h-[40%] text-start font-light antialiased truncate">{"Expense Date: " + item.transactionDate + " . " + "Value: " + item.value}</p>
+                                    <h6 className={"w-[100%] h-[60%] text-start font-bold font-serif antialiased tracking-widest truncate text-lg " + fontColor}>{item.title + " (" + item.transactionType + ")"}</h6>
+                                    <p className="w-[100%] h-[40%] text-start text-black/50 font-medium antialiased truncate text-sm ">{"Transaction Date: " + item.transactionDate + " . " + "Value: " + item.value}</p>
                                 </section>
                             </button>
                         </li>);
@@ -39,7 +39,7 @@ function TopBarButton({ svgIcon, btnName, onClickHandler }) {
     return (
         <button className="flex flex-nowrap flex-row my-3 mx-3 p-0.5 w-24 h-7 rounded-lg outline-1 hover:outline hover:outline-gray-800 hover:outline-offset-2 hover:bg-secondary-cl" onClick={()=>onClickHandler(btnName)}>
             <FontAwesomeIcon className="m-[5%] p-[0%] w-[30%] h-[80%] " icon={svgIcon} />
-            <p className="w-auto h-[80%] text-start font-light antialiased truncate">{btnName}</p>
+            <p className="w-auto h-[80%] text-start font-medium antialiased truncate">{btnName}</p>
         </button>
     );
 }
