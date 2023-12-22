@@ -86,9 +86,93 @@ TopBar.propTypes = {
 
 function DetailSection({ selectedItem }) {
 
+    const sectionClasses = "flex flex-row flex-wrap w-auto h-20 border-b-2 pb-4";
+    const h6Classes = "w-[100%] h-[38%] text-start font-bold font-serif antialiased tracking-widest truncate text-lg text-black/50 pb-[2%]";
+    const inputClasses = "w-[100%] h-[60%] text-start font-bold font-serif antialiased tracking-widest truncate text-lg text-black bg-background-cl border rounded-lg outline-1 hover:outline hover:outline-gray-800 hover:outline-offset-2 hover:bg-back";
+    const radioBtnClasses = "w-[100%] h-[60%] text-start font-bold font-serif antialiased tracking-widest truncate text-lg text-black bg-background-cl border rounded-lg outline-1 hover:outline hover:outline-gray-800 hover:outline-offset-2 hover:bg-back";
+    const selectBtnClasses = "w-[100%] h-[60%] text-start font-bold font-serif antialiased tracking-widest truncate text-lg text-black bg-background-cl border rounded-lg outline-1 hover:outline hover:outline-gray-800 hover:outline-offset-2 hover:bg-back";
     return (
-        <div className="ml-2 mr-7 mt-0 mb-4 border rounded-lg bg-surface-cl drop-shadow-lg " style={{ height: 'calc(100% - 150px)', width: 'calc(75% - 92px)' }}>
-            <p>{selectedItem.description}</p>
+        <div className="flex flex-nowrap flex-col ml-2 mr-7 mt-0 mb-4 border rounded-lg bg-surface-cl drop-shadow-lg overflow-x-hidden overflow-y-scroll px-[20%] py-[2%]" style={{ height: 'calc(100% - 150px)', width: 'calc(75% - 92px)' }}>
+            <section className={sectionClasses}>
+                <h6 className={h6Classes}>Title</h6>
+                <input className={inputClasses} value={selectedItem.title} type="text" />
+            </section>
+            <section className={sectionClasses + " h-72 "}>
+                <h6 className={h6Classes}>Description</h6>
+                <textarea className={inputClasses + " overflow-y-scroll resize-none "} value={selectedItem.title} type="text" />
+            </section>
+            <section className={sectionClasses}>
+                <h6 className={h6Classes}>Value</h6>
+                <input className={inputClasses} value={selectedItem.title} type="text" />
+                <select className={selectBtnClasses} value={selectedItem.currency}>
+                    {/* get currencies from backend */}
+                </select>
+            </section>
+            <h3>Configure Transaction</h3>
+            <section className={sectionClasses}>
+                <h6 className={h6Classes}>Transaction Type</h6>
+                <section className={radioBtnClasses}>
+                    <input type="radio" id="transactionTypeIn" name="transactionType" value="In" checked={selectedItem.transactionType === 'In'} />
+                    <label htmlFor="transactionTypeIn">In</label>
+                    <input type="radio" id="transactionTypeOut" name="transactionType" value="Out" checked={selectedItem.transactionType === 'Out'} />
+                    <label htmlFor="transactionTypeOut">Out</label>
+                </section>
+            </section>
+            <section className={sectionClasses}>
+                <h6 className={h6Classes}>Transaction Category</h6>
+                <select className={selectBtnClasses} value={selectedItem.transactionCategory}>
+                    {/* get categories from backend */}
+                </select>
+            </section>
+            <section className={sectionClasses}>
+                <h6 className={h6Classes}>From</h6>
+                <section className={radioBtnClasses}>
+                    <input type="radio" id="transactionFromInternal" name="fromEntity" value="Internal" checked={selectedItem.fromType === 'Internal'} />
+                    <label htmlFor="transactionFromInternal">Internal</label>
+                    <input type="radio" id="transactionFromExternal" name="fromEntity" value="External" checked={selectedItem.fromType === 'External'} />
+                    <label htmlFor="transactionFromExternal">External</label>
+                </section>
+                <select className={selectBtnClasses} value={selectedItem.fromEntity}>
+                    {/* get types from backend */}
+                </select>
+            </section>
+            <section className={sectionClasses}>
+                <h6 className={h6Classes}>To</h6>
+                <section className={radioBtnClasses}>
+                    <input type="radio" id="transactionToInternal" name="toEntity" value="Internal" checked={selectedItem.toType === 'Internal'} />
+                    <label htmlFor="transactionToInternal">Internal</label>
+                    <input type="radio" id="transactionToExternal" name="toEntity" value="External" checked={selectedItem.toType === 'External'} />
+                    <label htmlFor="transactionToExternal">External</label>
+                </section>
+                <select className={selectBtnClasses} value={selectedItem.toEntity}>
+                    {/* get types from backend */}
+                </select>
+            </section>
+            {selectedItem.recurringEntity && 
+                <section className={sectionClasses}>
+                    <h6>Recurring</h6>
+                    <select className={selectBtnClasses} value={selectedItem.toEntity}>
+                        {/* get types from backend */}
+                    </select>
+                </section>
+            }
+            <h3>Files</h3>
+            <section className={sectionClasses}>
+                <input type="file" multiple />
+            </section>
+            <h3>Meta Data</h3>
+            <section className={sectionClasses}>
+                <h6 className={h6Classes}>Entry Created On</h6>
+                <input className={inputClasses} value={selectedItem.createdDate} type="datetime-local" readOnly/>
+            </section>
+            <section className={sectionClasses}>
+                <h6 className={h6Classes}>Last Modified On</h6>
+                <input className={inputClasses} value={selectedItem.createdDate} type="datetime-local" readOnly/>
+            </section>
+            <section className={sectionClasses}>
+                <h6 className={h6Classes}>Set Transaction Date</h6>
+                <input className={inputClasses} value={selectedItem.createdDate} type="datetime-local"/>
+            </section>
         </div>
     );
 }
@@ -98,20 +182,27 @@ DetailSection.propTypes = {
 };
 
 function MainPage({svgIcons}) {
-
-   const [selectedItem, setSelectedItem] = useImmer({
-                                                     id: "",
-                                                     title: "",
-                                                     description: "",
+    //this is only the data structure for the selected item; backend needs to maintain other information related to
+    //the selected item, such as the fromRef, toRef, etc.
+    //we also need to send additional stuff for the select list from the backed, such as
+    //currencies, transaction categories, transaction types, etc.
+    const [selectedItem, setSelectedItem] = useImmer({
+                                                     id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx", //uuidv4 template
+                                                     title: null,
+                                                     description: null,
                                                      value: 0.0,
-                                                     currency: "GBP",
-                                                     transactionType: "",
-                                                     fromRef: "",
-                                                     fromType: "",
-                                                     toRef: "",
-                                                     toType: "",
-                                                     recurringRef: "",
+                                                     currency: null,
+                                                     transactionType: null,
+                                                     transactionCategory: null,
+                                                     fromEntity: null, //computed by backend
+                                                     fromType: null,
+                                                     toEntity: null, //computed by backend
+                                                     toType: null,
+                                                     recurringEntity: null,
                                                      file: false,
+                                                     createdDate: "YYYY-MM-DDThh:mm:ss",
+                                                     modifiedDate: "YYYY-MM-DDThh:mm:ss",
+                                                     transactionDate: "YYYY-MM-DDThh:mm:ss",
                                                     });
 
     const getItems = () => { 
