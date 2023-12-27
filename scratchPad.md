@@ -20,3 +20,25 @@ modifiedDate: "yyyy.mm.dd at hh:mm:ss",
 transactionDate: "yyyy.mm.dd at hh:mm:ss",
 }
 ```
+
+###### <u>The Section we have in the detail section in the main page:</u>
+
+* input section
+* text area section
+* h3 heading section
+* radio button section
+* select section
+* file section
+* date and time section (some are readonly and other can be modified)
+
+This can be further broken down to simple elements:
+
+* h6 heading
+* h3 heading
+* input text
+* input text area
+* input number
+* input radio
+* input select
+* input file
+* input date and time (with option to enable and disable the readonly mode)
