@@ -3,7 +3,7 @@ import { useImmer } from 'use-immer';
 import './index.css';
 import './sideSectionButton.jsx';
 import SideSectionButton from './sideSectionButton.jsx';
-import MainPage from './mainPage.jsx';
+import MainPage from './MainPageComponents/mainPage.jsx';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faHouse, faChartLine, faBuildingColumns, faTicketSimple, faFilter, faSort, faPlus, faTrashCan, faEdit, faRefresh } from '@fortawesome/free-solid-svg-icons';
