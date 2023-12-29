@@ -4,7 +4,7 @@ import '../index.css';
 import { useImmer } from 'use-immer';
 import SideBar from './sideBar';
 import TopBar from './topBar';
-import DetailSection from './detailSection';
+import DetailSection from './detailSection/detailSection';
 //import SideSectionButton from './sideSectionButton';
 //import GenericIconButton from './genericIconBtn';
 
@@ -58,12 +58,10 @@ function MainPage({svgIcons}) {
         ];
     };
 
-    const handleItemClick = (item) => { 
-        setSelectedItem( (draft) => {
-                                        Object.keys(draft).forEach(key => {
-                                            draft[key] = item[key];
-                                        });
-                                    });
+    const handleItemClick = (field, value) => {
+        //console.log("field: " + field + " value: " + value)
+        setSelectedItem( (draft) => { draft[field] = value; } );
+        //console.log(selectedItem);
     };
 
     const handleSearch = (event, searchParams) => {
@@ -80,10 +78,24 @@ function MainPage({svgIcons}) {
     const transactionEntities = [{name: "entity1", type: "Internal"}, {name: "entity2", type: "Internal"}, {name: "entity3", type: "External"}, {name: "entity4", type: "External"}];
 
     return (
-        <div className="flex flex-row flex-wrap h-[100%] w-[100%] bg-background-cl">
-            <TopBar svgIcons={svgIcons} handleSearch={handleSearch} />
-            <SideBar items={getItems()} handleItemClick={handleItemClick} />
-            <DetailSection selectedItem={selectedItem} currencies={currencies} transactionCategories={transactionCategories} transactionEntities={transactionEntities}/>
+        <div 
+            className="flex flex-row flex-wrap h-[100%] w-[100%] bg-background-cl"
+        >
+            <TopBar 
+                svgIcons={svgIcons} 
+                handleSearch={handleSearch} 
+            />
+            <SideBar 
+                items={getItems()} 
+                handleItemClick={handleItemClick} 
+            />
+            <DetailSection 
+                selectedItem={selectedItem} 
+                currencies={currencies} 
+                transactionCategories={transactionCategories} 
+                transactionEntities={transactionEntities} 
+                handleValueChange={handleItemClick}
+            />
         </div>
     );
 }
