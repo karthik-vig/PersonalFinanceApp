@@ -4,8 +4,8 @@ import {H6HeadingText,
         H3HeadingText, 
         TextInputSection, 
         TextAreaSection, 
-        //FileInputSection, 
-        //DatetimeInputSection, 
+        FileInputSection, 
+        DatetimeInputSection, 
         SelectInputSection, 
         NumberInputSection, 
         RadioButtonSection, 
@@ -82,6 +82,8 @@ function SalarySection({transactionValue, currencyValue, currencies, handleValue
                 selectedValue={currencyValue} 
                 options={currencies} 
                 additonalClasses="w-[20%] h-[60%]"
+                fieldName={"currency"}
+                handleValueChange={handleValueChange}
             />
         </SectionContainer>
     );
@@ -121,7 +123,7 @@ function TransactionTypeSection({transactionType, handleValueChange}) {
                 radioBtnID="transactionTypeIn"
                 fieldName="transactionType" 
                 additonalClasses="" 
-                checked={transactionType === 'In'} 
+                checked={transactionType === "In"} 
                 handleValueChange={handleValueChange}
             >
                 In
@@ -130,8 +132,8 @@ function TransactionTypeSection({transactionType, handleValueChange}) {
                 radioBtnID="transactionTypeOut"
                 fieldName="transactionType" 
                 additonalClasses="" 
-                checked={transactionType === 'Out'} 
-                handleRadioChange={handleValueChange}
+                checked={transactionType === "Out"} 
+                handleValueChange={handleValueChange}
             >
                 Out
             </RadioButtonSection>
@@ -182,7 +184,7 @@ function FromTypeSection({ fromType, handleValueChange }) {
                 radioBtnID="transactionFromInternal"
                 fieldName="fromType" 
                 additonalClasses="" 
-                checked={fromType === 'Internal'} 
+                checked={fromType === "Internal"} 
                 handleValueChange={handleValueChange}
             >
                 Internal
@@ -191,8 +193,8 @@ function FromTypeSection({ fromType, handleValueChange }) {
                 radioBtnID="transactionFromExternal"
                 fieldName="fromType" 
                 additonalClasses="" 
-                checked={fromType === 'External'} 
-                handleRadioChange={handleValueChange}
+                checked={fromType === "External"} 
+                handleValueChange={handleValueChange}
             >
                 External
             </RadioButtonSection>
@@ -208,7 +210,7 @@ FromTypeSection.propTypes = {
 
 function FromEntitySection({ fromEntity, fromType, transactionEntities, handleValueChange }) {
 
-    const transformedEntities = transactionEntities.filter((entity) => entity.type === fromType );
+    const transformedEntities = transactionEntities.filter((entity) => entity.type === fromType ).map((entity) => entity.name);
 
     return (
         <SectionContainer additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80">
@@ -220,7 +222,7 @@ function FromEntitySection({ fromEntity, fromType, transactionEntities, handleVa
             <SelectInputSection 
                 selectedValue={fromEntity} 
                 options={transformedEntities} 
-                additonalClasses=""
+                additonalClasses="min-w-20"
                 fieldName={"fromEntity"}
                 handleValueChange={handleValueChange}
             />
@@ -236,6 +238,132 @@ FromEntitySection.propTypes = {
 };
 
 
+function ToTypeSection({ toType, handleValueChange }) {
+
+    return (
+        <SectionContainer additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80">
+            <H6HeadingText additonalClasses="">To Type</H6HeadingText>
+            <RadioButtonSection 
+                radioBtnID="transactionToInternal"
+                fieldName="toType" 
+                additonalClasses="" 
+                checked={toType === "Internal"} 
+                handleValueChange={handleValueChange}
+            >
+                Internal
+            </RadioButtonSection>
+            <RadioButtonSection
+                radioBtnID="transactionToExternal"
+                fieldName="toType" 
+                additonalClasses="" 
+                checked={toType === "External"} 
+                handleValueChange={handleValueChange}
+            >
+                External
+            </RadioButtonSection>
+        </SectionContainer>
+    );
+}
+
+ToTypeSection.propTypes = {
+    toType: PropTypes.string,
+    handleValueChange: PropTypes.func,
+};
+
+
+function ToEntitySection({ toEntity, toType, transactionEntities, handleValueChange }) {
+
+    const transformedEntities = transactionEntities.filter((entity) => entity.type === toType ).map((entity) => entity.name);
+
+    return (
+        <SectionContainer additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80">
+            <H6HeadingText 
+                additonalClasses=""
+            >
+                To Entity
+            </H6HeadingText>
+            <SelectInputSection 
+                selectedValue={toEntity} 
+                options={transformedEntities} 
+                additonalClasses="min-w-20"
+                fieldName={"toEntity"}
+                handleValueChange={handleValueChange}
+            />
+        </SectionContainer>
+    );
+}
+
+ToEntitySection.propTypes = {
+    toEntity: PropTypes.string,
+    toType: PropTypes.string,
+    transactionEntities: PropTypes.array,
+    handleValueChange: PropTypes.func,
+};
+
+function RecurringEntity({ recurringEntity }) {
+
+    return (
+        <SectionContainer additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80">
+            <H6HeadingText additonalClasses="">Recurring</H6HeadingText>
+            <p>{recurringEntity}</p>
+        </SectionContainer>
+    );
+}
+
+RecurringEntity.propTypes = {
+    recurringEntity: PropTypes.string,
+};
+
+
+function FileInput({ files, handleValueChange}) {
+
+    return (
+        <SectionContainer additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80">
+            <FileInputSection 
+                additonalClasses="justify-center"
+                fieldName="file"
+                handleValueChange={handleValueChange}
+            />
+            {//files.map((file) => {<li>{file}</li>} )
+            }
+        </SectionContainer>
+    );
+}
+
+FileInput.propTypes = {
+    files: PropTypes.array,
+    handleValueChange: PropTypes.func,
+};
+
+function DatetimeInput({ datetimeValue, heading, fieldName, readonly, handleValueChange}) {
+
+    return (
+        <SectionContainer additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80">
+            <H6HeadingText 
+                additonalClasses=""
+            >
+                {heading}
+            </H6HeadingText>
+            <DatetimeInputSection 
+                datetimeValue={datetimeValue}
+                additonalClasses={"justify-center"}
+                readonly={readonly}
+                fieldName={fieldName}
+                handleValueChange={handleValueChange}
+            />
+        </SectionContainer>
+    );
+}
+
+DatetimeInput.propTypes = {
+    datetimeValue: PropTypes.string,
+    heading: PropTypes.string,
+    fieldName: PropTypes.string,
+    readonly: PropTypes.bool,
+    handleValueChange: PropTypes.func,
+};
+
+
 export {TitleSection, 
         DescriptionSection, 
         SalarySection, 
@@ -243,5 +371,10 @@ export {TitleSection,
         TransactionTypeSection, 
         TransactionCategorySection,
         FromTypeSection,
-        FromEntitySection
+        FromEntitySection,
+        ToTypeSection,
+        ToEntitySection,
+        RecurringEntity,
+        FileInput,
+        DatetimeInput
     };

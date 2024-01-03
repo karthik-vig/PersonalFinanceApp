@@ -8,37 +8,34 @@ import {TitleSection,
         TransactionTypeSection, 
         TransactionCategorySection, 
         FromTypeSection,
-        FromEntitySection
+        FromEntitySection,
+        ToTypeSection,
+        ToEntitySection,
+        RecurringEntity,
+        FileInput,
+        DatetimeInput,
     } from './sectionComponents';
-import { useImmer } from 'use-immer';
+//import { useImmer } from 'use-immer';
 
 
 // this is the detail section that is used in the main page
-function DetailSection({ selectedItem, currencies, transactionCategories, transactionEntities, handleValueChange}) {
+function DetailSection({ selectedItem, handleValueChange}) {
     // only common classes are defined here, specific classes are defined in the respective sections
     // specific classes include: height, width, padding, margin, etc.
-    const sectionClasses = " flex flex-row flex-wrap w-auto h-20 border-b-2 pb-4 min-w-80 ";
-    const h6Classes = " text-start font-bold font-serif antialiased tracking-widest truncate text-lg text-black/50 ";
-    const h3Classes = " justify-self-center text-start font-bold font-serif antialiased tracking-widest truncate text-xl text-black ";
-    const inputClasses = " text-start font-serif antialiased tracking-widest truncate text-base text-black bg-background-cl border rounded-lg outline-1 hover:outline hover:outline-gray-500 hover:outline-offset-2 hover:bg-back";
-    const radioBtnClasses = " text-start font-serif antialiased tracking-widest truncate text-base text-black ";
-    const selectBtnClasses = " text-start font-serif antialiased tracking-widest truncate text-base text-black border rounded-lg bg-background-cl";
+    //const sectionClasses = " flex flex-row flex-wrap w-auto h-20 border-b-2 pb-4 min-w-80 ";
+    //const h6Classes = " text-start font-bold font-serif antialiased tracking-widest truncate text-lg text-black/50 ";
+    //const h3Classes = " justify-self-center text-start font-bold font-serif antialiased tracking-widest truncate text-xl text-black ";
+    //const inputClasses = " text-start font-serif antialiased tracking-widest truncate text-base text-black bg-background-cl border rounded-lg outline-1 hover:outline hover:outline-gray-500 hover:outline-offset-2 hover:bg-back";
+    //const radioBtnClasses = " text-start font-serif antialiased tracking-widest truncate text-base text-black ";
+    //const selectBtnClasses = " text-start font-serif antialiased tracking-widest truncate text-base text-black border rounded-lg bg-background-cl";
 
     //const [fromType, setFromType] = useImmer(selectedItem.fromType);
-    const [toType, setToType] = useImmer(selectedItem.toType);
-    const [transactionType, setTransactionType] = useImmer(selectedItem.transactionType);
+ 
 
-
-    function handleRadioChange(radioBtn) {
-        //handle radio button change
-        console.log(radioBtn);
-        if (radioBtn === "transactionTypeIn") setTransactionType("In");
-        if (radioBtn === "transactionTypeOut") setTransactionType("Out");
-        //if (radioBtn === "fromTypeExt") setFromType("External");
-        //if (radioBtn === "fromTypeInt") setFromType("Internal");
-        if (radioBtn === "toTypeExt") setToType("External");
-        if (radioBtn === "toTypeInt") setToType("Internal");
-    }
+    // need to get these from the backend
+    const currencies = ["RON", "EUR", "USD"];
+    const transactionCategories = ["Salary", "Food", "Clothes", "Rent", "Utilities", "Other"];
+    const transactionEntities = [{name: "entity1", type: "Internal"}, {name: "entity2", type: "Internal"}, {name: "entity3", type: "External"}, {name: "entity4", type: "External"}];
 
     return (
         <div 
@@ -61,7 +58,7 @@ function DetailSection({ selectedItem, currencies, transactionCategories, transa
             />
             <H3HeadingSection>Configure Transaction</H3HeadingSection>
             <TransactionTypeSection 
-                transactionType={transactionType} 
+                transactionType={selectedItem.transactionType} 
                 handleValueChange={handleValueChange}
             />
             <TransactionCategorySection 
@@ -80,63 +77,56 @@ function DetailSection({ selectedItem, currencies, transactionCategories, transa
                 transactionEntities={transactionEntities}
                 handleValueChange={handleValueChange}
             />
-        
-            <section className={sectionClasses}>
-                <h6 className={h6Classes}>To Type</h6>
-                <section className={radioBtnClasses}>
-                    <input type="radio" id="transactionToInternal" name="toEntity" value="Internal" checked={selectedItem.toType === 'Internal'} onClick={() => handleRadioChange("toTypeInt")}/>
-                    <label htmlFor="transactionToInternal">Internal</label>
-                    <input type="radio" id="transactionToExternal" name="toEntity" value="External" checked={selectedItem.toType === 'External'} onClick={() => handleRadioChange("toTypeExt")}/>
-                    <label htmlFor="transactionToExternal">External</label>
-                </section>
-            </section>
-            <section className={sectionClasses}>
-                <h6 className={h6Classes}>To Entity</h6>
-                <select className={selectBtnClasses} value={selectedItem.toEntity}>
-                    { transactionEntities.map((entity) => {
-                        if (entity.type === toType)
-                        return (<option key={entity.name} value={entity.name}>{entity.name}</option>);
-                        })
-                    }
-                </select>
-            </section>
+            <ToTypeSection
+                toEntity={selectedItem.toEntity}
+                toType={selectedItem.toType}
+                handleValueChange={handleValueChange}
+            />
+            <ToEntitySection
+                toEntity={selectedItem.toEntity}
+                toType={selectedItem.toType}
+                transactionEntities={transactionEntities}
+                handleValueChange={handleValueChange}
+            />
+    
             {selectedItem.recurringEntity && 
-                <section className={sectionClasses}>
-                    <h6>Recurring</h6>
-                    <p>{selectedItem.recurringEntity}</p>
-                </section>
+                <RecurringEntity
+                    recurringEntity={selectedItem.recurringEntity}
+                />
             }
-            <section className={sectionClasses + " justify-center "}>
-                <h3 className={h3Classes}>Files</h3>
-            </section>
-            <section className={sectionClasses}>
-                <input type="file" multiple />
-            </section>
-            <section className={sectionClasses + " justify-center "}>
-                <h3 className={h3Classes}>Meta Data</h3>
-            </section>
-            <section className={sectionClasses}>
-                <h6 className={h6Classes}>Entry Created On</h6>
-                <input className={inputClasses} value={selectedItem.createdDate} type="datetime-local" readOnly/>
-            </section>
-            <section className={sectionClasses}>
-                <h6 className={h6Classes}>Last Modified On</h6>
-                <input className={inputClasses} value={selectedItem.createdDate} type="datetime-local" readOnly/>
-            </section>
-            <section className={sectionClasses}>
-                <h6 className={h6Classes}>Set Transaction Date</h6>
-                <input className={inputClasses} value={selectedItem.createdDate} type="datetime-local"/>
-            </section>
+            <H3HeadingSection>Files</H3HeadingSection>
+            <FileInput
+                files={selectedItem.file}
+                handleValueChange={handleValueChange}
+            />
+            <H3HeadingSection>Additional Information</H3HeadingSection>
+            <DatetimeInput
+                datetimeValue={selectedItem.createdDate}
+                heading={"Created On"}
+                fieldName={"createdDate"}
+                readonly={true}
+                handleValueChange={handleValueChange}
+            />
+            <DatetimeInput
+                datetimeValue={selectedItem.modifiedDate}
+                heading={"Last Modified On"}
+                fieldName={"modifiedDate"}
+                readonly={true}
+                handleValueChange={handleValueChange}
+            />
+            <DatetimeInput
+                datetimeValue={selectedItem.transactionDate}
+                heading={"Set Transaction Date"}
+                fieldName={"transactionDate"}
+                readonly={false}
+                handleValueChange={handleValueChange}
+            />
         </div>
     );
 }
 
 DetailSection.propTypes = {
     selectedItem: PropTypes.object,
-    currencies: PropTypes.array,
-    transactionCategories: PropTypes.array,
-    transactionEntities: PropTypes.array,
-    recurringEntities: PropTypes.array,
     handleValueChange: PropTypes.func,
 };
 

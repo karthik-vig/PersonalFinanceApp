@@ -64,6 +64,38 @@ function MainPage({svgIcons}) {
         //console.log(selectedItem);
     };
 
+    const handleSelectItemClick = (uuid) => {
+        setSelectedItem( (draft) => {
+            //get the item from the backend using UUID
+            const item = {
+                            id: uuid, //uuidv4 template
+                            title: null,
+                            description: null,
+                            value: 0.0,
+                            currency: null,
+                            transactionType: null,
+                            transactionCategory: null,
+                            fromEntity: null, //computed by backend
+                            fromType: null,
+                            toEntity: null, //computed by backend
+                            toType: null,
+                            recurringEntity: null,
+                            file: [
+                                  "file1",
+                                  "file2",
+                                  "file3"
+                                ],
+                            createdDate: "yyyy-MM-ddThh:mm:ss",
+                            modifiedDate: "yyyy-MM-ddThh:mm:ss",
+                            transactionDate: "yyyy-MM-ddThh:mm:ss",
+                        }
+            //for each field in the draft, set the value in the Item
+            for (const [key, value] of Object.entries(item)) {
+                draft[key] = value;
+            }
+         } );
+    }
+
     const handleSearch = (event, searchParams) => {
         //communicate with backend to get filtered and sorted items 
         console.log(searchParams);
@@ -72,10 +104,6 @@ function MainPage({svgIcons}) {
         }
     };
 
-    // need to get these from the backend
-    const currencies = ["RON", "EUR", "USD"];
-    const transactionCategories = ["Salary", "Food", "Clothes", "Rent", "Utilities", "Other"];
-    const transactionEntities = [{name: "entity1", type: "Internal"}, {name: "entity2", type: "Internal"}, {name: "entity3", type: "External"}, {name: "entity4", type: "External"}];
 
     return (
         <div 
@@ -87,13 +115,10 @@ function MainPage({svgIcons}) {
             />
             <SideBar 
                 items={getItems()} 
-                handleItemClick={handleItemClick} 
+                handleItemClick={handleSelectItemClick} 
             />
             <DetailSection 
-                selectedItem={selectedItem} 
-                currencies={currencies} 
-                transactionCategories={transactionCategories} 
-                transactionEntities={transactionEntities} 
+                selectedItem={selectedItem}
                 handleValueChange={handleItemClick}
             />
         </div>

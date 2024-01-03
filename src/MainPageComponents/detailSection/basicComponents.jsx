@@ -119,7 +119,7 @@ function RadioButtonSection({ radioBtnID, fieldName, children, additonalClasses,
                 name={radioBtnID} 
                 value={children} 
                 checked={checked} 
-                onClick={(event) => handleValueChange(fieldName, event.target.value)} 
+                onClick={(event) =>  handleValueChange(fieldName, event.target.value) } 
                 className={additonalClasses}
             />
             <label 
@@ -158,14 +158,14 @@ FileInputSection.propTypes = {
     handleValueChange: PropTypes.func,
 };
 
-function DatetimeInputSection({datetimeValue, additonalClasses, readOnly, fieldName, handleValueChange}) {
+function DatetimeInputSection({datetimeValue, additonalClasses, readonly, fieldName, handleValueChange}) {
 
     return (
         <input 
             className={"text-start font-serif antialiased tracking-widest truncate text-base text-black bg-background-cl border rounded-lg outline-1 hover:outline hover:outline-gray-500 hover:outline-offset-2 hover:bg-back" + " " + additonalClasses + " "} 
             value={datetimeValue} 
             type="datetime-local" 
-            readOnly={readOnly}
+            readOnly={readonly}
             onChange={(event) => handleValueChange(fieldName, event.target.value)}
         />
     );
@@ -174,7 +174,7 @@ function DatetimeInputSection({datetimeValue, additonalClasses, readOnly, fieldN
 DatetimeInputSection.propTypes = { 
     datetimeValue: PropTypes.string,
     additonalClasses: PropTypes.string,
-    readOnly: PropTypes.bool,
+    readonly: PropTypes.bool,
     fieldName: PropTypes.string,
     handleValueChange: PropTypes.func,
 };
