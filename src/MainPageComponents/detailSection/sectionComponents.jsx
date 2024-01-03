@@ -4,7 +4,9 @@ import {H6HeadingText,
         H3HeadingText, 
         TextInputSection, 
         TextAreaSection, 
-        FileInputSection, 
+        FileInputSection,
+        GetFileSection,
+        DeleteFileButtonSection, 
         DatetimeInputSection, 
         SelectInputSection, 
         NumberInputSection, 
@@ -315,24 +317,43 @@ RecurringEntity.propTypes = {
 };
 
 
-function FileInput({ files, handleValueChange}) {
+function FileInput({ files, handleValueChange }) {
 
     return (
         <SectionContainer additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80">
             <FileInputSection 
                 additonalClasses="justify-center"
-                fieldName="file"
+                files={files}
                 handleValueChange={handleValueChange}
             />
-            {//files.map((file) => {<li>{file}</li>} )
+            {Object.keys(files).map((fileName) => {
+
+                return (
+                    <li key={fileName}>
+                        <GetFileSection
+                            additonalClasses=""
+                            fileName={fileName}
+                            fileBlob={files[fileName]["fileBlob"]}
+                        />
+                        <DeleteFileButtonSection
+                            additonalClasses=""
+                            fileName={fileName}
+                            files={files}
+                            handleValueChange={handleValueChange}
+                        />
+                    </li>
+                );
+                } )
             }
         </SectionContainer>
     );
 }
 
 FileInput.propTypes = {
+    uuid: PropTypes.string,
     files: PropTypes.array,
     handleValueChange: PropTypes.func,
+    handleAddFile: PropTypes.func,
 };
 
 function DatetimeInput({ datetimeValue, heading, fieldName, readonly, handleValueChange}) {

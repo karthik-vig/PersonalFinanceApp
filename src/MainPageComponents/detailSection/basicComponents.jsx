@@ -140,21 +140,78 @@ RadioButtonSection.propTypes = {
     handleValueChange: PropTypes.func,
 };
 
-function FileInputSection({additonalClasses, fieldName, handleValueChange}) {
+function FileInputSection({additonalClasses, files, handleValueChange}) {
     
+    const handleAddFile = (event) => {
+        console.log(typeof event.target.files);
+        const filesCopy = Object.assign({}, files);
+        Array.from(event.target.files).forEach((newFile) => {
+        filesCopy[newFile.name] = { fileBlob: newFile,
+                                 mimetype: newFile.type,
+                                };
+        });
+        handleValueChange("file", filesCopy);
+    }
+
     return (
         <input 
             type="file" 
             multiple 
             className={"" + " " + additonalClasses + " "}
-            onChange={(event) => handleValueChange(fieldName, event.target.files)}
+            onChange={(event) => handleAddFile(event)}
         />
     );
 }
 
 FileInputSection.propTypes = {
     additonalClasses: PropTypes.string,
-    fieldName: PropTypes.string,
+    files: PropTypes.object,
+    handleValueChange: PropTypes.func,
+};
+
+function GetFileSection({ additonalClasses, fileName, fileBlob }) {
+    
+    const fileBlobURL = URL.createObjectURL(fileBlob);
+
+    return (
+        <a 
+            href={fileBlobURL} 
+            download={fileName} 
+            className={"min-w-20 min-h-20" + " " + additonalClasses + " "}
+        >
+            {fileName}
+        </a>
+    );
+}
+
+GetFileSection.propTypes = {
+    additonalClasses: PropTypes.string,
+    fileName: PropTypes.string,
+    fileBlob: PropTypes.object,
+};
+
+function DeleteFileButtonSection({additonalClasses, fileName, files, handleValueChange}) {
+
+    const handleFileDelete = (fileName) => { 
+        const filesCopy = Object.assign({}, files);
+        delete filesCopy[fileName];
+        handleValueChange("file", filesCopy);
+    };
+
+    return (
+        <button 
+            className={"min-w-20 min-h-20" + " " + additonalClasses + " "}
+            onClick={() => handleFileDelete(fileName)}
+        >
+            Delete
+        </button>
+    );
+}
+
+DeleteFileButtonSection.propTypes = {
+    additonalClasses: PropTypes.string,
+    fileName: PropTypes.string,
+    files: PropTypes.object,
     handleValueChange: PropTypes.func,
 };
 
@@ -200,7 +257,9 @@ export {H6HeadingText,
         SelectInputSection, 
         NumberInputSection, 
         RadioButtonSection, 
-        FileInputSection, 
+        FileInputSection,
+        GetFileSection,
+        DeleteFileButtonSection, 
         DatetimeInputSection, 
         SectionContainer
     };

@@ -27,12 +27,26 @@ function MainPage({svgIcons}) {
                                                      toEntity: null, //computed by backend
                                                      toType: null,
                                                      recurringEntity: null,
-                                                     file: false,
+                                                     file: { 
+                                                            file1: {
+                                                                    fileBlob: new Blob([""], {type: "text/plain"}),
+                                                                    mimetype: "text/plain",
+                                                                    },
+                                                            file2: {
+                                                                    fileBlob: new Blob([""], {type: "text/plain"}),
+                                                                    mimetype: "text/plain",
+                                                                    },
+                                                            file3: {
+                                                                    fileBlob: new Blob([""], {type: "text/plain"}),
+                                                                    mimetype: "text/plain",
+                                                                    },
+                                                    },
                                                      createdDate: "YYYY-MM-DDThh:mm:ss",
                                                      modifiedDate: "YYYY-MM-DDThh:mm:ss",
                                                      transactionDate: "YYYY-MM-DDThh:mm:ss",
                                                     });
 
+    
     const getItems = () => { 
         //communicate with backend to get items
         return [{id: 1, title: "someName", transactionDate: "2023.08.11", value: 2000, transactionType:"out", icon: svgIcons.faFilter},
@@ -80,11 +94,20 @@ function MainPage({svgIcons}) {
                             toEntity: null, //computed by backend
                             toType: null,
                             recurringEntity: null,
-                            file: [
-                                  "file1",
-                                  "file2",
-                                  "file3"
-                                ],
+                            file: { 
+                                    file1: {
+                                             fileBlob: new Blob([""], {type: "text/plain"}),
+                                             mimetype: "text/plain",
+                                            },
+                                    file2: {
+                                            fileBlob: new Blob([""], {type: "text/plain"}),
+                                            mimetype: "text/plain",
+                                            },
+                                    file3: {
+                                            fileBlob: new Blob([""], {type: "text/plain"}),
+                                            mimetype: "text/plain",
+                                            },
+                                },
                             createdDate: "yyyy-MM-ddThh:mm:ss",
                             modifiedDate: "yyyy-MM-ddThh:mm:ss",
                             transactionDate: "yyyy-MM-ddThh:mm:ss",
