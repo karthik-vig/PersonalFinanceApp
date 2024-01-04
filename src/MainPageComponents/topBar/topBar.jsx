@@ -1,14 +1,19 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import '../../index.css';
-//import { useImmer } from 'use-immer';
-//import FilterMenu from './FilterMenuComponents';
+import { useImmer } from 'use-immer';
+import FilterMenu from './FilterMenuComponents';
 
 function TopBarButton({ svgIcon, btnName, onClickHandler }) {
+
+    const [filterDisplayState, setFilterDisplayState] = useImmer("hidden"); //hidden or visible
+
     return (
+        <>
         <button 
             className="flex flex-nowrap flex-row my-3 mx-3 p-0.5 w-24 h-7 rounded-lg outline-1 hover:outline hover:outline-gray-800 hover:outline-offset-2 hover:bg-secondary-cl" 
-            onClick={(event)=>onClickHandler(event, btnName)}
+            onClick={()=>{ if (filterDisplayState === "hidden" )setFilterDisplayState("block");
+                            else setFilterDisplayState("hidden");}}
         >
             <FontAwesomeIcon 
                 className="m-[5%] p-[0%] w-[30%] h-[80%] " 
@@ -20,6 +25,11 @@ function TopBarButton({ svgIcon, btnName, onClickHandler }) {
                 {btnName}
             </p>
         </button>
+        <FilterMenu 
+            displayState={filterDisplayState}
+            handleFilterClick={onClickHandler}
+        />
+        </>
     );
 }
 
@@ -55,23 +65,18 @@ function TopBar({ svgIcons, handleSearch }) {
             transactionDate: { min: null, //date picker
                                 max: null, //date picker
                             },
-            
-        },
-        sort: { ascending: true, //can be true or false
-                field: null, //some valid field name
-                },
+            sort: { ascending: true, //can be true or false
+                    field: null, //some valid field name
+                  },
+        },   
     };
 
     const handleFilterClick = (event, filterParams) => { //set filter in searchParams 
         searchParams.filter = filterParams;
     };
 
-    const handleSortClick = (event, sortParams) => { //set sort in searchParams
-        searchParams.sort = sortParams;
-    };
-
     return (
-        <div className="flex flex-row flex-nowrap justify-center h-14 mx-7 mt-10 mb-4 rounded-lg border bg-surface-cl drop-shadow-lg " style={{ width: 'calc(100% - 56px)' }}>
+        <div className="flex flex-row flex-nowrap relative z-10 justify-center h-14 mx-7 mt-10 mb-4 rounded-lg border bg-surface-cl drop-shadow-lg " style={{ width: 'calc(100% - 56px)' }}>
             <TopBarButton 
                 svgIcon={svgIcons.faPlus} 
                 btnName="Create" 
@@ -97,11 +102,6 @@ function TopBar({ svgIcons, handleSearch }) {
                 svgIcon={svgIcons.faFilter} 
                 btnName="Filter" 
                 onClickHandler={ handleFilterClick }
-            />
-            <TopBarButton 
-                svgIcon={svgIcons.faSort} 
-                btnName="Sort" 
-                onClickHandler={ handleSortClick }
             />
             <TopBarButton 
                 svgIcon={svgIcons.faRefresh} 
