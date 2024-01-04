@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import '../index.css';
 import { useImmer } from 'use-immer';
 import SideBar from './sideBar';
-import TopBar from './topBar';
+import TopBar from './topBar/topBar';
 import DetailSection from './detailSection/detailSection';
 //import SideSectionButton from './sideSectionButton';
 //import GenericIconButton from './genericIconBtn';
