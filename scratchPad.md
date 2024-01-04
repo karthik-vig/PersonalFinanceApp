@@ -42,3 +42,16 @@ This can be further broken down to simple elements:
 * input select
 * input file
 * input date and time (with option to enable and disable the readonly mode)
+
+
+###### <u>The basic components needed for filter + sort menu:</u>
+
+* h6 heading
+* label
+* checkbox
+* number input
+* date input
+* select box
+* section container for range (hidden or shown based on the checkbox for the filter param)
+* section container for select only (hidden or shows based on checkbox for the fitler param)
+* section container for each filter param

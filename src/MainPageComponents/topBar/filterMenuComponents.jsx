@@ -3,6 +3,8 @@ import '../../index.css';
 
 function FilterMenu({ displayState="hidden", handleFilterClick }){
 
+    //each filter param is enabled or disabled based on the whether
+    //they are checked in the checkbox or not
     const filterParams = {
                             value: {
                                 min: null, //number input
@@ -25,8 +27,8 @@ function FilterMenu({ displayState="hidden", handleFilterClick }){
                             transactionDate: { min: null, //date picker
                                                 max: null, //date picker
                                             },
-                            sort: { ascending: true, //can be true or false
-                                    field: null, //some valid field name
+                            sort: { ascending: true, //select list; can be true or false
+                                    field: null, //select list; some valid field name
                                   },
                         };
 
