@@ -203,7 +203,7 @@ FilterSortInputParam.propTypes = {
     filterParamsVisibility: PropTypes.object,
 };
 
-function FilterMenu({ displayState="hidden", handleFilterClick }){
+function FilterMenu({ displayState="hidden", handleFilterClick, changeDisplayState }){
     
 
     //each filter param is enabled or disabled based on the whether
@@ -272,9 +272,15 @@ function FilterMenu({ displayState="hidden", handleFilterClick }){
 
     return (
         <div 
-            className={"h-96 w-[50%] z-50 top-[65px] left-[30%] absolute rounded-lg border bg-surface-cl drop-shadow-lg overflow-x-hidden overflow-y-scroll " + displayState}
+            className={" h-96 w-[50%] z-50 top-[65px] left-[30%] absolute rounded-lg border bg-surface-cl drop-shadow-lg overflow-x-hidden overflow-y-scroll " + displayState}
             onClick={(event) => handleFilterClick(event, filterParams)}
         >
+            <button
+                className="sticky top-0 left-[90%] h-8 w-16 rounded-lg border bg-surface-cl drop-shadow-lg"
+                onClick={() => changeDisplayState("hidden")}
+            >
+                Close
+            </button>
             <FilterRangeInputParam
                 labelText={{"rangeStart": "Min", "rangeEnd": "Max"}}
                 headingText="Value"
@@ -423,6 +429,7 @@ function FilterMenu({ displayState="hidden", handleFilterClick }){
 FilterMenu.propTypes = {
     displayState: PropTypes.string,
     handleFilterClick: PropTypes.func,
+    changeDisplayState: PropTypes.func,
 };
 
 export default FilterMenu;

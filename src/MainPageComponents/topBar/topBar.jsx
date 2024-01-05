@@ -28,6 +28,7 @@ function TopBarButton({ svgIcon, btnName, onClickHandler }) {
         <FilterMenu 
             displayState={filterDisplayState}
             handleFilterClick={onClickHandler}
+            changeDisplayState={setFilterDisplayState}
         />
         </>
     );
