@@ -3,21 +3,21 @@
 ```js
 {
 id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx", //uuidv4 template
-title: null,
-description: null,
-value: 0.0,
-currency: null,
-transactionType: null,
-transactionCategory: null,
+title: null, //string(50)
+description: null, //string(500)
+value: 0.0, //float
+currency: null, //string(5)
+transactionType: null, //string(3); in or out
+transactionCategory: null, //string(20)
 fromRef: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx", //uuidv4 template
-fromType: null,
+fromType: null, //not needed to be kept track of by this table
 toRef: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx", //uuidv4 template
-toType: null,
+toType: null, //not needed to be kept track of by this table
 recurringRef:"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx", //uuidv4 template
-file: false,
-createdDate: "yyyy.mm.dd at hh:mm:ss",
-modifiedDate: "yyyy.mm.dd at hh:mm:ss",
-transactionDate: "yyyy.mm.dd at hh:mm:ss",
+file: false, //bool
+createdDate: "yyyy.mm.dd at hh:mm:ss", //dateime
+modifiedDate: "yyyy.mm.dd at hh:mm:ss", //datetime
+transactionDate: "yyyy.mm.dd at hh:mm:ss", //datetime
 }
 ```
 
