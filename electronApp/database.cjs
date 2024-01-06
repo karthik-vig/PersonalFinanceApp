@@ -40,7 +40,7 @@ function setupDatabase() {
         
         db.run('CREATE TABLE IF NOT EXISTS financialEntities (\
                 id TEXT PRIMARY KEY, \
-                title TEXT, \
+                title TEXT UNIQUE, \
                 type TEXT, \
                 )');
         
@@ -51,9 +51,9 @@ function setupDatabase() {
         //weekly then day of week and time, 
         //monthly then day of month and time, 
         //yearly then date of the month, month of year and time}
-        db.run('CREATE TABLE IF NOT EXISTS recurringEntities (\
+        db.run('CREATE TABLE IF NOT EXISTS recurringTransactions (\
                 id TEXT PRIMARY KEY, \
-                title TEXT, \
+                title TEXT UNIQUE, \
                 description TEXT, \
                 value REAL, \
                 currency TEXT, \
@@ -88,6 +88,23 @@ function initializeDatabase() {
 }
 
 
+function getItems(db) {
+    db.all('SELECT id, \
+            title, \
+            value, \
+            transactionDate, \
+            transactionType, \
+            transactionCategory, \
+            FROM transaction', (err, rows) => {
+        if (err) {
+            throw err;
+        }
+        return rows;
+    });
+}
+
+
 export { initializeDatabase, 
          closeDb,
+         getItems
         };
