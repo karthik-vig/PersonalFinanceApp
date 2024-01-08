@@ -10,7 +10,7 @@ import {
         SelectInputField,
         DateInputField,
         //DateInputField,
-        } from './basicComponents.jsx';
+        } from '../../basicComponents/basicFilterInputComponents.jsx';
 
 function FilterParamHeadingSection({ additionalClasses, fieldName, headingText, handleInputChange}){
     return (

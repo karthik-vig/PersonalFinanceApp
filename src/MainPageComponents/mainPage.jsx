@@ -2,9 +2,9 @@
 import PropTypes from 'prop-types';
 import '../index.css';
 import { useImmer } from 'use-immer';
-import SideBar from './sideBar';
-import TopBar from './topBar/topBar';
-import DetailSection from './detailSection/detailSection';
+import SideBar from './sideBar/sideBar.jsx';
+import TopBar from './topBar/topBar.jsx';
+import DetailSection from './detailSection/detailSection.jsx';
 //import SideSectionButton from './sideSectionButton';
 //import GenericIconButton from './genericIconBtn';
 

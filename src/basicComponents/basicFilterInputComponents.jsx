@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import '../../index.css';
+import '../index.css';
 import { useImmer } from 'use-immer';
 
 function H6Heading({additionalClasses, headingText}){

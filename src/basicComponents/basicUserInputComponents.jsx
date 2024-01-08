@@ -1,6 +1,6 @@
 //import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
-import '../../index.css';
+import '../index.css';
 //import { useImmer } from 'use-immer';
 
 
