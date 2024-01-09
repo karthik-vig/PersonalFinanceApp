@@ -12,7 +12,7 @@ import {H6HeadingText,
         NumberInputSection, 
         RadioButtonSection, 
         SectionContainer
-    } from '../../basicComponents/basicUserInputComponents.jsx';
+    } from '../../basicComponents/userInputLayoutComponents/basicUserInputComponents.jsx';
 
 // below are the sections that are used in the detail section; built using the basic components
 function TitleSection({titleValue, handleValueChange}) {
