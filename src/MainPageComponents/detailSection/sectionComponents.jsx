@@ -351,7 +351,7 @@ function FileInput({ files, handleValueChange }) {
 
 FileInput.propTypes = {
     uuid: PropTypes.string,
-    files: PropTypes.array,
+    files: PropTypes.object,
     handleValueChange: PropTypes.func,
     handleAddFile: PropTypes.func,
 };
