@@ -155,6 +155,21 @@ function MainPage({svgIcons}) {
         }
     };
 
+    const handleRefreshBtnClick = () => {
+        console.log("Refresh button clicked");
+    }
+
+    const handleAddBtnClick = () => {
+        console.log("Add button clicked");
+    }
+
+    const handleModifyBtnClick = () => {
+        console.log("Modify button clicked");
+    }
+
+    const handleDeleteBtnClick = () => {
+        console.log("Delete button clicked");
+    }
 
     return (
         <div 
@@ -162,7 +177,11 @@ function MainPage({svgIcons}) {
         >
             <TopBar 
                 svgIcons={svgIcons} 
-                handleSearch={handleSearch} 
+                handleSearch={handleSearch}
+                handleRefreshBtnClick={handleRefreshBtnClick}
+                handleAddBtnClick={handleAddBtnClick}
+                handleModifyBtnClick={handleModifyBtnClick}
+                handleDeleteBtnClick={handleDeleteBtnClick} 
             />
             <SideBar 
                 items={getItems()} 

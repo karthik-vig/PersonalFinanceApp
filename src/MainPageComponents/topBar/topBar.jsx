@@ -32,7 +32,13 @@ TopBarButton.propTypes = {
     onClickHandler: PropTypes.func,
 };
 
-function TopBar({ svgIcons, handleSearch }) {
+function TopBar({ svgIcons, 
+                  handleSearch, 
+                  handleRefreshBtnClick, 
+                  handleAddBtnClick,
+                  handleModifyBtnClick,
+                  handleDeleteBtnClick,
+                 }) {
 
     const [searchParams, setSearchParams] = useImmer({
                                                         search: "", //string input
@@ -99,6 +105,7 @@ function TopBar({ svgIcons, handleSearch }) {
         }
     };
 
+
     return (
         <div 
             className="flex flex-row flex-nowrap relative z-10 justify-center h-14 mx-7 mt-10 mb-4 rounded-lg border bg-surface-cl drop-shadow-lg " style={{ width: 'calc(100% - 56px)' }}
@@ -106,17 +113,17 @@ function TopBar({ svgIcons, handleSearch }) {
             <TopBarButton 
                 svgIcon={svgIcons.faPlus} 
                 btnName="Create" 
-                onClickHandler={ (event, btnName) => {return btnName;} }
+                onClickHandler={ handleAddBtnClick }
             />
             <TopBarButton 
                 svgIcon={svgIcons.faEdit} 
                 btnName="Modify" 
-                onClickHandler={ (event, btnName) => {return btnName;} }
+                onClickHandler={ handleModifyBtnClick }
             />
             <TopBarButton 
                 svgIcon={svgIcons.faTrashCan} 
                 btnName="Delete" 
-                onClickHandler={ (event, btnName) => {return btnName;} }
+                onClickHandler={ handleDeleteBtnClick }
             />
             <input 
                 type="text" 
@@ -133,7 +140,7 @@ function TopBar({ svgIcons, handleSearch }) {
             <TopBarButton 
                 svgIcon={svgIcons.faRefresh} 
                 btnName="Refresh" 
-                onClickHandler={ (event, btnName) => {return btnName;} }
+                onClickHandler={ handleRefreshBtnClick }
             />
             <FilterMenu 
                 displayState={filterDisplayState}
@@ -149,6 +156,10 @@ function TopBar({ svgIcons, handleSearch }) {
 TopBar.propTypes = {
     svgIcons: PropTypes.object,
     handleSearch: PropTypes.func,
+    handleRefreshBtnClick: PropTypes.func,
+    handleAddBtnClick: PropTypes.func,
+    handleModifyBtnClick: PropTypes.func,
+    handleDeleteBtnClick: PropTypes.func,
 };
 
 export default TopBar;
