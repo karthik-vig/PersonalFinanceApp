@@ -119,11 +119,39 @@ function MainPage({svgIcons}) {
          } );
     }
 
-    const handleSearch = (event, searchParams) => {
+    const handleSearch = (keyCode, searchParams, filterParamsVisibility) => {
         //communicate with backend to get filtered and sorted items 
-        console.log(searchParams);
-        if(event.keyCode === 13) { //enter key
-            console.log("searching for: " + searchParams.search);
+        const makeFilterObjectCopy = (filterObj, filterParamsVisibility) => {
+            const copy = {};
+            Object.entries(filterObj).forEach(([fieldName, fieldValue]) => {
+                if (!filterParamsVisibility[fieldName]) {
+                    if (typeof(fieldValue) === "object") {
+                        copy[fieldName] = { min: null, max: null };
+                    }
+                    else {
+                    copy[fieldName] = null;
+                    }
+                }
+                else {
+                    if (typeof(fieldValue) === "object") {
+                        copy[fieldName] = { min: filterObj[fieldName].min, 
+                                            max:  filterObj[fieldName].max
+                                        };
+                    }
+                    else {
+                    copy[fieldName] = filterObj[fieldName];
+                    }
+                }
+            });
+            return copy;
+        };
+
+        if(keyCode === "Enter") { //enter key
+            console.log("searching for: ");
+            const localSearchParams = {};
+            localSearchParams.search = searchParams.search;
+            localSearchParams.filter = makeFilterObjectCopy(searchParams.filter, filterParamsVisibility);
+            console.log(localSearchParams);
         }
     };
 

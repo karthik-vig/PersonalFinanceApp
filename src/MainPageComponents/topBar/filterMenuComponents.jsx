@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import '../../index.css';
-import { useImmer } from 'use-immer';
+//import { useImmer } from 'use-immer';
 import {
         H6Heading,
         LabelText,
@@ -203,54 +203,41 @@ FilterSortInputParam.propTypes = {
     filterParamsVisibility: PropTypes.object,
 };
 
-function FilterMenu({ displayState="hidden", handleFilterClick, changeDisplayState }){
+function FilterMenu({ displayState="hidden", setSearchParams, filterParamsVisibility, setFilterParamsVisibility, changeDisplayState }){
     
 
     //each filter param is enabled or disabled based on the whether
     //they are checked in the checkbox or not
-    const filterParams = {
-                            value: {
-                                min: null, //number input
-                                max: null, //number input
+    /*
+    let filterParams = {
+                        value: {
+                            min: null, //number input
+                            max: null, //number input
+                        },
+                        currency: null, //select list
+                        transactionType: null, //select list
+                        transactionCategory: null, //select list
+                        fromType: null, //select list
+                        fromEntity: null, //select list
+                        toType: null, //select list
+                        toEntity: null, //select list
+                        recurringEntity: null, //select list
+                        createdDate: { min: null, //date picker
+                                        max: null, //date picker
+                                        },
+                        modifiedDate: { min: null, //date picker
+                                        max: null, //date picker
+                                        },
+                        transactionDate: { min: null, //date picker
+                                            max: null, //date picker
+                                        },
+                        sort: { ascending: true, //select list; can be true or false
+                                field: null, //select list; some valid field name
                             },
-                            currency: null, //select list
-                            transactionType: null, //select list
-                            transactionCategory: null, //select list
-                            fromType: null, //select list
-                            fromEntity: null, //select list
-                            toType: null, //select list
-                            toEntity: null, //select list
-                            recurringEntity: null, //select list
-                            createdDate: { min: null, //date picker
-                                            max: null, //date picker
-                                            },
-                            modifiedDate: { min: null, //date picker
-                                            max: null, //date picker
-                                            },
-                            transactionDate: { min: null, //date picker
-                                                max: null, //date picker
-                                            },
-                            sort: { ascending: true, //select list; can be true or false
-                                    field: null, //select list; some valid field name
-                                  },
                         };
+    */
 
-
-    const [filterParamsVisibility, setFilterParamsVisibility] = useImmer({
-                                                                            value: false,
-                                                                            currency: false,
-                                                                            transactionType: false,
-                                                                            transactionCategory: false,
-                                                                            fromType: false,
-                                                                            fromEntity: false,
-                                                                            toType: false,
-                                                                            toEntity: false,
-                                                                            recurringEntity: false,
-                                                                            createdDate: false,
-                                                                            modifiedDate: false,
-                                                                            transactionDate: false,
-                                                                            sort: false,
-                                                                        });
+    
 
     const toggleDisplay = (fieldName) => {
         setFilterParamsVisibility(draft => {
@@ -259,6 +246,16 @@ function FilterMenu({ displayState="hidden", handleFilterClick, changeDisplaySta
     }
 
     const handleInputChange = (fieldName, fieldValue) => {
+        setSearchParams(draft => {
+            const fieldSuffice = fieldName.slice(-3);
+            if (fieldSuffice === "Min" || fieldSuffice === "Max") {
+                const filterFieldName = fieldName.slice(0, -3);
+                draft.filter[filterFieldName][fieldSuffice.toLowerCase()] = fieldValue;
+            }
+            else {
+                draft.filter[fieldName] = fieldValue;
+            }
+        });
         console.log(fieldName, fieldValue);
     };
 
@@ -273,7 +270,6 @@ function FilterMenu({ displayState="hidden", handleFilterClick, changeDisplaySta
     return (
         <div 
             className={" h-96 w-[50%] z-50 top-[65px] left-[30%] absolute rounded-lg border bg-surface-cl drop-shadow-lg overflow-x-hidden overflow-y-scroll " + displayState}
-            onClick={(event) => handleFilterClick(event, filterParams)}
         >
             <button
                 className="sticky top-0 left-[90%] h-8 w-16 rounded-lg border bg-surface-cl drop-shadow-lg"
@@ -428,7 +424,9 @@ function FilterMenu({ displayState="hidden", handleFilterClick, changeDisplaySta
 
 FilterMenu.propTypes = {
     displayState: PropTypes.string,
-    handleFilterClick: PropTypes.func,
+    setSearchParams: PropTypes.func,
+    filterParamsVisibility: PropTypes.object,
+    setFilterParamsVisibility: PropTypes.func,
     changeDisplayState: PropTypes.func,
 };
 
