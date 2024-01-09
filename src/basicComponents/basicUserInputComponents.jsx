@@ -31,6 +31,8 @@ H3HeadingText.propTypes = {
 
 function TextInputSection({textValue, additonalClasses, fieldName, handleValueChange}) {
 
+    if (textValue === null) textValue = "";
+
     return (
         <input 
             className={"text-start font-serif antialiased tracking-widest truncate text-base text-black bg-background-cl border rounded-lg outline-1 hover:outline hover:outline-gray-500 hover:outline-offset-2 hover:bg-back" + " " + additonalClasses + " "} 
@@ -50,6 +52,8 @@ TextInputSection.propTypes = {
 
 function TextAreaSection({textValue, fieldName, handleValueChange}) {
 
+    if (textValue === null) textValue = "";
+
     return (
         <textarea 
             className=" text-start font-serif antialiased tracking-widest truncate text-base text-black bg-background-cl border rounded-lg outline-1 hover:outline hover:outline-gray-500 hover:outline-offset-2 hover:bg-back overflow-y-scroll resize-none w-[100%] h-[60%] " 
@@ -68,12 +72,20 @@ TextAreaSection.propTypes = {
 
 function SelectInputSection({selectedValue, options, additonalClasses, fieldName, handleValueChange}) {
 
+    if (selectedValue === null) selectedValue = "Choose";
+
     return (
         <select 
             className={"text-start font-serif antialiased tracking-widest truncate text-base text-black border rounded-lg bg-background-cl" + " " + additonalClasses + " "} 
             value={selectedValue}
             onChange={(event) => handleValueChange(fieldName, event.target.value)}
-        >
+        >   
+            <option 
+                key="choose"
+                value="choose"
+            >
+                Choose
+            </option>
             {options.map((option) => {
                 return (<option key={option} value={option}>{option}</option>);
                 })
@@ -91,6 +103,8 @@ SelectInputSection.propTypes = {
 };
 
 function NumberInputSection({numberValue, additonalClasses, fieldName, handleValueChange}) {
+
+    if (numberValue === null) numberValue = 0;
 
     return (
         <input 
@@ -111,6 +125,8 @@ NumberInputSection.propTypes = {
 
 function RadioButtonSection({ radioBtnID, fieldName, children, additonalClasses, checked, handleValueChange}) {
 
+    if (checked === null) checked = false;
+
     return (
         <>
             <input 
@@ -119,7 +135,7 @@ function RadioButtonSection({ radioBtnID, fieldName, children, additonalClasses,
                 name={radioBtnID} 
                 value={children} 
                 checked={checked} 
-                onClick={(event) =>  handleValueChange(fieldName, event.target.value) } 
+                onChange={(event) =>  handleValueChange(fieldName, event.target.value) } 
                 className={additonalClasses}
             />
             <label 
