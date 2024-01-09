@@ -5,6 +5,9 @@ import { useImmer } from 'use-immer';
 import SideBar from './sideBar/sideBar.jsx';
 import TopBar from './topBar/topBar.jsx';
 import DetailSection from './detailSection/detailSection.jsx';
+import GenericWarningBox from '../pageLayoutComponents/genericWarningBox.jsx';
+import GenericSuccess from '../pageLayoutComponents/genericSuccess.jsx';
+import GenericFail from '../pageLayoutComponents/genericFail.jsx';
 //import SideSectionButton from './sideSectionButton';
 //import GenericIconButton from './genericIconBtn';
 
@@ -46,7 +49,16 @@ function MainPage({svgIcons}) {
                                                      transactionDate: "YYYY-MM-DDThh:mm:ss",
                                                     });
 
-    
+    const [warningBoxDisplayState, setWarningBoxDisplayState] = useImmer({
+                                                                            refreshBtn: "hidden",
+                                                                            addBtn: "hidden",
+                                                                            modifyBtn: "hidden",
+                                                                            deleteBtn: "hidden",
+                                                                        });
+
+    const [successBoxDisplayState, setSuccessBoxDisplayState] = useImmer("hidden");
+    const [failBoxDisplayState, setFailBoxDisplayState] = useImmer("hidden");
+
     const getItems = () => { 
         //communicate with backend to get items
         return [{id: 1, title: "someName", transactionDate: "2023.08.11", value: 2000, transactionType:"out", icon: svgIcons.faFilter},
@@ -165,16 +177,76 @@ function MainPage({svgIcons}) {
 
     const handleModifyBtnClick = () => {
         console.log("Modify button clicked");
+        //show warning and get the response
+        setWarningBoxDisplayState(draft => {
+            draft.modifyBtn = "block"; 
+        });
+    }
+
+    const modifyDatabase = () => {
+        //interact with the database through api
+        //to modify an entry
+        //use the selectedItem object
+        console.log("modifyDatabase called");
+        return true;
     }
 
     const handleDeleteBtnClick = () => {
         console.log("Delete button clicked");
+        setWarningBoxDisplayState(draft => {
+            draft.deleteBtn = "block"; 
+        });
+    }
+
+    const deleteEntry = () => {
+        //interact with the database through api
+        //to delete an entry
+        //use the selectedItem object
+        console.log("deleteEntry called");
+        return false;
+    }
+
+    const handleActionResponse = (success) => {
+        if (success) {
+            setSuccessBoxDisplayState("block");
+        }
+        else {
+            setFailBoxDisplayState("block");
+        }
     }
 
     return (
         <div 
-            className="flex flex-row flex-wrap h-[100%] w-[100%] bg-background-cl"
+            className="relative z-0 flex flex-row flex-wrap h-[100%] w-[100%] bg-background-cl"
         >
+            <GenericWarningBox 
+                warningText="Are you sure you want to modify the Entry?"
+                additionalClasses=""
+                displayState={warningBoxDisplayState.modifyBtn}
+                changeDisplayState={setWarningBoxDisplayState}
+                warningCaller="modifyBtn"
+                action={modifyDatabase}
+                handleActionResponse={handleActionResponse}
+            />
+            <GenericWarningBox
+                warningText="Are you sure you want to delete the Entry?"
+                additionalClasses=""
+                displayState={warningBoxDisplayState.deleteBtn}
+                changeDisplayState={setWarningBoxDisplayState}
+                warningCaller="deleteBtn"
+                action={deleteEntry}
+                handleActionResponse={handleActionResponse}
+            />
+            <GenericSuccess
+                additionalClasses=""
+                displayState={successBoxDisplayState}
+                changeDisplayState={setSuccessBoxDisplayState}
+            />
+            <GenericFail
+                additionalClasses=""
+                displayState={failBoxDisplayState}
+                changeDisplayState={setFailBoxDisplayState}
+            />
             <TopBar 
                 svgIcons={svgIcons} 
                 handleSearch={handleSearch}
