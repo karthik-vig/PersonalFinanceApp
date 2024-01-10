@@ -13,6 +13,69 @@ import GenericFail from '../pageLayoutComponents/genericFail.jsx';
 
 
 function MainPage({svgIcons}) {
+
+    //backed function to get all items for the side bar
+    const getAllItems = () => {
+        //communicate with backend to get all items
+        console.log("getAllItems called");
+        return [{id: 1, title: "someName", transactionDate: "2023.08.11", value: 2000, transactionType:"out", icon: svgIcons.faFilter},
+            {id: 2, title: "someName2", transactionDate: "2023.08.09", value: 100, transactionType:"in", icon: svgIcons.faFilter},
+            {id: 3, title: "someName3", transactionDate: "2023.08.03", value: 3500, transactionType:"in", icon: svgIcons.faFilter},
+            {id: 4, title: "someName4", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
+            {id: 5, title: "someName5", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: svgIcons.faFilter},
+            {id: 6, title: "someName6", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
+            {id: 7, title: "someName7", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: svgIcons.faFilter},
+            {id: 8, title: "someName8", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
+            {id: 9, title: "someName9", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: svgIcons.faFilter},
+            {id: 10, title: "someName10", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
+            {id: 11, title: "someName11", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: svgIcons.faFilter},
+            {id: 12, title: "someName12", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
+            {id: 13, title: "someName13", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: svgIcons.faFilter},
+            {id: 14, title: "someName14", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
+            {id: 15, title: "someName15", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: svgIcons.faFilter},
+            {id: 16, title: "someName16", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
+            {id: 17, title: "someName17", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: svgIcons.faFilter},
+            {id: 18, title: "someName18", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
+            {id: 19, title: "someName19", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: svgIcons.faFilter},
+            {id: 20, title: "someName20", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
+            ]; //could also return null if the operation fails
+    };
+
+    //this should actually be a backed side function;
+    //here just to simulate the effect.
+    const getItems = (searchParams) => { 
+        //communicate with backend to get items
+        //based on the searchParams
+        console.log("getItems called with searchParams: ");
+        console.log(searchParams);
+        return [{id: 1, title: "someName", transactionDate: "2023.08.11", value: 2000, transactionType:"out", icon: svgIcons.faFilter},
+            {id: 2, title: "someName2", transactionDate: "2023.08.09", value: 100, transactionType:"in", icon: svgIcons.faFilter},
+            {id: 3, title: "someName3", transactionDate: "2023.08.03", value: 3500, transactionType:"in", icon: svgIcons.faFilter},
+            {id: 4, title: "someName4", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
+            {id: 5, title: "someName5", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: svgIcons.faFilter},
+            ]; //could also return null if the operation fails
+    };
+
+    //some other functions are:
+    //for getting the selectedItem value based on id; return null if the operation fails
+    //using id to delete an entry; return false if the operation fails
+    //using id to modify an entry; return false if the operation fails
+
+    //for simulation
+    //this should actually be a backed side function;
+    //this would create an entry and enter it into the database
+    //and return the following info for the side bar.
+    const createEntry = () => {
+        return (
+                {id: 21, 
+                title: "NEW ENTRY", 
+                transactionDate: "2023.08.01", 
+                value: 5000, 
+                transactionType:"in", 
+                icon: svgIcons.faFilter}
+        ); //could also return null if the operation fails
+    };
+
     //this is only the data structure for the selected item; backend needs to maintain other information related to
     //the selected item, such as the fromRef, toRef, etc.
     //we also need to send additional stuff for the select list from the backed, such as
@@ -49,6 +112,8 @@ function MainPage({svgIcons}) {
                                                      transactionDate: "YYYY-MM-DDThh:mm:ss",
                                                     });
 
+    const [sideBarItems, setSideBarItems] = useImmer(getAllItems()); //this will be an array of objects of the form {id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx", title: "someName", transactionDate: "2023.08.11", value: 2000, transactionType:"out", icon: svgIcons.faFilter}
+
     const [warningBoxDisplayState, setWarningBoxDisplayState] = useImmer({
                                                                             refreshBtn: "hidden",
                                                                             addBtn: "hidden",
@@ -59,30 +124,6 @@ function MainPage({svgIcons}) {
     const [successBoxDisplayState, setSuccessBoxDisplayState] = useImmer("hidden");
     const [failBoxDisplayState, setFailBoxDisplayState] = useImmer("hidden");
 
-    const getItems = () => { 
-        //communicate with backend to get items
-        return [{id: 1, title: "someName", transactionDate: "2023.08.11", value: 2000, transactionType:"out", icon: svgIcons.faFilter},
-        {id: 2, title: "someName2", transactionDate: "2023.08.09", value: 100, transactionType:"in", icon: svgIcons.faFilter},
-        {id: 3, title: "someName3", transactionDate: "2023.08.03", value: 3500, transactionType:"in", icon: svgIcons.faFilter},
-        {id: 4, title: "someName4", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
-        {id: 5, title: "someName5", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: svgIcons.faFilter},
-        {id: 6, title: "someName6", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
-        {id: 7, title: "someName7", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: svgIcons.faFilter},
-        {id: 8, title: "someName8", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
-        {id: 9, title: "someName9", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: svgIcons.faFilter},
-        {id: 10, title: "someName10", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
-        {id: 11, title: "someName11", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: svgIcons.faFilter},
-        {id: 12, title: "someName12", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
-        {id: 13, title: "someName13", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: svgIcons.faFilter},
-        {id: 14, title: "someName14", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
-        {id: 15, title: "someName15", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: svgIcons.faFilter},
-        {id: 16, title: "someName16", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
-        {id: 17, title: "someName17", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: svgIcons.faFilter},
-        {id: 18, title: "someName18", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
-        {id: 19, title: "someName19", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: svgIcons.faFilter},
-        {id: 20, title: "someName20", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
-        ];
-    };
 
     const handleItemClick = (field, value) => {
         //console.log("field: " + field + " value: " + value)
@@ -164,6 +205,10 @@ function MainPage({svgIcons}) {
             localSearchParams.search = searchParams.search;
             localSearchParams.filter = makeFilterObjectCopy(searchParams.filter, filterParamsVisibility);
             console.log(localSearchParams);
+            setSideBarItems(draft => {
+                draft = getItems(localSearchParams);
+                return draft;
+            });
         }
     };
 
@@ -173,6 +218,19 @@ function MainPage({svgIcons}) {
 
     const handleAddBtnClick = () => {
         console.log("Add button clicked");
+        //add a new entry to the database
+        //show the item in the sidebar
+        //and make the detail section empty to that
+        //the new values can be added
+        const newEntrySideBarItem = createEntry();
+        if (newEntrySideBarItem === null) {
+            setFailBoxDisplayState("block");
+            return;
+        }
+        setSideBarItems(draft => {
+            draft.unshift(newEntrySideBarItem);
+        });
+        setSuccessBoxDisplayState("block");
     }
 
     const handleModifyBtnClick = () => {
@@ -187,8 +245,8 @@ function MainPage({svgIcons}) {
         //interact with the database through api
         //to modify an entry
         //use the selectedItem object
-        console.log("modifyDatabase called");
-        return true;
+        console.log("modifyDatabase called. The ID to modify is :", selectedItem.id);
+        return true; //return true or false based on the success or failure of the operation
     }
 
     const handleDeleteBtnClick = () => {
@@ -202,8 +260,8 @@ function MainPage({svgIcons}) {
         //interact with the database through api
         //to delete an entry
         //use the selectedItem object
-        console.log("deleteEntry called");
-        return false;
+        console.log("deleteEntry called. The ID to delete is :", selectedItem.id);
+        return false; //return true or false based on the success or failure of the operation
     }
 
     const handleActionResponse = (success) => {
@@ -256,7 +314,7 @@ function MainPage({svgIcons}) {
                 handleDeleteBtnClick={handleDeleteBtnClick} 
             />
             <SideBar 
-                items={getItems()} 
+                items={sideBarItems} 
                 handleItemClick={handleSelectItemClick} 
             />
             <DetailSection 
