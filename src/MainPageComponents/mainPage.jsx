@@ -58,8 +58,64 @@ function MainPage({svgIcons}) {
 
     //some other functions are:
     //for getting the selectedItem value based on id; return null if the operation fails
+    const getSelectedItem = (uuid) => {
+        //communicate with backend to get the selectedItem
+        console.log("getSelectedItem called with id: ", uuid);
+        return {
+            id: uuid, //uuidv4 template
+            title: null,
+            description: null,
+            value: 0.0,
+            currency: null,
+            transactionType: null,
+            transactionCategory: null,
+            fromEntity: null, //computed by backend
+            fromType: null,
+            toEntity: null, //computed by backend
+            toType: null,
+            recurringEntity: null,
+            file: { 
+                    file1: {
+                             fileBlob: new Blob([""], {type: "text/plain"}),
+                             mimetype: "text/plain",
+                            },
+                    file2: {
+                            fileBlob: new Blob([""], {type: "text/plain"}),
+                            mimetype: "text/plain",
+                            },
+                    file3: {
+                            fileBlob: new Blob([""], {type: "text/plain"}),
+                            mimetype: "text/plain",
+                            },
+                },
+            createdDate: "yyyy-MM-ddThh:mm:ss",
+            modifiedDate: "yyyy-MM-ddThh:mm:ss",
+            transactionDate: "yyyy-MM-ddThh:mm:ss",
+        }; //could also return null if the operation fails
+    };
+
     //using id to delete an entry; return false if the operation fails
-    //using id to modify an entry; return false if the operation fails
+    const deleteItem = (id) => {
+        //communicate with backend to delete the item
+        console.log("deleteItem called with id: ", id);
+        return true; //could also return null if the operation fails
+    };
+
+    //takes selecteItem to modify an entry; return object if the operation succes; null if failure
+    const modifyItem = (selectedItem) => {
+        //communicate with backend to modify the item
+        console.log("modifyItem called with id: ", selectedItem.id);
+        return {
+            modifyStatus: true,
+            item: {id: selectedItem.id, 
+                    title: "someName5", 
+                    transactionDate: "2023.08.01", 
+                    value: 5000, 
+                    transactionType:"in", 
+                    icon: svgIcons.faFilter
+                },
+        }; //could also return null if the operation fails
+    };
 
     //for simulation
     //this should actually be a backed side function;
@@ -134,37 +190,7 @@ function MainPage({svgIcons}) {
     const handleSelectItemClick = (uuid) => {
         setSelectedItem( (draft) => {
             //get the item from the backend using UUID
-            const item = {
-                            id: uuid, //uuidv4 template
-                            title: null,
-                            description: null,
-                            value: 0.0,
-                            currency: null,
-                            transactionType: null,
-                            transactionCategory: null,
-                            fromEntity: null, //computed by backend
-                            fromType: null,
-                            toEntity: null, //computed by backend
-                            toType: null,
-                            recurringEntity: null,
-                            file: { 
-                                    file1: {
-                                             fileBlob: new Blob([""], {type: "text/plain"}),
-                                             mimetype: "text/plain",
-                                            },
-                                    file2: {
-                                            fileBlob: new Blob([""], {type: "text/plain"}),
-                                            mimetype: "text/plain",
-                                            },
-                                    file3: {
-                                            fileBlob: new Blob([""], {type: "text/plain"}),
-                                            mimetype: "text/plain",
-                                            },
-                                },
-                            createdDate: "yyyy-MM-ddThh:mm:ss",
-                            modifiedDate: "yyyy-MM-ddThh:mm:ss",
-                            transactionDate: "yyyy-MM-ddThh:mm:ss",
-                        }
+            const item = getSelectedItem(uuid);
             //for each field in the draft, set the value in the Item
             for (const [key, value] of Object.entries(item)) {
                 draft[key] = value;
@@ -246,7 +272,22 @@ function MainPage({svgIcons}) {
         //to modify an entry
         //use the selectedItem object
         console.log("modifyDatabase called. The ID to modify is :", selectedItem.id);
-        return true; //return true or false based on the success or failure of the operation
+        const modifiedItem = modifyItem(selectedItem);
+        if (modifiedItem.modifyStatus){
+            setSideBarItems(draft => {
+                draft = draft.map(item => {
+                    if (item.id === selectedItem.id) {
+                        return modifiedItem.item;
+                    }
+                    else {
+                        return item;
+                    }
+                });
+                return draft;
+            });
+        }
+
+        return modifiedItem.modifyStatus; //return true or false based on the success or failure of the operation
     }
 
     const handleDeleteBtnClick = () => {
@@ -261,7 +302,14 @@ function MainPage({svgIcons}) {
         //to delete an entry
         //use the selectedItem object
         console.log("deleteEntry called. The ID to delete is :", selectedItem.id);
-        return false; //return true or false based on the success or failure of the operation
+        const deleteStatus = deleteItem(selectedItem.id);
+        if (deleteStatus){
+            setSideBarItems(draft => {
+                draft = draft.filter(item => item.id !== selectedItem.id);
+                return draft;
+            });
+        }
+        return deleteStatus; //return true or false based on the success or failure of the operation
     }
 
     const handleActionResponse = (success) => {
