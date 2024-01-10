@@ -191,6 +191,10 @@ function MainPage({svgIcons}) {
         setSelectedItem( (draft) => {
             //get the item from the backend using UUID
             const item = getSelectedItem(uuid);
+            if (item === null) {
+                setFailBoxDisplayState("block");
+                return;
+            }
             //for each field in the draft, set the value in the Item
             for (const [key, value] of Object.entries(item)) {
                 draft[key] = value;
@@ -231,8 +235,13 @@ function MainPage({svgIcons}) {
             localSearchParams.search = searchParams.search;
             localSearchParams.filter = makeFilterObjectCopy(searchParams.filter, filterParamsVisibility);
             console.log(localSearchParams);
+            const items = getItems(localSearchParams);
+            if (items === null) {
+                setFailBoxDisplayState("block");
+                return;
+            }
             setSideBarItems(draft => {
-                draft = getItems(localSearchParams);
+                draft = items;
                 return draft;
             });
         }
