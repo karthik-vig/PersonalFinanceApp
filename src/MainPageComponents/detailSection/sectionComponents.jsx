@@ -326,14 +326,13 @@ function FileInput({ files, handleValueChange }) {
                 files={files}
                 handleValueChange={handleValueChange}
             />
-            {Object.keys(files).map((fileName) => {
+            {files.map((fileName) => {
 
                 return (
                     <li key={fileName}>
                         <GetFileSection
                             additonalClasses=""
                             fileName={fileName}
-                            fileBlob={files[fileName]["fileBlob"]}
                         />
                         <DeleteFileButtonSection
                             additonalClasses=""
@@ -350,10 +349,8 @@ function FileInput({ files, handleValueChange }) {
 }
 
 FileInput.propTypes = {
-    uuid: PropTypes.string,
-    files: PropTypes.object,
+    files: PropTypes.array,
     handleValueChange: PropTypes.func,
-    handleAddFile: PropTypes.func,
 };
 
 function DatetimeInput({ datetimeValue, heading, fieldName, readonly, handleValueChange}) {

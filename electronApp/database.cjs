@@ -31,10 +31,10 @@ function setupDatabase() {
                 transactionDate datetime, \
                 )');
         
+        //make sure fileName is unique for a given uuid
         db.run('CREATE TABLE IF NOT EXISTS files (\
-                id TEXT PRIMARY KEY, \
-                filename TEXT, \
-                filetype TEXT, \
+                id TEXT NOT NULL, \
+                filename TEXT NOT NULL, \
                 filedata BLOB, \
                 )');
         
@@ -43,7 +43,12 @@ function setupDatabase() {
                 title TEXT UNIQUE, \
                 type TEXT, \
                 )');
-        
+
+        //this table is for storing the currency and transaction categories and other additional data
+        db.run('CREATE TABLE IF NOT EXISTS additionalDataStore (\
+                currency TEXT NOT NULL, \
+                transactionCategories TEXT NOT NULL, \
+                )');
         //in the below tabke, the recurringFrequency is the frequency of the recurring transaction
         //it is {daily, weekly, monthly, yearly}
         //the recurringDate is the date of the month or year that the transaction occurs

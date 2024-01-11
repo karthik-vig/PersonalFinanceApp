@@ -2,6 +2,9 @@
 import PropTypes from 'prop-types';
 import '../index.css';
 import { useImmer } from 'use-immer';
+import { useSelector,
+         //useDispatch,
+         } from 'react-redux';
 import SideBar from './sideBar/sideBar.jsx';
 import TopBar from './topBar/topBar.jsx';
 import DetailSection from './detailSection/detailSection.jsx';
@@ -10,12 +13,46 @@ import GenericSuccess from '../pageLayoutComponents/genericSuccess.jsx';
 import GenericFail from '../pageLayoutComponents/genericFail.jsx';
 //import SideSectionButton from './sideSectionButton';
 //import GenericIconButton from './genericIconBtn';
+import { handleItemClick,
+         } from '../stateManagement/mainPageStates/selectedItem.js';
 
 
 function MainPage({svgIcons}) {
 
+    //when we get selectedItem from the database, we set a object in the
+    //nodejs to store the fileName and the fileBlob
+    //file blob simulated backend functions
+    window.getFileBlob = (fileName) => {
+        //communicate with backend to get the file blob
+        console.log( "get file blob fileName: ", fileName);
+        return new Blob([""], {type: "text/plain"}); //could also return null if the operation fails
+    }
+
+    window.setFileBlob = (fileName, fileBlob) => {
+        //communicate with backend to set the file blob
+        console.log( "set file blob fileName: ", fileName, " fileBlob: ", fileBlob);
+        return true; //could also return false if the operation fails
+    }
+
+    window.deleteFileBlob = (fileName) => {
+        //communicate with backend to delete the file blob
+        console.log( "delete file blob fileName: ", fileName);
+        return true; //could also return false if the operation fails
+    }
+
+
+    //file entry delete simulated backend functions
+    //not for front end as only backend can delete the file
+    /*
+    window.deleteFileEntry = (uuid, fileName) => {
+        //communicate with backend to delete the file entry
+        console.log("deleteFileEntry called with id: ", uuid, " and fileName: ", fileName);
+        return true; //could also return false if the operation fails
+    }
+    */
+
     //backed function to get all items for the side bar
-    const getAllItems = () => {
+    window.getAllItems = () => {
         //communicate with backend to get all items
         console.log("getAllItems called");
         return [{id: 1, title: "someName", transactionDate: "2023.08.11", value: 2000, transactionType:"out", icon: svgIcons.faFilter},
@@ -43,7 +80,7 @@ function MainPage({svgIcons}) {
 
     //this should actually be a backed side function;
     //here just to simulate the effect.
-    const getItems = (searchParams) => { 
+    window.getItems = (searchParams) => { 
         //communicate with backend to get items
         //based on the searchParams
         console.log("getItems called with searchParams: ");
@@ -58,9 +95,11 @@ function MainPage({svgIcons}) {
 
     //some other functions are:
     //for getting the selectedItem value based on id; return null if the operation fails
-    const getSelectedItem = (uuid) => {
+    window.getSelectedItem = (uuid) => {
         //communicate with backend to get the selectedItem
         console.log("getSelectedItem called with id: ", uuid);
+        //return null;
+        ///*
         return {
             id: uuid, //uuidv4 template
             title: null,
@@ -74,35 +113,23 @@ function MainPage({svgIcons}) {
             toEntity: null, //computed by backend
             toType: null,
             recurringEntity: null,
-            file: { 
-                    file1: {
-                             fileBlob: new Blob([""], {type: "text/plain"}),
-                             mimetype: "text/plain",
-                            },
-                    file2: {
-                            fileBlob: new Blob([""], {type: "text/plain"}),
-                            mimetype: "text/plain",
-                            },
-                    file3: {
-                            fileBlob: new Blob([""], {type: "text/plain"}),
-                            mimetype: "text/plain",
-                            },
-                },
+            file: ["file91.txt", "file92.txt", "file93.txt"],
             createdDate: "yyyy-MM-ddThh:mm:ss",
             modifiedDate: "yyyy-MM-ddThh:mm:ss",
             transactionDate: "yyyy-MM-ddThh:mm:ss",
-        }; //could also return null if the operation fails
+        }; //could also return null if the operation fails 
+        //*/
     };
 
     //using id to delete an entry; return false if the operation fails
-    const deleteItem = (id) => {
+    window.deleteItem = (id) => {
         //communicate with backend to delete the item
         console.log("deleteItem called with id: ", id);
         return true; //could also return null if the operation fails
     };
 
     //takes selecteItem to modify an entry; return object if the operation succes; null if failure
-    const modifyItem = (selectedItem) => {
+    window.modifyItem = (selectedItem) => {
         //communicate with backend to modify the item
         console.log("modifyItem called with id: ", selectedItem.id);
         return {
@@ -121,7 +148,7 @@ function MainPage({svgIcons}) {
     //this should actually be a backed side function;
     //this would create an entry and enter it into the database
     //and return the following info for the side bar.
-    const createEntry = () => {
+    window.createEntry = () => {
         return (
                 {id: 21, 
                 title: "NEW ENTRY", 
@@ -136,6 +163,7 @@ function MainPage({svgIcons}) {
     //the selected item, such as the fromRef, toRef, etc.
     //we also need to send additional stuff for the select list from the backed, such as
     //currencies, transaction categories, transaction types, etc.
+    /*
     const [selectedItem, setSelectedItem] = useImmer({
                                                      id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx", //uuidv4 template
                                                      title: null,
@@ -167,8 +195,9 @@ function MainPage({svgIcons}) {
                                                      modifiedDate: "YYYY-MM-DDThh:mm:ss",
                                                      transactionDate: "YYYY-MM-DDThh:mm:ss",
                                                     });
+    */
 
-    const [sideBarItems, setSideBarItems] = useImmer(getAllItems()); //this will be an array of objects of the form {id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx", title: "someName", transactionDate: "2023.08.11", value: 2000, transactionType:"out", icon: svgIcons.faFilter}
+    const [sideBarItems, setSideBarItems] = useImmer(window.getAllItems()); //this will be an array of objects of the form {id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx", title: "someName", transactionDate: "2023.08.11", value: 2000, transactionType:"out", icon: svgIcons.faFilter}
 
     const [warningBoxDisplayState, setWarningBoxDisplayState] = useImmer({
                                                                             refreshBtn: "hidden",
@@ -180,7 +209,7 @@ function MainPage({svgIcons}) {
     const [successBoxDisplayState, setSuccessBoxDisplayState] = useImmer("hidden");
     const [failBoxDisplayState, setFailBoxDisplayState] = useImmer("hidden");
 
-
+    /*
     const handleItemClick = (field, value) => {
         //console.log("field: " + field + " value: " + value)
         setSelectedItem( (draft) => { draft[field] = value; } );
@@ -201,6 +230,10 @@ function MainPage({svgIcons}) {
             }
          } );
     }
+    */
+
+    const selectedItem = useSelector(state => state.selectedItem);
+    //const dispatch = useDispatch();
 
     const handleSearch = (keyCode, searchParams, filterParamsVisibility) => {
         //communicate with backend to get filtered and sorted items 
@@ -235,7 +268,7 @@ function MainPage({svgIcons}) {
             localSearchParams.search = searchParams.search;
             localSearchParams.filter = makeFilterObjectCopy(searchParams.filter, filterParamsVisibility);
             console.log(localSearchParams);
-            const items = getItems(localSearchParams);
+            const items = window.getItems(localSearchParams);
             if (items === null) {
                 setFailBoxDisplayState("block");
                 return;
@@ -257,7 +290,7 @@ function MainPage({svgIcons}) {
         //show the item in the sidebar
         //and make the detail section empty to that
         //the new values can be added
-        const newEntrySideBarItem = createEntry();
+        const newEntrySideBarItem = window.createEntry();
         if (newEntrySideBarItem === null) {
             setFailBoxDisplayState("block");
             return;
@@ -281,7 +314,7 @@ function MainPage({svgIcons}) {
         //to modify an entry
         //use the selectedItem object
         console.log("modifyDatabase called. The ID to modify is :", selectedItem.id);
-        const modifiedItem = modifyItem(selectedItem);
+        const modifiedItem = window.modifyItem(selectedItem);
         if (modifiedItem.modifyStatus){
             setSideBarItems(draft => {
                 draft = draft.map(item => {
@@ -311,7 +344,7 @@ function MainPage({svgIcons}) {
         //to delete an entry
         //use the selectedItem object
         console.log("deleteEntry called. The ID to delete is :", selectedItem.id);
-        const deleteStatus = deleteItem(selectedItem.id);
+        const deleteStatus = window.deleteItem(selectedItem.id);
         if (deleteStatus){
             setSideBarItems(draft => {
                 draft = draft.filter(item => item.id !== selectedItem.id);
@@ -372,11 +405,12 @@ function MainPage({svgIcons}) {
             />
             <SideBar 
                 items={sideBarItems} 
-                handleItemClick={handleSelectItemClick} 
+                setFailBoxDisplayState={setFailBoxDisplayState}
             />
             <DetailSection 
                 selectedItem={selectedItem}
                 handleValueChange={handleItemClick}
+                setFailBoxDisplayState={setFailBoxDisplayState}
             />
         </div>
     );

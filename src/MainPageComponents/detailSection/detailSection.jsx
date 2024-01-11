@@ -30,7 +30,17 @@ function DetailSection({ selectedItem, handleValueChange}) {
     //const selectBtnClasses = " text-start font-serif antialiased tracking-widest truncate text-base text-black border rounded-lg bg-background-cl";
 
     //const [fromType, setFromType] = useImmer(selectedItem.fromType);
- 
+
+    if (selectedItem === null) {
+        return (
+            <div 
+            className="flex flex-nowrap flex-col ml-2 mr-7 mt-0 mb-4 border rounded-lg bg-surface-cl drop-shadow-lg overflow-x-hidden overflow-y-scroll px-[20%] py-[2%]" 
+            style={{ height: 'calc(100% - 150px)', width: 'calc(75% - 92px)' }}
+            >
+                
+            </div>
+        );
+    }
 
     // need to get these from the backend
     const currencies = ["RON", "EUR", "USD"];

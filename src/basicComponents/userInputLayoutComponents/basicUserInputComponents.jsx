@@ -2,6 +2,7 @@
 import PropTypes from 'prop-types';
 import '../../index.css';
 //import { useImmer } from 'use-immer';
+import { useDispatch } from 'react-redux';
 
 
 // below are the basic components that can be used to build the detail section
@@ -32,13 +33,14 @@ H3HeadingText.propTypes = {
 function TextInputSection({textValue, additonalClasses, fieldName, handleValueChange}) {
 
     if (textValue === null) textValue = "";
+    const dispatch = useDispatch();
 
     return (
         <input 
             className={"text-start font-serif antialiased tracking-widest truncate text-base text-black bg-background-cl border rounded-lg outline-1 hover:outline hover:outline-gray-500 hover:outline-offset-2 hover:bg-back" + " " + additonalClasses + " "} 
             value={textValue} 
             type="text" 
-            onChange={(event) => handleValueChange(fieldName, event.target.value)}
+            onChange={(event) => dispatch(handleValueChange({fieldName: fieldName, fieldValue: event.target.value}))}
         />
     );
 }
@@ -53,13 +55,14 @@ TextInputSection.propTypes = {
 function TextAreaSection({textValue, fieldName, handleValueChange}) {
 
     if (textValue === null) textValue = "";
+    const dispatch = useDispatch();
 
     return (
         <textarea 
             className=" text-start font-serif antialiased tracking-widest truncate text-base text-black bg-background-cl border rounded-lg outline-1 hover:outline hover:outline-gray-500 hover:outline-offset-2 hover:bg-back overflow-y-scroll resize-none w-[100%] h-[60%] " 
             value={textValue} 
             type="text"
-            onChange={(event) => handleValueChange(fieldName, event.target.value)}
+            onChange={(event) => dispatch(handleValueChange({fieldName: fieldName, fieldValue: event.target.value}))}
         />
     );
 }
@@ -73,12 +76,13 @@ TextAreaSection.propTypes = {
 function SelectInputSection({selectedValue, options, additonalClasses, fieldName, handleValueChange}) {
 
     if (selectedValue === null) selectedValue = "Choose";
+    const dispatch = useDispatch();
 
     return (
         <select 
             className={"text-start font-serif antialiased tracking-widest truncate text-base text-black border rounded-lg bg-background-cl" + " " + additonalClasses + " "} 
             value={selectedValue}
-            onChange={(event) => handleValueChange(fieldName, event.target.value)}
+            onChange={(event) => dispatch(handleValueChange({fieldName: fieldName, fieldValue: event.target.value}))}
         >   
             <option 
                 key="choose"
@@ -105,13 +109,14 @@ SelectInputSection.propTypes = {
 function NumberInputSection({numberValue, additonalClasses, fieldName, handleValueChange}) {
 
     if (numberValue === null) numberValue = 0;
+    const dispatch = useDispatch();
 
     return (
         <input 
             className={"text-start font-serif antialiased tracking-widest truncate text-base text-black bg-background-cl border rounded-lg outline-1 hover:outline hover:outline-gray-500 hover:outline-offset-2 hover:bg-back" + " " + additonalClasses + " "} 
             value={numberValue} 
             type="number"
-            onChange={(event) => handleValueChange(fieldName, event.target.value)}
+            onChange={(event) => dispatch(handleValueChange({fieldName: fieldName, fieldValue: event.target.value}))}
         />
     );
 }
@@ -126,6 +131,7 @@ NumberInputSection.propTypes = {
 function RadioButtonSection({ radioBtnID, fieldName, children, additonalClasses, checked, handleValueChange}) {
 
     if (checked === null) checked = false;
+    const dispatch = useDispatch();
 
     return (
         <>
@@ -135,7 +141,7 @@ function RadioButtonSection({ radioBtnID, fieldName, children, additonalClasses,
                 name={radioBtnID} 
                 value={children} 
                 checked={checked} 
-                onChange={(event) =>  handleValueChange(fieldName, event.target.value) } 
+                onChange={(event) =>  dispatch(handleValueChange({fieldName: fieldName, fieldValue: event.target.value})) } 
                 className={additonalClasses}
             />
             <label 
@@ -157,16 +163,20 @@ RadioButtonSection.propTypes = {
 };
 
 function FileInputSection({additonalClasses, files, handleValueChange}) {
+
+    const dispatch = useDispatch();
     
     const handleAddFile = (event) => {
         console.log(typeof event.target.files);
-        const filesCopy = Object.assign({}, files);
+        const filesCopy = [...files];
         Array.from(event.target.files).forEach((newFile) => {
-        filesCopy[newFile.name] = { fileBlob: newFile,
-                                 mimetype: newFile.type,
-                                };
+            const setFileBlobStatus = window.setFileBlob(newFile.name, newFile);
+            if (setFileBlobStatus && !filesCopy.includes(newFile.name)) {
+                filesCopy.push(newFile.name);
+            } 
         });
-        handleValueChange("file", filesCopy);
+        //handleValueChange("file", filesCopy);
+        dispatch(handleValueChange({fieldName: "file", fieldValue: filesCopy}))
     }
 
     return (
@@ -181,13 +191,17 @@ function FileInputSection({additonalClasses, files, handleValueChange}) {
 
 FileInputSection.propTypes = {
     additonalClasses: PropTypes.string,
-    files: PropTypes.object,
+    files: PropTypes.array,
     handleValueChange: PropTypes.func,
 };
 
-function GetFileSection({ additonalClasses, fileName, fileBlob }) {
+function GetFileSection({ additonalClasses, fileName }) {
     
-    const fileBlobURL = URL.createObjectURL(fileBlob);
+    const fileBlob = window.getFileBlob(fileName);
+    let fileBlobURL = "";
+    if (fileBlob !== null) {
+        fileBlobURL = URL.createObjectURL(fileBlob);
+    }
 
     return (
         <a 
@@ -203,15 +217,19 @@ function GetFileSection({ additonalClasses, fileName, fileBlob }) {
 GetFileSection.propTypes = {
     additonalClasses: PropTypes.string,
     fileName: PropTypes.string,
-    fileBlob: PropTypes.object,
 };
 
 function DeleteFileButtonSection({additonalClasses, fileName, files, handleValueChange}) {
 
+    const dispatch = useDispatch();
+
     const handleFileDelete = (fileName) => { 
-        const filesCopy = Object.assign({}, files);
-        delete filesCopy[fileName];
-        handleValueChange("file", filesCopy);
+        const deleteFileBlobStatus = window.deleteFileBlob(fileName);
+        let filesCopy = [...files];
+        if (deleteFileBlobStatus) {
+            filesCopy = files.filter((file) => file !== fileName);
+        }
+        dispatch(handleValueChange({fieldName: "file", fieldValue: filesCopy}));
     };
 
     return (
@@ -227,11 +245,13 @@ function DeleteFileButtonSection({additonalClasses, fileName, files, handleValue
 DeleteFileButtonSection.propTypes = {
     additonalClasses: PropTypes.string,
     fileName: PropTypes.string,
-    files: PropTypes.object,
+    files: PropTypes.array,
     handleValueChange: PropTypes.func,
 };
 
 function DatetimeInputSection({datetimeValue, additonalClasses, readonly, fieldName, handleValueChange}) {
+
+    const dispatch = useDispatch();
 
     return (
         <input 
@@ -239,7 +259,7 @@ function DatetimeInputSection({datetimeValue, additonalClasses, readonly, fieldN
             value={datetimeValue} 
             type="datetime-local" 
             readOnly={readonly}
-            onChange={(event) => handleValueChange(fieldName, event.target.value)}
+            onChange={(event) => dispatch(handleValueChange({fieldName: fieldName, fieldValue: event.target.value}))}
         />
     );
 }
