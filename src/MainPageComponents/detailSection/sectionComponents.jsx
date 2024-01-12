@@ -13,9 +13,15 @@ import {H6HeadingText,
         RadioButtonSection, 
         SectionContainer
     } from '../../basicComponents/userInputLayoutComponents/basicUserInputComponents.jsx';
+import { handleItemClick,
+    } from '../../stateManagement/mainPageStates/selectedItem.js';
+import { useSelector } from 'react-redux';
 
 // below are the sections that are used in the detail section; built using the basic components
-function TitleSection({titleValue, handleValueChange}) {
+function TitleSection() {
+
+    const titleValue = useSelector((state) => state.selectedItem.title);
+
     return (
     <SectionContainer 
         additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80"
@@ -29,18 +35,23 @@ function TitleSection({titleValue, handleValueChange}) {
             textValue={titleValue} 
             additonalClasses="w-[100%] h-[60%]" 
             fieldName={"title"}
-            handleValueChange={handleValueChange}
+            handleValueChange={handleItemClick}
         />
     </SectionContainer>
     );
 }
 
+/*
 TitleSection.propTypes = {
     titleValue: PropTypes.string,
     handleValueChange: PropTypes.func,
 };
+*/
 
-function DescriptionSection({descriptionValue, handleValueChange}) {
+function DescriptionSection() {
+
+    const descriptionValue = useSelector((state) => state.selectedItem.description);
+
     return (
     <SectionContainer 
         additonalClasses="w-auto h-72 border-b-2 pb-4 min-w-80"
@@ -53,18 +64,26 @@ function DescriptionSection({descriptionValue, handleValueChange}) {
         <TextAreaSection 
             textValue={descriptionValue}
             fieldName={"description"}
-            handleValueChange={handleValueChange}
+            handleValueChange={handleItemClick}
         />
     </SectionContainer>
     );
 }
 
+/*
 DescriptionSection.propTypes = {
     descriptionValue: PropTypes.string,
     handleValueChange: PropTypes.func,
 };
+*/
 
-function SalarySection({transactionValue, currencyValue, currencies, handleValueChange}) {
+function SalarySection() {
+
+    const transactionValue = useSelector((state) => state.selectedItem.value);
+    const currencyValue = useSelector((state) => state.selectedItem.currency);
+    let currencies = [];
+    window.electronAPI.getCurrencies().then((data) => { currencies = data;} );
+
     return (
         <SectionContainer 
             additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80"
@@ -78,25 +97,27 @@ function SalarySection({transactionValue, currencyValue, currencies, handleValue
                 numberValue={transactionValue} 
                 additonalClasses="w-[70%] h-[60%] mx-4"
                 fieldName={"value"}
-                handleValueChange={handleValueChange}
+                handleValueChange={handleItemClick}
             />
             <SelectInputSection 
                 selectedValue={currencyValue} 
                 options={currencies} 
                 additonalClasses="w-[20%] h-[60%]"
                 fieldName={"currency"}
-                handleValueChange={handleValueChange}
+                handleValueChange={handleItemClick}
             />
         </SectionContainer>
     );
 }
 
+/*
 SalarySection.propTypes = {
     transactionValue: PropTypes.number,
     currencyValue: PropTypes.string,
     currencies: PropTypes.array,
     handleValueChange: PropTypes.func,
 };
+*/
 
 function H3HeadingSection({children}) {
     return (
@@ -110,7 +131,9 @@ H3HeadingSection.propTypes = {
     children: PropTypes.string,
 };
 
-function TransactionTypeSection({transactionType, handleValueChange}) {
+function TransactionTypeSection() {
+
+    const transactionType = useSelector((state) => state.selectedItem.transactionType);
 
     return (
         <SectionContainer 
@@ -126,7 +149,7 @@ function TransactionTypeSection({transactionType, handleValueChange}) {
                 fieldName="transactionType" 
                 additonalClasses="" 
                 checked={transactionType === "In"} 
-                handleValueChange={handleValueChange}
+                handleValueChange={handleItemClick}
             >
                 In
             </RadioButtonSection>
@@ -135,7 +158,7 @@ function TransactionTypeSection({transactionType, handleValueChange}) {
                 fieldName="transactionType" 
                 additonalClasses="" 
                 checked={transactionType === "Out"} 
-                handleValueChange={handleValueChange}
+                handleValueChange={handleItemClick}
             >
                 Out
             </RadioButtonSection>
@@ -143,12 +166,20 @@ function TransactionTypeSection({transactionType, handleValueChange}) {
     );
 }
 
+/*
 TransactionTypeSection.propTypes = {
     transactionType: PropTypes.string,
     handleValueChange: PropTypes.func,
 };
+*/
 
-function TransactionCategorySection({transactionCategory, transactionCategories, handleValueChange}) {
+function TransactionCategorySection() {
+
+    const transactionCategory = useSelector((state) => state.selectedItem.transactionCategory);
+    let transactionCategories = [];
+    window.electronAPI.getTransactionCategories().then((data) => { 
+        transactionCategories = data;
+    });
 
     return (
         <SectionContainer 
@@ -164,20 +195,24 @@ function TransactionCategorySection({transactionCategory, transactionCategories,
                 options={transactionCategories} 
                 additonalClasses="w-[50%]"
                 fieldName={"transactionCategory"}
-                handleValueChange={handleValueChange}
+                handleValueChange={handleItemClick}
             />
         </SectionContainer>
     );
 }
 
+/*
 TransactionCategorySection.propTypes = {
     transactionCategory: PropTypes.string,
     transactionCategories: PropTypes.array,
     handleValueChange: PropTypes.func,
 };
+*/
 
 
-function FromTypeSection({ fromType, handleValueChange }) {
+function FromTypeSection() {
+
+    const fromType = useSelector((state) => state.selectedItem.fromType);
 
     return (
         <SectionContainer additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80">
@@ -187,7 +222,7 @@ function FromTypeSection({ fromType, handleValueChange }) {
                 fieldName="fromType" 
                 additonalClasses="" 
                 checked={fromType === "Internal"} 
-                handleValueChange={handleValueChange}
+                handleValueChange={handleItemClick}
             >
                 Internal
             </RadioButtonSection>
@@ -196,7 +231,7 @@ function FromTypeSection({ fromType, handleValueChange }) {
                 fieldName="fromType" 
                 additonalClasses="" 
                 checked={fromType === "External"} 
-                handleValueChange={handleValueChange}
+                handleValueChange={handleItemClick}
             >
                 External
             </RadioButtonSection>
@@ -204,14 +239,21 @@ function FromTypeSection({ fromType, handleValueChange }) {
     );
 }
 
+/*
 FromTypeSection.propTypes = {
     fromType: PropTypes.string,
     handleValueChange: PropTypes.func,
 };
+*/
 
-
-function FromEntitySection({ fromEntity, fromType, transactionEntities, handleValueChange }) {
-
+function FromEntitySection() {
+    
+    const fromEntity = useSelector((state) => state.selectedItem.fromEntity);
+    const fromType = useSelector((state) => state.selectedItem.fromType);
+    let transactionEntities = [{name: "entity1", type: "Internal"},];
+    window.electronAPI.getTransactionEntities().then((data) => { 
+        transactionEntities = data;
+    });
     const transformedEntities = transactionEntities.filter((entity) => entity.type === fromType ).map((entity) => entity.name);
 
     return (
@@ -226,21 +268,25 @@ function FromEntitySection({ fromEntity, fromType, transactionEntities, handleVa
                 options={transformedEntities} 
                 additonalClasses="min-w-20"
                 fieldName={"fromEntity"}
-                handleValueChange={handleValueChange}
+                handleValueChange={handleItemClick}
             />
         </SectionContainer>
     );
 }
 
+/*
 FromEntitySection.propTypes = {
     fromEntity: PropTypes.string,
     fromType: PropTypes.string,
     transactionEntities: PropTypes.array,
     handleValueChange: PropTypes.func,
 };
+*/
 
 
-function ToTypeSection({ toType, handleValueChange }) {
+function ToTypeSection() {
+
+    const toType = useSelector((state) => state.selectedItem.toType);
 
     return (
         <SectionContainer additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80">
@@ -250,7 +296,7 @@ function ToTypeSection({ toType, handleValueChange }) {
                 fieldName="toType" 
                 additonalClasses="" 
                 checked={toType === "Internal"} 
-                handleValueChange={handleValueChange}
+                handleValueChange={handleItemClick}
             >
                 Internal
             </RadioButtonSection>
@@ -259,7 +305,7 @@ function ToTypeSection({ toType, handleValueChange }) {
                 fieldName="toType" 
                 additonalClasses="" 
                 checked={toType === "External"} 
-                handleValueChange={handleValueChange}
+                handleValueChange={handleItemClick}
             >
                 External
             </RadioButtonSection>
@@ -267,14 +313,22 @@ function ToTypeSection({ toType, handleValueChange }) {
     );
 }
 
+/*
 ToTypeSection.propTypes = {
     toType: PropTypes.string,
     handleValueChange: PropTypes.func,
 };
+*/
 
 
-function ToEntitySection({ toEntity, toType, transactionEntities, handleValueChange }) {
+function ToEntitySection() {
 
+    const toEntity = useSelector((state) => state.selectedItem.toEntity);
+    const toType = useSelector((state) => state.selectedItem.toType);
+    let transactionEntities = [{name: "entity1", type: "Internal"},];
+    window.electronAPI.getTransactionEntities().then((data) => { 
+        transactionEntities = data;
+    });
     const transformedEntities = transactionEntities.filter((entity) => entity.type === toType ).map((entity) => entity.name);
 
     return (
@@ -289,20 +343,24 @@ function ToEntitySection({ toEntity, toType, transactionEntities, handleValueCha
                 options={transformedEntities} 
                 additonalClasses="min-w-20"
                 fieldName={"toEntity"}
-                handleValueChange={handleValueChange}
+                handleValueChange={handleItemClick}
             />
         </SectionContainer>
     );
 }
 
+/*
 ToEntitySection.propTypes = {
     toEntity: PropTypes.string,
     toType: PropTypes.string,
     transactionEntities: PropTypes.array,
     handleValueChange: PropTypes.func,
 };
+*/
 
-function RecurringEntity({ recurringEntity }) {
+function RecurringEntity() {
+
+    const recurringEntity = useSelector((state) => state.selectedItem.recurringEntity);
 
     return (
         <SectionContainer additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80">
@@ -312,19 +370,23 @@ function RecurringEntity({ recurringEntity }) {
     );
 }
 
+/*
 RecurringEntity.propTypes = {
     recurringEntity: PropTypes.string,
 };
+*/
 
 
-function FileInput({ files, handleValueChange }) {
+function FileInput() {
+
+    const files = useSelector((state) => state.selectedItem.file);
 
     return (
         <SectionContainer additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80">
             <FileInputSection 
                 additonalClasses="justify-center"
                 files={files}
-                handleValueChange={handleValueChange}
+                handleValueChange={handleItemClick}
             />
             {files.map((fileName) => {
 
@@ -338,7 +400,7 @@ function FileInput({ files, handleValueChange }) {
                             additonalClasses=""
                             fileName={fileName}
                             files={files}
-                            handleValueChange={handleValueChange}
+                            handleValueChange={handleItemClick}
                         />
                     </li>
                 );
@@ -348,12 +410,18 @@ function FileInput({ files, handleValueChange }) {
     );
 }
 
+/*
 FileInput.propTypes = {
     files: PropTypes.array,
     handleValueChange: PropTypes.func,
 };
+*/
 
-function DatetimeInput({ datetimeValue, heading, fieldName, readonly, handleValueChange}) {
+function DatetimeInput({ datetimeValue, 
+                         heading, 
+                         fieldName, 
+                         readonly, 
+                         }) {
 
     return (
         <SectionContainer additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80">
@@ -367,7 +435,7 @@ function DatetimeInput({ datetimeValue, heading, fieldName, readonly, handleValu
                 additonalClasses={"justify-center"}
                 readonly={readonly}
                 fieldName={fieldName}
-                handleValueChange={handleValueChange}
+                handleValueChange={handleItemClick}
             />
         </SectionContainer>
     );
@@ -378,7 +446,6 @@ DatetimeInput.propTypes = {
     heading: PropTypes.string,
     fieldName: PropTypes.string,
     readonly: PropTypes.bool,
-    handleValueChange: PropTypes.func,
 };
 
 

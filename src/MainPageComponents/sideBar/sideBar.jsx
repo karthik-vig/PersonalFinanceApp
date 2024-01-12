@@ -3,17 +3,25 @@ import PropTypes from 'prop-types';
 import '../../index.css';
 import GenericSideBar from '../../pageLayoutComponents/genericSideBar.jsx';
 import { handleSelectItemClick } from '../../stateManagement/mainPageStates/selectedItem.js';
+import { useSelector } from 'react-redux';
 //import { useImmer } from 'use-immer'; //will be used later when we will have to handle the click event on the side bar items
 
-function SideBar({ items, setFailBoxDisplayState }) {
+function SideBar({ setFailBoxDisplayState }) {
+
+    const items = useSelector((state) => state.sideBarItems);
 
     const handleItemClick = (itemId) => {
-        const selectedItem = window.getSelectedItem(itemId);
+
+        let selectedItem = null;
+        window.electronAPI.getSelectedItem(itemId).then((data) => {
+            selectedItem = data;
+        });
+        //const selectedItem = window.electronAPI.getSelectedItem(itemId);
         if (selectedItem === null) {
             console.log("selectedItem is null, triggering fail box");
             setFailBoxDisplayState("block");
         }
-        return handleSelectItemClick(window.getSelectedItem(itemId));
+        return handleSelectItemClick(selectedItem);
     }
 
     const genericItems = items.map((item) => {
@@ -41,7 +49,7 @@ function SideBar({ items, setFailBoxDisplayState }) {
 }
 
 SideBar.propTypes = {
-    items: PropTypes.array,
+    //items: PropTypes.array,
     setFailBoxDisplayState: PropTypes.func,
 };
 

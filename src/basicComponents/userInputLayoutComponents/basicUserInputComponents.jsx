@@ -166,26 +166,29 @@ function FileInputSection({additonalClasses, files, handleValueChange}) {
 
     const dispatch = useDispatch();
     
-    const handleAddFile = (event) => {
-        console.log(typeof event.target.files);
+    const handleAddFile = () => {
+        //console.log(typeof event.target.files);
         const filesCopy = [...files];
-        Array.from(event.target.files).forEach((newFile) => {
-            const setFileBlobStatus = window.setFileBlob(newFile.name, newFile);
-            if (setFileBlobStatus && !filesCopy.includes(newFile.name)) {
-                filesCopy.push(newFile.name);
-            } 
+        let fileNames = false;
+        window.electronAPI.openFileDialog().then((data) => {
+            fileNames = data;
         });
+        if (fileNames.length > 0) {
+            fileNames.forEach((fileName) => {
+            if (!filesCopy.includes(fileName)) filesCopy.push(fileName);
+            });
+        } 
         //handleValueChange("file", filesCopy);
         dispatch(handleValueChange({fieldName: "file", fieldValue: filesCopy}))
     }
 
     return (
-        <input 
-            type="file" 
-            multiple 
+        <button 
             className={"" + " " + additonalClasses + " "}
-            onChange={(event) => handleAddFile(event)}
-        />
+            onChange={() => handleAddFile()}
+        >
+            Add File
+        </button>
     );
 }
 
@@ -196,21 +199,14 @@ FileInputSection.propTypes = {
 };
 
 function GetFileSection({ additonalClasses, fileName }) {
-    
-    const fileBlob = window.getFileBlob(fileName);
-    let fileBlobURL = "";
-    if (fileBlob !== null) {
-        fileBlobURL = URL.createObjectURL(fileBlob);
-    }
 
     return (
-        <a 
-            href={fileBlobURL} 
-            download={fileName} 
+        <button
             className={"min-w-20 min-h-20" + " " + additonalClasses + " "}
+            onClick={() => { window.electronAPI.saveFileDialog(fileName)} }
         >
             {fileName}
-        </a>
+        </button>
     );
 }
 
@@ -224,7 +220,10 @@ function DeleteFileButtonSection({additonalClasses, fileName, files, handleValue
     const dispatch = useDispatch();
 
     const handleFileDelete = (fileName) => { 
-        const deleteFileBlobStatus = window.deleteFileBlob(fileName);
+        let deleteFileBlobStatus = false;
+        window.electronAPI.deleteFileBlob(fileName).then((data) => {
+            deleteFileBlobStatus = data;
+        });
         let filesCopy = [...files];
         if (deleteFileBlobStatus) {
             filesCopy = files.filter((file) => file !== fileName);

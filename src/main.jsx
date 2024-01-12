@@ -5,10 +5,13 @@ import './index.css'
 import store from './stateManagement/reduxStore.js';
 import { Provider } from 'react-redux';
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>,
-  </React.StrictMode>,
-)
+window.onload = () => {
+  ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+      <Provider store={store}>
+        <App />
+      </Provider>,
+    </React.StrictMode>,
+  )
+}
+

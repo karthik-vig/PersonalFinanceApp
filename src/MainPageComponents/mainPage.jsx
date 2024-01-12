@@ -13,152 +13,15 @@ import GenericSuccess from '../pageLayoutComponents/genericSuccess.jsx';
 import GenericFail from '../pageLayoutComponents/genericFail.jsx';
 //import SideSectionButton from './sideSectionButton';
 //import GenericIconButton from './genericIconBtn';
-import { handleItemClick,
-         } from '../stateManagement/mainPageStates/selectedItem.js';
+//import { handleItemClick,
+//         } from '../stateManagement/mainPageStates/selectedItem.js';
+import { setSideBarItems,
+            } from '../stateManagement/mainPageStates/sideBarItems.js';
 
 
 function MainPage({svgIcons}) {
 
-    //when we get selectedItem from the database, we set a object in the
-    //nodejs to store the fileName and the fileBlob
-    //file blob simulated backend functions
-    window.getFileBlob = (fileName) => {
-        //communicate with backend to get the file blob
-        console.log( "get file blob fileName: ", fileName);
-        return new Blob([""], {type: "text/plain"}); //could also return null if the operation fails
-    }
-
-    window.setFileBlob = (fileName, fileBlob) => {
-        //communicate with backend to set the file blob
-        console.log( "set file blob fileName: ", fileName, " fileBlob: ", fileBlob);
-        return true; //could also return false if the operation fails
-    }
-
-    window.deleteFileBlob = (fileName) => {
-        //communicate with backend to delete the file blob
-        console.log( "delete file blob fileName: ", fileName);
-        return true; //could also return false if the operation fails
-    }
-
-
-    //file entry delete simulated backend functions
-    //not for front end as only backend can delete the file
-    /*
-    window.deleteFileEntry = (uuid, fileName) => {
-        //communicate with backend to delete the file entry
-        console.log("deleteFileEntry called with id: ", uuid, " and fileName: ", fileName);
-        return true; //could also return false if the operation fails
-    }
-    */
-
-    //backed function to get all items for the side bar
-    window.getAllItems = () => {
-        //communicate with backend to get all items
-        console.log("getAllItems called");
-        return [{id: 1, title: "someName", transactionDate: "2023.08.11", value: 2000, transactionType:"out", icon: svgIcons.faFilter},
-            {id: 2, title: "someName2", transactionDate: "2023.08.09", value: 100, transactionType:"in", icon: svgIcons.faFilter},
-            {id: 3, title: "someName3", transactionDate: "2023.08.03", value: 3500, transactionType:"in", icon: svgIcons.faFilter},
-            {id: 4, title: "someName4", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
-            {id: 5, title: "someName5", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: svgIcons.faFilter},
-            {id: 6, title: "someName6", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
-            {id: 7, title: "someName7", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: svgIcons.faFilter},
-            {id: 8, title: "someName8", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
-            {id: 9, title: "someName9", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: svgIcons.faFilter},
-            {id: 10, title: "someName10", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
-            {id: 11, title: "someName11", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: svgIcons.faFilter},
-            {id: 12, title: "someName12", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
-            {id: 13, title: "someName13", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: svgIcons.faFilter},
-            {id: 14, title: "someName14", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
-            {id: 15, title: "someName15", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: svgIcons.faFilter},
-            {id: 16, title: "someName16", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
-            {id: 17, title: "someName17", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: svgIcons.faFilter},
-            {id: 18, title: "someName18", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
-            {id: 19, title: "someName19", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: svgIcons.faFilter},
-            {id: 20, title: "someName20", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
-            ]; //could also return null if the operation fails
-    };
-
-    //this should actually be a backed side function;
-    //here just to simulate the effect.
-    window.getItems = (searchParams) => { 
-        //communicate with backend to get items
-        //based on the searchParams
-        console.log("getItems called with searchParams: ");
-        console.log(searchParams);
-        return [{id: 1, title: "someName", transactionDate: "2023.08.11", value: 2000, transactionType:"out", icon: svgIcons.faFilter},
-            {id: 2, title: "someName2", transactionDate: "2023.08.09", value: 100, transactionType:"in", icon: svgIcons.faFilter},
-            {id: 3, title: "someName3", transactionDate: "2023.08.03", value: 3500, transactionType:"in", icon: svgIcons.faFilter},
-            {id: 4, title: "someName4", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: svgIcons.faFilter},
-            {id: 5, title: "someName5", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: svgIcons.faFilter},
-            ]; //could also return null if the operation fails
-    };
-
-    //some other functions are:
-    //for getting the selectedItem value based on id; return null if the operation fails
-    window.getSelectedItem = (uuid) => {
-        //communicate with backend to get the selectedItem
-        console.log("getSelectedItem called with id: ", uuid);
-        //return null;
-        ///*
-        return {
-            id: uuid, //uuidv4 template
-            title: null,
-            description: null,
-            value: 0.0,
-            currency: null,
-            transactionType: null,
-            transactionCategory: null,
-            fromEntity: null, //computed by backend
-            fromType: null,
-            toEntity: null, //computed by backend
-            toType: null,
-            recurringEntity: null,
-            file: ["file91.txt", "file92.txt", "file93.txt"],
-            createdDate: "yyyy-MM-ddThh:mm:ss",
-            modifiedDate: "yyyy-MM-ddThh:mm:ss",
-            transactionDate: "yyyy-MM-ddThh:mm:ss",
-        }; //could also return null if the operation fails 
-        //*/
-    };
-
-    //using id to delete an entry; return false if the operation fails
-    window.deleteItem = (id) => {
-        //communicate with backend to delete the item
-        console.log("deleteItem called with id: ", id);
-        return true; //could also return null if the operation fails
-    };
-
-    //takes selecteItem to modify an entry; return object if the operation succes; null if failure
-    window.modifyItem = (selectedItem) => {
-        //communicate with backend to modify the item
-        console.log("modifyItem called with id: ", selectedItem.id);
-        return {
-            modifyStatus: true,
-            item: {id: selectedItem.id, 
-                    title: "someName5", 
-                    transactionDate: "2023.08.01", 
-                    value: 5000, 
-                    transactionType:"in", 
-                    icon: svgIcons.faFilter
-                },
-        }; //could also return null if the operation fails
-    };
-
-    //for simulation
-    //this should actually be a backed side function;
-    //this would create an entry and enter it into the database
-    //and return the following info for the side bar.
-    window.createEntry = () => {
-        return (
-                {id: 21, 
-                title: "NEW ENTRY", 
-                transactionDate: "2023.08.01", 
-                value: 5000, 
-                transactionType:"in", 
-                icon: svgIcons.faFilter}
-        ); //could also return null if the operation fails
-    };
-
+    
     //this is only the data structure for the selected item; backend needs to maintain other information related to
     //the selected item, such as the fromRef, toRef, etc.
     //we also need to send additional stuff for the select list from the backed, such as
@@ -197,7 +60,7 @@ function MainPage({svgIcons}) {
                                                     });
     */
 
-    const [sideBarItems, setSideBarItems] = useImmer(window.getAllItems()); //this will be an array of objects of the form {id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx", title: "someName", transactionDate: "2023.08.11", value: 2000, transactionType:"out", icon: svgIcons.faFilter}
+    //const [sideBarItems, setSideBarItems] = useImmer(window.getAllItems()); //this will be an array of objects of the form {id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx", title: "someName", transactionDate: "2023.08.11", value: 2000, transactionType:"out", icon: svgIcons.faFilter}
 
     const [warningBoxDisplayState, setWarningBoxDisplayState] = useImmer({
                                                                             refreshBtn: "hidden",
@@ -235,6 +98,9 @@ function MainPage({svgIcons}) {
     const selectedItem = useSelector(state => state.selectedItem);
     //const dispatch = useDispatch();
 
+    const sideBarItems = useSelector(state => state.sideBarItems);
+    //dispatch(setSideBarItems(window.electronAPI.getAllItems()));
+
     const handleSearch = (keyCode, searchParams, filterParamsVisibility) => {
         //communicate with backend to get filtered and sorted items 
         const makeFilterObjectCopy = (filterObj, filterParamsVisibility) => {
@@ -268,7 +134,10 @@ function MainPage({svgIcons}) {
             localSearchParams.search = searchParams.search;
             localSearchParams.filter = makeFilterObjectCopy(searchParams.filter, filterParamsVisibility);
             console.log(localSearchParams);
-            const items = window.getItems(localSearchParams);
+            let items = null;
+            window.electronAPI.getItems(localSearchParams).then(data => {
+                items = data;
+            });
             if (items === null) {
                 setFailBoxDisplayState("block");
                 return;
@@ -290,7 +159,10 @@ function MainPage({svgIcons}) {
         //show the item in the sidebar
         //and make the detail section empty to that
         //the new values can be added
-        const newEntrySideBarItem = window.createEntry();
+        let newEntrySideBarItem = null;
+        window.electronAPI.createEntry().then(data => {
+            newEntrySideBarItem = data;
+        });
         if (newEntrySideBarItem === null) {
             setFailBoxDisplayState("block");
             return;
@@ -314,7 +186,10 @@ function MainPage({svgIcons}) {
         //to modify an entry
         //use the selectedItem object
         console.log("modifyDatabase called. The ID to modify is :", selectedItem.id);
-        const modifiedItem = window.modifyItem(selectedItem);
+        let modifiedItem = null;
+        window.electronAPI.modifyItem(selectedItem).then(data => {
+            modifiedItem = data;
+        });
         if (modifiedItem.modifyStatus){
             setSideBarItems(draft => {
                 draft = draft.map(item => {
@@ -344,7 +219,10 @@ function MainPage({svgIcons}) {
         //to delete an entry
         //use the selectedItem object
         console.log("deleteEntry called. The ID to delete is :", selectedItem.id);
-        const deleteStatus = window.deleteItem(selectedItem.id);
+        let deleteStatus = false;
+        window.electronAPI.deleteItem(selectedItem.id).then(data => {
+            deleteStatus = data;
+        });
         if (deleteStatus){
             setSideBarItems(draft => {
                 draft = draft.filter(item => item.id !== selectedItem.id);
@@ -408,9 +286,8 @@ function MainPage({svgIcons}) {
                 setFailBoxDisplayState={setFailBoxDisplayState}
             />
             <DetailSection 
-                selectedItem={selectedItem}
-                handleValueChange={handleItemClick}
-                setFailBoxDisplayState={setFailBoxDisplayState}
+                //selectedItem={selectedItem}
+                //handleValueChange={handleItemClick}
             />
         </div>
     );

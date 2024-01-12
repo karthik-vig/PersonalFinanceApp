@@ -11,6 +11,7 @@ import { faHouse, faChartLine, faBuildingColumns, faTicketSimple, faFilter, faSo
 library.add(faHouse, faChartLine, faBuildingColumns, faTicketSimple, faFilter, faSort, faPlus, faTrashCan, faEdit, faRefresh);
 
 function App() {
+
   const [activeTab, setActiveTab] = useImmer({
                                               mainPage: true,
                                              analyticPage: false,
