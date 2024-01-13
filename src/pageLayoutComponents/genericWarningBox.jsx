@@ -23,7 +23,7 @@ function GenericWarningBox({warningText,
                 <section className="flex flex-row flex-nowrap justify-center">
                     <button 
                         className="flex flex-row flex-nowrap justify-center items-center w-20 h-8 rounded-md bg-yellow-500 hover:bg-yellow-600"
-                        onClick={() => dispatch(setState()) }
+                        onClick={() => { dispatch(setState()); dispatch(changeDisplayState()) } }
                     >
                         <p className="text-sm font-semibold text-white">Yes</p>
                     </button>

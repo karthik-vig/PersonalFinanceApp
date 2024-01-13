@@ -130,12 +130,12 @@ function TopBar({ svgIcons,
             <TopBarButton 
                 svgIcon={svgIcons.faEdit} 
                 btnName="Modify" 
-                onClickHandler={ () => dispatch(setWarningBoxDisplayModifyState()) }
+                onClickHandler={ () => dispatch(setWarningBoxDisplayModifyState("block")) }
             />
             <TopBarButton 
                 svgIcon={svgIcons.faTrashCan} 
                 btnName="Delete" 
-                onClickHandler={ () => dispatch(setWarningBoxDisplayDeleteState()) }
+                onClickHandler={ () => dispatch(setWarningBoxDisplayDeleteState("block")) }
             />
             <input 
                 type="text" 
