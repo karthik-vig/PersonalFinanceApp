@@ -108,6 +108,8 @@ function MainPage({svgIcons}) {
    useEffect(() => {
         if (!triggerModifyEntryState) {
             //modify the database
+            console.log("The Modify Entry trigger selected item is: ");
+            console.log(selectedItem);
             window.electronAPI.modifyItem(selectedItem).then(modifiedItem => {
                 if (modifiedItem.modifyStatus){
                     //wrong
@@ -141,7 +143,7 @@ function MainPage({svgIcons}) {
     }, [triggerDeleteEntryState,
         dispatch,
         //resetTriggerDeleteEntry,
-        selectedItem.id,
+        selectedItem,
     ]);
 
     return (

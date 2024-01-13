@@ -133,20 +133,20 @@ function getItems(db) {
 //when we get selectedItem from the database, we set a object in the
 //nodejs to store the fileName and the fileBlob
 //file blob simulated backend functions
-function getFileBlob(fileName) {
+function getFileBlob(event, fileName) {
     //communicate with backend to get the file blob
     console.log( "get file blob fileName: ", fileName);
     const fileBufferData = getCurrentSelectedItemFiles().get(fileName, null);
     return  fileBufferData;//could also return null if the operation fails
 }
 
-function setFileBlob(fileName, arrayBuffer) {
+function setFileBlob(event, fileName, arrayBuffer) {
     //communicate with backend to set the file blob
     console.log( "set file blob fileName: ", fileName, " fileBlob: ", arrayBuffer);
     return true; //could also return false if the operation fails
 }
 
-function deleteFileBlob(fileName) {
+function deleteFileBlob(event, fileName) {
     //communicate with backend to delete the file blob
     console.log( "delete file blob fileName: ", fileName);
     const currentSelectedItemFiles = getCurrentSelectedItemFiles();
@@ -158,7 +158,7 @@ function deleteFileBlob(fileName) {
 }
 
 //file all files entry from files table based on uuid
-function getFileEntries(uuid) {
+function getFileEntries(event, uuid) {
     //communicate with backend to get all file entries
     console.log("getAllFileEntries called with id: ", uuid);
     //specifically it fetches the data from the files table based on the uuid
@@ -210,7 +210,7 @@ function getAllItems() {
 
 //this should actually be a backed side function;
 //here just to simulate the effect.
-function getItems (searchParams) { 
+function getItems (event, searchParams) { 
     //communicate with backend to get items
     //based on the searchParams
     console.log("getItems called with searchParams: ");
@@ -225,7 +225,7 @@ function getItems (searchParams) {
 
 //some other functions are:
   //for getting the selectedItem value based on id; return null if the operation fails
-function getSelectedItem(uuid) {
+function getSelectedItem(event, uuid) {
     //communicate with backend to get the selectedItem
     console.log("getSelectedItem called with id: ", uuid);
     //get the currentSelectedItemFiles object
@@ -262,14 +262,14 @@ function getSelectedItem(uuid) {
 }
 
 //using id to delete an entry; return false if the operation fails
-function deleteItem(id) {
+function deleteItem(event, id) {
     //communicate with backend to delete the item
     console.log("deleteItem called with id: ", id);
     return true; //could also return false if the operation fails
 }
 
 //takes selecteItem to modify an entry; return object if the operation succes; null if failure
-function modifyItem (selectedItem){
+function modifyItem (event, selectedItem){
     //communicate with backend to modify the item
     console.log("modifyItem called with id: ", selectedItem.id);
     return {
