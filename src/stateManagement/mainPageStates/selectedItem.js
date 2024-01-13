@@ -45,7 +45,8 @@ export const selectedItemSlice = createSlice({
             /*action.payload = the selectedItem object structure with values
             */
            if (action.payload !== null){
-                return action.payload;
+                state = action.payload;
+                return state;
            }
            return null;
         },

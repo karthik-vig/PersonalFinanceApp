@@ -1,39 +1,50 @@
 //import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import PropTypes from 'prop-types';
+//import PropTypes from 'prop-types';
 import '../../index.css';
 import GenericSideBar from '../../pageLayoutComponents/genericSideBar.jsx';
 import { handleSelectItemClick } from '../../stateManagement/mainPageStates/selectedItem.js';
-import { useSelector } from 'react-redux';
+import { showFailBox } from '../../stateManagement/mainPageStates/failBoxDisplay.js';
+import { triggerSearch } from '../../stateManagement/mainPageStates/triggerSearch.js';
+import { setCurrentSelectedItem } from '../../stateManagement/mainPageStates/currentSelectedItem.js';
+import { useSelector,
+         useDispatch,
+ } from 'react-redux';
+import { useEffect } from 'react';
 //import { useImmer } from 'use-immer'; //will be used later when we will have to handle the click event on the side bar items
 
-function SideBar({ setFailBoxDisplayState }) {
+function SideBar() {
 
-    const items = useSelector((state) => state.sideBarItems);
+    const sideBarItems = useSelector((state) => state.sideBarItems);
+    const currentSelectedItemState = useSelector((state) => state.currentSelectedItemState);
+    const dispatch = useDispatch();
 
-    const handleItemClick = (itemId) => {
-
-        let selectedItem = null;
-        window.electronAPI.getSelectedItem(itemId).then((data) => {
-            selectedItem = data;
+    //get the selecteded item data from the main process
+    useEffect(() => {
+        if (currentSelectedItemState === null) return;
+        console.log("currentSelectedItemState is not null, triggering getSelectedItem")
+        console.log(currentSelectedItemState);
+        window.electronAPI.getSelectedItem(currentSelectedItemState).then((selectedItem) => {
+            if (selectedItem === null) {
+                console.log("selectedItem is null, triggering fail box");
+                dispatch(showFailBox());
+            }
+            dispatch(handleSelectItemClick(selectedItem));
         });
-        //const selectedItem = window.electronAPI.getSelectedItem(itemId);
-        if (selectedItem === null) {
-            console.log("selectedItem is null, triggering fail box");
-            setFailBoxDisplayState("block");
-        }
-        return handleSelectItemClick(selectedItem);
-    }
+    }, [currentSelectedItemState,
+        dispatch,
+    ]);
 
-    const genericItems = items.map((item) => {
+
+    const genericItems = sideBarItems.map((sideBarItem) => {
         let fontColor = "text-green-500";
-        if (item.transactionType === "out") fontColor = "text-red-500";
+        if (sideBarItem.transactionType === "out") fontColor = "text-red-500";
         return (
             {
-                id: item.id, //uuid4
-                title: item.title + " (" + item.transactionType + ")", 
-                subTitle: "Transaction Date: " + item.transactionDate + " . " + "Value: " + item.value, 
+                id: sideBarItem.id, //uuid4
+                title: sideBarItem.title + " (" + sideBarItem.transactionType + ")", 
+                subTitle: "Transaction Date: " + sideBarItem.transactionDate + " . " + "Value: " + sideBarItem.value, 
                 titleFontColor: fontColor, 
-                icon: item.icon
+                icon: sideBarItem.icon
             }
         );
     
@@ -42,15 +53,17 @@ function SideBar({ setFailBoxDisplayState }) {
     return (
         <GenericSideBar 
             items={genericItems} 
-            handleItemClick={handleItemClick}
+            handleItemClick={(uuid) => { dispatch(triggerSearch()); dispatch(setCurrentSelectedItem(uuid));  }}
         />
     
     );
 }
 
+/*
 SideBar.propTypes = {
     //items: PropTypes.array,
     setFailBoxDisplayState: PropTypes.func,
 };
+*/
 
 export default SideBar;

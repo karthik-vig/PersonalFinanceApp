@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+//import PropTypes from 'prop-types';
 import '../../index.css';
 import {
         NumberInputField,
@@ -10,9 +10,20 @@ import {FilterRangeInputParam,
         FilterSortInputParam,
     } from '../../basicComponents/filterMenuLayoutComponents/filterMenuContainerLayouts.jsx';
 //import { useImmer } from 'use-immer';
+import { useSelector, useDispatch } from 'react-redux';
+import {  //showFilter,
+          hideFilter,
+ } from '../../stateManagement/mainPageStates/filterDisplay.js';
+import { toggleFilterParamsVisibility } from '../../stateManagement/mainPageStates/filterParamsVisibility.js';
+import { setFilterParams } from '../../stateManagement/mainPageStates/searchParams.js';
 
-
-function FilterMenu({ displayState="hidden", setSearchParams, filterParamsVisibility, setFilterParamsVisibility, changeDisplayState }){
+function FilterMenu(/*{ 
+                      //displayState="hidden", 
+                      //setSearchParams, 
+                      //filterParamsVisibility, 
+                      //setFilterParamsVisibility, 
+                      //changeDisplayState 
+                    }*/){
     
 
     //each filter param is enabled or disabled based on the whether
@@ -47,13 +58,15 @@ function FilterMenu({ displayState="hidden", setSearchParams, filterParamsVisibi
     */
 
     
-
+    /*
     const toggleDisplay = (fieldName) => {
         setFilterParamsVisibility(draft => {
             draft[fieldName] = !draft[fieldName];
         });
     }
+    */
 
+    /*
     const handleInputChange = (fieldName, fieldValue) => {
         setSearchParams(draft => {
             const fieldSuffice = fieldName.slice(-3);
@@ -67,6 +80,14 @@ function FilterMenu({ displayState="hidden", setSearchParams, filterParamsVisibi
         });
         console.log(fieldName, fieldValue);
     };
+    */
+
+    const filterParamsVisibility = useSelector((state) => state.filterParamsVisibility);
+    const displayState = useSelector((state) => state.filterDisplayState);
+    const dispatch = useDispatch();
+
+    const handleInputChange = (fieldName, fieldValue) => dispatch(setFilterParams({fieldName, fieldValue}));
+    const toggleFieldVisibility = (fieldName) => dispatch(toggleFilterParamsVisibility(fieldName));
 
     //get from backend api
     const currencies = ["RON", "EUR", "USD"];
@@ -82,7 +103,7 @@ function FilterMenu({ displayState="hidden", setSearchParams, filterParamsVisibi
         >
             <button
                 className="sticky top-0 left-[90%] h-8 w-16 rounded-lg border bg-surface-cl drop-shadow-lg"
-                onClick={() => changeDisplayState("hidden")}
+                onClick={() => dispatch(hideFilter())}
             >
                 Close
             </button>
@@ -90,7 +111,7 @@ function FilterMenu({ displayState="hidden", setSearchParams, filterParamsVisibi
                 labelText={{"rangeStart": "Min", "rangeEnd": "Max"}}
                 headingText="Value"
                 fieldName="value"
-                toggleDisplay={toggleDisplay}
+                toggleDisplay={toggleFieldVisibility}
                 filterParamsVisibility={filterParamsVisibility}
             >
                 <NumberInputField
@@ -107,7 +128,7 @@ function FilterMenu({ displayState="hidden", setSearchParams, filterParamsVisibi
             <FilterSelectInputParam
                 headingText="Currency"
                 fieldName="currency"
-                toggleDisplay={toggleDisplay}
+                toggleDisplay={toggleFieldVisibility}
                 handleInputChange={handleInputChange}
                 filterParamsVisibility={filterParamsVisibility}
                 selectOptions={currencies}
@@ -115,7 +136,7 @@ function FilterMenu({ displayState="hidden", setSearchParams, filterParamsVisibi
             <FilterSelectInputParam
                 headingText="Transaction Type"
                 fieldName="transactionType"
-                toggleDisplay={toggleDisplay}
+                toggleDisplay={toggleFieldVisibility}
                 handleInputChange={handleInputChange}
                 filterParamsVisibility={filterParamsVisibility}
                 selectOptions={["In", "Out"]}
@@ -123,7 +144,7 @@ function FilterMenu({ displayState="hidden", setSearchParams, filterParamsVisibi
             <FilterSelectInputParam
                 headingText="Transaction Category"
                 fieldName="transactionCategory"
-                toggleDisplay={toggleDisplay}
+                toggleDisplay={toggleFieldVisibility}
                 handleInputChange={handleInputChange}
                 filterParamsVisibility={filterParamsVisibility}
                 selectOptions={transactionCategories}
@@ -131,7 +152,7 @@ function FilterMenu({ displayState="hidden", setSearchParams, filterParamsVisibi
             <FilterSelectInputParam
                 headingText="From Type"
                 fieldName="fromType"
-                toggleDisplay={toggleDisplay}
+                toggleDisplay={toggleFieldVisibility}
                 handleInputChange={handleInputChange}
                 filterParamsVisibility={filterParamsVisibility}
                 selectOptions={["Internal", "External"]}
@@ -139,7 +160,7 @@ function FilterMenu({ displayState="hidden", setSearchParams, filterParamsVisibi
             <FilterSelectInputParam
                 headingText="From Entity"
                 fieldName="fromEntity"
-                toggleDisplay={toggleDisplay}
+                toggleDisplay={toggleFieldVisibility}
                 handleInputChange={handleInputChange}
                 filterParamsVisibility={filterParamsVisibility}
                 selectOptions={transactionEntityNames}
@@ -147,7 +168,7 @@ function FilterMenu({ displayState="hidden", setSearchParams, filterParamsVisibi
             <FilterSelectInputParam
                 headingText="To Type"
                 fieldName="toType"
-                toggleDisplay={toggleDisplay}
+                toggleDisplay={toggleFieldVisibility}
                 handleInputChange={handleInputChange}
                 filterParamsVisibility={filterParamsVisibility}
                 selectOptions={["Internal", "External"]}
@@ -155,7 +176,7 @@ function FilterMenu({ displayState="hidden", setSearchParams, filterParamsVisibi
             <FilterSelectInputParam
                 headingText="To Entity"
                 fieldName="toEntity"
-                toggleDisplay={toggleDisplay}
+                toggleDisplay={toggleFieldVisibility}
                 handleInputChange={handleInputChange}
                 filterParamsVisibility={filterParamsVisibility}
                 selectOptions={transactionEntityNames}
@@ -163,7 +184,7 @@ function FilterMenu({ displayState="hidden", setSearchParams, filterParamsVisibi
             <FilterSelectInputParam
                 headingText="Recurring Entity"
                 fieldName="recurringEntity"
-                toggleDisplay={toggleDisplay}
+                toggleDisplay={toggleFieldVisibility}
                 handleInputChange={handleInputChange}
                 filterParamsVisibility={filterParamsVisibility}
                 selectOptions={recurringEntities}
@@ -172,7 +193,7 @@ function FilterMenu({ displayState="hidden", setSearchParams, filterParamsVisibi
                 labelText={{"rangeStart": "Min", "rangeEnd": "Max"}}
                 headingText="Created Date"
                 fieldName="createdDate"
-                toggleDisplay={toggleDisplay}
+                toggleDisplay={toggleFieldVisibility}
                 filterParamsVisibility={filterParamsVisibility}
             >
                 <DateInputField
@@ -190,7 +211,7 @@ function FilterMenu({ displayState="hidden", setSearchParams, filterParamsVisibi
                 labelText={{"rangeStart": "Min", "rangeEnd": "Max"}}
                 headingText="Modified Date"
                 fieldName="modifiedDate"
-                toggleDisplay={toggleDisplay}
+                toggleDisplay={toggleFieldVisibility}
                 filterParamsVisibility={filterParamsVisibility}
             >
                 <DateInputField
@@ -208,7 +229,7 @@ function FilterMenu({ displayState="hidden", setSearchParams, filterParamsVisibi
                 labelText={{"rangeStart": "Min", "rangeEnd": "Max"}}
                 headingText="Transaction Date"
                 fieldName="transactionDate"
-                toggleDisplay={toggleDisplay}
+                toggleDisplay={toggleFieldVisibility}
                 filterParamsVisibility={filterParamsVisibility}
             >
                 <DateInputField
@@ -223,7 +244,7 @@ function FilterMenu({ displayState="hidden", setSearchParams, filterParamsVisibi
                 />
             </FilterRangeInputParam>
             <FilterSortInputParam
-                toggleDisplay={toggleDisplay}
+                toggleDisplay={toggleFieldVisibility}
                 handleInputChange={handleInputChange}
                 filterParamsVisibility={filterParamsVisibility}
             />
@@ -232,11 +253,11 @@ function FilterMenu({ displayState="hidden", setSearchParams, filterParamsVisibi
 }
 
 FilterMenu.propTypes = {
-    displayState: PropTypes.string,
-    setSearchParams: PropTypes.func,
-    filterParamsVisibility: PropTypes.object,
-    setFilterParamsVisibility: PropTypes.func,
-    changeDisplayState: PropTypes.func,
+    //displayState: PropTypes.string,
+    //setSearchParams: PropTypes.func,
+    //filterParamsVisibility: PropTypes.object,
+    //setFilterParamsVisibility: PropTypes.func,
+    //changeDisplayState: PropTypes.func,
 };
 
 export default FilterMenu;

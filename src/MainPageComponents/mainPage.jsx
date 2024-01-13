@@ -1,9 +1,10 @@
 //import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
+import { useEffect } from 'react';
 import '../index.css';
-import { useImmer } from 'use-immer';
+//import { useImmer } from 'use-immer';
 import { useSelector,
-         //useDispatch,
+         useDispatch,
          } from 'react-redux';
 import SideBar from './sideBar/sideBar.jsx';
 import TopBar from './topBar/topBar.jsx';
@@ -15,231 +16,133 @@ import GenericFail from '../pageLayoutComponents/genericFail.jsx';
 //import GenericIconButton from './genericIconBtn';
 //import { handleItemClick,
 //         } from '../stateManagement/mainPageStates/selectedItem.js';
-import { setSideBarItems,
-            } from '../stateManagement/mainPageStates/sideBarItems.js';
-
+import { showFailBox, hideFailBox } from '../stateManagement/mainPageStates/failBoxDisplay.js';
+import { hideSuccessBox, showSuccessBox } from '../stateManagement/mainPageStates/successBoxDisplay.js';
+import {  setWarningBoxDisplayModifyState,
+          //setWarningBoxDisplayAddState,
+          setWarningBoxDisplayDeleteState,
+          //setWarningBoxDisplayRefreshState,
+    } from '../stateManagement/mainPageStates/warningBoxDisplay.js';
+import { resetTriggerModifyEntry, triggerModifyEntry,
+         //resetTriggerModifyEntry,
+ } from '../stateManagement/mainPageStates/triggerModifyEntry.js';
+import { resetTriggerDeleteEntry, triggerDeleteEntry,
+            //resetTriggerDeleteEntry,
+    } from '../stateManagement/mainPageStates/triggerDeleteEntry.js';
+import {  removeSideBarItem,
+    modifySideBarItem,
+    addSideBarItem,
+    setSideBarItems,
+ } from '../stateManagement/mainPageStates/sideBarItems.js';
+ import {  //triggerAddEntry,
+            resetTriggerAddEntry,
+ } from '../stateManagement/mainPageStates/triggerAddEntry.js';
+import {  //triggerSearch,
+        resetTriggerSearch,
+} from '../stateManagement/mainPageStates/triggerSearch.js';
 
 function MainPage({svgIcons}) {
 
-    
-    //this is only the data structure for the selected item; backend needs to maintain other information related to
-    //the selected item, such as the fromRef, toRef, etc.
-    //we also need to send additional stuff for the select list from the backed, such as
-    //currencies, transaction categories, transaction types, etc.
-    /*
-    const [selectedItem, setSelectedItem] = useImmer({
-                                                     id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx", //uuidv4 template
-                                                     title: null,
-                                                     description: null,
-                                                     value: 0.0,
-                                                     currency: null,
-                                                     transactionType: null,
-                                                     transactionCategory: null,
-                                                     fromEntity: null, //computed by backend
-                                                     fromType: null,
-                                                     toEntity: null, //computed by backend
-                                                     toType: null,
-                                                     recurringEntity: null,
-                                                     file: { 
-                                                            file1: {
-                                                                    fileBlob: new Blob([""], {type: "text/plain"}),
-                                                                    mimetype: "text/plain",
-                                                                    },
-                                                            file2: {
-                                                                    fileBlob: new Blob([""], {type: "text/plain"}),
-                                                                    mimetype: "text/plain",
-                                                                    },
-                                                            file3: {
-                                                                    fileBlob: new Blob([""], {type: "text/plain"}),
-                                                                    mimetype: "text/plain",
-                                                                    },
-                                                    },
-                                                     createdDate: "YYYY-MM-DDThh:mm:ss",
-                                                     modifiedDate: "YYYY-MM-DDThh:mm:ss",
-                                                     transactionDate: "YYYY-MM-DDThh:mm:ss",
-                                                    });
-    */
+    const selectedItem = useSelector(state => state.selectedItem);
+    const warningBoxDisplayState = useSelector(state => state.warningBoxDisplayState);
+    const failBoxDisplayState = useSelector(state => state.failBoxDisplayState);
+    const successBoxDisplayState = useSelector(state => state.successBoxDisplayState);
+    const triggerModifyEntryState = useSelector(state => state.triggerModifyEntryState);
+    const triggerDeleteEntryState = useSelector(state => state.triggerDeleteEntryState);
+    const triggerAddEntryState = useSelector(state => state.triggerAddEntryState);
+    const triggerSearchState = useSelector(state => state.triggerSearchState);
+    const searchParams = useSelector(state => state.searchParams);
+    const filterParamsVisibility = useSelector(state => state.filterParamsVisibility);   
+    const dispatch = useDispatch();
 
-    //const [sideBarItems, setSideBarItems] = useImmer(window.getAllItems()); //this will be an array of objects of the form {id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx", title: "someName", transactionDate: "2023.08.11", value: 2000, transactionType:"out", icon: svgIcons.faFilter}
 
-    const [warningBoxDisplayState, setWarningBoxDisplayState] = useImmer({
-                                                                            refreshBtn: "hidden",
-                                                                            addBtn: "hidden",
-                                                                            modifyBtn: "hidden",
-                                                                            deleteBtn: "hidden",
-                                                                        });
-
-    const [successBoxDisplayState, setSuccessBoxDisplayState] = useImmer("hidden");
-    const [failBoxDisplayState, setFailBoxDisplayState] = useImmer("hidden");
-
-    /*
-    const handleItemClick = (field, value) => {
-        //console.log("field: " + field + " value: " + value)
-        setSelectedItem( (draft) => { draft[field] = value; } );
-        //console.log(selectedItem);
-    };
-
-    const handleSelectItemClick = (uuid) => {
-        setSelectedItem( (draft) => {
-            //get the item from the backend using UUID
-            const item = getSelectedItem(uuid);
-            if (item === null) {
-                setFailBoxDisplayState("block");
+    //tigger getAllItems on page load
+    useEffect(() => {
+        window.electronAPI.getAllItems().then(items => {
+            if (items === null) {
+                dispatch(showFailBox());
                 return;
             }
-            //for each field in the draft, set the value in the Item
-            for (const [key, value] of Object.entries(item)) {
-                draft[key] = value;
-            }
-         } );
-    }
-    */
+            dispatch(setSideBarItems(items));
+        });
+    }, [dispatch]);
 
-    const selectedItem = useSelector(state => state.selectedItem);
-    //const dispatch = useDispatch();
+   //trigger on search params set and enter key pressed
+    useEffect(() => {
+        if (triggerSearchState) {
+            window.electronAPI.getItems(searchParams).then(items => {
+                if (items === null) {
+                    dispatch(showFailBox());
+                    return;
+                }
+                dispatch(setSideBarItems(items));
+                dispatch(resetTriggerSearch());
+            });
+        }
+    }, [triggerSearchState,
+        dispatch,
+        //resetTriggerSearch,
+        searchParams,
+        filterParamsVisibility,
+    ]);
 
-    const sideBarItems = useSelector(state => state.sideBarItems);
-    //dispatch(setSideBarItems(window.electronAPI.getAllItems()));
+   //trigger on add entry
+    useEffect(() => {
+        if (triggerAddEntryState) {
+            window.electronAPI.createEntry().then(newEntrySideBarItem => {
+                if (newEntrySideBarItem === null) {
+                    dispatch(showFailBox());
+                    return;
+                }
+                dispatch(addSideBarItem(newEntrySideBarItem));
+                dispatch(showSuccessBox());
+                dispatch(resetTriggerAddEntry());
+            });
+        }
+    }, [triggerAddEntryState,
+        dispatch,
+        //resetTriggerAddEntry,
+    ]);
 
-    const handleSearch = (keyCode, searchParams, filterParamsVisibility) => {
-        //communicate with backend to get filtered and sorted items 
-        const makeFilterObjectCopy = (filterObj, filterParamsVisibility) => {
-            const copy = {};
-            Object.entries(filterObj).forEach(([fieldName, fieldValue]) => {
-                if (!filterParamsVisibility[fieldName]) {
-                    if (typeof(fieldValue) === "object") {
-                        copy[fieldName] = { min: null, max: null };
-                    }
-                    else {
-                    copy[fieldName] = null;
-                    }
+   //trigger on modify entry
+   useEffect(() => {
+        if (!triggerModifyEntryState) {
+            //modify the database
+            window.electronAPI.modifyItem(selectedItem).then(modifiedItem => {
+                if (modifiedItem.modifyStatus){
+                    //wrong
+                    dispatch(modifySideBarItem({id: selectedItem.id, item: modifiedItem }));
+                    dispatch(showSuccessBox());
                 }
                 else {
-                    if (typeof(fieldValue) === "object") {
-                        copy[fieldName] = { min: filterObj[fieldName].min, 
-                                            max:  filterObj[fieldName].max
-                                        };
-                    }
-                    else {
-                    copy[fieldName] = filterObj[fieldName];
-                    }
+                    dispatch(showFailBox());
                 }
-            });
-            return copy;
-        };
-
-        if(keyCode === "Enter") { //enter key
-            console.log("searching for: ");
-            const localSearchParams = {};
-            localSearchParams.search = searchParams.search;
-            localSearchParams.filter = makeFilterObjectCopy(searchParams.filter, filterParamsVisibility);
-            console.log(localSearchParams);
-            let items = null;
-            window.electronAPI.getItems(localSearchParams).then(data => {
-                items = data;
-            });
-            if (items === null) {
-                setFailBoxDisplayState("block");
-                return;
-            }
-            setSideBarItems(draft => {
-                draft = items;
-                return draft;
+                dispatch(resetTriggerModifyEntry());
             });
         }
-    };
+   }, [triggerModifyEntryState,
+        dispatch,
+        //resetTriggerModifyEntry,
+        selectedItem,
+    ]);
 
-    const handleRefreshBtnClick = () => {
-        console.log("Refresh button clicked");
-    }
 
-    const handleAddBtnClick = () => {
-        console.log("Add button clicked");
-        //add a new entry to the database
-        //show the item in the sidebar
-        //and make the detail section empty to that
-        //the new values can be added
-        let newEntrySideBarItem = null;
-        window.electronAPI.createEntry().then(data => {
-            newEntrySideBarItem = data;
-        });
-        if (newEntrySideBarItem === null) {
-            setFailBoxDisplayState("block");
-            return;
+    //trigger on delete entry
+    useEffect(() => {
+        if (triggerDeleteEntryState) {
+            //delete the entry from the database
+            window.electronAPI.deleteItem(selectedItem.id).then(deleteStatus => {
+                if (deleteStatus){
+                    dispatch(removeSideBarItem(selectedItem.id));
+                }
+                dispatch(resetTriggerDeleteEntry());
+            });       
         }
-        setSideBarItems(draft => {
-            draft.unshift(newEntrySideBarItem);
-        });
-        setSuccessBoxDisplayState("block");
-    }
-
-    const handleModifyBtnClick = () => {
-        console.log("Modify button clicked");
-        //show warning and get the response
-        setWarningBoxDisplayState(draft => {
-            draft.modifyBtn = "block"; 
-        });
-    }
-
-    const modifyDatabase = () => {
-        //interact with the database through api
-        //to modify an entry
-        //use the selectedItem object
-        console.log("modifyDatabase called. The ID to modify is :", selectedItem.id);
-        let modifiedItem = null;
-        window.electronAPI.modifyItem(selectedItem).then(data => {
-            modifiedItem = data;
-        });
-        if (modifiedItem.modifyStatus){
-            setSideBarItems(draft => {
-                draft = draft.map(item => {
-                    if (item.id === selectedItem.id) {
-                        return modifiedItem.item;
-                    }
-                    else {
-                        return item;
-                    }
-                });
-                return draft;
-            });
-        }
-
-        return modifiedItem.modifyStatus; //return true or false based on the success or failure of the operation
-    }
-
-    const handleDeleteBtnClick = () => {
-        console.log("Delete button clicked");
-        setWarningBoxDisplayState(draft => {
-            draft.deleteBtn = "block"; 
-        });
-    }
-
-    const deleteEntry = () => {
-        //interact with the database through api
-        //to delete an entry
-        //use the selectedItem object
-        console.log("deleteEntry called. The ID to delete is :", selectedItem.id);
-        let deleteStatus = false;
-        window.electronAPI.deleteItem(selectedItem.id).then(data => {
-            deleteStatus = data;
-        });
-        if (deleteStatus){
-            setSideBarItems(draft => {
-                draft = draft.filter(item => item.id !== selectedItem.id);
-                return draft;
-            });
-        }
-        return deleteStatus; //return true or false based on the success or failure of the operation
-    }
-
-    const handleActionResponse = (success) => {
-        if (success) {
-            setSuccessBoxDisplayState("block");
-        }
-        else {
-            setFailBoxDisplayState("block");
-        }
-    }
+    }, [triggerDeleteEntryState,
+        dispatch,
+        //resetTriggerDeleteEntry,
+        selectedItem.id,
+    ]);
 
     return (
         <div 
@@ -249,46 +152,31 @@ function MainPage({svgIcons}) {
                 warningText="Are you sure you want to modify the Entry?"
                 additionalClasses=""
                 displayState={warningBoxDisplayState.modifyBtn}
-                changeDisplayState={setWarningBoxDisplayState}
-                warningCaller="modifyBtn"
-                action={modifyDatabase}
-                handleActionResponse={handleActionResponse}
+                changeDisplayState={() => setWarningBoxDisplayModifyState("hidden")}
+                setState={triggerModifyEntry}
             />
             <GenericWarningBox
                 warningText="Are you sure you want to delete the Entry?"
                 additionalClasses=""
                 displayState={warningBoxDisplayState.deleteBtn}
-                changeDisplayState={setWarningBoxDisplayState}
-                warningCaller="deleteBtn"
-                action={deleteEntry}
-                handleActionResponse={handleActionResponse}
+                changeDisplayState={() => setWarningBoxDisplayDeleteState("hidden")}
+                setState={triggerDeleteEntry}
             />
             <GenericSuccess
                 additionalClasses=""
                 displayState={successBoxDisplayState}
-                changeDisplayState={setSuccessBoxDisplayState}
+                changeDisplayState={hideSuccessBox}
             />
             <GenericFail
                 additionalClasses=""
                 displayState={failBoxDisplayState}
-                changeDisplayState={setFailBoxDisplayState}
+                changeDisplayState={hideFailBox}
             />
             <TopBar 
-                svgIcons={svgIcons} 
-                handleSearch={handleSearch}
-                handleRefreshBtnClick={handleRefreshBtnClick}
-                handleAddBtnClick={handleAddBtnClick}
-                handleModifyBtnClick={handleModifyBtnClick}
-                handleDeleteBtnClick={handleDeleteBtnClick} 
+                svgIcons={svgIcons}  
             />
-            <SideBar 
-                items={sideBarItems} 
-                setFailBoxDisplayState={setFailBoxDisplayState}
-            />
-            <DetailSection 
-                //selectedItem={selectedItem}
-                //handleValueChange={handleItemClick}
-            />
+            <SideBar />
+            <DetailSection />
         </div>
     );
 }

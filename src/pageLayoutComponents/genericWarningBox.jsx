@@ -1,15 +1,18 @@
 import PropTypes from 'prop-types';
 import '../index.css';
+import { useDispatch } from 'react-redux';
 
 function GenericWarningBox({warningText, 
                             additionalClasses, 
                             displayState = "hidden",
                             changeDisplayState,
-                            warningCaller,
-                            action,
-                            handleActionResponse,
+                            setState,
+                            //warningCaller,
+                            //action,
+                            //handleActionResponse,
                         }) {
 
+    const dispatch = useDispatch();
 
     return (
         <div 
@@ -20,13 +23,13 @@ function GenericWarningBox({warningText,
                 <section className="flex flex-row flex-nowrap justify-center">
                     <button 
                         className="flex flex-row flex-nowrap justify-center items-center w-20 h-8 rounded-md bg-yellow-500 hover:bg-yellow-600"
-                        onClick={() => { changeDisplayState(draft => {draft[warningCaller] = "hidden"}); handleActionResponse(action()); }}
+                        onClick={() => dispatch(setState()) }
                     >
                         <p className="text-sm font-semibold text-white">Yes</p>
                     </button>
                     <button 
                         className="flex flex-row flex-nowrap justify-center items-center w-20 h-8 rounded-md bg-yellow-500 hover:bg-yellow-600"
-                        onClick={() => changeDisplayState(draft => {draft[warningCaller] = "hidden"})}
+                        onClick={() => dispatch(changeDisplayState()) }
                     >
                         <p className="text-sm font-semibold text-white">No</p>
                     </button>
@@ -41,9 +44,10 @@ GenericWarningBox.propTypes = {
     additionalClasses: PropTypes.string,
     displayState: PropTypes.string,
     changeDisplayState: PropTypes.func,
-    warningCaller: PropTypes.string,
-    action: PropTypes.func,
-    handleActionResponse: PropTypes.func,
+    setState: PropTypes.func,
+    //warningCaller: PropTypes.string,
+    //action: PropTypes.func,
+    //handleActionResponse: PropTypes.func,
 };
 
 export default GenericWarningBox;

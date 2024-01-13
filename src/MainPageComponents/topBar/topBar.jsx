@@ -1,8 +1,21 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import '../../index.css';
-import { useImmer } from 'use-immer';
+//import { useImmer } from 'use-immer';
+//import { useEffect } from 'react';
 import FilterMenu from './FilterMenuComponents';
+import {  showFilter,
+    hideFilter,
+} from '../../stateManagement/mainPageStates/filterDisplay.js';
+import { setSearchField, 
+        //setFilterParams,
+  } from '../../stateManagement/mainPageStates/searchParams.js';
+import { triggerAddEntry } from '../../stateManagement/mainPageStates/triggerAddEntry.js';
+import { setWarningBoxDisplayModifyState,
+         setWarningBoxDisplayDeleteState,
+    } from '../../stateManagement/mainPageStates/warningBoxDisplay.js';
+import { useSelector, useDispatch } from 'react-redux';
+//import { setWarningBoxDisplayModifyState } from '../../stateManagement/mainPageStates/warningBoxDisplay.js';
 
 function TopBarButton({ svgIcon, btnName, onClickHandler }) {
 
@@ -33,13 +46,14 @@ TopBarButton.propTypes = {
 };
 
 function TopBar({ svgIcons, 
-                  handleSearch, 
-                  handleRefreshBtnClick, 
-                  handleAddBtnClick,
-                  handleModifyBtnClick,
-                  handleDeleteBtnClick,
+                  //handleSearch, 
+                  //handleRefreshBtnClick, 
+                  //handleAddBtnClick,
+                  //handleModifyBtnClick,
+                  //handleDeleteBtnClick,
                  }) {
 
+    /*                
     const [searchParams, setSearchParams] = useImmer({
                                                         search: "", //string input
                                                         filter: {
@@ -69,7 +83,8 @@ function TopBar({ svgIcons,
                                                                 },
                                                         },   
                                                     }); //set filter in searchParams
-                
+    */
+    /*          
     const [filterParamsVisibility, setFilterParamsVisibility] = useImmer({
                                                                             value: false,
                                                                             currency: false,
@@ -84,7 +99,8 @@ function TopBar({ svgIcons,
                                                                             modifiedDate: false,
                                                                             transactionDate: false,
                                                                             sort: false,
-                                                                        });
+                                                                        }); 
+                                                                        */
 
     /*
     const handleFilterClick = (filterParams) => { //set filter in searchParams 
@@ -94,16 +110,12 @@ function TopBar({ svgIcons,
     };
     */
 
-    const [filterDisplayState, setFilterDisplayState] = useImmer("hidden"); //hidden or visible
+    //const [filterDisplayState, setFilterDisplayState] = useImmer("hidden"); //hidden or visible
 
-    const handleFilterBtnClick = () => { 
-        if ( filterDisplayState === "hidden" ) {
-            setFilterDisplayState("block");
-        }
-        else {
-            setFilterDisplayState("hidden");
-        }
-    };
+    const filterDisplayState = useSelector((state) => state.filterDisplayState);
+    //const searchParams = useSelector((state) => state.searchParams);
+    //const filterParamsVisibility = useSelector((state) => state.filterParamsVisibility);
+    const dispatch = useDispatch();
 
 
     return (
@@ -113,41 +125,41 @@ function TopBar({ svgIcons,
             <TopBarButton 
                 svgIcon={svgIcons.faPlus} 
                 btnName="Create" 
-                onClickHandler={ handleAddBtnClick }
+                onClickHandler={() => dispatch(triggerAddEntry()) }
             />
             <TopBarButton 
                 svgIcon={svgIcons.faEdit} 
                 btnName="Modify" 
-                onClickHandler={ handleModifyBtnClick }
+                onClickHandler={ () => dispatch(setWarningBoxDisplayModifyState()) }
             />
             <TopBarButton 
                 svgIcon={svgIcons.faTrashCan} 
                 btnName="Delete" 
-                onClickHandler={ handleDeleteBtnClick }
+                onClickHandler={ () => dispatch(setWarningBoxDisplayDeleteState()) }
             />
             <input 
                 type="text" 
                 placeholder="Search" 
                 className="h-10 w-[50%] mx-4 mt-2 mb-2 rounded-lg border bg-background-cl" 
-                onChange={(event) => setSearchParams(draft => {draft.search = event.target.value;})}
-                onKeyDown={ (event) => handleSearch(event.code, searchParams, filterParamsVisibility) }
+                onChange={(event) => dispatch(setSearchField(event.target.value))}
+                onKeyDown={ (event) => { if (event.code === "Enter") { dispatch(); } } }
             />
             <TopBarButton 
                 svgIcon={svgIcons.faFilter} 
                 btnName="Filter" 
-                onClickHandler={ handleFilterBtnClick }
+                onClickHandler={ filterDisplayState === "hidden" ? () => dispatch(showFilter()) : () => dispatch(hideFilter()) }
             />
             <TopBarButton 
                 svgIcon={svgIcons.faRefresh} 
                 btnName="Refresh" 
-                onClickHandler={ handleRefreshBtnClick }
+                onClickHandler={ () => console.log("Refresh button clicked") }
             />
             <FilterMenu 
-                displayState={filterDisplayState}
-                setSearchParams={setSearchParams}
-                filterParamsVisibility={filterParamsVisibility}
-                setFilterParamsVisibility={setFilterParamsVisibility}
-                changeDisplayState={setFilterDisplayState}
+                //displayState={filterDisplayState}
+                //setSearchParams={setSearchParams}
+                //filterParamsVisibility={filterParamsVisibility}
+                //setFilterParamsVisibility={setFilterParamsVisibility}
+                //changeDisplayState={setFilterDisplayState}
             />
         </div>
     );
@@ -155,11 +167,11 @@ function TopBar({ svgIcons,
 
 TopBar.propTypes = {
     svgIcons: PropTypes.object,
-    handleSearch: PropTypes.func,
-    handleRefreshBtnClick: PropTypes.func,
-    handleAddBtnClick: PropTypes.func,
-    handleModifyBtnClick: PropTypes.func,
-    handleDeleteBtnClick: PropTypes.func,
+    //handleSearch: PropTypes.func,
+    //handleRefreshBtnClick: PropTypes.func,
+    //handleAddBtnClick: PropTypes.func,
+    //handleModifyBtnClick: PropTypes.func,
+    //handleDeleteBtnClick: PropTypes.func,
 };
 
 export default TopBar;

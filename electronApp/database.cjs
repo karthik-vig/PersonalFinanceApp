@@ -164,7 +164,10 @@ function getFileEntries(uuid) {
     //specifically it fetches the data from the files table based on the uuid
     //this works as the the uuid of the files in the files table is same
     //as the uuid of the transaction in the transaction table
-    return { "SuperFile.txt": new Blob([""], {type: "text/plain"})}; //could also return null if the operation fails
+    return  {"SuperFile71.txt" : Buffer.from("hello world1 " + uuid, "utf-8"),
+             "SuperFile72.txt" : Buffer.from("hello world2 " + uuid, "utf-8"),
+             "SuperFile73.txt" : Buffer.from("hello world3 " + uuid, "utf-8"),
+             };//could also return null if the operation fails
 }
 
 //file entry delete simulated backend functions
@@ -225,8 +228,6 @@ function getItems (searchParams) {
 function getSelectedItem(uuid) {
     //communicate with backend to get the selectedItem
     console.log("getSelectedItem called with id: ", uuid);
-    //return null;
-    ///*
     //get the currentSelectedItemFiles object
     const currentSelectedItemFiles = getCurrentSelectedItemFiles();
     //clear any cotents in the currentSelectedItemFiles
@@ -234,10 +235,13 @@ function getSelectedItem(uuid) {
         delete currentSelectedItemFiles[key];
     });
     //set the currentSelectedItemFiles
-    currentSelectedItemFiles["SuperFile.txt"] = getFileEntries(uuid);
+    const fileInfo = getFileEntries(uuid);
+    Object.keys(fileInfo).forEach((key) => {
+        currentSelectedItemFiles[key] = fileInfo[key];
+    });
     console.log("currentSelectedItemFiles: ", currentSelectedItemFiles);
     return {
-        id: uuid, //uuidv4 template
+        id: String(uuid), //uuidv4 template
         title: null,
         description: null,
         value: 0.0,
@@ -249,7 +253,7 @@ function getSelectedItem(uuid) {
         toEntity: null, //computed by backend
         toType: null,
         recurringEntity: null,
-        file: ["file91.txt", "file92.txt", "file93.txt"],
+        file: ["SuperFile71.txt", "SuperFile72.txt", "SuperFile73.txt"],
         createdDate: "yyyy-MM-ddThh:mm:ss",
         modifiedDate: "yyyy-MM-ddThh:mm:ss",
         transactionDate: "yyyy-MM-ddThh:mm:ss",

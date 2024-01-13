@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 //import  { useDispatch } from "react-redux";
 
 //console.log("calling window.electronAPI.getAllItems() from sideBarItems.js");
+/*
 async function getAllItems() {
     const allItems = await window.electronAPI.getAllItems();
     console.log("allItems in getAllItems= ", allItems);
@@ -13,14 +14,15 @@ getAllItems().then((result) => {
     console.log("allItems = ", result);
     allItems = [...result];
 });
+*/
 
 export const sideBarItemSlice = createSlice({
     name: "sideBarItems",
-    initialState: console.log(allItems),
+    initialState: [],
     reducers: {
         removeSideBarItem: (state, action) => {
-            //action.payload = {id: string}
-            state = state.filter(item => item.id !== action.payload.id);
+            //action.payload = uuid
+            state = state.filter(item => item.id !== action.payload);
             return state;
         },
         modifySideBarItem: (state, action) => {
@@ -36,12 +38,13 @@ export const sideBarItemSlice = createSlice({
             return state;
         },
         addSideBarItem: (state, action) => {
-            //action.payload = {newItem: object}
-            state.unshift(action.payload.newItem);
+            //action.payload = object
+            state.unshift(action.payload);
         },
         setSideBarItems: (state, action) => {
-            //action.payload = {newItems: object}
-            state = action.payload.newItems;
+            //action.payload = objects
+            state = action.payload;
+            return state;
         },
 
     }

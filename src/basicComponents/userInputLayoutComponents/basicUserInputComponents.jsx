@@ -2,7 +2,15 @@
 import PropTypes from 'prop-types';
 import '../../index.css';
 //import { useImmer } from 'use-immer';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import {  triggerAddFile,
+    resetTriggerAddFile,
+    triggerDeleteFile,
+    resetTriggerDeleteFile,
+    triggerGetFile,
+    resetTriggerGetFile,
+ } from '../../stateManagement/mainPageStates/triggerUpdateFile.js';
 
 
 // below are the basic components that can be used to build the detail section
@@ -164,8 +172,28 @@ RadioButtonSection.propTypes = {
 
 function FileInputSection({additonalClasses, files, handleValueChange}) {
 
+    const triggerUpdateFilesState = useSelector((state) => state.triggerUpdateFileState);
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (!triggerUpdateFilesState.addFile) return;
+        window.electronAPI.openFileDialog().then((fileNames) => {
+            if(fileNames.length > 0) {
+                let filesCopy = [...files];
+                fileNames.forEach((fileName) => {
+                    if (!filesCopy.includes(fileName)) filesCopy.push(fileName);
+                });
+                dispatch(handleValueChange({fieldName: "file", fieldValue: filesCopy}))
+            }
+            dispatch(resetTriggerAddFile());
+        });
+    }, [triggerUpdateFilesState,
+        files, 
+        dispatch,
+        handleValueChange,
+    ]);
     
+    /*
     const handleAddFile = () => {
         //console.log(typeof event.target.files);
         const filesCopy = [...files];
@@ -181,11 +209,12 @@ function FileInputSection({additonalClasses, files, handleValueChange}) {
         //handleValueChange("file", filesCopy);
         dispatch(handleValueChange({fieldName: "file", fieldValue: filesCopy}))
     }
+    */
 
     return (
         <button 
             className={"" + " " + additonalClasses + " "}
-            onChange={() => handleAddFile()}
+            onClick={() => dispatch(triggerAddFile())}
         >
             Add File
         </button>
@@ -200,10 +229,22 @@ FileInputSection.propTypes = {
 
 function GetFileSection({ additonalClasses, fileName }) {
 
+    const triggerUpdateFilesState = useSelector((state) => state.triggerUpdateFileState);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (!triggerUpdateFilesState.getFile) return;
+        window.electronAPI.saveFileDialog(fileName);
+        dispatch(resetTriggerGetFile());
+    }, [triggerUpdateFilesState,
+        fileName,
+        dispatch,
+    ]);
+
     return (
         <button
             className={"min-w-20 min-h-20" + " " + additonalClasses + " "}
-            onClick={() => { window.electronAPI.saveFileDialog(fileName)} }
+            onClick={() => { dispatch(triggerGetFile()); } }
         >
             {fileName}
         </button>
@@ -217,8 +258,27 @@ GetFileSection.propTypes = {
 
 function DeleteFileButtonSection({additonalClasses, fileName, files, handleValueChange}) {
 
+    const triggerUpdateFilesState = useSelector((state) => state.triggerUpdateFileState);
     const dispatch = useDispatch();
 
+    useEffect(() => {
+        if (!triggerUpdateFilesState.deleteFile) return;
+        window.electronAPI.deleteFileBlob(fileName).then((deleteFileBlobStatus) => {
+            if (deleteFileBlobStatus) {
+                //let filesCopy = [...files];
+                const filesCopy = files.filter((file) => file !== fileName);
+                dispatch(handleValueChange({fieldName: "file", fieldValue: filesCopy}));
+            }
+            dispatch(resetTriggerDeleteFile());
+        });
+    }, [triggerUpdateFilesState,
+        fileName,
+        files,
+        dispatch,
+        handleValueChange,
+    ]);
+
+    /*
     const handleFileDelete = (fileName) => { 
         let deleteFileBlobStatus = false;
         window.electronAPI.deleteFileBlob(fileName).then((data) => {
@@ -230,11 +290,12 @@ function DeleteFileButtonSection({additonalClasses, fileName, files, handleValue
         }
         dispatch(handleValueChange({fieldName: "file", fieldValue: filesCopy}));
     };
+    */
 
     return (
         <button 
             className={"min-w-20 min-h-20" + " " + additonalClasses + " "}
-            onClick={() => handleFileDelete(fileName)}
+            onClick={() => { dispatch(triggerDeleteFile()); } }
         >
             Delete
         </button>

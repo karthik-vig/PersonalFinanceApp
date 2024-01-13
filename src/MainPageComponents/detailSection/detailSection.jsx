@@ -23,16 +23,6 @@ import { useSelector,
 
 // this is the detail section that is used in the main page
 function DetailSection() {
-    // only common classes are defined here, specific classes are defined in the respective sections
-    // specific classes include: height, width, padding, margin, etc.
-    //const sectionClasses = " flex flex-row flex-wrap w-auto h-20 border-b-2 pb-4 min-w-80 ";
-    //const h6Classes = " text-start font-bold font-serif antialiased tracking-widest truncate text-lg text-black/50 ";
-    //const h3Classes = " justify-self-center text-start font-bold font-serif antialiased tracking-widest truncate text-xl text-black ";
-    //const inputClasses = " text-start font-serif antialiased tracking-widest truncate text-base text-black bg-background-cl border rounded-lg outline-1 hover:outline hover:outline-gray-500 hover:outline-offset-2 hover:bg-back";
-    //const radioBtnClasses = " text-start font-serif antialiased tracking-widest truncate text-base text-black ";
-    //const selectBtnClasses = " text-start font-serif antialiased tracking-widest truncate text-base text-black border rounded-lg bg-background-cl";
-
-    //const [fromType, setFromType] = useImmer(selectedItem.fromType);
 
     const selectedItem = useSelector((state) => state.selectedItem);
 
@@ -47,10 +37,6 @@ function DetailSection() {
         );
     }
 
-    // need to get these from the backend
-    //const currencies = ["RON", "EUR", "USD"];
-    //const transactionCategories = ["Salary", "Food", "Clothes", "Rent", "Utilities", "Other"];
-    //const transactionEntities = [{name: "entity1", type: "Internal"}, {name: "entity2", type: "Internal"}, {name: "entity3", type: "External"}, {name: "entity4", type: "External"}];
 
     return (
         <div 
