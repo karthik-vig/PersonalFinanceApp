@@ -4,7 +4,7 @@ import '../../index.css';
 import GenericSideBar from '../../pageLayoutComponents/genericSideBar.jsx';
 import { handleSelectItemClick } from '../../stateManagement/mainPageStates/selectedItem.js';
 import { showFailBox } from '../../stateManagement/mainPageStates/failBoxDisplay.js';
-import { triggerSearch } from '../../stateManagement/mainPageStates/triggerSearch.js';
+//import { triggerSearch } from '../../stateManagement/mainPageStates/triggerSearch.js';
 import { setCurrentSelectedItem } from '../../stateManagement/mainPageStates/currentSelectedItem.js';
 import { useSelector,
          useDispatch,
@@ -53,7 +53,9 @@ function SideBar() {
     return (
         <GenericSideBar 
             items={genericItems} 
-            handleItemClick={(uuid) => { dispatch(triggerSearch()); dispatch(setCurrentSelectedItem(uuid));  }}
+            handleItemClick={(uuid) => { //dispatch(triggerSearch());
+                 dispatch(setCurrentSelectedItem(uuid));  
+                }}
         />
     
     );
