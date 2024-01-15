@@ -76,8 +76,8 @@ function MainPage({svgIcons}) {
                 return;
             }
             dispatch(setSideBarItems(items));
-            dispatch(resetTriggerSearch());
         });
+        dispatch(resetTriggerSearch());
     }, [triggerSearchState,
         dispatch,
         //resetTriggerSearch,
@@ -95,8 +95,8 @@ function MainPage({svgIcons}) {
             }
             dispatch(addSideBarItem(newEntrySideBarItem));
             //dispatch(showSuccessBox());
-            dispatch(resetTriggerAddEntry());
         });
+        dispatch(resetTriggerAddEntry());
     }, [triggerAddEntryState,
         dispatch,
         //resetTriggerAddEntry,
@@ -117,8 +117,8 @@ function MainPage({svgIcons}) {
             else {
                 dispatch(showFailBox());
             }
-            dispatch(resetTriggerModifyEntry());
         });
+        dispatch(resetTriggerModifyEntry());
    }, [triggerModifyEntryState,
         dispatch,
         //resetTriggerModifyEntry,
@@ -136,8 +136,8 @@ function MainPage({svgIcons}) {
                 console.log(selectedItem.id);
                 dispatch(removeSideBarItem(selectedItem.id));
             }
-            dispatch(resetTriggerDeleteEntry());
-        });       
+        });
+        dispatch(resetTriggerDeleteEntry());       
     }, [triggerDeleteEntryState,
         dispatch,
         //resetTriggerDeleteEntry,
