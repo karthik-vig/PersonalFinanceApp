@@ -13,6 +13,7 @@ import triggerAddEntryReducer from './mainPageStates/triggerAddEntry.js';
 import triggerSearchReducer from './mainPageStates/triggerSearch.js';
 import currentSelectedItemReducer from './mainPageStates/currentSelectedItem.js';
 import triggerUpdateFileReducer from './mainPageStates/triggerUpdateFile.js';
+import additionalInformationReducer from './mainPageStates/additionalInformation.js';
 
 
 export default configureStore({
@@ -31,5 +32,6 @@ export default configureStore({
     triggerSearchState: triggerSearchReducer,
     currentSelectedItemState: currentSelectedItemReducer,
     triggerUpdateFileState: triggerUpdateFileReducer,
+    additionalInformationState: additionalInformationReducer,
   }
 })

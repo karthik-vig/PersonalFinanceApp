@@ -5,12 +5,44 @@ import './sideSectionButton.jsx';
 import SideSectionButton from './sideSectionButton.jsx';
 import MainPage from './MainPageComponents/mainPage.jsx';
 import FinancialEntityPage from './FinancialEntityPageComponents/financialEntityPage.jsx';
-
+import { useDispatch } from 'react-redux';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faHouse, faChartLine, faBuildingColumns, faTicketSimple, faFilter, faSort, faPlus, faTrashCan, faEdit, faRefresh } from '@fortawesome/free-solid-svg-icons';
+import { useEffect } from 'react';
+import { setCurrencies, 
+  setTransactionCategories, 
+  setTransactionEntities,
+} from './stateManagement/mainPageStates/additionalInformation.js';
 library.add(faHouse, faChartLine, faBuildingColumns, faTicketSimple, faFilter, faSort, faPlus, faTrashCan, faEdit, faRefresh);
 
 function App() {
+
+  const dispatch = useDispatch();
+
+  //fetch additional information from the main process
+  //and set currencies value
+  useEffect(() => {
+    window.electronAPI.getCurrencies().then((currencies) => { 
+      dispatch(setCurrencies(currencies));
+    });
+  }, [dispatch,]);
+
+  //fetch additional information from the main process
+  //and set transaction categories value
+  useEffect(() => {
+    window.electronAPI.getTransactionCategories().then((transactionCategories) => {
+      dispatch(setTransactionCategories(transactionCategories));
+    });
+  }, [dispatch,]);
+
+  //fetch additional information from the main process
+  //and set transaction entities value
+  useEffect(() => {
+    window.electronAPI.getTransactionEntities().then((transactionEntities) => {
+      dispatch(setTransactionEntities(transactionEntities));
+    });
+  }, [dispatch,]);
+  
 
   const [activeTab, setActiveTab] = useImmer({
                                               mainPage: true,

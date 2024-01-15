@@ -81,8 +81,7 @@ function SalarySection() {
 
     const transactionValue = useSelector((state) => state.selectedItem.value);
     const currencyValue = useSelector((state) => state.selectedItem.currency);
-    let currencies = [];
-    window.electronAPI.getCurrencies().then((data) => { currencies = data;} );
+    const currencies = useSelector((state) => state.additionalInformationState.currencies);
 
     return (
         <SectionContainer 
@@ -176,10 +175,7 @@ TransactionTypeSection.propTypes = {
 function TransactionCategorySection() {
 
     const transactionCategory = useSelector((state) => state.selectedItem.transactionCategory);
-    let transactionCategories = [];
-    window.electronAPI.getTransactionCategories().then((data) => { 
-        transactionCategories = data;
-    });
+    const transactionCategories = useSelector((state) => state.additionalInformationState.transactionCategories);
 
     return (
         <SectionContainer 
@@ -250,10 +246,7 @@ function FromEntitySection() {
     
     const fromEntity = useSelector((state) => state.selectedItem.fromEntity);
     const fromType = useSelector((state) => state.selectedItem.fromType);
-    let transactionEntities = [{name: "entity1", type: "Internal"},];
-    window.electronAPI.getTransactionEntities().then((data) => { 
-        transactionEntities = data;
-    });
+    let transactionEntities = useSelector((state) => state.additionalInformationState.transactionEntities);
     const transformedEntities = transactionEntities.filter((entity) => entity.type === fromType ).map((entity) => entity.name);
 
     return (
@@ -325,10 +318,7 @@ function ToEntitySection() {
 
     const toEntity = useSelector((state) => state.selectedItem.toEntity);
     const toType = useSelector((state) => state.selectedItem.toType);
-    let transactionEntities = [{name: "entity1", type: "Internal"},];
-    window.electronAPI.getTransactionEntities().then((data) => { 
-        transactionEntities = data;
-    });
+    const transactionEntities = useSelector((state) => state.additionalInformationState.transactionEntities);
     const transformedEntities = transactionEntities.filter((entity) => entity.type === toType ).map((entity) => entity.name);
 
     return (
