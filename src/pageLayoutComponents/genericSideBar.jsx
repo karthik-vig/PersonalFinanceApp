@@ -16,15 +16,19 @@ import '../index.css';
 // handleItemClick is a function that will be called when the user clicks on a side bar item
 // the value passed to it will be the id of the item
 
-function GenericSideBar({ items, handleItemClick}) {
+function GenericSideBar({ items, 
+                          handleItemClick,
+                          currentSelectedItemState,
+                        }) {
 
     //const dispatch = useDispatch();
-
     return ( 
-    <div className="flex flex-nowrap flex-col w-[25%] mx-7 mt-0 mb-4 border rounded-lg bg-surface-cl drop-shadow-lg overflow-x-hidden overflow-y-scroll" style={{ height: 'calc(100% - 150px)' }}>
+    <div className="flex flex-nowrap flex-col w-[25%] mx-7 mt-0 mb-4 border rounded-lg bg-surface-cl drop-shadow-lg overflow-x-hidden overflow-y-scroll " style={{ height: 'calc(100% - 150px)' }}>
                 <ul>
                     {items.map((item) => {
-                        return (<li key={item.id}>
+                        return (<li key={item.id}
+                                    className={ String(currentSelectedItemState) === String(item.id) ? "bg-cyan-200" : "bg-surface-cl"}
+                                >
                             <button  className="flex flex-row flex-wrap w-[100%] h-20 border-t-2 p-4" onClick={() => handleItemClick(item.id)}>
                                 <FontAwesomeIcon className="m-2 w-10 h-10 border rounded-full outline outline-cyan-950" icon={item.icon} />
                                 <section className="flex flex-row flex-wrap h-[100%] ml-4" style={{ width: 'calc(100% - 76px)' }}>
@@ -42,6 +46,7 @@ function GenericSideBar({ items, handleItemClick}) {
 GenericSideBar.propTypes = {
     items: PropTypes.array,
     handleItemClick: PropTypes.func,
+    currentSelectedItemState: PropTypes.string,
 };
 
 export default GenericSideBar;

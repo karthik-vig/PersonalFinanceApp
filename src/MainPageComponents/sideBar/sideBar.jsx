@@ -56,6 +56,7 @@ function SideBar() {
             handleItemClick={(uuid) => { //dispatch(triggerSearch());
                  dispatch(setCurrentSelectedItem(uuid));  
                 }}
+            currentSelectedItemState={currentSelectedItemState}
         />
     
     );
