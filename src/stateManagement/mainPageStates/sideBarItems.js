@@ -22,19 +22,25 @@ export const sideBarItemSlice = createSlice({
     reducers: {
         removeSideBarItem: (state, action) => {
             //action.payload = uuid
-            state = state.filter(item => item.id !== action.payload);
+            console.log("The State of Side Bar Items before removal = ");
+            console.log(state);
+            state = state.filter(item => String(item.id) !== String(action.payload));
+            console.log("The State of Side Bar Items after removal = ");
+            console.log(state);
             return state;
         },
         modifySideBarItem: (state, action) => {
             //action.payload = {id: string, modifiedItem: object}
+            console.log("Attempting to modify sideBarItem with id = ", action.payload.modifiedItem.item.id);
             state = state.map(item => {
-                if (item.id === action.payload.id) {
+                if (String(item.id) === String(action.payload.modifiedItem.item.id)) {
                     return action.payload.modifiedItem.item;
                 }
                 else {
                     return item;
                 }
             });
+            console.log("No error in modifySideBarItem");
             return state;
         },
         addSideBarItem: (state, action) => {
