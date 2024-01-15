@@ -69,16 +69,15 @@ function MainPage({svgIcons}) {
 
    //trigger on search params set and enter key pressed
     useEffect(() => {
-        if (triggerSearchState) {
-            window.electronAPI.getItems(searchParams).then(items => {
-                if (items === null) {
-                    dispatch(showFailBox());
-                    return;
-                }
-                dispatch(setSideBarItems(items));
-                dispatch(resetTriggerSearch());
-            });
-        }
+        if (!triggerSearchState) return;
+        window.electronAPI.getItems(searchParams).then(items => {
+            if (items === null) {
+                dispatch(showFailBox());
+                return;
+            }
+            dispatch(setSideBarItems(items));
+            dispatch(resetTriggerSearch());
+        });
     }, [triggerSearchState,
         dispatch,
         //resetTriggerSearch,
@@ -88,17 +87,16 @@ function MainPage({svgIcons}) {
 
    //trigger on add entry
     useEffect(() => {
-        if (triggerAddEntryState) {
-            window.electronAPI.createEntry().then(newEntrySideBarItem => {
-                if (newEntrySideBarItem === null) {
-                    dispatch(showFailBox());
-                    return;
-                }
-                dispatch(addSideBarItem(newEntrySideBarItem));
-                dispatch(showSuccessBox());
-                dispatch(resetTriggerAddEntry());
-            });
-        }
+        if (!triggerAddEntryState) return;
+        window.electronAPI.createEntry().then(newEntrySideBarItem => {
+            if (newEntrySideBarItem === null) {
+                dispatch(showFailBox());
+                return;
+            }
+            dispatch(addSideBarItem(newEntrySideBarItem));
+            //dispatch(showSuccessBox());
+            dispatch(resetTriggerAddEntry());
+        });
     }, [triggerAddEntryState,
         dispatch,
         //resetTriggerAddEntry,
@@ -106,22 +104,21 @@ function MainPage({svgIcons}) {
 
    //trigger on modify entry
    useEffect(() => {
-        if (!triggerModifyEntryState) {
-            //modify the database
-            console.log("The Modify Entry trigger selected item is: ");
-            console.log(selectedItem);
-            window.electronAPI.modifyItem(selectedItem).then(modifiedItem => {
-                if (modifiedItem.modifyStatus){
-                    //wrong
-                    dispatch(modifySideBarItem({id: selectedItem.id, item: modifiedItem }));
-                    dispatch(showSuccessBox());
-                }
-                else {
-                    dispatch(showFailBox());
-                }
-                dispatch(resetTriggerModifyEntry());
-            });
-        }
+        if (!triggerModifyEntryState) return;
+        //modify the database
+        console.log("The Modify Entry trigger selected item is: ");
+        console.log(selectedItem);
+        window.electronAPI.modifyItem(selectedItem).then(modifiedItem => {
+            if (modifiedItem.modifyStatus){
+                //wrong
+                dispatch(modifySideBarItem({id: selectedItem.id, item: modifiedItem }));
+                dispatch(showSuccessBox());
+            }
+            else {
+                dispatch(showFailBox());
+            }
+            dispatch(resetTriggerModifyEntry());
+        });
    }, [triggerModifyEntryState,
         dispatch,
         //resetTriggerModifyEntry,
@@ -131,19 +128,21 @@ function MainPage({svgIcons}) {
 
     //trigger on delete entry
     useEffect(() => {
-        if (triggerDeleteEntryState) {
-            //delete the entry from the database
-            window.electronAPI.deleteItem(selectedItem.id).then(deleteStatus => {
-                if (deleteStatus){
-                    dispatch(removeSideBarItem(selectedItem.id));
-                }
-                dispatch(resetTriggerDeleteEntry());
-            });       
-        }
+        if (!triggerDeleteEntryState) return;
+        //delete the entry from the database
+        window.electronAPI.deleteItem(selectedItem.id).then(deleteStatus => {
+            if (deleteStatus){
+                console.log("The Delete Entry trigger selected item ID is: ");
+                console.log(selectedItem.id);
+                dispatch(removeSideBarItem(selectedItem.id));
+            }
+            dispatch(resetTriggerDeleteEntry());
+        });       
     }, [triggerDeleteEntryState,
         dispatch,
         //resetTriggerDeleteEntry,
-        selectedItem,
+        //removeSideBarItem,
+        selectedItem.id,
     ]);
 
     return (
