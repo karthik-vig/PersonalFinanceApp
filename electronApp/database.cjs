@@ -99,18 +99,12 @@ function setupDatabase() {
 }
 
 function initializeDatabase() {
-
-    let db = null;
+    
     if (!fs.existsSync('../data')) {
         fs.mkdirSync('../data');
-        db = setupDatabase();
     }
-    else {
-        db = openDb();
-    }
-
+    const db = setupDatabase();
     return db;
-    
 }
 
 /*
