@@ -2,14 +2,15 @@
 //import fs from 'fs';
 
 //import { faFilter } from '@fortawesome/free-solid-svg-icons';
-const sqlite = require('sqlite3');
-const fs = require('node:fs');
+//const sqlite = require('sqlite3');
+//const fs = require('node:fs');
 const { faFilter } = require('@fortawesome/free-solid-svg-icons');
 
 
 //this is a map of the current selected item files
 //normally only a empty object.
 //this is set when the selectedItem is set.
+/*
 function getCurrentSelectedItemFilesRef() {
 
     const currentSelectedItemFiles = {};
@@ -21,91 +22,8 @@ function getCurrentSelectedItemFilesRef() {
 }
 
 const getCurrentSelectedItemFiles = getCurrentSelectedItemFilesRef();
+*/
 
-function openDb() {
-  const db = new sqlite.Database('../data/database.db');
-  return db;
-}
-
-function closeDb(db) {
-    db.close();
-}
-
-function setupDatabase() {
-
-    const db = openDb();
-    db.serialize(() => {
-        db.run('CREATE TABLE IF NOT EXISTS transactions (\
-                id TEXT PRIMARY KEY, \
-                title TEXT, \
-                description TEXT, \
-                value REAL, \
-                currency TEXT, \
-                transactionType TEXT, \
-                transactionCategory TEXT, \
-                fromReference TEXT, \
-                toReference TEXT, \
-                recurringReference TEXT, \
-                file bool, \
-                createdDate datetime, \
-                modifiedDate datetime, \
-                transactionDate datetime, \
-                )');
-        
-        //make sure fileName is unique for a given uuid
-        db.run('CREATE TABLE IF NOT EXISTS files (\
-                id TEXT NOT NULL, \
-                filename TEXT NOT NULL, \
-                filedata BLOB, \
-                )');
-        
-        db.run('CREATE TABLE IF NOT EXISTS financialEntities (\
-                id TEXT PRIMARY KEY, \
-                title TEXT UNIQUE, \
-                type TEXT, \
-                )');
-
-        //this table is for storing the currency and transaction categories and other additional data
-        db.run('CREATE TABLE IF NOT EXISTS additionalDataStore (\
-                currency TEXT NOT NULL, \
-                transactionCategories TEXT NOT NULL, \
-                )');
-        //in the below tabke, the recurringFrequency is the frequency of the recurring transaction
-        //it is {daily, weekly, monthly, yearly}
-        //the recurringDate is the date of the month or year that the transaction occurs
-        //it is {daily then time only, 
-        //weekly then day of week and time, 
-        //monthly then day of month and time, 
-        //yearly then date of the month, month of year and time}
-        db.run('CREATE TABLE IF NOT EXISTS recurringTransactions (\
-                id TEXT PRIMARY KEY, \
-                title TEXT UNIQUE, \
-                description TEXT, \
-                value REAL, \
-                currency TEXT, \
-                transactionType TEXT, \
-                transactionCategory TEXT, \
-                fromReference TEXT, \
-                toReference TEXT, \
-                files bool, \
-                createdDate datetime, \
-                modifiedDate datetime, \
-                recurringFrequency TEXT, \
-                recurringDate TEXT, \
-                )');
-    });
-
-    return db;
-}
-
-function initializeDatabase() {
-    
-    if (!fs.existsSync('../data')) {
-        fs.mkdirSync('../data');
-    }
-    const db = setupDatabase();
-    return db;
-}
 
 /*
 function getItems(db) {
@@ -124,13 +42,15 @@ function getItems(db) {
 }
 */
 
+const currentSelectedItemFiles = {};
+
 //when we get selectedItem from the database, we set a object in the
 //nodejs to store the fileName and the fileBlob
 //file blob simulated backend functions
 function getFileBlob(event, fileName) {
     //communicate with backend to get the file blob
     console.log( "get file blob fileName: ", fileName);
-    const fileBufferData = getCurrentSelectedItemFiles().get(fileName, null);
+    const fileBufferData = currentSelectedItemFiles.get(fileName, null);
     return  fileBufferData;//could also return null if the operation fails
 }
 
@@ -143,7 +63,7 @@ function setFileBlob(event, fileName, arrayBuffer) {
 function deleteFileBlob(event, fileName) {
     //communicate with backend to delete the file blob
     console.log( "delete file blob fileName: ", fileName);
-    const currentSelectedItemFiles = getCurrentSelectedItemFiles();
+    //const currentSelectedItemFiles = getCurrentSelectedItemFiles();
     if (currentSelectedItemFiles.keys().includes(fileName)){
         delete currentSelectedItemFiles[fileName];
         return true;
@@ -159,20 +79,11 @@ function getFileEntries(event, uuid) {
     //this works as the the uuid of the files in the files table is same
     //as the uuid of the transaction in the transaction table
     return  {"SuperFile71.txt" : Buffer.from("hello world1 " + uuid, "utf-8"),
-             "SuperFile72.txt" : Buffer.from("hello world2 " + uuid, "utf-8"),
-             "SuperFile73.txt" : Buffer.from("hello world3 " + uuid, "utf-8"),
-             };//could also return null if the operation fails
+            "SuperFile72.txt" : Buffer.from("hello world2 " + uuid, "utf-8"),
+            "SuperFile73.txt" : Buffer.from("hello world3 " + uuid, "utf-8"),
+            };//could also return null if the operation fails
 }
 
-//file entry delete simulated backend functions
-  //not for front end as only backend can delete the file
-  /*
-  window.deleteFileEntry = (uuid, fileName) => {
-      //communicate with backend to delete the file entry
-      console.log("deleteFileEntry called with id: ", uuid, " and fileName: ", fileName);
-      return true; //could also return false if the operation fails
-  }
-  */
 
 //backed function to get all items for the side bar
 function getAllItems() {
@@ -204,7 +115,7 @@ function getAllItems() {
 
 //this should actually be a backed side function;
 //here just to simulate the effect.
-function getItems (event, searchParams) { 
+function getItems(event, searchParams) { 
     //communicate with backend to get items
     //based on the searchParams
     console.log("getItems called with searchParams: ");
@@ -218,13 +129,15 @@ function getItems (event, searchParams) {
 }
 
 //some other functions are:
-  //for getting the selectedItem value based on id; return null if the operation fails
+//for getting the selectedItem value based on id; return null if the operation fails
 function getSelectedItem(event, uuid) {
     //communicate with backend to get the selectedItem
     console.log("getSelectedItem called with id: ", uuid);
     //get the currentSelectedItemFiles object
-    const currentSelectedItemFiles = getCurrentSelectedItemFiles();
+    //const currentSelectedItemFiles = getCurrentSelectedItemFiles();
     //clear any cotents in the currentSelectedItemFiles
+    //console.log(typeof currentSelectedItemFiles);
+    //console.log(getFileEntries(uuid));
     Object.keys(currentSelectedItemFiles).forEach((key) => {
         delete currentSelectedItemFiles[key];
     });
@@ -247,7 +160,7 @@ function getSelectedItem(event, uuid) {
         toEntity: null, //computed by backend
         toType: null,
         recurringEntity: null,
-        file: ["SuperFile71.txt", "SuperFile72.txt", "SuperFile73.txt"],
+        file: Object.keys(currentSelectedItemFiles),
         createdDate: "yyyy-MM-ddThh:mm:ss",
         modifiedDate: "yyyy-MM-ddThh:mm:ss",
         transactionDate: "yyyy-MM-ddThh:mm:ss",
@@ -263,7 +176,7 @@ function deleteItem(event, id) {
 }
 
 //takes selecteItem to modify an entry; return object if the operation succes; null if failure
-function modifyItem (event, selectedItem){
+function modifyItem(event, selectedItem){
     //communicate with backend to modify the item
     console.log("modifyItem called with id: ", selectedItem.id);
     return {
@@ -293,40 +206,16 @@ function createEntry() {
     ); //could also return null if the operation fails
 }
 
-//backend simulation to get currencies
-function getCurrencies() {
-    return (
-            ["USD", "CAD", "INR", "EUR", "GBP", "AUD", "JPY"]
-    ); //could also return [] if the operation fails
-}
-
-//backend simulation to get transaction categories
-function getTransactionCategories() {
-    return (
-            ["Salary", "Rent", "Groceries", "Utilities", "Entertainment", "Miscellaneous"]
-    ); //could also return [] if the operation fails
-}
-
-//backend simulation to get transaction entities
-function getTransactionEntities() {
-    return (
-            [{name: "entity1", type: "Internal"}, {name: "entity2", type: "Internal"}, {name: "entity3", type: "External"}, {name: "entity4", type: "External"}]
-    ); //could also return [] if the operation fails
-}
 
 module.exports = {
-        initializeDatabase, 
-        closeDb,
-        getFileBlob,
-        setFileBlob,
-        deleteFileBlob,
-        getAllItems,
-        getItems,
-        getSelectedItem,
-        deleteItem,
-        modifyItem,
-        createEntry,
-        getCurrencies,
-        getTransactionCategories,
-        getTransactionEntities,
-        };
+    getFileBlob,
+    setFileBlob,
+    deleteFileBlob,
+    getFileEntries,
+    getAllItems,
+    getItems,
+    getSelectedItem,
+    deleteItem,
+    modifyItem,
+    createEntry,
+};

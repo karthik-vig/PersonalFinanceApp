@@ -3,20 +3,33 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 // Expose selected APIs to the renderer process
-contextBridge.exposeInMainWorld('electronAPI', {
+contextBridge.exposeInMainWorld('transactionOperations', {
     // Add your API methods here
     //getFileBlob: (fileName) => {ipcRenderer.invoke('getFileBlob', fileName)},
     //setFileBlob: (fileName, arrayBuffer) => {ipcRenderer.invoke('setFileBlob', fileName, arrayBuffer)},
-    deleteFileBlob: (fileName) => ipcRenderer.invoke('deleteFileBlob', fileName),
-    getAllItems: () => ipcRenderer.invoke('getAllItems'),
-    getItems: (searchParams) => ipcRenderer.invoke('getItems', searchParams),
-    getSelectedItem: (uuid) => ipcRenderer.invoke('getSelectedItem', uuid),
-    deleteItem: (uuid) => ipcRenderer.invoke('deleteItem', uuid),
-    modifyItem: (selectedItem) => ipcRenderer.invoke('modifyItem', selectedItem),
-    createEntry: () => ipcRenderer.invoke('createEntry'),
-    getCurrencies: () => ipcRenderer.invoke('getCurrencies'),
-    getTransactionCategories: () => ipcRenderer.invoke('getTransactionCategories'),
-    getTransactionEntities: () => ipcRenderer.invoke('getTransactionEntities'),
-    openFileDialog: () => ipcRenderer.invoke('openFileDialog'),
-    saveFileDialog: () => ipcRenderer.invoke('saveFileDialog'),
+    deleteFileBlob: (fileName) => ipcRenderer.invoke('transactionOperations:deleteFileBlob', fileName),
+    getAllItems: () => ipcRenderer.invoke('transactionOperations:getAllItems'),
+    getItems: (searchParams) => ipcRenderer.invoke('transactionOperations:getItems', searchParams),
+    getSelectedItem: (uuid) => ipcRenderer.invoke('transactionOperations:getSelectedItem', uuid),
+    deleteItem: (uuid) => ipcRenderer.invoke('transactionOperations:deleteItem', uuid),
+    modifyItem: (selectedItem) => ipcRenderer.invoke('transactionOperations:modifyItem', selectedItem),
+    createEntry: () => ipcRenderer.invoke('transactionOperations:createEntry'),
+    //getTransactionEntities: () => ipcRenderer.invoke('financialEntityOperations:getTransactionEntities'),
+    openFileDialog: () => ipcRenderer.invoke('transactionOperations:openFileDialog'),
+    saveFileDialog: () => ipcRenderer.invoke('transactionOperations:saveFileDialog'),
+});
+
+contextBridge.exposeInMainWorld('financialEntityOperations', {
+    // Add your API methods here
+    //getFileBlob: (fileName) => {ipcRenderer.invoke('getFileBlob', fileName)},
+    //setFileBlob: (fileName, arrayBuffer) => {ipcRenderer.invoke('setFileBlob', fileName, arrayBuffer)},
+    getTransactionEntities: () => ipcRenderer.invoke('financialEntityOperations:getTransactionEntities'),
+});
+
+contextBridge.exposeInMainWorld('initializeDatabase', {
+    // Add your API methods here
+    //getFileBlob: (fileName) => {ipcRenderer.invoke('getFileBlob', fileName)},
+    //setFileBlob: (fileName, arrayBuffer) => {ipcRenderer.invoke('setFileBlob', fileName, arrayBuffer)},
+    getCurrencies: () => ipcRenderer.invoke('initializeDatabase:getCurrencies'),
+    getTransactionCategories: () => ipcRenderer.invoke('initializeDatabase:getTransactionCategories'),
 });

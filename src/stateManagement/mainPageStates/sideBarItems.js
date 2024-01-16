@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 //import  { useDispatch } from "react-redux";
 
-//console.log("calling window.electronAPI.getAllItems() from sideBarItems.js");
+//console.log("calling window.transactionOperations.getAllItems() from sideBarItems.js");
 /*
 async function getAllItems() {
-    const allItems = await window.electronAPI.getAllItems();
+    const allItems = await window.transactionOperations.getAllItems();
     console.log("allItems in getAllItems= ", allItems);
     return allItems;
 }

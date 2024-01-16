@@ -177,7 +177,7 @@ function FileInputSection({additonalClasses, files, handleValueChange}) {
 
     useEffect(() => {
         if (!triggerUpdateFilesState.addFile) return;
-        window.electronAPI.openFileDialog().then((fileNames) => {
+        window.transactionOperations.openFileDialog().then((fileNames) => {
             if(fileNames.length > 0) {
                 let filesCopy = [...files];
                 fileNames.forEach((fileName) => {
@@ -198,7 +198,7 @@ function FileInputSection({additonalClasses, files, handleValueChange}) {
         //console.log(typeof event.target.files);
         const filesCopy = [...files];
         let fileNames = false;
-        window.electronAPI.openFileDialog().then((data) => {
+        window.transactionOperations.openFileDialog().then((data) => {
             fileNames = data;
         });
         if (fileNames.length > 0) {
@@ -234,7 +234,7 @@ function GetFileSection({ additonalClasses, fileName }) {
 
     useEffect(() => {
         if (!triggerUpdateFilesState.getFile) return;
-        window.electronAPI.saveFileDialog(fileName);
+        window.transactionOperations.saveFileDialog(fileName);
         dispatch(resetTriggerGetFile());
     }, [triggerUpdateFilesState,
         fileName,
@@ -263,7 +263,7 @@ function DeleteFileButtonSection({additonalClasses, fileName, files, handleValue
 
     useEffect(() => {
         if (!triggerUpdateFilesState.deleteFile) return;
-        window.electronAPI.deleteFileBlob(fileName).then((deleteFileBlobStatus) => {
+        window.transactionOperations.deleteFileBlob(fileName).then((deleteFileBlobStatus) => {
             if (deleteFileBlobStatus) {
                 //let filesCopy = [...files];
                 const filesCopy = files.filter((file) => file !== fileName);
@@ -281,7 +281,7 @@ function DeleteFileButtonSection({additonalClasses, fileName, files, handleValue
     /*
     const handleFileDelete = (fileName) => { 
         let deleteFileBlobStatus = false;
-        window.electronAPI.deleteFileBlob(fileName).then((data) => {
+        window.transactionOperations.deleteFileBlob(fileName).then((data) => {
             deleteFileBlobStatus = data;
         });
         let filesCopy = [...files];

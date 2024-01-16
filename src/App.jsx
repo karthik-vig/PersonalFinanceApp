@@ -22,7 +22,7 @@ function App() {
   //fetch additional information from the main process
   //and set currencies value
   useEffect(() => {
-    window.electronAPI.getCurrencies().then((currencies) => { 
+    window.initializeDatabase.getCurrencies().then((currencies) => { 
       dispatch(setCurrencies(currencies));
     });
   }, [dispatch,]);
@@ -30,7 +30,7 @@ function App() {
   //fetch additional information from the main process
   //and set transaction categories value
   useEffect(() => {
-    window.electronAPI.getTransactionCategories().then((transactionCategories) => {
+    window.initializeDatabase.getTransactionCategories().then((transactionCategories) => {
       dispatch(setTransactionCategories(transactionCategories));
     });
   }, [dispatch,]);
@@ -38,7 +38,7 @@ function App() {
   //fetch additional information from the main process
   //and set transaction entities value
   useEffect(() => {
-    window.electronAPI.getTransactionEntities().then((transactionEntities) => {
+    window.financialEntityOperations.getTransactionEntities().then((transactionEntities) => {
       dispatch(setTransactionEntities(transactionEntities));
     });
   }, [dispatch,]);

@@ -58,7 +58,7 @@ function MainPage({svgIcons}) {
 
     //tigger getAllItems on page load
     useEffect(() => {
-        window.electronAPI.getAllItems().then(items => {
+        window.transactionOperations.getAllItems().then(items => {
             if (items === null) {
                 dispatch(showFailBox());
                 return;
@@ -70,7 +70,7 @@ function MainPage({svgIcons}) {
    //trigger on search params set and enter key pressed
     useEffect(() => {
         if (!triggerSearchState) return;
-        window.electronAPI.getItems(searchParams).then(items => {
+        window.transactionOperations.getItems(searchParams).then(items => {
             if (items === null) {
                 dispatch(showFailBox());
                 return;
@@ -88,7 +88,7 @@ function MainPage({svgIcons}) {
    //trigger on add entry
     useEffect(() => {
         if (!triggerAddEntryState) return;
-        window.electronAPI.createEntry().then(newEntrySideBarItem => {
+        window.transactionOperations.createEntry().then(newEntrySideBarItem => {
             if (newEntrySideBarItem === null) {
                 dispatch(showFailBox());
                 return;
@@ -108,10 +108,10 @@ function MainPage({svgIcons}) {
         //modify the database
         console.log("The Modify Entry trigger selected item is: ");
         console.log(selectedItem);
-        window.electronAPI.modifyItem(selectedItem).then(modifiedItem => {
+        window.transactionOperations.modifyItem(selectedItem).then(modifiedItem => {
             if (modifiedItem.modifyStatus){
                 //wrong
-                dispatch(modifySideBarItem({id: selectedItem.id, item: modifiedItem }));
+                dispatch(modifySideBarItem({id: selectedItem.id, modifiedItem: modifiedItem }));
                 dispatch(showSuccessBox());
             }
             else {
@@ -130,7 +130,7 @@ function MainPage({svgIcons}) {
     useEffect(() => {
         if (!triggerDeleteEntryState) return;
         //delete the entry from the database
-        window.electronAPI.deleteItem(selectedItem.id).then(deleteStatus => {
+        window.transactionOperations.deleteItem(selectedItem.id).then(deleteStatus => {
             if (deleteStatus){
                 console.log("The Delete Entry trigger selected item ID is: ");
                 console.log(selectedItem.id);

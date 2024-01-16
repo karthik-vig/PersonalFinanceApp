@@ -23,7 +23,7 @@ function SideBar() {
         if (currentSelectedItemState === null) return;
         console.log("currentSelectedItemState is not null, triggering getSelectedItem")
         console.log(currentSelectedItemState);
-        window.electronAPI.getSelectedItem(currentSelectedItemState).then((selectedItem) => {
+        window.transactionOperations.getSelectedItem(currentSelectedItemState).then((selectedItem) => {
             if (selectedItem === null) {
                 console.log("selectedItem is null, triggering fail box");
                 dispatch(showFailBox());
