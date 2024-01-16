@@ -27,7 +27,7 @@ function GenericSideBar({ items,
                 <ul>
                     {items.map((item) => {
                         return (<li key={item.id}
-                                    className={ String(currentSelectedItemState) === String(item.id) ? "bg-cyan-200" : "bg-surface-cl"}
+                                    className={ "hover:bg-cyan-600 " + (String(currentSelectedItemState) === String(item.id) ? "bg-cyan-200" : "bg-surface-cl")}
                                 >
                             <button  className="flex flex-row flex-wrap w-[100%] h-20 border-t-2 p-4" onClick={() => handleItemClick(item.id)}>
                                 <FontAwesomeIcon className="m-2 w-10 h-10 border rounded-full outline outline-cyan-950" icon={item.icon} />
