@@ -135,6 +135,10 @@ function MainPage({svgIcons}) {
                 console.log("The Delete Entry trigger selected item ID is: ");
                 console.log(selectedItem.id);
                 dispatch(removeSideBarItem(selectedItem.id));
+                dispatch(showSuccessBox());
+            }
+            else {
+                dispatch(showFailBox());
             }
         });
         dispatch(resetTriggerDeleteEntry());       
