@@ -55,3 +55,41 @@ This can be further broken down to simple elements:
 * section container for range (hidden or shown based on the checkbox for the filter param)
 * section container for select only (hidden or shows based on checkbox for the fitler param)
 * section container for each filter param
+
+
+###### <u>TailwindCSS color setting classess used for bg:</u>
+
+* bg-lime-100 (side secton button, which is used in app.jsx; to denote active)
+* bg-back (basicInputComponents; for text input; on hover)
+* bg-back (basicInputComponents; for text area input; on hover)
+* bg-back (basicInputComponents; for number input; on hover)
+* bg-back (basicInputComponents; for datetime input; on hover)
+* bg-slate-950/30 (genericFail; for the darkening of the entire page)
+* bg-red-200 (genericFail; for the bg on the text box)
+* bg-cyan-600 (genericSideBar; on hover highlight the box)
+* bg-cyan-200 (genericSideBar; highlight the box when selected)
+* bg-slate-950/30 (genericSuccess; for the darkening of the background)
+* bg-green-200 (genericSuccess; for the success box)
+* bg-slate-950/30 (genericWarningBox; for the darkening of the backgroud)
+* bg-yellow-200 (genericWarningBox; for the warning box)
+* bg-yellow-500 (genericWArningBox; for the "yes" and "no" buttons)
+* bg-yellow-600 (genericWarningBox; for the "yes" and "no" buttons when hovering on them)
+
+###### <u>TailwindCSS color setting classess used for text:</u>
+
+* border-red-500 (genericFail; for the fail box)
+* border-green-500 (genericSuccess; for the sucess box)
+* border-yellow-500 (genericWarningBox; for the warning box)
+
+###### <u>TailwindCSS color setting classess used for text:</u>
+
+* text-black/50 (basicUserInputComponents; h6 heading)
+* text-black (basicUserINputComponents; h3 heading, textInputSection, textAreaSection selectInputSection, NumberInputSection, datetimeinputsection)
+* text-green-500 (sideBar; for "in" type of transaction)
+* text-red-500 (sideBar; for "out" type of transaction)
+* text-red-800 (genericFail; for the fail message text)
+* text-green-500 (genericSideBar; as a part of items object structure)
+* text-black/50 (genericSideBar; the botton text)
+* text-green-800 (genericSuccess; for the success message)
+* text-yellow-800 (genericWarningBox; for the warning message)
+* text-white (genericWarningBox; the "yes" and "no" button text)
