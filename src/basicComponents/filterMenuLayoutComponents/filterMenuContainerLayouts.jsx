@@ -13,7 +13,7 @@ import {
 function FilterParamHeadingSection({ additionalClasses, fieldName, headingText, handleInputChange}){
     return (
         <section
-            className={"flex flex-row flex-wrap justify-start " + additionalClasses}
+            className={"flex flex-row flex-wrap justify-start items-center w-[40%] " + additionalClasses}
         >
             <CheckboxInputField
                 additionalClasses=""
@@ -38,7 +38,7 @@ FilterParamHeadingSection.propTypes = {
 function FilterParamInputSection({ additionalClasses, labelText, children}){
     return (
         <section
-            className={"flex flex-row flex-wrap justify-start " + additionalClasses}
+            className={"flex flex-col flex-nowrap h-[100%] w-[25%] mx-2 " + additionalClasses}
         >
             <LabelText
                 additionalClasses=""
@@ -59,7 +59,7 @@ function FilterParamSection({additionalClasses, headingText, toggleDisplay, chil
 
     return (
         <div
-            className={"flex flex-row flex-wrap justify-start " + additionalClasses}
+            className={"flex flex-row flex-nowrap justify-start " + additionalClasses}
         >
             <FilterParamHeadingSection
                 additionalClasses=""
@@ -90,20 +90,20 @@ function FilterRangeInputParam({ labelText, headingText, fieldName, toggleDispla
                 additionalClasses=""
                 headingText={headingText}
                 toggleDisplay={() => toggleDisplay(fieldName)}
+        >
+            <FilterParamInputSection
+                additionalClasses={filterParamsVisibility[fieldName] ? "flex" : "hidden"}
+                labelText={labelText["rangeStart"]}
             >
-                <FilterParamInputSection
-                    additionalClasses={filterParamsVisibility[fieldName] ? "flex" : "hidden"}
-                    labelText={labelText["rangeStart"]}
-                >
-                    {firstChild}
-                </FilterParamInputSection>
-                <FilterParamInputSection
-                    additionalClasses={filterParamsVisibility[fieldName] ? "flex" : "hidden"}
-                    labelText={labelText["rangeStart"]}
-                >
-                    {secondChild}
-                </FilterParamInputSection>
-            </FilterParamSection>
+                {firstChild}
+            </FilterParamInputSection>
+            <FilterParamInputSection
+                additionalClasses={filterParamsVisibility[fieldName] ? "flex" : "hidden"}
+                labelText={labelText["rangeStart"]}
+            >
+                {secondChild}
+            </FilterParamInputSection>
+        </FilterParamSection>
     );
 }
 
@@ -122,18 +122,18 @@ function FilterSelectInputParam({ headingText, fieldName, toggleDisplay, handleI
                 additionalClasses=""
                 headingText={headingText}
                 toggleDisplay={() => toggleDisplay(fieldName)}
+        >
+            <FilterParamInputSection
+                additionalClasses={filterParamsVisibility[fieldName] ? "flex" : "hidden"}
+                labelText=""
             >
-                <FilterParamInputSection
-                    additionalClasses={filterParamsVisibility[fieldName] ? "flex" : "hidden"}
-                    labelText=""
-                >
-                    <SelectInputField
-                        additionalClasses=""
-                        fieldName={fieldName}
-                        handleInputChange={handleInputChange}
-                        selectOptions={selectOptions}
-                    />
-                </FilterParamInputSection>
+                <SelectInputField
+                    additionalClasses=""
+                    fieldName={fieldName}
+                    handleInputChange={handleInputChange}
+                    selectOptions={selectOptions}
+                />
+            </FilterParamInputSection>
         </FilterParamSection>
     );
 }

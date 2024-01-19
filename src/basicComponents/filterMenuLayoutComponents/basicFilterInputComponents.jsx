@@ -6,7 +6,7 @@ function H6Heading({additionalClasses, headingText}){
 
     return (
         <h6 
-            className={"text-2xl font-semibold text-primary-cl " + additionalClasses}
+            className={"truncate text-lg font-semibold text-indigo-400 " + additionalClasses}
         >
             {headingText}
         </h6>
