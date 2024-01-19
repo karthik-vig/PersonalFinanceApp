@@ -16,71 +16,11 @@ import {  //showFilter,
  } from '../../stateManagement/mainPageStates/filterDisplay.js';
 import { toggleFilterParamsVisibility } from '../../stateManagement/mainPageStates/filterParamsVisibility.js';
 import { setFilterParams } from '../../stateManagement/mainPageStates/searchParams.js';
+import { setRecurringTransactions } from '../../stateManagement/mainPageStates/additionalInformation.js';
+import { useEffect } from 'react';
 
-function FilterMenu(/*{ 
-                      //displayState="hidden", 
-                      //setSearchParams, 
-                      //filterParamsVisibility, 
-                      //setFilterParamsVisibility, 
-                      //changeDisplayState 
-                    }*/){
+function FilterMenu(){
     
-
-    //each filter param is enabled or disabled based on the whether
-    //they are checked in the checkbox or not
-    /*
-    let filterParams = {
-                        value: {
-                            min: null, //number input
-                            max: null, //number input
-                        },
-                        currency: null, //select list
-                        transactionType: null, //select list
-                        transactionCategory: null, //select list
-                        fromType: null, //select list
-                        fromEntity: null, //select list
-                        toType: null, //select list
-                        toEntity: null, //select list
-                        recurringEntity: null, //select list
-                        createdDate: { min: null, //date picker
-                                        max: null, //date picker
-                                        },
-                        modifiedDate: { min: null, //date picker
-                                        max: null, //date picker
-                                        },
-                        transactionDate: { min: null, //date picker
-                                            max: null, //date picker
-                                        },
-                        sort: { ascending: true, //select list; can be true or false
-                                field: null, //select list; some valid field name
-                            },
-                        };
-    */
-
-    
-    /*
-    const toggleDisplay = (fieldName) => {
-        setFilterParamsVisibility(draft => {
-            draft[fieldName] = !draft[fieldName];
-        });
-    }
-    */
-
-    /*
-    const handleInputChange = (fieldName, fieldValue) => {
-        setSearchParams(draft => {
-            const fieldSuffice = fieldName.slice(-3);
-            if (fieldSuffice === "Min" || fieldSuffice === "Max") {
-                const filterFieldName = fieldName.slice(0, -3);
-                draft.filter[filterFieldName][fieldSuffice.toLowerCase()] = fieldValue;
-            }
-            else {
-                draft.filter[fieldName] = fieldValue;
-            }
-        });
-        console.log(fieldName, fieldValue);
-    };
-    */
 
     const filterParamsVisibility = useSelector((state) => state.filterParamsVisibility);
     const displayState = useSelector((state) => state.filterDisplayState);
@@ -90,10 +30,18 @@ function FilterMenu(/*{
     const toggleFieldVisibility = (fieldName) => dispatch(toggleFilterParamsVisibility(fieldName));
 
     //get from backend api
-    const currencies = ["RON", "EUR", "USD"];
-    const transactionCategories = ["Salary", "Food", "Clothes", "Rent", "Utilities", "Other"];
-    const transactionEntities = [{name: "entity1", type: "Internal"}, {name: "entity2", type: "Internal"}, {name: "entity3", type: "External"}, {name: "entity4", type: "External"}];
-    const recurringEntities = ["entity1", "entity2", "entity3", "entity4"];
+    const currencies = useSelector((state) => state.additionalInformationState.currencies);
+    const transactionCategories = useSelector((state) => state.additionalInformationState.transactionCategories);
+    const transactionEntities = useSelector((state) => state.additionalInformationState.transactionEntities);
+    const recurringTransactions = useSelector((state) => state.additionalInformationState.recurringTransactions);
+
+    useEffect(() => {
+        window.recurringTransactionOperations.getRecurringTransactions().then((retrievedRecurringTransactions) => {
+            dispatch(setRecurringTransactions(retrievedRecurringTransactions));
+        });
+    }, [dispatch,
+    ]);
+    
     //convert transactionEntities to an array of transactionEntity names
     const transactionEntityNames = Object.keys(transactionEntities).map((key) => transactionEntities[key].name );
 
@@ -187,7 +135,7 @@ function FilterMenu(/*{
                 toggleDisplay={toggleFieldVisibility}
                 handleInputChange={handleInputChange}
                 filterParamsVisibility={filterParamsVisibility}
-                selectOptions={recurringEntities}
+                selectOptions={recurringTransactions}
             />
             <FilterRangeInputParam
                 labelText={{"rangeStart": "Min", "rangeEnd": "Max"}}

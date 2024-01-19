@@ -33,3 +33,7 @@ contextBridge.exposeInMainWorld('initializeDatabase', {
     getCurrencies: () => ipcRenderer.invoke('initializeDatabase:getCurrencies'),
     getTransactionCategories: () => ipcRenderer.invoke('initializeDatabase:getTransactionCategories'),
 });
+
+contextBridge.exposeInMainWorld('recurringTransactionOperations', {
+    getRecurringTransactions: () => ipcRenderer.invoke('recurringTransactionOperations:getRecurringTransactions'),
+});

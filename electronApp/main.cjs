@@ -22,6 +22,7 @@ import {
 const initializeDatabase = require('./database/initializeDatabase.cjs');
 const transactionOperations = require('./database/transactionOperations.cjs');
 const financialEntitiesOperation = require('./database/financialEntityOperation.cjs');
+const recurringTransactionOperations = require('./database/recurringTransactionOperations.cjs');
 
 function createWindow() {
     const win = new BrowserWindow({
@@ -100,6 +101,9 @@ app.whenReady().then(() => {
     //INITIALIZE DATABASE OPERATIONS
     ipcMain.handle('initializeDatabase:getCurrencies', initializeDatabase.getCurrencies);
     ipcMain.handle('initializeDatabase:getTransactionCategories', initializeDatabase.getTransactionCategories);
+
+    //RECURRING TRANSACTION OPERATIONS
+    ipcMain.handle('recurringTransactionOperations:getRecurringTransactions', recurringTransactionOperations.getRecurringTransactions);
 
 });
 
