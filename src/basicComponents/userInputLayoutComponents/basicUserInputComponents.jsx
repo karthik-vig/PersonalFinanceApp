@@ -11,6 +11,10 @@ import {  triggerAddFile,
     triggerGetFile,
     resetTriggerGetFile,
  } from '../../stateManagement/mainPageStates/triggerUpdateFile.js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+library.add(faTrashAlt);
 
 
 // below are the basic components that can be used to build the detail section
@@ -67,7 +71,7 @@ function TextAreaSection({textValue, fieldName, handleValueChange}) {
 
     return (
         <textarea 
-            className=" text-start font-serif antialiased tracking-widest truncate text-base text-black bg-background-cl border rounded-lg outline-1 hover:outline hover:outline-gray-500 hover:outline-offset-2 hover:bg-back overflow-y-scroll resize-none w-[100%] h-[60%] " 
+            className="text-start font-serif antialiased tracking-widest truncate text-base text-black bg-background-cl border rounded-lg outline-1 hover:outline hover:outline-gray-500 hover:outline-offset-2 hover:bg-back overflow-y-scroll resize-y w-[100%] h-auto min-h-28 max-h-56 px-2 py-1" 
             value={textValue} 
             type="text"
             onChange={(event) => dispatch(handleValueChange({fieldName: fieldName, fieldValue: event.target.value}))}
@@ -114,9 +118,10 @@ SelectInputSection.propTypes = {
     handleValueChange: PropTypes.func,
 };
 
-function NumberInputSection({numberValue, additonalClasses, fieldName, handleValueChange}) {
+function NumberInputSection({numberValue, minValue=null, additonalClasses, fieldName, handleValueChange}) {
 
     if (numberValue === null) numberValue = 0;
+    if (minValue === null) minValue = 0;
     const dispatch = useDispatch();
 
     return (
@@ -124,6 +129,7 @@ function NumberInputSection({numberValue, additonalClasses, fieldName, handleVal
             className={"text-start font-serif antialiased tracking-widest truncate text-base text-black bg-background-cl border rounded-lg outline-1 hover:outline hover:outline-gray-500 hover:outline-offset-2 hover:bg-back" + " " + additonalClasses + " "} 
             value={numberValue} 
             type="number"
+            min={minValue}
             onChange={(event) => dispatch(handleValueChange({fieldName: fieldName, fieldValue: event.target.value}))}
         />
     );
@@ -131,6 +137,7 @@ function NumberInputSection({numberValue, additonalClasses, fieldName, handleVal
 
 NumberInputSection.propTypes = {
     numberValue: PropTypes.number,
+    minValue: PropTypes.number,
     additonalClasses: PropTypes.string,
     fieldName: PropTypes.string,
     handleValueChange: PropTypes.func,
@@ -142,7 +149,9 @@ function RadioButtonSection({ radioBtnID, fieldName, children, additonalClasses,
     const dispatch = useDispatch();
 
     return (
-        <>
+        <section
+            className={ "flex flex-row flex-nowrap items-center justify-start" + " " + additonalClasses }
+        >
             <input 
                 type="radio"
                 id={radioBtnID}
@@ -150,14 +159,14 @@ function RadioButtonSection({ radioBtnID, fieldName, children, additonalClasses,
                 value={children} 
                 checked={checked} 
                 onChange={(event) =>  dispatch(handleValueChange({fieldName: fieldName, fieldValue: event.target.value})) } 
-                className={additonalClasses}
+                className=""
             />
             <label 
                 htmlFor={fieldName}
             >
                 {children}
             </label>
-        </>
+        </section>
     );
 }
 
@@ -193,31 +202,17 @@ function FileInputSection({additonalClasses, files, handleValueChange}) {
         handleValueChange,
     ]);
     
-    /*
-    const handleAddFile = () => {
-        //console.log(typeof event.target.files);
-        const filesCopy = [...files];
-        let fileNames = false;
-        window.transactionOperations.openFileDialog().then((data) => {
-            fileNames = data;
-        });
-        if (fileNames.length > 0) {
-            fileNames.forEach((fileName) => {
-            if (!filesCopy.includes(fileName)) filesCopy.push(fileName);
-            });
-        } 
-        //handleValueChange("file", filesCopy);
-        dispatch(handleValueChange({fieldName: "file", fieldValue: filesCopy}))
-    }
-    */
-
     return (
-        <button 
-            className={"" + " " + additonalClasses + " "}
-            onClick={() => dispatch(triggerAddFile())}
+        <section
+            className={"flex flex-row flex-nowrap justify-center items-center" + " " + additonalClasses + " "}
         >
-            Add File
-        </button>
+            <button 
+                className="border bg-blue-500 hover:bg-blue-800 text-white font-bold py-1 px-2 rounded-lg"
+                onClick={() => dispatch(triggerAddFile())}
+            >
+                Add File
+            </button>
+        </section>
     );
 }
 
@@ -243,7 +238,7 @@ function GetFileSection({ additonalClasses, fileName }) {
 
     return (
         <button
-            className={"min-w-20 min-h-20" + " " + additonalClasses + " "}
+            className={"underline text-blue-300 hover:text-blue-500 min-w-20 min-h-20" + " " + additonalClasses + " "}
             onClick={() => { dispatch(triggerGetFile()); } }
         >
             {fileName}
@@ -278,26 +273,12 @@ function DeleteFileButtonSection({additonalClasses, fileName, files, handleValue
         handleValueChange,
     ]);
 
-    /*
-    const handleFileDelete = (fileName) => { 
-        let deleteFileBlobStatus = false;
-        window.transactionOperations.deleteFileBlob(fileName).then((data) => {
-            deleteFileBlobStatus = data;
-        });
-        let filesCopy = [...files];
-        if (deleteFileBlobStatus) {
-            filesCopy = files.filter((file) => file !== fileName);
-        }
-        dispatch(handleValueChange({fieldName: "file", fieldValue: filesCopy}));
-    };
-    */
-
     return (
         <button 
-            className={"min-w-20 min-h-20" + " " + additonalClasses + " "}
+            className={ " " + additonalClasses + " "}
             onClick={() => { dispatch(triggerDeleteFile()); } }
         >
-            Delete
+            <FontAwesomeIcon icon={faTrashAlt} color='#ff0000'/>
         </button>
     );
 }

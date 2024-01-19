@@ -93,3 +93,9 @@ This can be further broken down to simple elements:
 * text-green-800 (genericSuccess; for the success message)
 * text-yellow-800 (genericWarningBox; for the warning message)
 * text-white (genericWarningBox; the "yes" and "no" button text)
+
+###### <u>Size measurement for basic input components - additionalClasses:</u>
+* first radio btn = h-[100%] w-[20%] mx-2
+* second radio btn = h-[100%] w-[20%]
+* select menu = w-[30%] h-[100%]
+* h6 heading = w-[40%] h-[100%]

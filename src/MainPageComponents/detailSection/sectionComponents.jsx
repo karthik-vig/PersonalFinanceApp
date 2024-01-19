@@ -54,10 +54,10 @@ function DescriptionSection() {
 
     return (
     <SectionContainer 
-        additonalClasses="w-auto h-72 border-b-2 pb-4 min-w-80"
+        additonalClasses="w-auto h-auto border-b-2 pb-4 min-w-80"
     >
         <H6HeadingText 
-            additonalClasses={"w-[100%] h-[38%] mb-2"}
+            additonalClasses={"w-[100%] h-6 mb-2"}
         >
             Description
         </H6HeadingText>
@@ -88,20 +88,20 @@ function SalarySection() {
             additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80"
         >
             <H6HeadingText 
-                additonalClasses={"w-[100%] h-[38%] mb-2"}
+                additonalClasses={"w-[40%] h-[100%]"}
             >
                 Transaction Value
             </H6HeadingText>
             <NumberInputSection 
                 numberValue={transactionValue} 
-                additonalClasses="w-[70%] h-[60%] mx-4"
+                additonalClasses="w-[20%] h-[100%] mx-2"
                 fieldName={"value"}
                 handleValueChange={handleItemClick}
             />
             <SelectInputSection 
                 selectedValue={currencyValue} 
                 options={currencies} 
-                additonalClasses="w-[20%] h-[60%]"
+                additonalClasses="w-[20%] h-[100%]"
                 fieldName={"currency"}
                 handleValueChange={handleItemClick}
             />
@@ -139,14 +139,14 @@ function TransactionTypeSection() {
             additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80"
         >
             <H6HeadingText 
-                additonalClasses={"w-[50%]"}
+                additonalClasses={"w-[40%] h-[100%]"}
             >
                 Transaction Type
             </H6HeadingText>
             <RadioButtonSection 
                 radioBtnID="transactionTypeIn"
                 fieldName="transactionType" 
-                additonalClasses="" 
+                additonalClasses="h-[100%] w-[20%] mx-2" 
                 checked={transactionType === "In"} 
                 handleValueChange={handleItemClick}
             >
@@ -155,7 +155,7 @@ function TransactionTypeSection() {
             <RadioButtonSection
                 radioBtnID="transactionTypeOut"
                 fieldName="transactionType" 
-                additonalClasses="" 
+                additonalClasses="h-[100%] w-[20%]" 
                 checked={transactionType === "Out"} 
                 handleValueChange={handleItemClick}
             >
@@ -182,14 +182,14 @@ function TransactionCategorySection() {
             additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80"
         >
             <H6HeadingText 
-                additonalClasses={"w-[50%]"}
+                additonalClasses={"w-[40%] h-[100%]"}
             >
                 Transaction Category
             </H6HeadingText>
             <SelectInputSection 
                 selectedValue={transactionCategory} 
                 options={transactionCategories} 
-                additonalClasses="w-[50%]"
+                additonalClasses="w-[30%] h-[100%]"
                 fieldName={"transactionCategory"}
                 handleValueChange={handleItemClick}
             />
@@ -211,12 +211,18 @@ function FromTypeSection() {
     const fromType = useSelector((state) => state.selectedItem.fromType);
 
     return (
-        <SectionContainer additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80">
-            <H6HeadingText additonalClasses="">From Type</H6HeadingText>
+        <SectionContainer 
+            additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80"
+        >
+            <H6HeadingText 
+                additonalClasses="h-[100%] w-[40%]"
+            >
+                From Type
+            </H6HeadingText>
             <RadioButtonSection 
                 radioBtnID="transactionFromInternal"
                 fieldName="fromType" 
-                additonalClasses="" 
+                additonalClasses="h-[100%] w-[20%] mx-2" 
                 checked={fromType === "Internal"} 
                 handleValueChange={handleItemClick}
             >
@@ -225,7 +231,7 @@ function FromTypeSection() {
             <RadioButtonSection
                 radioBtnID="transactionFromExternal"
                 fieldName="fromType" 
-                additonalClasses="" 
+                additonalClasses="h-[100%] w-[20%]" 
                 checked={fromType === "External"} 
                 handleValueChange={handleItemClick}
             >
@@ -250,16 +256,18 @@ function FromEntitySection() {
     const transformedEntities = transactionEntities.filter((entity) => entity.type === fromType ).map((entity) => entity.name);
 
     return (
-        <SectionContainer additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80">
+        <SectionContainer 
+            additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80"
+        >
             <H6HeadingText 
-                additonalClasses=""
+                additonalClasses="h-[100%] w-[40%]"
             >
                 From Entity
             </H6HeadingText>
             <SelectInputSection 
                 selectedValue={fromEntity} 
                 options={transformedEntities} 
-                additonalClasses="min-w-20"
+                additonalClasses="w-[30%] h-[100%]"
                 fieldName={"fromEntity"}
                 handleValueChange={handleItemClick}
             />
@@ -282,12 +290,18 @@ function ToTypeSection() {
     const toType = useSelector((state) => state.selectedItem.toType);
 
     return (
-        <SectionContainer additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80">
-            <H6HeadingText additonalClasses="">To Type</H6HeadingText>
+        <SectionContainer 
+            additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80"
+        >
+            <H6HeadingText 
+                additonalClasses="h-[100%] w-[40%]"
+            >
+                To Type
+            </H6HeadingText>
             <RadioButtonSection 
                 radioBtnID="transactionToInternal"
                 fieldName="toType" 
-                additonalClasses="" 
+                additonalClasses="h-[100%] w-[20%] mx-2" 
                 checked={toType === "Internal"} 
                 handleValueChange={handleItemClick}
             >
@@ -296,7 +310,7 @@ function ToTypeSection() {
             <RadioButtonSection
                 radioBtnID="transactionToExternal"
                 fieldName="toType" 
-                additonalClasses="" 
+                additonalClasses="h-[100%] w-[20%]" 
                 checked={toType === "External"} 
                 handleValueChange={handleItemClick}
             >
@@ -322,16 +336,18 @@ function ToEntitySection() {
     const transformedEntities = transactionEntities.filter((entity) => entity.type === toType ).map((entity) => entity.name);
 
     return (
-        <SectionContainer additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80">
+        <SectionContainer 
+            additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80"
+        >
             <H6HeadingText 
-                additonalClasses=""
+                additonalClasses="h-[100%] w-[40%]"
             >
                 To Entity
             </H6HeadingText>
             <SelectInputSection 
                 selectedValue={toEntity} 
                 options={transformedEntities} 
-                additonalClasses="min-w-20"
+                additonalClasses="w-[30%] h-[100%]"
                 fieldName={"toEntity"}
                 handleValueChange={handleItemClick}
             />
@@ -354,8 +370,16 @@ function RecurringEntity() {
 
     return (
         <SectionContainer additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80">
-            <H6HeadingText additonalClasses="">Recurring</H6HeadingText>
-            <p>{recurringEntity}</p>
+            <H6HeadingText 
+                additonalClasses="H-[100%] W-[40%]"
+            >
+                Recurring
+            </H6HeadingText>
+            <p 
+                className="h-[100%] w-[60%] text-start text-base font-normal truncate"
+            >
+                {recurringEntity}
+            </p>
         </SectionContainer>
     );
 }
@@ -372,30 +396,37 @@ function FileInput() {
     const files = useSelector((state) => state.selectedItem.file);
 
     return (
-        <SectionContainer additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80">
+        <SectionContainer additonalClasses="w-auto h-auto border-b-2 pb-4 min-w-80">
             <FileInputSection 
-                additonalClasses="justify-center"
+                additonalClasses="h-10 w-[100%]"
                 files={files}
                 handleValueChange={handleItemClick}
             />
-            {files.map((fileName) => {
+            <ul
+                className="flex flex-row flex-wrap h-auto w-[100%]"
+            >
+                {files.map((fileName) => {
 
-                return (
-                    <li key={fileName}>
-                        <GetFileSection
-                            additonalClasses=""
-                            fileName={fileName}
-                        />
-                        <DeleteFileButtonSection
-                            additonalClasses=""
-                            fileName={fileName}
-                            files={files}
-                            handleValueChange={handleItemClick}
-                        />
-                    </li>
-                );
-                } )
-            }
+                    return (
+                        <li 
+                            key={fileName}
+                            className="list-decimal h-10 w-auto mx-4 my-1"
+                        >
+                            <GetFileSection
+                                additonalClasses="h-10 w-auto p-2"
+                                fileName={fileName}
+                            />
+                            <DeleteFileButtonSection
+                                additonalClasses="h-10 w-auto p-2"
+                                fileName={fileName}
+                                files={files}
+                                handleValueChange={handleItemClick}
+                            />
+                        </li>
+                    );
+                    } )
+                }
+            </ul>
         </SectionContainer>
     );
 }
@@ -416,13 +447,13 @@ function DatetimeInput({ datetimeValue,
     return (
         <SectionContainer additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80">
             <H6HeadingText 
-                additonalClasses=""
+                additonalClasses="h-[100%] w-[40%]"
             >
                 {heading}
             </H6HeadingText>
             <DatetimeInputSection 
                 datetimeValue={datetimeValue}
-                additonalClasses={"justify-center"}
+                additonalClasses="h-[100%] w-[30%]"
                 readonly={readonly}
                 fieldName={fieldName}
                 handleValueChange={handleItemClick}

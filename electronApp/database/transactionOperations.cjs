@@ -159,7 +159,7 @@ function getSelectedItem(event, uuid) {
         fromType: null,
         toEntity: null, //computed by backend
         toType: null,
-        recurringEntity: null,
+        recurringEntity: "entity1", //computed by backend, could be null
         file: Object.keys(currentSelectedItemFiles),
         createdDate: "yyyy-MM-ddThh:mm:ss",
         modifiedDate: "yyyy-MM-ddThh:mm:ss",

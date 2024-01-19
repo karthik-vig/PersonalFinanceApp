@@ -40,7 +40,7 @@ function DetailSection() {
 
     return (
         <div 
-            className="flex flex-nowrap flex-col ml-2 mr-7 mt-0 mb-4 border rounded-lg bg-surface-cl drop-shadow-lg overflow-x-hidden overflow-y-scroll px-[20%] py-[2%]" 
+            className="flex flex-nowrap flex-col ml-2 mr-7 mt-0 mb-4 border rounded-lg bg-surface-cl drop-shadow-lg overflow-x-hidden overflow-y-scroll px-[10%] py-[2%]" 
             style={{ height: 'calc(100% - 150px)', width: 'calc(75% - 92px)' }}
         >
             <TitleSection />
@@ -53,10 +53,7 @@ function DetailSection() {
             <FromEntitySection />
             <ToTypeSection />
             <ToEntitySection />
-    
-            {selectedItem.recurringEntity && 
-                <RecurringEntity />
-            }
+            { selectedItem.recurringEntity && <RecurringEntity /> }
             <H3HeadingSection>Files</H3HeadingSection>
             <FileInput />
             <H3HeadingSection>Additional Information</H3HeadingSection>
