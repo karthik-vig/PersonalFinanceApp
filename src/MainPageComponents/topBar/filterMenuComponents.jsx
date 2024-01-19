@@ -41,7 +41,7 @@ function FilterMenu(){
         });
     }, [dispatch,
     ]);
-    
+
     //convert transactionEntities to an array of transactionEntity names
     const transactionEntityNames = Object.keys(transactionEntities).map((key) => transactionEntities[key].name );
 
@@ -50,7 +50,7 @@ function FilterMenu(){
             className={" h-96 w-[50%] z-50 top-[65px] left-[30%] absolute rounded-lg border bg-surface-cl drop-shadow-lg overflow-x-hidden overflow-y-scroll " + displayState}
         >
             <button
-                className="sticky top-0 left-[90%] h-8 w-16 rounded-lg border bg-surface-cl drop-shadow-lg"
+                className="sticky top-0 left-[90%] h-8 w-16 rounded-lg border bg-red-500 border-red-700 hover:bg-red-800 drop-shadow-lg"
                 onClick={() => dispatch(hideFilter())}
             >
                 Close
@@ -200,12 +200,5 @@ function FilterMenu(){
     );
 }
 
-FilterMenu.propTypes = {
-    //displayState: PropTypes.string,
-    //setSearchParams: PropTypes.func,
-    //filterParamsVisibility: PropTypes.object,
-    //setFilterParamsVisibility: PropTypes.func,
-    //changeDisplayState: PropTypes.func,
-};
 
 export default FilterMenu;
