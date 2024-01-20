@@ -20,7 +20,7 @@ import { useSelector } from 'react-redux';
 // below are the sections that are used in the detail section; built using the basic components
 function TitleSection() {
 
-    const titleValue = useSelector((state) => state.selectedItem.title);
+    const titleValue = useSelector((state) => state.mainPageStates.selectedItem.title);
 
     return (
     <SectionContainer 
@@ -50,7 +50,7 @@ TitleSection.propTypes = {
 
 function DescriptionSection() {
 
-    const descriptionValue = useSelector((state) => state.selectedItem.description);
+    const descriptionValue = useSelector((state) => state.mainPageStates.selectedItem.description);
 
     return (
     <SectionContainer 
@@ -79,9 +79,9 @@ DescriptionSection.propTypes = {
 
 function SalarySection() {
 
-    const transactionValue = useSelector((state) => state.selectedItem.value);
-    const currencyValue = useSelector((state) => state.selectedItem.currency);
-    const currencies = useSelector((state) => state.additionalInformationState.currencies);
+    const transactionValue = useSelector((state) => state.mainPageStates.selectedItem.value);
+    const currencyValue = useSelector((state) => state.mainPageStates.selectedItem.currency);
+    const currencies = useSelector((state) => state.mainPageStates.additionalInformationState.currencies);
 
     return (
         <SectionContainer 
@@ -132,7 +132,7 @@ H3HeadingSection.propTypes = {
 
 function TransactionTypeSection() {
 
-    const transactionType = useSelector((state) => state.selectedItem.transactionType);
+    const transactionType = useSelector((state) => state.mainPageStates.selectedItem.transactionType);
 
     return (
         <SectionContainer 
@@ -174,8 +174,8 @@ TransactionTypeSection.propTypes = {
 
 function TransactionCategorySection() {
 
-    const transactionCategory = useSelector((state) => state.selectedItem.transactionCategory);
-    const transactionCategories = useSelector((state) => state.additionalInformationState.transactionCategories);
+    const transactionCategory = useSelector((state) => state.mainPageStates.selectedItem.transactionCategory);
+    const transactionCategories = useSelector((state) => state.mainPageStates.additionalInformationState.transactionCategories);
 
     return (
         <SectionContainer 
@@ -208,7 +208,7 @@ TransactionCategorySection.propTypes = {
 
 function FromTypeSection() {
 
-    const fromType = useSelector((state) => state.selectedItem.fromType);
+    const fromType = useSelector((state) => state.mainPageStates.selectedItem.fromType);
 
     return (
         <SectionContainer 
@@ -250,9 +250,9 @@ FromTypeSection.propTypes = {
 
 function FromEntitySection() {
     
-    const fromEntity = useSelector((state) => state.selectedItem.fromEntity);
-    const fromType = useSelector((state) => state.selectedItem.fromType);
-    let transactionEntities = useSelector((state) => state.additionalInformationState.transactionEntities);
+    const fromEntity = useSelector((state) => state.mainPageStates.selectedItem.fromEntity);
+    const fromType = useSelector((state) => state.mainPageStates.selectedItem.fromType);
+    let transactionEntities = useSelector((state) => state.mainPageStates.additionalInformationState.transactionEntities);
     const transformedEntities = transactionEntities.filter((entity) => entity.type === fromType ).map((entity) => entity.name);
 
     return (
@@ -287,7 +287,7 @@ FromEntitySection.propTypes = {
 
 function ToTypeSection() {
 
-    const toType = useSelector((state) => state.selectedItem.toType);
+    const toType = useSelector((state) => state.mainPageStates.selectedItem.toType);
 
     return (
         <SectionContainer 
@@ -330,9 +330,9 @@ ToTypeSection.propTypes = {
 
 function ToEntitySection() {
 
-    const toEntity = useSelector((state) => state.selectedItem.toEntity);
-    const toType = useSelector((state) => state.selectedItem.toType);
-    const transactionEntities = useSelector((state) => state.additionalInformationState.transactionEntities);
+    const toEntity = useSelector((state) => state.mainPageStates.selectedItem.toEntity);
+    const toType = useSelector((state) => state.mainPageStates.selectedItem.toType);
+    const transactionEntities = useSelector((state) => state.mainPageStates.additionalInformationState.transactionEntities);
     const transformedEntities = transactionEntities.filter((entity) => entity.type === toType ).map((entity) => entity.name);
 
     return (
@@ -366,7 +366,7 @@ ToEntitySection.propTypes = {
 
 function RecurringEntity() {
 
-    const recurringEntity = useSelector((state) => state.selectedItem.recurringEntity);
+    const recurringEntity = useSelector((state) => state.mainPageStates.selectedItem.recurringEntity);
 
     return (
         <SectionContainer additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80">
@@ -393,7 +393,7 @@ RecurringEntity.propTypes = {
 
 function FileInput() {
 
-    const files = useSelector((state) => state.selectedItem.file);
+    const files = useSelector((state) => state.mainPageStates.selectedItem.file);
 
     return (
         <SectionContainer additonalClasses="w-auto h-auto border-b-2 pb-4 min-w-80">

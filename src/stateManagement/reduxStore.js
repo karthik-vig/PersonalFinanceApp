@@ -15,23 +15,26 @@ import currentSelectedItemReducer from './mainPageStates/currentSelectedItem.js'
 import triggerUpdateFileReducer from './mainPageStates/triggerUpdateFile.js';
 import additionalInformationReducer from './mainPageStates/additionalInformation.js';
 
+const mainPageStates = {
+  selectedItem: selectedItemReducer,
+  sideBarItems: sideBarItemReducer,
+  warningBoxDisplayState: warningBoxDisplayReducer,
+  successBoxDisplayState: successBoxDisplayReducer,
+  failBoxDisplayState: failBoxDisplayReducer,
+  searchParams: searchParamsReducer,
+  filterParamsVisibility: filterParamsVisibilityReducer,
+  filterDisplayState: filterDisplayReducer,
+  triggerModifyEntryState: triggerModifyEntryReducer,
+  triggerDeleteEntryState: triggerDeleteEntryReducer,
+  triggerAddEntryState: triggerAddEntryReducer,
+  triggerSearchState: triggerSearchReducer,
+  currentSelectedItemState: currentSelectedItemReducer,
+  triggerUpdateFileState: triggerUpdateFileReducer,
+  additionalInformationState: additionalInformationReducer,
+};
 
 export default configureStore({
   reducer: {
-    selectedItem: selectedItemReducer,
-    sideBarItems: sideBarItemReducer,
-    warningBoxDisplayState: warningBoxDisplayReducer,
-    successBoxDisplayState: successBoxDisplayReducer,
-    failBoxDisplayState: failBoxDisplayReducer,
-    searchParams: searchParamsReducer,
-    filterParamsVisibility: filterParamsVisibilityReducer,
-    filterDisplayState: filterDisplayReducer,
-    triggerModifyEntryState: triggerModifyEntryReducer,
-    triggerDeleteEntryState: triggerDeleteEntryReducer,
-    triggerAddEntryState: triggerAddEntryReducer,
-    triggerSearchState: triggerSearchReducer,
-    currentSelectedItemState: currentSelectedItemReducer,
-    triggerUpdateFileState: triggerUpdateFileReducer,
-    additionalInformationState: additionalInformationReducer,
-  }
+    mainPageStates,
+  },
 })

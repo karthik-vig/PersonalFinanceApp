@@ -112,9 +112,9 @@ function TopBar({ svgIcons,
 
     //const [filterDisplayState, setFilterDisplayState] = useImmer("hidden"); //hidden or visible
 
-    const filterDisplayState = useSelector((state) => state.filterDisplayState);
-    //const searchParams = useSelector((state) => state.searchParams);
-    //const filterParamsVisibility = useSelector((state) => state.filterParamsVisibility);
+    const filterDisplayState = useSelector((state) => state.mainPageStates.filterDisplayState);
+    //const searchParams = useSelector((state) => state.mainPageStates.searchParams);
+    //const filterParamsVisibility = useSelector((state) => state.mainPageStates.filterParamsVisibility);
     const dispatch = useDispatch();
 
 

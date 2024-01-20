@@ -22,18 +22,18 @@ import { useEffect } from 'react';
 function FilterMenu(){
     
 
-    const filterParamsVisibility = useSelector((state) => state.filterParamsVisibility);
-    const displayState = useSelector((state) => state.filterDisplayState);
+    const filterParamsVisibility = useSelector((state) => state.mainPageStates.filterParamsVisibility);
+    const displayState = useSelector((state) => state.mainPageStates.filterDisplayState);
     const dispatch = useDispatch();
 
     const handleInputChange = (fieldName, fieldValue) => dispatch(setFilterParams({fieldName, fieldValue}));
     const toggleFieldVisibility = (fieldName) => dispatch(toggleFilterParamsVisibility(fieldName));
 
     //get from backend api
-    const currencies = useSelector((state) => state.additionalInformationState.currencies);
-    const transactionCategories = useSelector((state) => state.additionalInformationState.transactionCategories);
-    const transactionEntities = useSelector((state) => state.additionalInformationState.transactionEntities);
-    const recurringTransactions = useSelector((state) => state.additionalInformationState.recurringTransactions);
+    const currencies = useSelector((state) => state.mainPageStates.additionalInformationState.currencies);
+    const transactionCategories = useSelector((state) => state.mainPageStates.additionalInformationState.transactionCategories);
+    const transactionEntities = useSelector((state) => state.mainPageStates.additionalInformationState.transactionEntities);
+    const recurringTransactions = useSelector((state) => state.mainPageStates.additionalInformationState.recurringTransactions);
 
     useEffect(() => {
         window.recurringTransactionOperations.getRecurringTransactions().then((retrievedRecurringTransactions) => {

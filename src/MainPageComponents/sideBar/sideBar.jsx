@@ -14,8 +14,8 @@ import { useEffect } from 'react';
 
 function SideBar() {
 
-    const sideBarItems = useSelector((state) => state.sideBarItems);
-    const currentSelectedItemState = useSelector((state) => state.currentSelectedItemState);
+    const sideBarItems = useSelector((state) => state.mainPageStates.sideBarItems);
+    const currentSelectedItemState = useSelector((state) => state.mainPageStates.currentSelectedItemState);
     const dispatch = useDispatch();
 
     //get the selecteded item data from the main process

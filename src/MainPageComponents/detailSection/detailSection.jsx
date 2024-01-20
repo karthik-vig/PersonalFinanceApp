@@ -24,7 +24,7 @@ import { useSelector,
 // this is the detail section that is used in the main page
 function DetailSection() {
 
-    const selectedItem = useSelector((state) => state.selectedItem);
+    const selectedItem = useSelector((state) => state.mainPageStates.selectedItem);
 
     if (selectedItem === null) {
         return (

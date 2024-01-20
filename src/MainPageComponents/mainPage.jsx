@@ -43,16 +43,21 @@ import {  //triggerSearch,
 
 function MainPage({svgIcons}) {
 
-    const selectedItem = useSelector(state => state.selectedItem);
-    const warningBoxDisplayState = useSelector(state => state.warningBoxDisplayState);
-    const failBoxDisplayState = useSelector(state => state.failBoxDisplayState);
-    const successBoxDisplayState = useSelector(state => state.successBoxDisplayState);
-    const triggerModifyEntryState = useSelector(state => state.triggerModifyEntryState);
-    const triggerDeleteEntryState = useSelector(state => state.triggerDeleteEntryState);
-    const triggerAddEntryState = useSelector(state => state.triggerAddEntryState);
-    const triggerSearchState = useSelector(state => state.triggerSearchState);
-    const searchParams = useSelector(state => state.searchParams);
-    const filterParamsVisibility = useSelector(state => state.filterParamsVisibility);   
+    //debugging; remove later
+    const state = useSelector(state => state);
+    console.log(Object.keys(state));
+    console.log(state.mainPageStates);
+
+    const selectedItem = useSelector(state => state.mainPageStates.selectedItem);
+    const warningBoxDisplayState = useSelector(state => state.mainPageStates.warningBoxDisplayState);
+    const failBoxDisplayState = useSelector(state => state.mainPageStates.failBoxDisplayState);
+    const successBoxDisplayState = useSelector(state => state.mainPageStates.successBoxDisplayState);
+    const triggerModifyEntryState = useSelector(state => state.mainPageStates.triggerModifyEntryState);
+    const triggerDeleteEntryState = useSelector(state => state.mainPageStates.triggerDeleteEntryState);
+    const triggerAddEntryState = useSelector(state => state.mainPageStates.triggerAddEntryState);
+    const triggerSearchState = useSelector(state => state.mainPageStates.triggerSearchState);
+    const searchParams = useSelector(state => state.mainPageStates.searchParams);
+    const filterParamsVisibility = useSelector(state => state.mainPageStates.filterParamsVisibility);   
     const dispatch = useDispatch();
 
 
