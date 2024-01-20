@@ -38,15 +38,18 @@ function getTransactionCategories() {
 }
 
 function openDB() {
-    db = new sqlite.Database('../data/database.db');
+    const db = new sqlite.Database('../data/database.db');
     return db;
 }
 
-function closeDB() {
+function closeDB(db) {
     db.close();
 }
 
 function setupDatabase() {
+
+    const db = openDB();
+
     db.serialize(() => {
         db.run('CREATE TABLE IF NOT EXISTS transactions (\
                 id TEXT PRIMARY KEY, \
@@ -225,6 +228,6 @@ module.exports = {
     initDatabase,
     getCurrencies,
     getTransactionCategories,
-    openDB,
+    //openDB,
     closeDB,
 }

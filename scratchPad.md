@@ -126,6 +126,31 @@ Taxes: `fas fa-file-invoice-dollar`
 Legal Services: `fas fa-balance-scale`
 Other: `fas fa-ellipsis-h`
 
+
+Groceries: `#4CAF50` (Green)
+Restaurants and Dining: `#FF5722` (Deep Orange)
+Shopping: `#9C27B0` (Purple)
+Utilities: `#607D8B` (Blue Grey)
+Telecommunication: `#3F51B5` (Indigo)
+Transportation: `#FFEB3B` (Yellow)
+Rent or Mortgage: `#795548` (Brown)
+Insurance: `#9E9E9E` (Grey)
+Healthcare: `#F44336` (Red)
+Education: `#03A9F4` (Light Blue)
+Entertainment: `#E91E63` (Pink)
+Travel and Lodging: `#00BCD4` (Cyan)
+Personal Care: `#FFC107` (Amber)
+Fitness and Wellness: `#8BC34A` (Light Green)
+Investments and Savings: `#CDDC39` (Lime)
+Loans and Credit Payments: `#FF9800` (Orange)
+Charity and Donations: `#673AB7` (Deep Purple)
+Home Improvement and Maintenance: `#9E9D24` (Lime)
+Childcare and Education: `#2196F3` (Blue)
+Pet Care: `#4CAF50` (Green)
+Taxes: `#F44336` (Red)
+Legal Services: `#3F51B5` (Indigo)
+Other: `#607D8B` (Blue Grey)
+
 ###### <u>List of all possible currency abbreviations in the world:</u>
 
 [
