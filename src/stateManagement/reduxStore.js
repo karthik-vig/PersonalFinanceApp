@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import selectedItemReducer from './mainPageStates/selectedItem.js';
 import sideBarItemReducer from './mainPageStates/sideBarItems.js';
 import warningBoxDisplayReducer from './mainPageStates/warningBoxDisplay.js';
@@ -15,7 +15,7 @@ import currentSelectedItemReducer from './mainPageStates/currentSelectedItem.js'
 import triggerUpdateFileReducer from './mainPageStates/triggerUpdateFile.js';
 import additionalInformationReducer from './mainPageStates/additionalInformation.js';
 
-const mainPageStates = {
+const mainPageStates = combineReducers({
   selectedItem: selectedItemReducer,
   sideBarItems: sideBarItemReducer,
   warningBoxDisplayState: warningBoxDisplayReducer,
@@ -31,10 +31,12 @@ const mainPageStates = {
   currentSelectedItemState: currentSelectedItemReducer,
   triggerUpdateFileState: triggerUpdateFileReducer,
   additionalInformationState: additionalInformationReducer,
-};
+});
+
+const rootReducer = combineReducers({
+  mainPageStates,
+});
 
 export default configureStore({
-  reducer: {
-    mainPageStates,
-  },
+  reducer: rootReducer,
 })

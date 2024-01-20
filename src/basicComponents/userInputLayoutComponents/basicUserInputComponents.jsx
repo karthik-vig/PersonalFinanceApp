@@ -181,7 +181,7 @@ RadioButtonSection.propTypes = {
 
 function FileInputSection({additonalClasses, files, handleValueChange}) {
 
-    const triggerUpdateFilesState = useSelector((state) => state.triggerUpdateFileState);
+    const triggerUpdateFilesState = useSelector((state) => state.mainPageStates.triggerUpdateFileState);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -224,7 +224,7 @@ FileInputSection.propTypes = {
 
 function GetFileSection({ additonalClasses, fileName }) {
 
-    const triggerUpdateFilesState = useSelector((state) => state.triggerUpdateFileState);
+    const triggerUpdateFilesState = useSelector((state) => state.mainPageStates.triggerUpdateFileState);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -253,7 +253,7 @@ GetFileSection.propTypes = {
 
 function DeleteFileButtonSection({additonalClasses, fileName, files, handleValueChange}) {
 
-    const triggerUpdateFilesState = useSelector((state) => state.triggerUpdateFileState);
+    const triggerUpdateFilesState = useSelector((state) => state.mainPageStates.triggerUpdateFileState);
     const dispatch = useDispatch();
 
     useEffect(() => {
