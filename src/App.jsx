@@ -7,13 +7,13 @@ import MainPage from './MainPageComponents/mainPage.jsx';
 import FinancialEntityPage from './FinancialEntityPageComponents/financialEntityPage.jsx';
 import { useDispatch } from 'react-redux';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faHouse, faChartLine, faBuildingColumns, faTicketSimple, faFilter, faSort, faPlus, faTrashCan, faEdit, faRefresh } from '@fortawesome/free-solid-svg-icons';
+import { faHouse, faChartLine, faBuildingColumns, faTicketSimple,  } from '@fortawesome/free-solid-svg-icons';
 import { useEffect } from 'react';
 import { setCurrencies, 
   setTransactionCategories, 
   setTransactionEntities,
 } from './stateManagement/mainPageStates/additionalInformation.js';
-library.add(faHouse, faChartLine, faBuildingColumns, faTicketSimple, faFilter, faSort, faPlus, faTrashCan, faEdit, faRefresh);
+library.add(faHouse, faChartLine, faBuildingColumns, faTicketSimple);
 
 function App() {
 
@@ -51,14 +51,6 @@ function App() {
                                              recurringTransactionPage: false,
                                             });
 
-  const mainPageSvgIcons = { faFilter,
-                              faSort,
-                              faPlus,
-                              faEdit,
-                              faTrashCan,
-                              faRefresh,
-                           };
-
   const changeActiveTab = (tabName) => {
     setActiveTab(draft => {
       Object.keys(draft).forEach(key => {
@@ -77,9 +69,9 @@ function App() {
         <SideSectionButton svgIcon={faTicketSimple} tabName="recurringTransactionPage" onClickHandler={changeActiveTab} isActive={activeTab.recurringTransactionPage}/>
       </div>
       <div className="flex flex-row flex-wrap h-[100%] min-h-[500px] min-w-[600px]" style={{ width: 'calc(100% - 50px)' }}>
-        {activeTab.mainPage && <MainPage svgIcons={mainPageSvgIcons}/>}
+        {activeTab.mainPage && <MainPage />}
         {activeTab.analyticPage && <div>Analytics Page</div>}
-        {activeTab.financialEntityPage && <FinancialEntityPage svgIcons={mainPageSvgIcons}/>}
+        {activeTab.financialEntityPage && <FinancialEntityPage />}
         {activeTab.recurringTransactionPage && <div>Recurring Transaction Page</div>}
       </div>
     </div>

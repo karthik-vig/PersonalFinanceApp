@@ -1,5 +1,5 @@
 //import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import PropTypes from 'prop-types';
+//import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import '../index.css';
 //import { useImmer } from 'use-immer';
@@ -41,7 +41,7 @@ import {  //triggerSearch,
         resetTriggerSearch,
 } from '../stateManagement/mainPageStates/triggerSearch.js';
 
-function MainPage({svgIcons}) {
+function MainPage() {
 
     //debugging; remove later
     const state = useSelector(state => state);
@@ -182,17 +182,12 @@ function MainPage({svgIcons}) {
                 displayState={failBoxDisplayState}
                 changeDisplayState={hideFailBox}
             />
-            <TopBar 
-                svgIcons={svgIcons}  
-            />
+            <TopBar />
             <SideBar />
             <DetailSection />
         </div>
     );
 }
 
-MainPage.propTypes = {
-    svgIcons: PropTypes.object,
-};
 
 export default MainPage;

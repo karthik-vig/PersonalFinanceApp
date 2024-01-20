@@ -16,21 +16,25 @@ import { setWarningBoxDisplayModifyState,
     } from '../../stateManagement/mainPageStates/warningBoxDisplay.js';
 import { useSelector, useDispatch } from 'react-redux';
 //import { setWarningBoxDisplayModifyState } from '../../stateManagement/mainPageStates/warningBoxDisplay.js';
+import { faFilter, faSort, faPlus, faTrashCan, faEdit, faRefresh } from '@fortawesome/free-solid-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core';
+library.add(faFilter, faSort, faPlus, faTrashCan, faEdit, faRefresh);
 
-function TopBarButton({ svgIcon, btnName, onClickHandler }) {
+function TopBarButton({ svgIcon, iconColor, btnName, onClickHandler }) {
 
     return (
         <>
         <button 
-            className="flex flex-nowrap flex-row my-3 mx-3 p-0.5 w-24 h-7 rounded-lg outline-1 hover:outline hover:outline-gray-800 hover:outline-offset-2 hover:bg-secondary-cl" 
+            className="flex flex-nowrap flex-row m-3 p-0.5 w-24 h-7 rounded-lg outline-1 hover:outline hover:outline-gray-800 hover:outline-offset-2 hover:bg-secondary-cl" 
             onClick={()=> onClickHandler()}
         >
             <FontAwesomeIcon 
-                className="m-[5%] p-[0%] w-[30%] h-[80%] " 
+                className="mx-[5%] my-0 p-[0%] w-[30%] h-[100%] " 
                 icon={svgIcon} 
+                color={iconColor}
             />
             <p 
-                className="w-auto h-[80%] text-start font-medium antialiased truncate"
+                className="w-auto h-[100%] text-start font-medium antialiased truncate"
             >
                 {btnName}
             </p>
@@ -41,80 +45,14 @@ function TopBarButton({ svgIcon, btnName, onClickHandler }) {
 
 TopBarButton.propTypes = {
     svgIcon: PropTypes.object,
+    iconColor: PropTypes.string,
     btnName: PropTypes.string,
     onClickHandler: PropTypes.func,
 };
 
-function TopBar({ svgIcons, 
-                  //handleSearch, 
-                  //handleRefreshBtnClick, 
-                  //handleAddBtnClick,
-                  //handleModifyBtnClick,
-                  //handleDeleteBtnClick,
-                 }) {
-
-    /*                
-    const [searchParams, setSearchParams] = useImmer({
-                                                        search: "", //string input
-                                                        filter: {
-                                                            value: {
-                                                                min: null, //number input
-                                                                max: null, //number input
-                                                            },
-                                                            currency: null, //select list
-                                                            transactionType: null, //select list
-                                                            transactionCategory: null, //select list
-                                                            fromType: null, //select list
-                                                            fromEntity: null, //select list
-                                                            toType: null, //select list
-                                                            toEntity: null, //select list
-                                                            recurringEntity: null, //select list
-                                                            createdDate: { min: null, //date picker
-                                                                            max: null, //date picker
-                                                                            },
-                                                            modifiedDate: { min: null, //date picker
-                                                                            max: null, //date picker
-                                                                            },
-                                                            transactionDate: { min: null, //date picker
-                                                                                max: null, //date picker
-                                                                            },
-                                                            sort: { ascending: true, //can be true or false
-                                                                    field: null, //some valid field name
-                                                                },
-                                                        },   
-                                                    }); //set filter in searchParams
-    */
-    /*          
-    const [filterParamsVisibility, setFilterParamsVisibility] = useImmer({
-                                                                            value: false,
-                                                                            currency: false,
-                                                                            transactionType: false,
-                                                                            transactionCategory: false,
-                                                                            fromType: false,
-                                                                            fromEntity: false,
-                                                                            toType: false,
-                                                                            toEntity: false,
-                                                                            recurringEntity: false,
-                                                                            createdDate: false,
-                                                                            modifiedDate: false,
-                                                                            transactionDate: false,
-                                                                            sort: false,
-                                                                        }); 
-                                                                        */
-
-    /*
-    const handleFilterClick = (filterParams) => { //set filter in searchParams 
-        setSearchParams(draft => {
-            draft.filter = filterParams;
-        });
-    };
-    */
-
-    //const [filterDisplayState, setFilterDisplayState] = useImmer("hidden"); //hidden or visible
+function TopBar() {
 
     const filterDisplayState = useSelector((state) => state.mainPageStates.filterDisplayState);
-    //const searchParams = useSelector((state) => state.mainPageStates.searchParams);
-    //const filterParamsVisibility = useSelector((state) => state.mainPageStates.filterParamsVisibility);
     const dispatch = useDispatch();
 
 
@@ -123,55 +61,45 @@ function TopBar({ svgIcons,
             className="flex flex-row flex-nowrap relative z-10 justify-center h-14 mx-7 mt-10 mb-4 rounded-lg border bg-surface-cl drop-shadow-lg " style={{ width: 'calc(100% - 56px)' }}
         >
             <TopBarButton 
-                svgIcon={svgIcons.faPlus} 
+                svgIcon={faPlus} 
+                iconColor="#00ff00"
                 btnName="Create" 
                 onClickHandler={() => dispatch(triggerAddEntry()) }
             />
             <TopBarButton 
-                svgIcon={svgIcons.faEdit} 
+                svgIcon={faEdit} 
+                iconColor="#eab308"
                 btnName="Modify" 
                 onClickHandler={ () => dispatch(setWarningBoxDisplayModifyState("block")) }
             />
             <TopBarButton 
-                svgIcon={svgIcons.faTrashCan} 
+                svgIcon={faTrashCan}
+                iconColor="#ff0000" 
                 btnName="Delete" 
                 onClickHandler={ () => dispatch(setWarningBoxDisplayDeleteState("block")) }
             />
             <input 
                 type="text" 
                 placeholder="Search" 
-                className="h-10 w-[50%] mx-4 mt-2 mb-2 rounded-lg border bg-background-cl" 
+                className="h-10 w-[50%] mx-4 my-2 py-1 px-2 rounded-lg border bg-background-cl" 
                 onChange={(event) => dispatch(setSearchField(event.target.value))}
                 onKeyDown={ (event) => { if (event.code === "Enter") { dispatch(); } } }
             />
             <TopBarButton 
-                svgIcon={svgIcons.faFilter} 
+                svgIcon={faFilter} 
+                iconColor="#0000ff"
                 btnName="Filter" 
                 onClickHandler={ filterDisplayState === "hidden" ? () => dispatch(showFilter()) : () => dispatch(hideFilter()) }
             />
             <TopBarButton 
-                svgIcon={svgIcons.faRefresh} 
+                svgIcon={faRefresh} 
+                iconColor="#00ff00"
                 btnName="Refresh" 
                 onClickHandler={ () => console.log("Refresh button clicked") }
             />
-            <FilterMenu 
-                //displayState={filterDisplayState}
-                //setSearchParams={setSearchParams}
-                //filterParamsVisibility={filterParamsVisibility}
-                //setFilterParamsVisibility={setFilterParamsVisibility}
-                //changeDisplayState={setFilterDisplayState}
-            />
+            <FilterMenu />
         </div>
     );
 }
-
-TopBar.propTypes = {
-    svgIcons: PropTypes.object,
-    //handleSearch: PropTypes.func,
-    //handleRefreshBtnClick: PropTypes.func,
-    //handleAddBtnClick: PropTypes.func,
-    //handleModifyBtnClick: PropTypes.func,
-    //handleDeleteBtnClick: PropTypes.func,
-};
 
 export default TopBar;

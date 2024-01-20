@@ -1,5 +1,5 @@
 //import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import PropTypes from 'prop-types';
+//import PropTypes from 'prop-types';
 import '../index.css';
 import { useImmer } from 'use-immer';
 import SideBar from './sideBar/sideBar.jsx';
@@ -7,9 +7,12 @@ import TopBar from './topBar/topBar.jsx';
 import DetailSection from './detailSection/detailSection.jsx';
 //import SideSectionButton from './sideSectionButton';
 //import GenericIconButton from './genericIconBtn';
+import { faFilter, faSort, faPlus, faTrashCan, faEdit, faRefresh } from '@fortawesome/free-solid-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core';
+library.add(faFilter, faSort, faPlus, faTrashCan, faEdit, faRefresh);
 
 
-function FinancialEntityPage({svgIcons}) {
+function FinancialEntityPage() {
     //this is only the data structure for the selected item; backend needs to maintain other information related to
     //the selected item, such as the fromRef, toRef, etc.
     //we also need to send additional stuff for the select list from the backed, such as
@@ -155,6 +158,7 @@ function FinancialEntityPage({svgIcons}) {
         }
     };
 
+    const svgIcons = { faFilter, faSort, faPlus, faTrashCan, faEdit, faRefresh };
 
     return (
         <div 
@@ -175,9 +179,5 @@ function FinancialEntityPage({svgIcons}) {
         </div>
     );
 }
-
-FinancialEntityPage.propTypes = {
-    svgIcons: PropTypes.object,
-};
 
 export default FinancialEntityPage;
