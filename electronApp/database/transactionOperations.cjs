@@ -206,7 +206,7 @@ function createEntry() {
             transactionDate: "2023.08.01", 
             value: 5000, 
             transactionType:"in", 
-            icon: faFilter}
+            transactionCategory: "Other",}
     ); //could also return null if the operation fails
 }
 
