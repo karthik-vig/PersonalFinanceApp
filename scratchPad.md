@@ -128,171 +128,21 @@ Other: `fas fa-ellipsis-h`
 
 ###### <u>List of all possible currency abbreviations in the world:</u>
 
-    AFN
-    EUR
-    ALL
-    DZD
-    USD
-    AOA
-    XCD
-    ARS
-    AMD
-    AWG
-    AUD
-    AZN
-    BSD
-    BHD
-    BDT
-    BBD
-    BYR
-    BZD
-    XOF
-    BMD
-    BTN
-    INR
-    BOB
-    BOV
-    BAM
-    BWP
-    NOK
-    BRL
-    BND
-    BGN
-    BIF
-    KHR
-    XAF
-    CAD
-    CVE
-    KYD
-    CLF
-    CLP
-    CNY
-    COP
-    COU
-    KMF
-    CDF
-    NZD
-    CRC
-    HRK
-    CUC
-    CUP
-    ANG
-    CZK
-    DKK
-    DJF
-    DOP
-    EGP
-    SVC
-    ERN
-    ETB
-    FKP
-    XPF
-    GMD
-    GEL
-    GHS
-    GIP
-    GTQ
-    GBP
-    GNF
-    GYD
-    HTG
-    HNL
-    HKD
-    ISK
-    IDR
-    XDR
-    IRR
-    IQD
-    ILS
-    JMD
-    JOD
-    KES
-    KPW
-    KRW
-    KWD
-    KGS
-    LAK
-    LBP
-    LSL
-    ZAR
-    LRD
-    LYD
-    CHF
-    MOP
-    MKD
-    MGA
-    MWK
-    MYR
-    MVR
-    MRO
-    MUR
-    XUA
-    MXN
-    MDL
-    MNT
-    MAD
-    MZN
-    MMK
-    NAD
-    NPR
-    NIO
-    NGN
-    OMR
-    PKR
-    PAB
-    PGK
-    PYG
-    PEN
-    PHP
-    PLN
-    QAR
-    RON
-    RUB
-    RWF
-    SHP
-    STD
-    SAR
-    RSD
-    SCR
-    SLL
-    SGD
-    XSU
-    SBD
-    SOS
-    SSP
-    LKR
-    SDG
-    SRD
-    SZL
-    SEK
-    CHE
-    CHW
-    SYP
-    TWD
-    TJS
-    THB
-    XOF
-    TOP
-    TND
-    TRY
-    TMT
-    UGX
-    UAH
-    AED
-    USN
-    UYU
-    UZS
-    VEF
-    VND
-    YER
-    ZMW
-    ZWL
-    XBA
-    XBB
-    XBC
-    XBD
-    XTS
-    XAU
-    XPD
-    XPT
-    XAG
+[
+    "AED", "AFN", "ALL", "AMD", "ANG", "AOA", "ARS", "AUD", "AWG", "AZN", "BAM",
+    "BBD", "BDT", "BGN", "BHD", "BIF", "BMD", "BND", "BOB", "BOV", "BRL", "BSD",
+    "BTN", "BWP", "BYR", "BZD", "CAD", "CDF", "CHE", "CHF", "CHW", "CLF", "CLP",
+    "CNY", "COP", "COU", "CRC", "CUC", "CUP", "CVE", "CZK", "DJF", "DKK", "DOP",
+    "DZD", "EGP", "ERN", "ETB", "EUR", "FKP", "GBP", "GEL", "GHS", "GIP", "GMD",
+    "GNF", "GTQ", "GYD", "HKD", "HNL", "HRK", "HTG", "IDR", "ILS", "INR", "IQD",
+    "IRR", "ISK", "JMD", "JOD", "KES", "KGS", "KHR", "KMF", "KPW", "KRW", "KWD",
+    "KYD", "LAK", "LBP", "LKR", "LRD", "LSL", "LYD", "MAD", "MDL", "MGA", "MKD",
+    "MMK", "MNT", "MOP", "MRO", "MUR", "MVR", "MWK", "MXN", "MYR", "MZN", "NAD",
+    "NGN", "NIO", "NOK", "NPR", "NZD", "OMR", "PAB", "PEN", "PGK", "PHP", "PKR",
+    "PLN", "PYG", "QAR", "RON", "RSD", "RUB", "RWF", "SAR", "SBD", "SCR", "SDG",
+    "SEK", "SGD", "SHP", "SLL", "SOS", "SRD", "SSP", "STD", "SVC", "SYP", "SZL",
+    "THB", "TJS", "TMT", "TND", "TOP", "TRY", "TWD", "UAH", "UGX", "USD", "USN",
+    "UYU", "UZS", "VEF", "VND", "XAF", "XAG", "XAU", "XBA", "XBB", "XBC", "XBD",
+    "XCD", "XDR", "XOF", "XOF", "XPD", "XPF", "XPT", "XSU", "XTS", "XUA", "YER",
+    "ZAR", "ZMW", "ZWL"
+]
