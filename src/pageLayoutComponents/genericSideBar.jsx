@@ -11,6 +11,7 @@ import '../index.css';
     subTitle: "someSubTitle", 
     titleFontColor: "text-green-500", 
     icon: svgIcons.faFilter
+    iconColor: "#000000", //some hex color value
 }
 */
 // handleItemClick is a function that will be called when the user clicks on a side bar item
@@ -29,11 +30,26 @@ function GenericSideBar({ items,
                         return (<li key={item.id}
                                     className={ "hover:bg-cyan-600 " + (String(currentSelectedItemState) === String(item.id) ? "bg-cyan-200" : "bg-surface-cl")}
                                 >
-                            <button  className="flex flex-row flex-wrap w-[100%] h-20 border-t-2 p-4" onClick={() => handleItemClick(item.id)}>
-                                <FontAwesomeIcon className="m-2 w-10 h-10 border rounded-full outline outline-cyan-950" icon={item.icon} />
-                                <section className="flex flex-row flex-wrap h-[100%] ml-4" style={{ width: 'calc(100% - 76px)' }}>
-                                    <h6 className={"w-[100%] h-[60%] text-start font-bold font-serif antialiased tracking-widest truncate text-lg " + item.titleFontColor}>{item.title}</h6>
-                                    <p className="w-[100%] h-[40%] text-start text-black/50 font-medium antialiased truncate text-sm ">{item.subTitle}</p>
+                            <button  className="flex flex-row flex-nowrap justify-evenly items-center w-[100%] h-20 border-t-2 p-2" onClick={() => handleItemClick(item.id)}>
+                                <FontAwesomeIcon 
+                                    className="m-1 p-2 w-10 h-10 border rounded-lg outline outline-cyan-950" 
+                                    icon={item.icon} 
+                                    color={item.iconColor}
+                                />
+                                <section 
+                                    className="flex flex-row flex-wrap h-[100%] ml-4 w-auto" 
+                                    //style={{ width: 'calc(100% - 76px)' }}
+                                >
+                                    <h6 
+                                        className={"w-[100%] h-[60%] text-start font-bold font-serif antialiased tracking-widest truncate text-lg " + item.titleFontColor}
+                                    >
+                                        {item.title}
+                                    </h6>
+                                    <p 
+                                        className="w-[100%] h-[40%] text-start text-black/50 font-medium antialiased truncate text-sm "
+                                    >
+                                        {item.subTitle}
+                                    </p>
                                 </section>
                             </button>
                         </li>);

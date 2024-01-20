@@ -43,11 +43,6 @@ import {  //triggerSearch,
 
 function MainPage() {
 
-    //debugging; remove later
-    const state = useSelector(state => state);
-    console.log(Object.keys(state));
-    console.log(state.mainPageStates);
-
     const selectedItem = useSelector(state => state.mainPageStates.selectedItem);
     const warningBoxDisplayState = useSelector(state => state.mainPageStates.warningBoxDisplayState);
     const failBoxDisplayState = useSelector(state => state.mainPageStates.failBoxDisplayState);

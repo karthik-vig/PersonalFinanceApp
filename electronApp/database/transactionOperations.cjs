@@ -90,26 +90,29 @@ function getAllItems() {
     //communicate with backend to get all items
     console.log("getAllItems called");
     return [
-        {id: 1, title: "someName", transactionDate: "2023.08.11", value: 2000, transactionType:"out", icon: faFilter},
-        {id: 2, title: "someName2", transactionDate: "2023.08.09", value: 100, transactionType:"in", icon: faFilter},
-        {id: 3, title: "someName3", transactionDate: "2023.08.03", value: 3500, transactionType:"in", icon: faFilter},
-        {id: 4, title: "someName4", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: faFilter},
-        {id: 5, title: "someName5", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: faFilter},
-        {id: 6, title: "someName6", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: faFilter},
-        {id: 7, title: "someName7", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: faFilter},
-        {id: 8, title: "someName8", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: faFilter},
-        {id: 9, title: "someName9", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: faFilter},
-        {id: 10, title: "someName10", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: faFilter},
-        {id: 11, title: "someName11", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: faFilter},
-        {id: 12, title: "someName12", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: faFilter},
-        {id: 13, title: "someName13", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: faFilter},
-        {id: 14, title: "someName14", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: faFilter},
-        {id: 15, title: "someName15", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: faFilter},
-        {id: 16, title: "someName16", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: faFilter},
-        {id: 17, title: "someName17", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: faFilter},
-        {id: 18, title: "someName18", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: faFilter},
-        {id: 19, title: "someName19", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: faFilter},
-        {id: 20, title: "someName20", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: faFilter},
+        {id: 1, title: "someName", transactionDate: "2023.08.11", value: 2000, transactionType:"out", transactionCategory: "Groceries"},
+        {id: 2, title: "someName2", transactionDate: "2023.08.09", value: 100, transactionType:"in", transactionCategory: "Restaurants and Dining"},
+        {id: 3, title: "someName3", transactionDate: "2023.08.03", value: 3500, transactionType:"in", transactionCategory: "Shopping"},
+        {id: 4, title: "someName4", transactionDate: "2023.08.01", value: 5000, transactionType:"out", transactionCategory: "Utilities"},
+        {id: 5, title: "someName5", transactionDate: "2023.08.01", value: 5000, transactionType:"in", transactionCategory: "Telecommunication"},
+        {id: 6, title: "someName6", transactionDate: "2023.08.01", value: 5000, transactionType:"out", transactionCategory: "Transportation"},
+        {id: 7, title: "someName7", transactionDate: "2023.08.01", value: 5000, transactionType:"in", transactionCategory: "Rent or Mortgage"},
+        {id: 8, title: "someName8", transactionDate: "2023.08.01", value: 5000, transactionType:"out", transactionCategory: "Insurance"},
+        {id: 9, title: "someName9", transactionDate: "2023.08.01", value: 5000, transactionType:"in", transactionCategory: "Healthcare"},
+        {id: 10, title: "someName10", transactionDate: "2023.08.01", value: 5000, transactionType:"out", transactionCategory: "Education"},
+        {id: 11, title: "someName11", transactionDate: "2023.08.01", value: 5000, transactionType:"in", transactionCategory: "Entertainment"},
+        {id: 12, title: "someName12", transactionDate: "2023.08.01", value: 5000, transactionType:"out", transactionCategory: "Travel and Lodging"},
+        {id: 13, title: "someName13", transactionDate: "2023.08.01", value: 5000, transactionType:"in", transactionCategory: "Personal Care"},
+        {id: 14, title: "someName14", transactionDate: "2023.08.01", value: 5000, transactionType:"out", transactionCategory: "Fitness and Wellness"},
+        {id: 15, title: "someName15", transactionDate: "2023.08.01", value: 5000, transactionType:"in", transactionCategory: "Investments and Savings"},
+        {id: 16, title: "someName16", transactionDate: "2023.08.01", value: 5000, transactionType:"out", transactionCategory: "Loans and Credit Payments"},
+        {id: 17, title: "someName17", transactionDate: "2023.08.01", value: 5000, transactionType:"in", transactionCategory: "Charity and Donations"},
+        {id: 18, title: "someName18", transactionDate: "2023.08.01", value: 5000, transactionType:"out", transactionCategory: "Home Improvement and Maintenance"},
+        {id: 19, title: "someName19", transactionDate: "2023.08.01", value: 5000, transactionType:"in", transactionCategory: "Childcare and Education"},
+        {id: 20, title: "someName20", transactionDate: "2023.08.01", value: 5000, transactionType:"out", transactionCategory: "Pet Care"},
+        {id: 21, title: "someName21", transactionDate: "2023.08.01", value: 5000, transactionType:"in", transactionCategory: "Taxes"},
+        {id: 22, title: "someName22", transactionDate: "2023.08.01", value: 5000, transactionType:"out", transactionCategory: "Legal Services"},
+        {id: 23, title: "someName23", transactionDate: "2023.08.01", value: 5000, transactionType:"in", transactionCategory: "Other"},
         ]; //could also return null if the operation fails
 }
 
@@ -120,11 +123,12 @@ function getItems(event, searchParams) {
     //based on the searchParams
     console.log("getItems called with searchParams: ");
     console.log(searchParams);
-    return [{id: 1, title: "someName", transactionDate: "2023.08.11", value: 2000, transactionType:"out", icon: faFilter},
-        {id: 2, title: "someName2", transactionDate: "2023.08.09", value: 100, transactionType:"in", icon: faFilter},
-        {id: 3, title: "someName3", transactionDate: "2023.08.03", value: 3500, transactionType:"in", icon: faFilter},
-        {id: 4, title: "someName4", transactionDate: "2023.08.01", value: 5000, transactionType:"out", icon: faFilter},
-        {id: 5, title: "someName5", transactionDate: "2023.08.01", value: 5000, transactionType:"in", icon: faFilter},
+    return [
+        {id: 1, title: "someName", transactionDate: "2023.08.11", value: 2000, transactionType:"out", transactionCategory: "Groceries"},
+        {id: 2, title: "someName2", transactionDate: "2023.08.09", value: 100, transactionType:"in", transactionCategory: "Restaurants and Dining"},
+        {id: 3, title: "someName3", transactionDate: "2023.08.03", value: 3500, transactionType:"in", transactionCategory: "Shopping"},
+        {id: 4, title: "someName4", transactionDate: "2023.08.01", value: 5000, transactionType:"out", transactionCategory: "Utilities"},
+        {id: 5, title: "someName5", transactionDate: "2023.08.01", value: 5000, transactionType:"in", transactionCategory: "Telecommunications"},
         ]; //could also return null if the operation fails
 }
 
