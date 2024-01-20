@@ -32,7 +32,7 @@ function GenericSideBar({ items,
                                 >
                             <button  className="flex flex-row flex-nowrap justify-evenly items-center w-[100%] h-20 border-t-2 p-2" onClick={() => handleItemClick(item.id)}>
                                 <FontAwesomeIcon 
-                                    className="m-1 p-2 w-10 h-10 border rounded-lg outline outline-cyan-950" 
+                                    className="m-1 p-2 w-10 h-10 border-2 rounded-lg" 
                                     icon={item.icon} 
                                     color={item.iconColor}
                                 />
