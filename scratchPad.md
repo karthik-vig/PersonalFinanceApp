@@ -99,3 +99,200 @@ This can be further broken down to simple elements:
 * second radio btn = h-[100%] w-[20%]
 * select menu = w-[30%] h-[100%]
 * h6 heading = w-[40%] h-[100%]
+
+###### <u>List of all possible transaction categories:</u>
+
+Groceries: `fas fa-shopping-basket`
+Restaurants and Dining: `fas fa-utensils`
+Shopping: `fas fa-shopping-cart`
+Utilities: `fas fa-tools`
+Telecommunication: `fas fa-phone`
+Transportation: `fas fa-bus`
+Rent or Mortgage: `fas fa-home`
+Insurance: `fas fa-shield-alt`
+Healthcare: `fas fa-heartbeat`
+Education: `fas fa-graduation-cap`
+Entertainment: `fas fa-film`
+Travel and Lodging: `fas fa-plane`
+Personal Care: `fas fa-spa`
+Fitness and Wellness: `fas fa-dumbbell`
+Investments and Savings: `fas fa-piggy-bank`
+Loans and Credit Payments: `fas fa-credit-card`
+Charity and Donations: `fas fa-hand-holding-heart`
+Home Improvement and Maintenance: `fas fa-hammer`
+Childcare and Education: `fas fa-baby`
+Pet Care: `fas fa-paw`
+Taxes: `fas fa-file-invoice-dollar`
+Legal Services: `fas fa-balance-scale`
+Other: `fas fa-ellipsis-h`
+
+###### <u>List of all possible currency abbreviations in the world:</u>
+
+    AFN
+    EUR
+    ALL
+    DZD
+    USD
+    AOA
+    XCD
+    ARS
+    AMD
+    AWG
+    AUD
+    AZN
+    BSD
+    BHD
+    BDT
+    BBD
+    BYR
+    BZD
+    XOF
+    BMD
+    BTN
+    INR
+    BOB
+    BOV
+    BAM
+    BWP
+    NOK
+    BRL
+    BND
+    BGN
+    BIF
+    KHR
+    XAF
+    CAD
+    CVE
+    KYD
+    CLF
+    CLP
+    CNY
+    COP
+    COU
+    KMF
+    CDF
+    NZD
+    CRC
+    HRK
+    CUC
+    CUP
+    ANG
+    CZK
+    DKK
+    DJF
+    DOP
+    EGP
+    SVC
+    ERN
+    ETB
+    FKP
+    XPF
+    GMD
+    GEL
+    GHS
+    GIP
+    GTQ
+    GBP
+    GNF
+    GYD
+    HTG
+    HNL
+    HKD
+    ISK
+    IDR
+    XDR
+    IRR
+    IQD
+    ILS
+    JMD
+    JOD
+    KES
+    KPW
+    KRW
+    KWD
+    KGS
+    LAK
+    LBP
+    LSL
+    ZAR
+    LRD
+    LYD
+    CHF
+    MOP
+    MKD
+    MGA
+    MWK
+    MYR
+    MVR
+    MRO
+    MUR
+    XUA
+    MXN
+    MDL
+    MNT
+    MAD
+    MZN
+    MMK
+    NAD
+    NPR
+    NIO
+    NGN
+    OMR
+    PKR
+    PAB
+    PGK
+    PYG
+    PEN
+    PHP
+    PLN
+    QAR
+    RON
+    RUB
+    RWF
+    SHP
+    STD
+    SAR
+    RSD
+    SCR
+    SLL
+    SGD
+    XSU
+    SBD
+    SOS
+    SSP
+    LKR
+    SDG
+    SRD
+    SZL
+    SEK
+    CHE
+    CHW
+    SYP
+    TWD
+    TJS
+    THB
+    XOF
+    TOP
+    TND
+    TRY
+    TMT
+    UGX
+    UAH
+    AED
+    USN
+    UYU
+    UZS
+    VEF
+    VND
+    YER
+    ZMW
+    ZWL
+    XBA
+    XBB
+    XBC
+    XBD
+    XTS
+    XAU
+    XPD
+    XPT
+    XAG
