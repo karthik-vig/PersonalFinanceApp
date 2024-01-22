@@ -44,6 +44,10 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+
+    const db = initializeDatabase.initDatabase();
+    transactionOperations.setDb(db);
+
     createWindow();
 
     app.on('activate', function () {

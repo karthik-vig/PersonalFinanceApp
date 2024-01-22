@@ -1,48 +1,11 @@
-//import sqlite from 'sqlite3';
-//import fs from 'fs';
-
-//import { faFilter } from '@fortawesome/free-solid-svg-icons';
-//const sqlite = require('sqlite3');
-//const fs = require('node:fs');
-const { faFilter } = require('@fortawesome/free-solid-svg-icons');
-
-
-//this is a map of the current selected item files
-//normally only a empty object.
-//this is set when the selectedItem is set.
-/*
-function getCurrentSelectedItemFilesRef() {
-
-    const currentSelectedItemFiles = {};
-
-    function getCurrentSelectedItemFiles() {
-        return currentSelectedItemFiles;
-    }
-    return getCurrentSelectedItemFiles;
-}
-
-const getCurrentSelectedItemFiles = getCurrentSelectedItemFilesRef();
-*/
-
-
-/*
-function getItems(db) {
-    db.all('SELECT id, \
-            title, \
-            value, \
-            transactionDate, \
-            transactionType, \
-            transactionCategory, \
-            FROM transaction', (err, rows) => {
-        if (err) {
-            throw err;
-        }
-        return rows;
-    });
-}
-*/
+const { v4: UUIDv4 } = require('uuid');
 
 const currentSelectedItemFiles = {};
+let db = null;
+
+function setDB(database) {
+    db = database;
+}
 
 //when we get selectedItem from the database, we set a object in the
 //nodejs to store the fileName and the fileBlob
@@ -190,7 +153,7 @@ function modifyItem(event, selectedItem){
                 transactionDate: "2023.08.01", 
                 value: 5000, 
                 transactionType:"in", 
-                icon: faFilter
+                transactionCategory: "Telecommunications",
             },
     }; //could also return null if the operation fails
 }
@@ -200,18 +163,59 @@ function modifyItem(event, selectedItem){
 //this would create an entry and enter it into the database
 //and return the following info for the side bar.
 function createEntry() {
+
+    if (db === null) return null;
+
+    const uuid = UUIDv4();
+
+    db.serialize(() => {
+        
+        db.run(`INSERT INTO transaction (\
+            id, \
+            title,\
+            description, \
+            value, \
+            currency, \
+            transactionType, \
+            transactionCategory, \
+            fromReference, \
+            toReference, \
+            recurringReference, \
+            file, \
+            createdDate, \
+            modifiedDate, \
+            transactionDate \
+            ) VALUES (\
+                ${uuid}, \
+                "NEW ENTRY", \
+                NULL, \
+                NULL, \
+                NULL, \
+                NULL, \
+                NULL, \
+                NULL, \
+                NULL, \
+                NULL, \
+                false, \
+                yyyy-MM-ddThh:mm:ss, \
+                yyyy-MM-ddThh:mm:ss, \
+                yyyy-MM-ddThh:mm:ss \
+                )`);
+    });
+
     return (
-            {id: 21, 
+            {id: uuid, 
             title: "NEW ENTRY", 
-            transactionDate: "2023.08.01", 
-            value: 5000, 
-            transactionType:"in", 
-            transactionCategory: "Other",}
+            transactionDate: null, 
+            value: null, 
+            transactionType: null, 
+            transactionCategory: null,}
     ); //could also return null if the operation fails
 }
 
 
 module.exports = {
+    setDB,
     getFileBlob,
     setFileBlob,
     deleteFileBlob,
