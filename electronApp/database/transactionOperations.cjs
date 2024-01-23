@@ -1,4 +1,4 @@
-const { v4: UUIDv4 } = require('uuid');
+const { v4: uuidv4 } = require('uuid');
 
 const currentSelectedItemFiles = {};
 let db = null;
@@ -52,6 +52,29 @@ function getFileEntries(event, uuid) {
 function getAllItems() {
     //communicate with backend to get all items
     console.log("getAllItems called");
+
+    return new Promise((resolve, reject) => {
+        db.all(`SELECT \
+                id,\
+                title,\
+                transactionDate,\
+                value,\
+                transactionType,\
+                transactionCategory\
+                FROM transactions`, (err, rows) => {
+            if (err) {
+                console.log(`Get All Items Error ${err}`);
+                reject(err);
+            }
+            else {
+                console.log("Get All Items Success");
+                console.log(typeof rows);
+                resolve(rows);
+            }
+        });
+    });
+
+    /*
     return [
         {id: 1, title: "someName", transactionDate: "2023.08.11", value: 2000, transactionType:"out", transactionCategory: "Groceries"},
         {id: 2, title: "someName2", transactionDate: "2023.08.09", value: 100, transactionType:"in", transactionCategory: "Restaurants and Dining"},
@@ -76,7 +99,8 @@ function getAllItems() {
         {id: 21, title: "someName21", transactionDate: "2023.08.01", value: 5000, transactionType:"in", transactionCategory: "Taxes"},
         {id: 22, title: "someName22", transactionDate: "2023.08.01", value: 5000, transactionType:"out", transactionCategory: "Legal Services"},
         {id: 23, title: "someName23", transactionDate: "2023.08.01", value: 5000, transactionType:"in", transactionCategory: "Other"},
-        ]; //could also return null if the operation fails
+        ]; */
+        //could also return null if the operation fails
 }
 
 //this should actually be a backed side function;
@@ -146,6 +170,92 @@ function deleteItem(event, id) {
 function modifyItem(event, selectedItem){
     //communicate with backend to modify the item
     console.log("modifyItem called with id: ", selectedItem.id);
+
+    return new Promise((resolve, reject) => {
+        db.serialize(() => {
+            let fromReferenceID = null;
+            let toReferenceID = null;
+            let recurringReferenceID = null;
+            db.run(`SELECT \
+                    id\
+                    FROM financialEntities \
+                    WHERE title = "${selectedItem.fromEntity}"`, (err, rows) => {
+                        if (err) {
+                            console.log(`Get Financial Reference ID in modifyItem: ${err}`);
+                            reject({modifyStatus: false, item: null});
+                        }
+                        else {
+                            console.log("Get From Financial from Reference ID Success in modifyItem");
+                            fromReferenceID = rows.length > 0 ? rows[0].id : null;
+                        }
+                    });
+
+            db.run(`SELECT \
+                    id\
+                    FROM financialEntities \
+                    WHERE title = "${selectedItem.toEntity}"`, (err, rows) => {
+                        if (err) {
+                            console.log(`Get Financial Reference ID in modifyItem: ${err}`);
+                            reject({modifyStatus: false, item: null});
+                        }
+                        else {
+                            console.log("Get To Financial Reference ID Success in modifyItem");
+                            toReferenceID = rows.length > 0 ? rows[0].id : null;
+                        }
+                    });
+                
+            db.run(`SELECT \
+                    id\
+                    FROM recurringTransactions \
+                    WHERE title = "${selectedItem.recurringEntity}"`, (err, rows) => {
+                        if (err) {
+                            console.log(`Get Recurring Transaction Reference ID in modifyItem: ${err}`);
+                            reject({modifyStatus: false, item: null});
+                        }
+                        else {
+                            console.log("Get Financial Reference ID Success in modifyItem");
+                            recurringReferenceID = rows.length > 0 ? rows[0].id : null;
+                        }
+                    });
+
+            db.run(`UPDATE transactions SET \
+                    title = "${selectedItem.title}", \
+                    description = "${selectedItem.description}", \
+                    value = ${selectedItem.value}, \
+                    currency = "${selectedItem.currency === "choose"? null: selectedItem.currency}", \
+                    transactionType = "${selectedItem.transactionType}", \
+                    transactionCategory = "${selectedItem.transactionCategory !== "choose"? selectedItem.transactionCategory : null}", \
+                    fromReference = "${fromReferenceID}", \
+                    toReference = "${toReferenceID}", \
+                    recurringReference = "${recurringReferenceID}", \
+                    file = "${selectedItem.file.length > 0}", \
+                    modifiedDate = "${new Date().toISOString()}", \
+                    transactionDate = "${selectedItem.transactionDate}" \
+                    WHERE id = "${selectedItem.id}"`, (err) => {
+                        if (err) {
+                            console.log(`Modify Item Error ${err}`);
+                            reject({modifyStatus: false, item: null});
+                        }
+                        else {
+                            console.log("Modify Item Success");
+                            resolve( {
+                                modifyStatus: true,
+                                item: {
+                                        id: selectedItem.id, 
+                                        title: selectedItem.title, 
+                                        transactionDate: selectedItem.transactionDate, 
+                                        value: selectedItem.value, 
+                                        transactionType: selectedItem.transactionType, 
+                                        transactionCategory: selectedItem.transactionCategory,
+                                    },
+                            });
+                        }
+                    });
+
+        });
+    });
+
+    /*
     return {
         modifyStatus: true,
         item: {id: selectedItem.id, 
@@ -155,7 +265,8 @@ function modifyItem(event, selectedItem){
                 transactionType:"in", 
                 transactionCategory: "Telecommunications",
             },
-    }; //could also return null if the operation fails
+    }; */
+    //could also return null if the operation fails
 }
 
 //for simulation
@@ -166,11 +277,13 @@ function createEntry() {
 
     if (db === null) return null;
 
-    const uuid = UUIDv4();
+    const uuid = uuidv4();
 
     db.serialize(() => {
         
-        db.run(`INSERT INTO transaction (\
+        const currentDateTime = new Date().toISOString();
+
+        db.run(`INSERT INTO transactions (\
             id, \
             title,\
             description, \
@@ -186,7 +299,7 @@ function createEntry() {
             modifiedDate, \
             transactionDate \
             ) VALUES (\
-                ${uuid}, \
+                "${uuid}", \
                 "NEW ENTRY", \
                 NULL, \
                 NULL, \
@@ -196,11 +309,18 @@ function createEntry() {
                 NULL, \
                 NULL, \
                 NULL, \
-                false, \
-                yyyy-MM-ddThh:mm:ss, \
-                yyyy-MM-ddThh:mm:ss, \
-                yyyy-MM-ddThh:mm:ss \
-                )`);
+                0, \
+                "${currentDateTime}", \
+                "${currentDateTime}", \
+                NULL \
+                )`, (err) => {
+                    if (err) {
+                        console.log(`Create Entry Error ${err}`);
+                    }
+                    else {
+                        console.log("Create Entry Success");
+                    }
+                });
     });
 
     return (
