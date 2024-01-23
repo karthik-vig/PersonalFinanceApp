@@ -34,6 +34,7 @@ import { faShoppingBasket,
          faFileInvoiceDollar,
          faBalanceScale,
          faEllipsisH,
+         faTimes,
 } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 library.add(
@@ -59,7 +60,8 @@ library.add(
     faPaw,
     faFileInvoiceDollar,
     faBalanceScale,
-    faEllipsisH
+    faEllipsisH,
+    faTimes,
     );
 
 function SideBar() {
@@ -115,11 +117,20 @@ function SideBar() {
 
 
     const genericItems = sideBarItems.map((sideBarItem) => {
-        let fontColor = "text-green-500";
+        let fontColor = "text-gray-500";
         if (sideBarItem.transactionType === "out") fontColor = "text-red-500";
+        if (sideBarItem.transactionType === "in") fontColor = "text-green-500";
         console.log("setting sidebaritem: ", sideBarItem.id);
         console.log("setting sidebaritem cat: ", sideBarItem.transactionCategory);
         console.log("setting svg icons cat: ", svgIcons.current[sideBarItem.transactionCategory]);
+
+        let icon = faTimes;
+        let iconColor = "#FF0000";
+
+        if (sideBarItem.transactionCategory !== null) {
+            icon = svgIcons.current[sideBarItem.transactionCategory].icon
+            iconColor = svgIcons.current[sideBarItem.transactionCategory].color
+        }
 
         return (
             {
@@ -127,8 +138,8 @@ function SideBar() {
                 title: sideBarItem.title + " (" + sideBarItem.transactionType + ")", 
                 subTitle: "Transaction Date: " + sideBarItem.transactionDate + " . " + "Value: " + sideBarItem.value, 
                 titleFontColor: fontColor, 
-                icon: svgIcons.current[sideBarItem.transactionCategory].icon, 
-                iconColor: svgIcons.current[sideBarItem.transactionCategory].color,
+                icon: icon, 
+                iconColor: iconColor,
             }
         );
     
