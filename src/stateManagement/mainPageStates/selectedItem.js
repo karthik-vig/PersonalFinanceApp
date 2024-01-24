@@ -4,10 +4,10 @@ import { createSlice } from "@reduxjs/toolkit";
 export const selectedItemSlice = createSlice({
     name: "selectedItem",
     initialState: {
-                    id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx", //uuidv4 template
+                    id: "", //uuidv4 template
                     title: null,
                     description: null,
-                    value: 0.0,
+                    value: null,
                     currency: null,
                     transactionType: null,
                     transactionCategory: null,
@@ -16,22 +16,7 @@ export const selectedItemSlice = createSlice({
                     toEntity: null, //computed by backend
                     toType: null,
                     recurringEntity: null,
-                    file: ["file1.txt", "file2.txt", "file3.txt"],
-                    /*
-                    { 
-                        file1: {
-                                fileBlob: new Blob([""], {type: "text/plain"}),
-                                mimetype: "text/plain",
-                                },
-                        file2: {
-                                fileBlob: new Blob([""], {type: "text/plain"}),
-                                mimetype: "text/plain",
-                                },
-                        file3: {
-                                fileBlob: new Blob([""], {type: "text/plain"}),
-                                mimetype: "text/plain",
-                                },
-                },*/
+                    file: [], 
                     createdDate: "YYYY-MM-DDThh:mm:ss",
                     modifiedDate: "YYYY-MM-DDThh:mm:ss",
                     transactionDate: "YYYY-MM-DDThh:mm:ss",
@@ -50,12 +35,34 @@ export const selectedItemSlice = createSlice({
            }
            return null;
         },
+        resetSelectedItem: (state) => {
+            state = {
+                id: "", //uuidv4 template
+                title: null,
+                description: null,
+                value: null,
+                currency: null,
+                transactionType: null,
+                transactionCategory: null,
+                fromEntity: null, //computed by backend
+                fromType: null,
+                toEntity: null, //computed by backend
+                toType: null,
+                recurringEntity: null, //computed by backend, could be null
+                file: [],
+                createdDate: "yyyy-MM-ddThh:mm:ss",
+                modifiedDate: "yyyy-MM-ddThh:mm:ss",
+                transactionDate: "yyyy-MM-ddThh:mm:ss",
+            };
+            return state;
+        }
 
     }
 });
 
 export const {  handleItemClick, 
                 handleSelectItemClick,
+                resetSelectedItem
              } = selectedItemSlice.actions;
 
 export default selectedItemSlice.reducer;
