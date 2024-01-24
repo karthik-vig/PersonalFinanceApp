@@ -14,8 +14,8 @@ import GenericSuccess from '../pageLayoutComponents/genericSuccess.jsx';
 import GenericFail from '../pageLayoutComponents/genericFail.jsx';
 //import SideSectionButton from './sideSectionButton';
 //import GenericIconButton from './genericIconBtn';
-//import { handleItemClick,
-//         } from '../stateManagement/mainPageStates/selectedItem.js';
+import { resetSelectedItem,
+         } from '../stateManagement/mainPageStates/selectedItem.js';
 import { showFailBox, hideFailBox } from '../stateManagement/mainPageStates/failBoxDisplay.js';
 import { hideSuccessBox, showSuccessBox } from '../stateManagement/mainPageStates/successBoxDisplay.js';
 import {  setWarningBoxDisplayModifyState,
@@ -137,6 +137,7 @@ function MainPage() {
                 console.log("The Delete Entry trigger selected item ID is: ");
                 console.log(selectedItem.id);
                 dispatch(removeSideBarItem(selectedItem.id));
+                dispatch(resetSelectedItem());
                 dispatch(showSuccessBox());
             }
             else {
