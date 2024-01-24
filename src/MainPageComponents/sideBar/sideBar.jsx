@@ -35,8 +35,10 @@ import { faShoppingBasket,
          faBalanceScale,
          faEllipsisH,
          faTimes,
+         faDollarSign,
 } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 library.add(
     faShoppingBasket,
     faUtensils,
@@ -62,6 +64,7 @@ library.add(
     faBalanceScale,
     faEllipsisH,
     faTimes,
+    faDollarSign,
     );
 
 function SideBar() {
@@ -132,11 +135,24 @@ function SideBar() {
             iconColor = svgIcons.current[sideBarItem.transactionCategory].color
         }
 
+        const subTitle = <section className='flex flex-row flex-nowrap justify-stretch items-center'>
+            <FontAwesomeIcon 
+                className='mx-1'
+                icon={['fas', 'shopping-cart']} 
+            />
+            {sideBarItem.transactionDate.substring(0, 10)}
+            <FontAwesomeIcon 
+                className='mr-1 ml-2'
+                icon={['fas', 'dollar-sign']} 
+            />
+            {sideBarItem.value}
+        </section>
+
         return (
             {
                 id: sideBarItem.id, //uuid4
                 title: sideBarItem.title + " (" + sideBarItem.transactionType + ")", 
-                subTitle: "Transaction Date: " + sideBarItem.transactionDate + " . " + "Value: " + sideBarItem.value, 
+                subTitle: subTitle,//"Transaction Date: " + sideBarItem.transactionDate + " . " + "Value: " + sideBarItem.value, 
                 titleFontColor: fontColor, 
                 icon: icon, 
                 iconColor: iconColor,
