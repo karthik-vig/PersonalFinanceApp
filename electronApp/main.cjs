@@ -78,7 +78,7 @@ app.whenReady().then(() => {
             const bufferData = fs.readFileSync(filePath);
             const fileName = path.basename(filePath);
             fileNames.push(fileName);
-        transactionOperations.setFileBlob(fileName, bufferData);
+            transactionOperations.setFileBlob(fileName, bufferData);
         });
         return fileNames;
     });
@@ -86,13 +86,14 @@ app.whenReady().then(() => {
     ipcMain.handle('transactionOperations:saveFileDialog', async ( fileName ) => {
         const { filePath } = await dialog.showSaveDialog({
             title: 'Save File',
-            defaultPath: path.join(__dirname, fileName),
+            //defaultPath: fileName,
             filters: [
                 { name: 'All Files', extensions: ['*'] }
               ],
         });
         if (filePath) {
             const bufferData = transactionOperations.getFileBlob(fileName);
+            if (bufferData === null) return false;
             fs.writeFileSync(filePath, bufferData);
             return true;
         }
