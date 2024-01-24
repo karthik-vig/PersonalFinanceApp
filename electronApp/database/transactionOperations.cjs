@@ -13,13 +13,14 @@ function setDB(database) {
 function getFileBlob(event, fileName) {
     //communicate with backend to get the file blob
     console.log( "get file blob fileName: ", fileName);
-    const fileBufferData = currentSelectedItemFiles.get(fileName, null);
+    const fileBufferData = currentSelectedItemFiles.fileName ?? null;
     return  fileBufferData;//could also return null if the operation fails
 }
 
 function setFileBlob(event, fileName, arrayBuffer) {
     //communicate with backend to set the file blob
     console.log( "set file blob fileName: ", fileName, " fileBlob: ", arrayBuffer);
+    currentSelectedItemFiles[fileName] = arrayBuffer;
     return true; //could also return false if the operation fails
 }
 
@@ -27,7 +28,7 @@ function deleteFileBlob(event, fileName) {
     //communicate with backend to delete the file blob
     console.log( "delete file blob fileName: ", fileName);
     //const currentSelectedItemFiles = getCurrentSelectedItemFiles();
-    if (currentSelectedItemFiles.keys().includes(fileName)){
+    if (Object.keys(currentSelectedItemFiles).includes(fileName)){
         delete currentSelectedItemFiles[fileName];
         return true;
     }
@@ -41,10 +42,13 @@ function getFileEntries(event, uuid) {
     //specifically it fetches the data from the files table based on the uuid
     //this works as the the uuid of the files in the files table is same
     //as the uuid of the transaction in the transaction table
+    /*
     return  {"SuperFile71.txt" : Buffer.from("hello world1 " + uuid, "utf-8"),
             "SuperFile72.txt" : Buffer.from("hello world2 " + uuid, "utf-8"),
             "SuperFile73.txt" : Buffer.from("hello world3 " + uuid, "utf-8"),
             };//could also return null if the operation fails
+    */
+    return currentSelectedItemFiles;
 }
 
 
@@ -306,7 +310,33 @@ function getSelectedItem(event, uuid) {
 function deleteItem(event, id) {
     //communicate with backend to delete the item
     console.log("deleteItem called with id: ", id);
-    return true; //could also return false if the operation fails
+    return new Promise((resolve) => {
+        let transactionDeleteStatus = false;
+        db.serialize(() => {
+            db.run(`DELETE FROM transactions WHERE id = "${id}"`, (err) => {
+                if (err) {
+                    console.log(`Delete Item Error ${err}`);
+                    resolve(false);
+                }
+                else {
+                    console.log("Delete Item Success");
+                    transactionDeleteStatus = true;
+                }
+            });
+
+            db.run(`DELETE FROM files WHERE id = "${id}"`, (err) => {
+                if (err) {
+                    console.log(`Delete Item Error ${err}`);
+                    resolve(false);
+                }
+                else {
+                    console.log("Delete Item Success");
+                    if (transactionDeleteStatus) resolve(true);
+                }
+            });
+        });
+    });
+   // return true; //could also return false if the operation fails
 }
 
 //takes selecteItem to modify an entry; return object if the operation succes; null if failure
@@ -365,10 +395,10 @@ function modifyItem(event, selectedItem){
                         }
                     });
 
-            currentSelectedItemFiles.keys().forEach((filename) => {
+            Object.keys(currentSelectedItemFiles).forEach((filename) => {
                 db.run(`INSERT OR REPLACE INTO files \
-                        (filename, filedata) \
-                        VALUES (?, ?)`, [filename, currentSelectedItemFiles[filename]], (err) => {
+                        (id, filename, filedata) \
+                        VALUES (?, ?, ?)`, [selectedItem.id, filename, currentSelectedItemFiles[filename]], (err) => {
                             if (err) {
                                 console.error(err);
                                 resolve({modifyStatus: false, item: null});
