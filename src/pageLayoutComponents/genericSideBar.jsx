@@ -47,7 +47,7 @@ function GenericSideBar({ items,
                                     style={{ width: 'calc(100% - 76px)' }}
                                 >
                                     <h6 
-                                        className={"w-[100%] h-[60%] text-start font-bold font-serif antialiased tracking-widest truncate lg:text-lg text-base" + item.titleFontColor}
+                                        className={"w-[100%] h-[60%] text-start font-bold font-serif antialiased tracking-widest truncate lg:text-lg text-base " + item.titleFontColor}
                                     >
                                         {item.title}
                                     </h6>

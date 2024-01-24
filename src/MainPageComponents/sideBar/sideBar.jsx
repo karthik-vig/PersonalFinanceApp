@@ -121,8 +121,10 @@ function SideBar() {
 
     const genericItems = sideBarItems.map((sideBarItem) => {
         let fontColor = "text-gray-500";
-        if (sideBarItem.transactionType === "out") fontColor = "text-red-500";
-        if (sideBarItem.transactionType === "in") fontColor = "text-green-500";
+        
+        if (sideBarItem.transactionType === "Out") fontColor = "text-red-500";
+        if (sideBarItem.transactionType === "In") fontColor = "text-green-500";
+        
         console.log("setting sidebaritem: ", sideBarItem.id);
         console.log("setting sidebaritem cat: ", sideBarItem.transactionCategory);
         console.log("setting svg icons cat: ", svgIcons.current[sideBarItem.transactionCategory]);
