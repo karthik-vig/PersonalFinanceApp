@@ -121,7 +121,6 @@ function SideBar() {
 
     const genericItems = sideBarItems.map((sideBarItem) => {
         let fontColor = "text-gray-500";
-        
         if (sideBarItem.transactionType === "Out") fontColor = "text-red-500";
         if (sideBarItem.transactionType === "In") fontColor = "text-green-500";
         
@@ -142,7 +141,7 @@ function SideBar() {
                 className='mx-1'
                 icon={['fas', 'shopping-cart']} 
             />
-            {sideBarItem.transactionDate.substring(0, 10)}
+            {sideBarItem.transactionDate?.substring(0, 10)}
             <FontAwesomeIcon 
                 className='mr-1 ml-2'
                 icon={['fas', 'dollar-sign']} 
