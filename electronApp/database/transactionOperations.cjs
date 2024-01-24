@@ -138,6 +138,148 @@ function getSelectedItem(event, uuid) {
         currentSelectedItemFiles[key] = fileInfo[key];
     });
     console.log("currentSelectedItemFiles: ", currentSelectedItemFiles);
+    
+    return new Promise((resolve, reject) => {
+        db.serialize(() => {
+
+            let fromReferenceID = null;
+            let toReferenceID = null;
+            let recurringReferenceID = null;
+
+            const selectedItem = {
+                id: null, //uuidv4 template
+                title: null,
+                description: null,
+                value: 0.0,
+                currency: null,
+                transactionType: null,
+                transactionCategory: null,
+                fromEntity: null, //computed by backend
+                fromType: null,
+                toEntity: null, //computed by backend
+                toType: null,
+                recurringEntity: null, //computed by backend, could be null
+                file: [],
+                createdDate: "yyyy-MM-ddThh:mm:ss",
+                modifiedDate: "yyyy-MM-ddThh:mm:ss",
+                transactionDate: "yyyy-MM-ddThh:mm:ss",
+            };
+
+            db.all(`SELECT \
+                    id,\
+                    title,\
+                    description,\
+                    value,\
+                    currency,\
+                    transactionType,\
+                    transactionCategory,\
+                    fromReference,\
+                    toReference,\
+                    recurringReference,\
+                    file,\
+                    createdDate,\
+                    modifiedDate,\
+                    transactionDate\
+                    FROM transactions \
+                    WHERE id = "${uuid}"`, (err, rows) => {
+                if (err) {
+                    console.log(`Get Selected Item Error ${err}`);
+                    reject(err);
+                    //return null;
+                }
+                else {
+                    console.log("Get Selected Item Success");
+                    console.log(rows);
+                    if (rows && rows.length > 0) {
+                        selectedItem.title = rows[0].title;
+                        selectedItem.description = rows[0].description;
+                        selectedItem.value = rows[0].value;
+                        selectedItem.currency = rows[0].currency;
+                        selectedItem.transactionType = rows[0].transactionType;
+                        selectedItem.transactionCategory = rows[0].transactionCategory;
+                        //selectedItem.fromEntity = fromEntity;
+                        //selectedItem.toEntity = toEntity;
+                        //selectedItem.recurringEntity = recurringEntity;
+                        selectedItem.createdDate = rows[0].createdDate;
+                        selectedItem.modifiedDate = rows[0].modifiedDate;
+                        selectedItem.transactionDate = rows[0].transactionDate;
+
+                        fromReferenceID = rows[0].fromReference;
+                        toReferenceID = rows[0].toReference;
+                        recurringReferenceID = rows[0].recurringReference;
+                    } 
+                }
+            });
+
+            db.all(`SELECT \
+                    title \
+                    FROM financialEntities 
+                    WHERE id = "${fromReferenceID}"`, (err, rows) => {
+                        if (err) {
+                            console.log(`Get Selected Item Error ${err}`);
+                            reject(err);
+                        }
+                        else {
+                            console.log("Get Selected Item Success");
+                            console.log(rows);
+                            if (rows && rows.length > 0) {
+                                selectedItem.fromEntity = rows[0].title;
+                            }
+                        }
+            });
+
+            db.all(`SELECT \
+                    title \
+                    FROM financialEntities 
+                    WHERE id = "${toReferenceID}"`, (err, rows) => {
+                        if (err) {
+                            console.log(`Get Selected Item Error ${err}`);
+                            reject(err);
+                        }
+                        else {
+                            console.log("Get Selected Item Success");
+                            console.log(rows);
+                            selectedItem.toEntity = rows && rows.length > 0 ? rows[0].title : null;
+                        }
+            });
+
+            db.all(`SELECT \
+                    title\
+                    FROM recurringTransactions \
+                    WHERE id = "${recurringReferenceID}"`, (err, rows) => {
+                        if (err) {
+                            console.log(`Get Recurring Transaction Reference ID in modifyItem: ${err}`);
+                            //reject({modifyStatus: false, item: null});
+                            reject(err);
+                        }
+                        else {
+                            console.log("Get Recurring Entity Reference ID Success in modifyItem");
+                            recurringReferenceID = rows && rows.length > 0 ? rows[0].title : null;
+                            console.log(recurringReferenceID);
+                        }
+            });
+
+            db.all(`SELECT filename, filedata FROM files WHERE id = "${uuid}"`, (err, rows) => {
+                if (err) {
+                    console.log(`Get Selected Item Error ${err}`);
+                    //return null;
+                }
+                else {
+                    console.log("Get Selected Item Success");
+                    console.log(rows);
+                    if (rows && rows.length > 0) {
+                        rows.forEach((row) => {
+                            currentSelectedItemFiles[row.filename] = row.fileBlob;
+                            selectedItem.file.push(row.filename);
+                        });
+                    } 
+                    console.log("selectedItem created in the backend: ", selectedItem);
+                    resolve(selectedItem);
+                }
+            });
+        });
+    });
+    /*
     return {
         id: String(uuid), //uuidv4 template
         title: null,
@@ -155,7 +297,8 @@ function getSelectedItem(event, uuid) {
         createdDate: "yyyy-MM-ddThh:mm:ss",
         modifiedDate: "yyyy-MM-ddThh:mm:ss",
         transactionDate: "yyyy-MM-ddThh:mm:ss",
-    }; //could also return null if the operation fails 
+    }; */
+    //could also return null if the operation fails 
     //*/
 }
 
@@ -171,52 +314,67 @@ function modifyItem(event, selectedItem){
     //communicate with backend to modify the item
     console.log("modifyItem called with id: ", selectedItem.id);
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         db.serialize(() => {
             let fromReferenceID = null;
             let toReferenceID = null;
             let recurringReferenceID = null;
-            db.run(`SELECT \
+            db.all(`SELECT \
                     id\
                     FROM financialEntities \
                     WHERE title = "${selectedItem.fromEntity}"`, (err, rows) => {
                         if (err) {
                             console.log(`Get Financial Reference ID in modifyItem: ${err}`);
-                            reject({modifyStatus: false, item: null});
+                            resolve({modifyStatus: false, item: null});
                         }
                         else {
-                            console.log("Get From Financial from Reference ID Success in modifyItem");
-                            fromReferenceID = rows.length > 0 ? rows[0].id : null;
+                            console.log("Get From Financial Entity Reference ID Success in modifyItem");
+                            console.log(rows);
+                            fromReferenceID = rows && rows.length > 0 ? rows[0].id : null;
+                            console.log(fromReferenceID);
                         }
                     });
 
-            db.run(`SELECT \
+            db.all(`SELECT \
                     id\
                     FROM financialEntities \
                     WHERE title = "${selectedItem.toEntity}"`, (err, rows) => {
                         if (err) {
                             console.log(`Get Financial Reference ID in modifyItem: ${err}`);
-                            reject({modifyStatus: false, item: null});
+                            resolve({modifyStatus: false, item: null});
                         }
                         else {
-                            console.log("Get To Financial Reference ID Success in modifyItem");
-                            toReferenceID = rows.length > 0 ? rows[0].id : null;
+                            console.log("Get To Financial Entity Reference ID Success in modifyItem");
+                            toReferenceID = rows && rows.length > 0 ? rows[0].id : null;
+                            console.log(toReferenceID);
                         }
                     });
                 
-            db.run(`SELECT \
+            db.all(`SELECT \
                     id\
                     FROM recurringTransactions \
                     WHERE title = "${selectedItem.recurringEntity}"`, (err, rows) => {
                         if (err) {
                             console.log(`Get Recurring Transaction Reference ID in modifyItem: ${err}`);
-                            reject({modifyStatus: false, item: null});
+                            resolve({modifyStatus: false, item: null});
                         }
                         else {
-                            console.log("Get Financial Reference ID Success in modifyItem");
-                            recurringReferenceID = rows.length > 0 ? rows[0].id : null;
+                            console.log("Get Recurring Entity Reference ID Success in modifyItem");
+                            recurringReferenceID = rows && rows.length > 0 ? rows[0].id : null;
+                            console.log(recurringReferenceID);
                         }
                     });
+
+            currentSelectedItemFiles.keys().forEach((filename) => {
+                db.run(`INSERT OR REPLACE INTO files \
+                        (filename, filedata) \
+                        VALUES (?, ?)`, [filename, currentSelectedItemFiles[filename]], (err) => {
+                            if (err) {
+                                console.error(err);
+                                resolve({modifyStatus: false, item: null});
+                            }
+                    });
+            });
 
             db.run(`UPDATE transactions SET \
                     title = "${selectedItem.title}", \
@@ -234,7 +392,8 @@ function modifyItem(event, selectedItem){
                     WHERE id = "${selectedItem.id}"`, (err) => {
                         if (err) {
                             console.log(`Modify Item Error ${err}`);
-                            reject({modifyStatus: false, item: null});
+                            //reject({modifyStatus: false, item: null});
+                            resolve({modifyStatus: false, item: null});
                         }
                         else {
                             console.log("Modify Item Success");
