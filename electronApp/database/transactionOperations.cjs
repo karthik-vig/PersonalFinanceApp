@@ -170,7 +170,6 @@ function getSelectedItem(event, uuid) {
             };
 
             db.all(`SELECT \
-                    id,\
                     title,\
                     description,\
                     value,\
@@ -195,6 +194,7 @@ function getSelectedItem(event, uuid) {
                     console.log("Get Selected Item Success");
                     console.log(rows);
                     if (rows && rows.length > 0) {
+                        selectedItem.id = uuid;
                         selectedItem.title = rows[0].title;
                         selectedItem.description = rows[0].description;
                         selectedItem.value = rows[0].value;
