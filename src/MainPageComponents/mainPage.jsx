@@ -40,6 +40,7 @@ import {  removeSideBarItem,
 import {  //triggerSearch,
         resetTriggerSearch,
 } from '../stateManagement/mainPageStates/triggerSearch.js';
+import { setCurrentSelectedItem } from '../stateManagement/mainPageStates/currentSelectedItem.js';
 
 function MainPage() {
 
@@ -63,6 +64,7 @@ function MainPage() {
                 dispatch(showFailBox());
                 return;
             }
+            dispatch(setCurrentSelectedItem(items && items.length > 0 ? items[0].id : null));
             dispatch(setSideBarItems(items));
         });
     }, [dispatch]);
