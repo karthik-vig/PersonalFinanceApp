@@ -204,9 +204,9 @@ function getSelectedItem(event, uuid) {
                         //selectedItem.fromEntity = fromEntity;
                         //selectedItem.toEntity = toEntity;
                         //selectedItem.recurringEntity = recurringEntity;
-                        selectedItem.createdDate = rows[0].createdDate;
-                        selectedItem.modifiedDate = rows[0].modifiedDate;
-                        selectedItem.transactionDate = rows[0].transactionDate;
+                        selectedItem.createdDate = rows[0].createdDate?.substring(0, 16);
+                        selectedItem.modifiedDate = rows[0].modifiedDate?.substring(0, 16);
+                        selectedItem.transactionDate = rows[0].transactionDate?.substring(0, 16);
 
                         fromReferenceID = rows[0].fromReference;
                         toReferenceID = rows[0].toReference;
@@ -343,6 +343,7 @@ function deleteItem(event, id) {
 function modifyItem(event, selectedItem){
     //communicate with backend to modify the item
     console.log("modifyItem called with id: ", selectedItem.id);
+    console.log("modifyItem called with fromeEntity: ", selectedItem.fromEntity);
 
     return new Promise((resolve) => {
         db.serialize(() => {
@@ -406,6 +407,8 @@ function modifyItem(event, selectedItem){
                     });
             });
 
+            console.log("Before the udpate of the transactions table")
+
             db.run(`UPDATE transactions SET \
                     title = "${selectedItem.title}", \
                     description = "${selectedItem.description}", \
@@ -427,6 +430,7 @@ function modifyItem(event, selectedItem){
                         }
                         else {
                             console.log("Modify Item Success");
+                            console.log(fromReferenceID)
                             resolve( {
                                 modifyStatus: true,
                                 item: {
