@@ -296,7 +296,7 @@ function DatetimeInputSection({datetimeValue, additonalClasses, readonly, fieldN
 
     return (
         <input 
-            className={"text-start font-serif antialiased tracking-widest truncate text-base text-black bg-background-cl border rounded-lg outline-1 hover:outline hover:outline-gray-500 hover:outline-offset-2 hover:bg-back" + " " + additonalClasses + " "} 
+            className={"py-1 text-start font-serif antialiased tracking-widest truncate text-base text-black bg-background-cl border rounded-lg outline-1 hover:outline hover:outline-gray-500 hover:outline-offset-2 hover:bg-back" + " " + additonalClasses + " "} 
             value={datetimeValue} 
             type="datetime-local" 
             readOnly={readonly}
