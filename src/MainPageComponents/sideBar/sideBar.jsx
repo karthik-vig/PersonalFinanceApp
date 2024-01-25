@@ -131,7 +131,7 @@ function SideBar() {
         let icon = faTimes;
         let iconColor = "#FF0000";
 
-        if (sideBarItem.transactionCategory !== null) {
+        if (Object.keys(svgIcons.current).includes(sideBarItem.transactionCategory)) {
             icon = svgIcons.current[sideBarItem.transactionCategory].icon
             iconColor = svgIcons.current[sideBarItem.transactionCategory].color
         }
