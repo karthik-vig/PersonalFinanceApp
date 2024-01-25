@@ -42,13 +42,7 @@ function getFileEntries(event, uuid) {
     //specifically it fetches the data from the files table based on the uuid
     //this works as the the uuid of the files in the files table is same
     //as the uuid of the transaction in the transaction table
-    /*
-    return  {"SuperFile71.txt" : Buffer.from("hello world1 " + uuid, "utf-8"),
-            "SuperFile72.txt" : Buffer.from("hello world2 " + uuid, "utf-8"),
-            "SuperFile73.txt" : Buffer.from("hello world3 " + uuid, "utf-8"),
-            };//could also return null if the operation fails
-    */
-    return currentSelectedItemFiles;
+    return currentSelectedItemFiles; //could also return null if the operation fails
 }
 
 
@@ -187,7 +181,6 @@ function getSelectedItem(event, uuid) {
                     if (err) {
                         console.log(`Get Selected Item Error ${err}`);
                         reject(err);
-                        //return null;
                     }
                     else {
                         console.log("Transaction Table Information (getSelectedItem):");
@@ -331,28 +324,7 @@ function getSelectedItem(event, uuid) {
         });
 
         });
-    });
-    /*
-    return {
-        id: String(uuid), //uuidv4 template
-        title: null,
-        description: null,
-        value: 0.0,
-        currency: null,
-        transactionType: null,
-        transactionCategory: null,
-        fromEntity: null, //computed by backend
-        fromType: null,
-        toEntity: null, //computed by backend
-        toType: null,
-        recurringEntity: "entity1", //computed by backend, could be null
-        file: Object.keys(currentSelectedItemFiles),
-        createdDate: "yyyy-MM-ddThh:mm:ss",
-        modifiedDate: "yyyy-MM-ddThh:mm:ss",
-        transactionDate: "yyyy-MM-ddThh:mm:ss",
-    }; */
-    //could also return null if the operation fails 
-    //*/
+    }); //could also return null if the operation fails 
 }
 
 //using id to delete an entry; return false if the operation fails
@@ -397,8 +369,7 @@ function deleteItem(event, id) {
                 resolve(false);
             });
         });
-    });
-   // return true; //could also return false if the operation fails
+    }); // return true; //could also return false if the operation fails
 }
 
 //takes selecteItem to modify an entry; return object if the operation succes; null if failure
@@ -539,24 +510,10 @@ function modifyItem(event, selectedItem){
                     resolve({modifyStatus: false, item: null})
                 });
             })
-    });
-
-    /*
-    return {
-        modifyStatus: true,
-        item: {id: selectedItem.id, 
-                title: "someName5", 
-                transactionDate: "2023.08.01", 
-                value: 5000, 
-                transactionType:"in", 
-                transactionCategory: "Telecommunications",
-            },
-    }; */
-    //could also return null if the operation fails
+    }); //could also return null if the operation fails
 }
 
-//for simulation
-//this should actually be a backed side function;
+
 //this would create an entry and enter it into the database
 //and return the following info for the side bar.
 function createEntry() {
