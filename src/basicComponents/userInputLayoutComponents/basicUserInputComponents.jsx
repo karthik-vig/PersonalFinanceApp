@@ -228,7 +228,7 @@ function GetFileSection({ additonalClasses, fileName }) {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (!triggerUpdateFilesState.getFile) return;
+        if (!(triggerUpdateFilesState.getFile.status && triggerUpdateFilesState.getFile.fileName === fileName)) return;
         window.transactionOperations.saveFileDialog(fileName);
         dispatch(resetTriggerGetFile());
     }, [triggerUpdateFilesState,
@@ -239,7 +239,7 @@ function GetFileSection({ additonalClasses, fileName }) {
     return (
         <button
             className={"underline text-blue-300 hover:text-blue-500 min-w-20 min-h-20" + " " + additonalClasses + " "}
-            onClick={() => { dispatch(triggerGetFile()); } }
+            onClick={() => { dispatch(triggerGetFile(fileName)); } }
         >
             {fileName}
         </button>
@@ -257,7 +257,7 @@ function DeleteFileButtonSection({additonalClasses, fileName, files, handleValue
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (!triggerUpdateFilesState.deleteFile) return;
+        if (!(triggerUpdateFilesState.deleteFile.status && triggerUpdateFilesState.deleteFile.fileName === fileName)) return;
         window.transactionOperations.deleteFileBlob(fileName).then((deleteFileBlobStatus) => {
             if (deleteFileBlobStatus) {
                 //let filesCopy = [...files];
@@ -276,7 +276,7 @@ function DeleteFileButtonSection({additonalClasses, fileName, files, handleValue
     return (
         <button 
             className={ " " + additonalClasses + " "}
-            onClick={() => { dispatch(triggerDeleteFile()); } }
+            onClick={() => { dispatch(triggerDeleteFile(fileName)); } }
         >
             <FontAwesomeIcon icon={faTrashAlt} color='#ff0000'/>
         </button>
