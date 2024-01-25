@@ -1,6 +1,6 @@
 const { v4: uuidv4 } = require('uuid');
 
-const currentSelectedItemFiles = {};
+let currentSelectedItemFiles = {};
 let db = null;
 
 function setDB(database) {
@@ -10,14 +10,14 @@ function setDB(database) {
 //when we get selectedItem from the database, we set a object in the
 //nodejs to store the fileName and the fileBlob
 //file blob simulated backend functions
-function getFileBlob(event, fileName) {
+function getFileBlob(fileName) {
     //communicate with backend to get the file blob
     console.log( "get file blob fileName: ", fileName);
     const fileBufferData = currentSelectedItemFiles.fileName ?? null;
     return  fileBufferData;//could also return null if the operation fails
 }
 
-function setFileBlob(event, fileName, arrayBuffer) {
+function setFileBlob(fileName, arrayBuffer) {
     //communicate with backend to set the file blob
     console.log( "set file blob fileName: ", fileName, " fileBlob: ", arrayBuffer);
     currentSelectedItemFiles[fileName] = arrayBuffer;
@@ -28,12 +28,14 @@ function deleteFileBlob(event, fileName) {
     //communicate with backend to delete the file blob
     console.log( "delete file blob fileName: ", fileName);
     //const currentSelectedItemFiles = getCurrentSelectedItemFiles();
-    if (Object.keys(currentSelectedItemFiles).includes(fileName)){
+    const currentSelectedItemFilenames = new Set(Object.keys(currentSelectedItemFiles));
+    if (currentSelectedItemFilenames.has(fileName)){
         delete currentSelectedItemFiles[fileName];
         return true;
     }
     return false; //could also return false if the operation fails
 }
+
 
 //file all files entry from files table based on uuid
 function getFileEntries(event, uuid) {
@@ -70,35 +72,7 @@ function getAllItems() {
                 resolve(rows);
             }
         });
-    });
-
-    /*
-    return [
-        {id: 1, title: "someName", transactionDate: "2023.08.11", value: 2000, transactionType:"out", transactionCategory: "Groceries"},
-        {id: 2, title: "someName2", transactionDate: "2023.08.09", value: 100, transactionType:"in", transactionCategory: "Restaurants and Dining"},
-        {id: 3, title: "someName3", transactionDate: "2023.08.03", value: 3500, transactionType:"in", transactionCategory: "Shopping"},
-        {id: 4, title: "someName4", transactionDate: "2023.08.01", value: 5000, transactionType:"out", transactionCategory: "Utilities"},
-        {id: 5, title: "someName5", transactionDate: "2023.08.01", value: 5000, transactionType:"in", transactionCategory: "Telecommunication"},
-        {id: 6, title: "someName6", transactionDate: "2023.08.01", value: 5000, transactionType:"out", transactionCategory: "Transportation"},
-        {id: 7, title: "someName7", transactionDate: "2023.08.01", value: 5000, transactionType:"in", transactionCategory: "Rent or Mortgage"},
-        {id: 8, title: "someName8", transactionDate: "2023.08.01", value: 5000, transactionType:"out", transactionCategory: "Insurance"},
-        {id: 9, title: "someName9", transactionDate: "2023.08.01", value: 5000, transactionType:"in", transactionCategory: "Healthcare"},
-        {id: 10, title: "someName10", transactionDate: "2023.08.01", value: 5000, transactionType:"out", transactionCategory: "Education"},
-        {id: 11, title: "someName11", transactionDate: "2023.08.01", value: 5000, transactionType:"in", transactionCategory: "Entertainment"},
-        {id: 12, title: "someName12", transactionDate: "2023.08.01", value: 5000, transactionType:"out", transactionCategory: "Travel and Lodging"},
-        {id: 13, title: "someName13", transactionDate: "2023.08.01", value: 5000, transactionType:"in", transactionCategory: "Personal Care"},
-        {id: 14, title: "someName14", transactionDate: "2023.08.01", value: 5000, transactionType:"out", transactionCategory: "Fitness and Wellness"},
-        {id: 15, title: "someName15", transactionDate: "2023.08.01", value: 5000, transactionType:"in", transactionCategory: "Investments and Savings"},
-        {id: 16, title: "someName16", transactionDate: "2023.08.01", value: 5000, transactionType:"out", transactionCategory: "Loans and Credit Payments"},
-        {id: 17, title: "someName17", transactionDate: "2023.08.01", value: 5000, transactionType:"in", transactionCategory: "Charity and Donations"},
-        {id: 18, title: "someName18", transactionDate: "2023.08.01", value: 5000, transactionType:"out", transactionCategory: "Home Improvement and Maintenance"},
-        {id: 19, title: "someName19", transactionDate: "2023.08.01", value: 5000, transactionType:"in", transactionCategory: "Childcare and Education"},
-        {id: 20, title: "someName20", transactionDate: "2023.08.01", value: 5000, transactionType:"out", transactionCategory: "Pet Care"},
-        {id: 21, title: "someName21", transactionDate: "2023.08.01", value: 5000, transactionType:"in", transactionCategory: "Taxes"},
-        {id: 22, title: "someName22", transactionDate: "2023.08.01", value: 5000, transactionType:"out", transactionCategory: "Legal Services"},
-        {id: 23, title: "someName23", transactionDate: "2023.08.01", value: 5000, transactionType:"in", transactionCategory: "Other"},
-        ]; */
-        //could also return null if the operation fails
+    }); //could also return null if the operation fails
 }
 
 //this should actually be a backed side function;
@@ -123,17 +97,7 @@ function getSelectedItem(event, uuid) {
     //communicate with backend to get the selectedItem
     console.log("getSelectedItem called with id: ", uuid);
     //clear any cotents in the currentSelectedItemFiles
-    Object.keys(currentSelectedItemFiles).forEach((key) => {
-        delete currentSelectedItemFiles[key];
-    });
-    //set the currentSelectedItemFiles
-    /*
-    const fileInfo = getFileEntries(uuid);
-    Object.keys(fileInfo).forEach((key) => {
-        currentSelectedItemFiles[key] = fileInfo[key];
-    });
-    console.log("currentSelectedItemFiles: ", currentSelectedItemFiles);
-    */
+    currentSelectedItemFiles = {};
     
     return new Promise((resolve) => {
         db.serialize(() => {
@@ -385,7 +349,7 @@ function modifyItem(event, selectedItem){
                 db.all(`SELECT \
                         id\
                         FROM financialEntities \
-                        WHERE title = "${selectedItem.fromEntity}"`, (err, rows) => {
+                        WHERE title = ?`, selectedItem.fromEntity, (err, rows) => {
                             if (err) {
                                 console.log(`Get Financial Reference ID in modifyItem: ${err}`);
                                 reject(err);
@@ -404,7 +368,7 @@ function modifyItem(event, selectedItem){
                 db.all(`SELECT \
                         id\
                         FROM financialEntities \
-                        WHERE title = "${selectedItem.toEntity}"`, (err, rows) => {
+                        WHERE title = ?`, selectedItem.toEntity, (err, rows) => {
                             if (err) {
                                 console.log(`Get Financial Reference ID in modifyItem: ${err}`);
                                 reject(err);
@@ -422,7 +386,7 @@ function modifyItem(event, selectedItem){
                 db.all(`SELECT \
                         id\
                         FROM recurringTransactions \
-                        WHERE title = "${selectedItem.recurringEntity}"`, (err, rows) => {
+                        WHERE title = ?`, selectedItem.recurringEntity, (err, rows) => {
                             if (err) {
                                 console.log(`Get Recurring Transaction Reference ID in modifyItem: ${err}`);
                                 reject(err);
@@ -454,34 +418,96 @@ function modifyItem(event, selectedItem){
                         resolve(true);
                     }
                 });
-            }); 
+            });
+            
+            const deleteFileEntires = new Promise((resolve, reject) => {
+                const fetchFilenamesToDelete = new Promise((resolve, reject) => {
+                    db.all(`SELECT filename FROM files WHERE id = ?`, selectedItem.id, (err, rows) => {
+                        if (err) {
+                            console.log(`Get Selected Item Error ${err}`);
+                            reject(err);
+                        }
+                        else {
+                            console.log("Files Table Information (getSelectedItem):");
+                            console.log(rows);
+                            resolve(rows);
+                        }
+                    });
+                });
+
+                fetchFilenamesToDelete.then((rows) => {
+                    console.log("rows from files table in deleteFileEntries: ", rows);
+                    console.log("filenames from currentSelectedItemFiles: ", Object.keys(currentSelectedItemFiles));
+                    const deleteFileEntryStmt = db.prepare(`DELETE FROM files WHERE id = ? \
+                                                            AND filename = ?`);
+                    const currentSelectedItemFilenames = new Set(Object.keys(currentSelectedItemFiles));
+                    rows.forEach((row) => {
+                        if (!currentSelectedItemFilenames.has(row.filename))
+                            deleteFileEntryStmt.run(selectedItem.id, row.filename);
+                    });
+                    deleteFileEntryStmt.finalize((err) => {
+                        if (err) {
+                            console.error(err);
+                            resolve(false);
+                        }
+                        else {
+                            console.log("Delete File Entries Success");
+                            resolve(true);
+                        }
+                    });
+                }).catch((err) => {
+                    console.log(`Delete Item Error ${err}`);
+                    reject(err);
+                });
+            });
 
             const fetchAllReferenceIDs = Promise.all([
                                                         fetchFromReferenceID, 
                                                         fetchToReferenceID, 
                                                         fetchRecurringReferenceIDs, 
-                                                        insertFileEntries
+                                                        insertFileEntries,
+                                                        deleteFileEntires
                                                     ]);
 
-            fetchAllReferenceIDs.then(([fromReferenceID, toReferenceID, recurringReferenceID, insertFileEntriesStatus]) => {
+            fetchAllReferenceIDs.then(([
+                                        fromReferenceID, 
+                                        toReferenceID, 
+                                        recurringReferenceID, 
+                                        insertFileEntriesStatus,
+                                        deleteFileEntiresStatus
+                                    ]) => {
                 console.log("fromReferenceID in modifyItem: ");
                 console.log("fromReferenceID: ", fromReferenceID);
                 console.log("toReferenceID: ", toReferenceID);
                 console.log("recurringReferenceID: ", recurringReferenceID);
                 db.run(`UPDATE transactions SET \
-                        title = "${selectedItem.title}", \
-                        description = "${selectedItem.description}", \
-                        value = ${selectedItem.value}, \
-                        currency = "${selectedItem.currency === "choose"? null: selectedItem.currency}", \
-                        transactionType = "${selectedItem.transactionType}", \
-                        transactionCategory = "${selectedItem.transactionCategory !== "choose"? selectedItem.transactionCategory : null}", \
-                        fromReference = "${fromReferenceID}", \
-                        toReference = "${toReferenceID}", \
-                        recurringReference = "${recurringReferenceID}", \
-                        file = "${selectedItem.file.length > 0}", \
-                        modifiedDate = "${new Date().toISOString()}", \
-                        transactionDate = "${selectedItem.transactionDate}" \
-                        WHERE id = "${selectedItem.id}"`, (err) => {
+                        title = ?, \
+                        description = ?, \
+                        value = ?, \
+                        currency = ?, \
+                        transactionType = ?, \
+                        transactionCategory = ?, \
+                        fromReference = ?, \
+                        toReference = ?, \
+                        recurringReference = ?, \
+                        file = ?, \
+                        modifiedDate = ?, \
+                        transactionDate = ? \
+                        WHERE id = ?`, 
+                            selectedItem.title,
+                            selectedItem.description,
+                            selectedItem.value,
+                            selectedItem.currency === "choose"? null: selectedItem.currency,
+                            selectedItem.transactionType,
+                            selectedItem.transactionCategory !== "choose"? selectedItem.transactionCategory : null,
+                            fromReferenceID,
+                            toReferenceID,
+                            recurringReferenceID,
+                            selectedItem.file.length > 0,
+                            new Date().toISOString(),
+                            selectedItem.transactionDate,
+                            selectedItem.id,
+                            (err) => {
                             if (err) {
                                 console.log(`Modify Item Error ${err}`);
                                 //reject({modifyStatus: false, item: null});
@@ -490,7 +516,7 @@ function modifyItem(event, selectedItem){
                             else {
                                 console.log("Modify Item Success");
                                 console.log(fromReferenceID)
-                                if (insertFileEntriesStatus)
+                                if (insertFileEntriesStatus && deleteFileEntiresStatus) {
                                 resolve( {
                                     modifyStatus: true,
                                     item: {
@@ -501,7 +527,11 @@ function modifyItem(event, selectedItem){
                                             transactionType: selectedItem.transactionType, 
                                             transactionCategory: selectedItem.transactionCategory,
                                         },
-                                });
+                                    });
+                                }
+                                else {
+                                    resolve({modifyStatus: false, item: null});
+                                }
                             }
                         });
 
