@@ -9,7 +9,7 @@ contextBridge.exposeInMainWorld('transactionOperations', {
     //setFileBlob: (fileName, arrayBuffer) => {ipcRenderer.invoke('setFileBlob', fileName, arrayBuffer)},
     deleteFileBlob: (fileName) => ipcRenderer.invoke('transactionOperations:deleteFileBlob', fileName),
     getAllItems: () => ipcRenderer.invoke('transactionOperations:getAllItems'),
-    getItems: (searchParams) => ipcRenderer.invoke('transactionOperations:getItems', searchParams),
+    getItems: (searchParams, filterParamsVisibility) => ipcRenderer.invoke('transactionOperations:getItems', searchParams, filterParamsVisibility),
     getSelectedItem: (uuid) => ipcRenderer.invoke('transactionOperations:getSelectedItem', uuid),
     deleteItem: (uuid) => ipcRenderer.invoke('transactionOperations:deleteItem', uuid),
     modifyItem: (selectedItem) => ipcRenderer.invoke('transactionOperations:modifyItem', selectedItem),

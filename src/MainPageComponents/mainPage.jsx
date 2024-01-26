@@ -72,7 +72,7 @@ function MainPage() {
    //trigger on search params set and enter key pressed
     useEffect(() => {
         if (!triggerSearchState) return;
-        window.transactionOperations.getItems(searchParams).then(items => {
+        window.transactionOperations.getItems(searchParams, filterParamsVisibility).then(items => {
             if (items === null) {
                 dispatch(showFailBox());
                 return;

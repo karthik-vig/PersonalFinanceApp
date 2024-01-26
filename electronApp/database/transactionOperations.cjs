@@ -77,27 +77,29 @@ function getAllItems() {
 
 //this should actually be a backed side function;
 //here just to simulate the effect.
-function getItems(event, searchParams) { 
+function getItems(event, searchParams, filterParamsVisibility) { 
     //communicate with backend to get items
     //based on the searchParams
     console.log("getItems called with searchParams: ", searchParams);
     ///*
     return new Promise((resolve) => {
+
+        searchParams.filter.sort.field = searchParams.filter.sort.field === "currencyValue" ? "value" : searchParams.filter.sort.field;
         //there might be problem with min and max value for the value field as 0 value will be rejected.
         //will need to fix this later
-        const filterValueStmt = searchParams.filter.value.max && searchParams.filter.value.min ? ` AND (value BETWEEN ${searchParams.filter.value.min} AND ${searchParams.filter.value.max})`: ``;
-        const filterCurrencyStmt = searchParams.filter.currency && searchParams.filter.currency !== "choose" ? ` AND (currency = "${searchParams.filter.currency}")` : "";
-        const filterTransactionTypeStmt = searchParams.filter.transactionType && searchParams.filter.transactionType !== "choose" ? ` AND (transactionType = "${searchParams.filter.transactionType}")` : ``;
-        const filterTransactionCategoryStmt = searchParams.filter.transactionType && searchParams.filter.transactionCategory !== "choose" && searchParams.filter.transactionCategory !== null ? ` AND (transactionCategory = "${searchParams.filter.transactionCategory}")` : ``;
-        const filterFromTypeStmt = searchParams.filter.fromType && searchParams.filter.fromType !== "choose" ? ` AND (fromType = "${searchParams.filter.fromType}")` : ``;
-        const filterFromEntityStmt = searchParams.filter.fromEntity && searchParams.filter.fromEntity !== "choose" ? ` AND (fromEntity = "${searchParams.filter.fromEntity}")` : ``;
-        const filterToTypeStmt = searchParams.filter.toType && searchParams.filter.toType !== "choose" ? ` AND (toType = "${searchParams.filter.toType}")` : ``;
-        const filterToEntityStmt = searchParams.filter.toEntity && searchParams.filter.toEntity !== "choose" ? ` AND (toEntity = "${searchParams.filter.toEntity}")` : ``;
-        const filterRecurringEntityStmt = searchParams.filter.recurringEntity && searchParams.filter.recurringEntity !== "choose" ? ` AND (recurringEntity = "${searchParams.filter.recurringEntity}")` : ``;
-        const filterCreatedDateStmt = searchParams.filter.createdDate.max && searchParams.filter.createdDate.min ? ` AND (createdDate BETWEEN "${searchParams.filter.createdDate.min}" AND "${searchParams.filter.createdDate.max}")` : ``;
-        const filterModifiedDateStmt = searchParams.filter.modifiedDate.max && searchParams.filter.modifiedDate.min ? ` AND (modifiedDate BETWEEN "${searchParams.filter.modifiedDate.min}" AND "${searchParams.filter.modifiedDate.max}")` : ``;
-        const filterTransactionDateStmt = searchParams.filter.transactionDate.max && searchParams.filter.transactionDate.min ? ` AND (transactionDate BETWEEN "${searchParams.filter.transactionDate.min}" AND "${searchParams.filter.transactionDate.max}")` : ``;
-        const filterSortStmt = searchParams.filter.sort.ascending === true && searchParams.filter.sort.field ? ` ORDER BY ${searchParams.filter.sort.field} ASC` : searchParams.filter.sort.field && !searchParams.filter.sort.ascending === false ? ` ORDER BY ${searchParams.filter.sort.field} DESC` : ``;
+        const filterValueStmt = filterParamsVisibility.value && searchParams.filter.value.max && searchParams.filter.value.min ? ` AND (value BETWEEN ${searchParams.filter.value.min} AND ${searchParams.filter.value.max})`: ``;
+        const filterCurrencyStmt = filterParamsVisibility.currency && searchParams.filter.currency && searchParams.filter.currency !== "choose" ? ` AND (currency = "${searchParams.filter.currency}")` : "";
+        const filterTransactionTypeStmt = filterParamsVisibility.transactionType && searchParams.filter.transactionType && searchParams.filter.transactionType !== "choose" ? ` AND (transactionType = "${searchParams.filter.transactionType}")` : ``;
+        const filterTransactionCategoryStmt = filterParamsVisibility.transactionCategory && searchParams.filter.transactionType && searchParams.filter.transactionCategory !== "choose" && searchParams.filter.transactionCategory !== null ? ` AND (transactionCategory = "${searchParams.filter.transactionCategory}")` : ``;
+        const filterFromTypeStmt = filterParamsVisibility.fromType && searchParams.filter.fromType && searchParams.filter.fromType !== "choose" ? ` AND (fromType = "${searchParams.filter.fromType}")` : ``;
+        const filterFromEntityStmt = filterParamsVisibility.fromEntity && searchParams.filter.fromEntity && searchParams.filter.fromEntity !== "choose" ? ` AND (fromEntity = "${searchParams.filter.fromEntity}")` : ``;
+        const filterToTypeStmt = filterParamsVisibility.toType && searchParams.filter.toType && searchParams.filter.toType !== "choose" ? ` AND (toType = "${searchParams.filter.toType}")` : ``;
+        const filterToEntityStmt = filterParamsVisibility.toEntity && searchParams.filter.toEntity && searchParams.filter.toEntity !== "choose" ? ` AND (toEntity = "${searchParams.filter.toEntity}")` : ``;
+        const filterRecurringEntityStmt = filterParamsVisibility.recurringEntity && searchParams.filter.recurringEntity && searchParams.filter.recurringEntity !== "choose" ? ` AND (recurringEntity = "${searchParams.filter.recurringEntity}")` : ``;
+        const filterCreatedDateStmt = filterParamsVisibility.createdDate && searchParams.filter.createdDate.max && searchParams.filter.createdDate.min ? ` AND (createdDate BETWEEN "${searchParams.filter.createdDate.min}" AND "${searchParams.filter.createdDate.max}")` : ``;
+        const filterModifiedDateStmt = filterParamsVisibility.modifiedDate && searchParams.filter.modifiedDate.max && searchParams.filter.modifiedDate.min ? ` AND (modifiedDate BETWEEN "${searchParams.filter.modifiedDate.min}" AND "${searchParams.filter.modifiedDate.max}")` : ``;
+        const filterTransactionDateStmt = filterParamsVisibility.transactionDate && searchParams.filter.transactionDate.max && searchParams.filter.transactionDate.min ? ` AND (transactionDate BETWEEN "${searchParams.filter.transactionDate.min}" AND "${searchParams.filter.transactionDate.max}")` : ``;
+        const filterSortStmt = filterParamsVisibility.sort && searchParams.filter.sort.ascending === true && searchParams.filter.sort.field ? ` ORDER BY ${searchParams.filter.sort.field} ASC` : searchParams.filter.sort.field && !searchParams.filter.sort.ascending === false ? ` ORDER BY ${searchParams.filter.sort.field} DESC` : ``;
 
         //create the main query statement
         const queryStmt = `SELECT id, title, transactionDate, value, transactionType, transactionCategory FROM transactions WHERE (title LIKE "%${searchParams.search}%" OR description LIKE "%${searchParams.search}%")`
