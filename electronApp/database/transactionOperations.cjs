@@ -270,7 +270,7 @@ function getSelectedItem(event, uuid) {
 
                                             if (fileInformationRows && fileInformationRows.length > 0) {
                                                 fileInformationRows.forEach((row) => {
-                                                    currentSelectedItemFiles[row.filename] = row.fileBlob;
+                                                    currentSelectedItemFiles[row.filename] = row.filedata;
                                                     selectedItem.file.push(row.filename);
                                                 });
                                             } 
