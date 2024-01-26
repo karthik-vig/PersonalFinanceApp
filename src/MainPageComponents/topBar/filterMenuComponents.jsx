@@ -8,6 +8,7 @@ import {
 import {FilterRangeInputParam,
         FilterSelectInputParam,
         FilterSortInputParam,
+        FilterSelectFinancialEntityInputParam,
     } from '../../basicComponents/filterMenuLayoutComponents/filterMenuContainerLayouts.jsx';
 //import { useImmer } from 'use-immer';
 import { useSelector, useDispatch } from 'react-redux';
@@ -97,32 +98,16 @@ function FilterMenu(){
                 filterParamsVisibility={filterParamsVisibility}
                 selectOptions={transactionCategories}
             />
-            <FilterSelectInputParam
-                headingText="From Type"
-                fieldName="fromType"
-                toggleDisplay={toggleFieldVisibility}
-                handleInputChange={handleInputChange}
-                filterParamsVisibility={filterParamsVisibility}
-                selectOptions={["Internal", "External"]}
-            />
-            <FilterSelectInputParam
-                headingText="From Entity"
+            <FilterSelectFinancialEntityInputParam
+                headingText="From Financial Entity"
                 fieldName="fromEntity"
                 toggleDisplay={toggleFieldVisibility}
                 handleInputChange={handleInputChange}
                 filterParamsVisibility={filterParamsVisibility}
                 selectOptions={transactionEntityNames}
             />
-            <FilterSelectInputParam
-                headingText="To Type"
-                fieldName="toType"
-                toggleDisplay={toggleFieldVisibility}
-                handleInputChange={handleInputChange}
-                filterParamsVisibility={filterParamsVisibility}
-                selectOptions={["Internal", "External"]}
-            />
-            <FilterSelectInputParam
-                headingText="To Entity"
+            <FilterSelectFinancialEntityInputParam
+                headingText="To Financial Entity"
                 fieldName="toEntity"
                 toggleDisplay={toggleFieldVisibility}
                 handleInputChange={handleInputChange}

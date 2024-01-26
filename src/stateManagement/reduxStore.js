@@ -14,6 +14,7 @@ import triggerSearchReducer from './mainPageStates/triggerSearch.js';
 import currentSelectedItemReducer from './mainPageStates/currentSelectedItem.js';
 import triggerUpdateFileReducer from './mainPageStates/triggerUpdateFile.js';
 import additionalInformationReducer from './mainPageStates/additionalInformation.js';
+import selectFilterFinancialEntityReducer from './mainPageStates/selectFilterFinancialEntity.js';
 
 const mainPageStates = combineReducers({
   selectedItem: selectedItemReducer,
@@ -31,6 +32,7 @@ const mainPageStates = combineReducers({
   currentSelectedItemState: currentSelectedItemReducer,
   triggerUpdateFileState: triggerUpdateFileReducer,
   additionalInformationState: additionalInformationReducer,
+  selectFilterFinancialEntityState: selectFilterFinancialEntityReducer,
 });
 
 const rootReducer = combineReducers({

@@ -12,9 +12,9 @@ export const searchParamsSlice = createSlice({
             currency: null, //select list
             transactionType: null, //select list
             transactionCategory: null, //select list
-            fromType: null, //select list
+            //fromType: null, //select list
             fromEntity: null, //select list
-            toType: null, //select list
+            //toType: null, //select list
             toEntity: null, //select list
             recurringEntity: null, //select list
             createdDate: { min: null, //date picker

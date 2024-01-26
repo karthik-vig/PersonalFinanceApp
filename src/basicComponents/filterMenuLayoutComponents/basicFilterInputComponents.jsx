@@ -104,7 +104,6 @@ function SelectInputField({additionalClasses, fieldName, handleInputChange, sele
             <option 
                 key="choose"
                 value="choose"
-                selected
             > 
                 choose
             </option>

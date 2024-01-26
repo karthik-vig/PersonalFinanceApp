@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import '../../index.css';
 import {
@@ -9,6 +9,8 @@ import {
         SelectInputField,
         //DateInputField,
         } from './basicFilterInputComponents.jsx';
+import { useSelector, useDispatch } from 'react-redux';
+import { setFilterFinancialEntity, resetFilterFinancialEntity } from '../../stateManagement/mainPageStates/selectFilterFinancialEntity.js';
 
 function FilterParamHeadingSection({ additionalClasses, fieldName, headingText, handleInputChange}){
     return (
@@ -147,6 +149,69 @@ FilterSelectInputParam.propTypes = {
     selectOptions: PropTypes.array,
 };
 
+
+function FilterSelectFinancialEntityInputParam({ headingText, fieldName, toggleDisplay, handleInputChange, filterParamsVisibility}){
+
+    const transactionEntities = useSelector(state => state.mainPageStates.additionalInformationState.transactionEntities);
+    const selectFilterFinancialEntityState = useSelector(state => state.mainPageStates.selectFilterFinancialEntityState);
+    const dispatch = useDispatch();
+
+    let entitySelectFieldOptions = useRef([]);
+
+    useEffect(() => {
+        if (selectFilterFinancialEntityState.type && selectFilterFinancialEntityState.type !== "choose" && selectFilterFinancialEntityState.fieldname === fieldName){
+            entitySelectFieldOptions.current = transactionEntities.filter((entity) => entity.type === selectFilterFinancialEntityState.type).map((entity) => entity.name)
+            dispatch(resetFilterFinancialEntity());
+        } 
+    }, [
+        dispatch, 
+        entitySelectFieldOptions, 
+        fieldName, 
+        selectFilterFinancialEntityState, 
+        transactionEntities
+    ]);  
+
+    return (
+        <FilterParamSection
+            additionalClasses=""
+            headingText={headingText}
+            toggleDisplay={() => toggleDisplay(fieldName)}
+        >
+            <FilterParamInputSection
+                additionalClasses={filterParamsVisibility[fieldName] ? "flex" : "hidden"}
+                labelText="Select Entity Type"
+            >
+                <SelectInputField
+                    additionalClasses=""
+                    fieldName={fieldName}
+                    handleInputChange={(fieldName, targetValue) => dispatch(setFilterFinancialEntity({fieldname: fieldName, type: targetValue}))}
+                    selectOptions={["Internal", "External"]}
+                />
+            </FilterParamInputSection>
+            <FilterParamInputSection
+                additionalClasses={filterParamsVisibility[fieldName] ? "flex" : "hidden"}
+                labelText="Select Entity"
+            >
+                <SelectInputField
+                    additionalClasses=""
+                    fieldName={fieldName}
+                    handleInputChange={handleInputChange}
+                    selectOptions={entitySelectFieldOptions.current}
+                />
+            </FilterParamInputSection>
+        </FilterParamSection>
+    );
+
+}
+
+FilterSelectFinancialEntityInputParam.propTypes = {
+    headingText: PropTypes.string,
+    fieldName: PropTypes.string,
+    toggleDisplay: PropTypes.func,
+    handleInputChange: PropTypes.func,
+    filterParamsVisibility: PropTypes.object,
+};
+
 function FilterSortInputParam({ toggleDisplay, handleInputChange, filterParamsVisibility}){
     
     const fields = ["currencyValue", 
@@ -205,4 +270,5 @@ export {
         FilterRangeInputParam,
         FilterSelectInputParam,
         FilterSortInputParam,
+        FilterSelectFinancialEntityInputParam,
     };
