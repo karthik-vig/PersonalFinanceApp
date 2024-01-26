@@ -84,6 +84,80 @@ function getItems(event, searchParams, filterParamsVisibility) {
     ///*
     return new Promise((resolve) => {
 
+        const fetchFromReferenceID = new Promise((resolve, reject) => {
+            if (filterParamsVisibility.fromEntity && searchParams.filter.fromEntity && searchParams.filter.fromEntity !== "choose") {
+            db.all(`SELECT id from financialEntities WHERE title = ?`, searchParams.filter.fromEntity, (err, rows) => { 
+                if (err) {
+                    console.log(`Get From Reference ID Error ${err}`);
+                    reject(err);
+                }
+                else {
+                    console.log("Get From Reference ID Success");
+                    console.log(rows);
+                    const fromReferenceID = rows && rows.length > 0 ? rows[0].id : null;
+                    resolve(` AND (fromReference = "${fromReferenceID}")`);
+                }
+             });
+            }
+            else {
+                resolve(``);
+            }
+        }).catch((err) => {
+            console.log(`Get From Reference ID Error ${err}`);
+            resolve(null);
+        });
+
+
+        const fetchToReferenceID = new Promise((resolve, reject) => {
+            if (filterParamsVisibility.toEntity && searchParams.filter.toEntity && searchParams.filter.toEntity !== "choose") {
+            db.all(`SELECT id from financialEntities WHERE title = ?`, searchParams.filter.toEntity, (err, rows) => { 
+                if (err) {
+                    console.log(`Get To Reference ID Error ${err}`);
+                    reject(err);
+                }
+                else {
+                    console.log("Get To Reference ID Success");
+                    console.log(rows);
+                    const toReferenceID = rows && rows.length > 0 ? rows[0].id : null;
+                    resolve(` AND (toReference = "${toReferenceID}")`);
+                }
+             });
+            }
+            else {
+                resolve(``);
+            }
+        }).catch((err) => {
+            console.log(`Get From Reference ID Error ${err}`);
+            resolve(null);
+        });
+
+        const fetchRecurringReferenceIDs = new Promise((resolve, reject) => {
+            if (filterParamsVisibility.recurringEntity && searchParams.filter.recurringEntity && searchParams.filter.recurringEntity !== "choose") {
+                db.all(`SELECT id from recurringTransactions WHERE title = ?`, searchParams.filter.recurringEntity, (err, rows) => {
+                    if (err) {
+                        console.log(`Get Recurring Reference ID Error ${err}`);
+                        reject(err);
+                    }
+                    else {
+                        console.log("Get Recurring Reference ID Success");
+                        console.log(rows);
+                        const recurringReferenceID = rows && rows.length > 0 ? rows[0].id : null;
+                        resolve(` AND (recurringReference = "${recurringReferenceID}")`);
+                    }
+                });
+            }
+            else {
+                resolve(``);
+            }
+        }).catch((err) => {
+            console.log(`Get Recurring Reference ID Error ${err}`);
+            resolve(null);
+        });
+
+        const fetchAllReferenceIDs = Promise.all([fetchFromReferenceID, fetchToReferenceID, fetchRecurringReferenceIDs]);
+
+        fetchAllReferenceIDs.then(([filterFromEntityStmt, filterToEntityStmt, filterRecurringEntityStmt]) => {
+
         searchParams.filter.sort.field = searchParams.filter.sort.field === "currencyValue" ? "value" : searchParams.filter.sort.field;
         //there might be problem with min and max value for the value field as 0 value will be rejected.
         //will need to fix this later
@@ -91,11 +165,11 @@ function getItems(event, searchParams, filterParamsVisibility) {
         const filterCurrencyStmt = filterParamsVisibility.currency && searchParams.filter.currency && searchParams.filter.currency !== "choose" ? ` AND (currency = "${searchParams.filter.currency}")` : "";
         const filterTransactionTypeStmt = filterParamsVisibility.transactionType && searchParams.filter.transactionType && searchParams.filter.transactionType !== "choose" ? ` AND (transactionType = "${searchParams.filter.transactionType}")` : ``;
         const filterTransactionCategoryStmt = filterParamsVisibility.transactionCategory && searchParams.filter.transactionType && searchParams.filter.transactionCategory !== "choose" && searchParams.filter.transactionCategory !== null ? ` AND (transactionCategory = "${searchParams.filter.transactionCategory}")` : ``;
-        const filterFromTypeStmt = filterParamsVisibility.fromType && searchParams.filter.fromType && searchParams.filter.fromType !== "choose" ? ` AND (fromType = "${searchParams.filter.fromType}")` : ``;
-        const filterFromEntityStmt = filterParamsVisibility.fromEntity && searchParams.filter.fromEntity && searchParams.filter.fromEntity !== "choose" ? ` AND (fromEntity = "${searchParams.filter.fromEntity}")` : ``;
-        const filterToTypeStmt = filterParamsVisibility.toType && searchParams.filter.toType && searchParams.filter.toType !== "choose" ? ` AND (toType = "${searchParams.filter.toType}")` : ``;
-        const filterToEntityStmt = filterParamsVisibility.toEntity && searchParams.filter.toEntity && searchParams.filter.toEntity !== "choose" ? ` AND (toEntity = "${searchParams.filter.toEntity}")` : ``;
-        const filterRecurringEntityStmt = filterParamsVisibility.recurringEntity && searchParams.filter.recurringEntity && searchParams.filter.recurringEntity !== "choose" ? ` AND (recurringEntity = "${searchParams.filter.recurringEntity}")` : ``;
+        //const filterFromTypeStmt = filterParamsVisibility.fromType && searchParams.filter.fromType && searchParams.filter.fromType !== "choose" ? ` AND (fromType = "${searchParams.filter.fromType}")` : ``;
+        //const filterFromEntityStmt = filterParamsVisibility.fromEntity && searchParams.filter.fromEntity && searchParams.filter.fromEntity !== "choose" ? ` AND (fromEntity = "${searchParams.filter.fromEntity}")` : ``;
+        //const filterToTypeStmt = filterParamsVisibility.toType && searchParams.filter.toType && searchParams.filter.toType !== "choose" ? ` AND (toType = "${searchParams.filter.toType}")` : ``;
+        //const filterToEntityStmt = filterParamsVisibility.toEntity && searchParams.filter.toEntity && searchParams.filter.toEntity !== "choose" ? ` AND (toEntity = "${searchParams.filter.toEntity}")` : ``;
+        //const filterRecurringEntityStmt = filterParamsVisibility.recurringEntity && searchParams.filter.recurringEntity && searchParams.filter.recurringEntity !== "choose" ? ` AND (recurringEntity = "${searchParams.filter.recurringEntity}")` : ``;
         const filterCreatedDateStmt = filterParamsVisibility.createdDate && searchParams.filter.createdDate.max && searchParams.filter.createdDate.min ? ` AND (createdDate BETWEEN "${searchParams.filter.createdDate.min}" AND "${searchParams.filter.createdDate.max}")` : ``;
         const filterModifiedDateStmt = filterParamsVisibility.modifiedDate && searchParams.filter.modifiedDate.max && searchParams.filter.modifiedDate.min ? ` AND (modifiedDate BETWEEN "${searchParams.filter.modifiedDate.min}" AND "${searchParams.filter.modifiedDate.max}")` : ``;
         const filterTransactionDateStmt = filterParamsVisibility.transactionDate && searchParams.filter.transactionDate.max && searchParams.filter.transactionDate.min ? ` AND (transactionDate BETWEEN "${searchParams.filter.transactionDate.min}" AND "${searchParams.filter.transactionDate.max}")` : ``;
@@ -104,7 +178,7 @@ function getItems(event, searchParams, filterParamsVisibility) {
         //create the main query statement
         const queryStmt = `SELECT id, title, transactionDate, value, transactionType, transactionCategory FROM transactions WHERE (title LIKE "%${searchParams.search}%" OR description LIKE "%${searchParams.search}%")`
         //add up all the query statements
-        const finalQueryStmt = queryStmt + filterValueStmt + filterCurrencyStmt + filterTransactionTypeStmt + filterTransactionCategoryStmt + filterFromTypeStmt + filterFromEntityStmt + filterToTypeStmt + filterToEntityStmt + filterRecurringEntityStmt + filterCreatedDateStmt + filterModifiedDateStmt + filterTransactionDateStmt + filterSortStmt;
+        const finalQueryStmt = queryStmt + filterValueStmt + filterCurrencyStmt + filterTransactionTypeStmt + filterTransactionCategoryStmt + filterFromEntityStmt + filterToEntityStmt + filterRecurringEntityStmt + filterCreatedDateStmt + filterModifiedDateStmt + filterTransactionDateStmt + filterSortStmt;
         db.all(finalQueryStmt, (err, rows) => { 
             if (err) {
                 console.log(`Get Items Error ${err}`);
@@ -116,6 +190,11 @@ function getItems(event, searchParams, filterParamsVisibility) {
                 resolve(rows);
             }
          });
+
+        }).catch((err) => {
+            console.log(`Get All Reference IDs Error ${err}`);
+            resolve(null);
+        });
     });
     //*/
     /*
