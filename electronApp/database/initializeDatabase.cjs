@@ -80,7 +80,8 @@ function setupDatabase() {
         db.run('CREATE TABLE IF NOT EXISTS files (\
                 id TEXT NOT NULL, \
                 filename TEXT NOT NULL, \
-                filedata BLOB \
+                filedata BLOB, \
+                PRIMARY KEY (id, filename) \
                 )', (err) => { 
                     if (err) { 
                         console.log(`Files table creation ${err}`); 
