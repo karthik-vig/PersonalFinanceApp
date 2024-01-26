@@ -80,15 +80,51 @@ function getAllItems() {
 function getItems(event, searchParams) { 
     //communicate with backend to get items
     //based on the searchParams
-    console.log("getItems called with searchParams: ");
-    console.log(searchParams);
+    console.log("getItems called with searchParams: ", searchParams);
+    ///*
+    return new Promise((resolve) => {
+        //there might be problem with min and max value for the value field as 0 value will be rejected.
+        //will need to fix this later
+        const filterValueStmt = searchParams.filter.value.max && searchParams.filter.value.min ? ` AND (value BETWEEN ${searchParams.filter.value.min} AND ${searchParams.filter.value.max})`: ``;
+        const filterCurrencyStmt = searchParams.filter.currency && searchParams.filter.currency !== "choose" ? ` AND (currency = "${searchParams.filter.currency}")` : "";
+        const filterTransactionTypeStmt = searchParams.filter.transactionType && searchParams.filter.transactionType !== "choose" ? ` AND (transactionType = "${searchParams.filter.transactionType}")` : ``;
+        const filterTransactionCategoryStmt = searchParams.filter.transactionType && searchParams.filter.transactionCategory !== "choose" && searchParams.filter.transactionCategory !== null ? ` AND (transactionCategory = "${searchParams.filter.transactionCategory}")` : ``;
+        const filterFromTypeStmt = searchParams.filter.fromType && searchParams.filter.fromType !== "choose" ? ` AND (fromType = "${searchParams.filter.fromType}")` : ``;
+        const filterFromEntityStmt = searchParams.filter.fromEntity && searchParams.filter.fromEntity !== "choose" ? ` AND (fromEntity = "${searchParams.filter.fromEntity}")` : ``;
+        const filterToTypeStmt = searchParams.filter.toType && searchParams.filter.toType !== "choose" ? ` AND (toType = "${searchParams.filter.toType}")` : ``;
+        const filterToEntityStmt = searchParams.filter.toEntity && searchParams.filter.toEntity !== "choose" ? ` AND (toEntity = "${searchParams.filter.toEntity}")` : ``;
+        const filterRecurringEntityStmt = searchParams.filter.recurringEntity && searchParams.filter.recurringEntity !== "choose" ? ` AND (recurringEntity = "${searchParams.filter.recurringEntity}")` : ``;
+        const filterCreatedDateStmt = searchParams.filter.createdDate.max && searchParams.filter.createdDate.min ? ` AND (createdDate BETWEEN "${searchParams.filter.createdDate.min}" AND "${searchParams.filter.createdDate.max}")` : ``;
+        const filterModifiedDateStmt = searchParams.filter.modifiedDate.max && searchParams.filter.modifiedDate.min ? ` AND (modifiedDate BETWEEN "${searchParams.filter.modifiedDate.min}" AND "${searchParams.filter.modifiedDate.max}")` : ``;
+        const filterTransactionDateStmt = searchParams.filter.transactionDate.max && searchParams.filter.transactionDate.min ? ` AND (transactionDate BETWEEN "${searchParams.filter.transactionDate.min}" AND "${searchParams.filter.transactionDate.max}")` : ``;
+        const filterSortStmt = searchParams.filter.sort.ascending === true && searchParams.filter.sort.field ? ` ORDER BY ${searchParams.filter.sort.field} ASC` : searchParams.filter.sort.field && !searchParams.filter.sort.ascending === false ? ` ORDER BY ${searchParams.filter.sort.field} DESC` : ``;
+
+        //create the main query statement
+        const queryStmt = `SELECT id, title, transactionDate, value, transactionType, transactionCategory FROM transactions WHERE (title LIKE "%${searchParams.search}%" OR description LIKE "%${searchParams.search}%")`
+        //add up all the query statements
+        const finalQueryStmt = queryStmt + filterValueStmt + filterCurrencyStmt + filterTransactionTypeStmt + filterTransactionCategoryStmt + filterFromTypeStmt + filterFromEntityStmt + filterToTypeStmt + filterToEntityStmt + filterRecurringEntityStmt + filterCreatedDateStmt + filterModifiedDateStmt + filterTransactionDateStmt + filterSortStmt;
+        db.all(finalQueryStmt, (err, rows) => { 
+            if (err) {
+                console.log(`Get Items Error ${err}`);
+                resolve(null);
+            }
+            else {
+                console.log("Get Items Success");
+                console.log(rows);
+                resolve(rows);
+            }
+         });
+    });
+    //*/
+    /*
     return [
         {id: 1, title: "someName", transactionDate: "2023.08.11", value: 2000, transactionType:"out", transactionCategory: "Groceries"},
         {id: 2, title: "someName2", transactionDate: "2023.08.09", value: 100, transactionType:"in", transactionCategory: "Restaurants and Dining"},
         {id: 3, title: "someName3", transactionDate: "2023.08.03", value: 3500, transactionType:"in", transactionCategory: "Shopping"},
         {id: 4, title: "someName4", transactionDate: "2023.08.01", value: 5000, transactionType:"out", transactionCategory: "Utilities"},
         {id: 5, title: "someName5", transactionDate: "2023.08.01", value: 5000, transactionType:"in", transactionCategory: "Telecommunications"},
-        ]; //could also return null if the operation fails
+        ]; */
+        //could also return null if the operation fails
 }
 
 //some other functions are:

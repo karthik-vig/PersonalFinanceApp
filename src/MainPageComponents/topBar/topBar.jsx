@@ -18,6 +18,7 @@ import { useSelector, useDispatch } from 'react-redux';
 //import { setWarningBoxDisplayModifyState } from '../../stateManagement/mainPageStates/warningBoxDisplay.js';
 import { faFilter, faSort, faPlus, faTrashCan, faEdit, faRefresh } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
+import { triggerSearch } from '../../stateManagement/mainPageStates/triggerSearch.js';
 library.add(faFilter, faSort, faPlus, faTrashCan, faEdit, faRefresh);
 
 function TopBarButton({ svgIcon, iconColor, btnName, onClickHandler }) {
@@ -83,7 +84,7 @@ function TopBar() {
                 placeholder="Search" 
                 className="h-10 w-[50%] mx-4 my-2 py-1 px-2 rounded-lg border bg-background-cl" 
                 onChange={(event) => dispatch(setSearchField(event.target.value))}
-                onKeyDown={ (event) => { if (event.code === "Enter") { dispatch(); } } }
+                onKeyDown={ (event) => { if (event.code === "Enter") { dispatch(triggerSearch()); } } }
             />
             <TopBarButton 
                 svgIcon={faFilter} 
