@@ -29,11 +29,11 @@ function getCurrencies() {
 
 function getTransactionCategories() {
     return (
-        ["Groceries", "Restaurants and Dining", "Shopping", "Utilities", "Telecommunications",
+        ["Groceries", "Restaurants and Dining", "Shopping", "Utilities", "Telecommunication",
          "Transportation", "Rent or Mortgage", "Insurance", "Healthcare", "Education", "Entertainment",
          "Travel and Lodging", "Personal Care", "Fitness and Wellness", "Investments and Savings", "Loans and Credit Payments",
          "Charity and Donations", "Home Improvement and Maintenance", "Childcare and Education", "Pet Care", "Taxes", 
-         "Legal Services", "other" ]
+         "Legal Services", "Other" ]
     ); //could also return [] if the operation fails
 }
 
