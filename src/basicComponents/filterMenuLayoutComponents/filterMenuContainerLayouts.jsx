@@ -99,7 +99,7 @@ function FilterRangeInputParam({ labelText, headingText, fieldName, toggleDispla
             </FilterParamInputSection>
             <FilterParamInputSection
                 additionalClasses={filterParamsVisibility[fieldName] ? "flex" : "hidden"}
-                labelText={labelText["rangeStart"]}
+                labelText={labelText["rangeEnd"]}
             >
                 {secondChild}
             </FilterParamInputSection>
@@ -149,7 +149,7 @@ FilterSelectInputParam.propTypes = {
 
 function FilterSortInputParam({ toggleDisplay, handleInputChange, filterParamsVisibility}){
     
-    const fields = ["value", 
+    const fields = ["currencyValue", 
                     "currency", 
                     "transactionType", 
                     "transactionCategory", 

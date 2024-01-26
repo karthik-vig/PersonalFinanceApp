@@ -100,7 +100,14 @@ function SelectInputField({additionalClasses, fieldName, handleInputChange, sele
         <select 
             className={"w-full h-8 rounded-md border border-primary-cl " + additionalClasses}
             onChange={(event) => handleInputChange(fieldName, event.target.value)}
-        >
+        >   
+            <option 
+                key="choose"
+                value="choose"
+                selected
+            > 
+                choose
+            </option>
             {selectOptions.map((option) => (
                 <option 
                     key={option}
