@@ -19,7 +19,20 @@ import mainPageAdditionalInformationReducer from './mainPageStates/additionalInf
 import mainPageSelectFilterFinancialEntityReducer from './mainPageStates/selectFilterFinancialEntity.js';
 
 //import all the reducers for the the financial entity page states
-import financialEntitySelectedItemReducer from './financialEntityPageStates/selectedItem.js';
+import financialEntityPageSelectedItemReducer from './financialEntityPageStates/selectedItem.js';
+import financialEntityPageCurrentSelectedItemReducer from './financialEntityPageStates/currentSelectedItem.js';
+import financialEntityPageFailBoxDisplayReducer from './financialEntityPageStates/failBoxDisplay.js';
+import financialEntityPageFilterDisplayReducer from './financialEntityPageStates/filterDisplay.js';
+import financialEntityPageFilterParamsVisibilityReducer from './financialEntityPageStates/filterParamsVisibility.js';
+import financialEntityPageSearchParamsReducer from './financialEntityPageStates/searchParams.js';
+import financialEntityPageSideBarItemReducer from './financialEntityPageStates/sideBarItems.js';
+import financialEntityPageSuccessBoxDisplayReducer from './financialEntityPageStates/successBoxDisplay.js';
+import financialEntityPageTriggerAddEntryReducer from './financialEntityPageStates/triggerAddEntry.js';
+import financialEntityPageTriggerDeleteEntryReducer from './financialEntityPageStates/triggerDeleteEntry.js';
+import financialEntityPageTriggerModifyEntryReducer from './financialEntityPageStates/triggerModifyEntry.js';
+import financialEntityPageTriggerSearchReducer from './financialEntityPageStates/triggerSearch.js';
+import financialEntityPageWarningBoxDisplayReducer from './financialEntityPageStates/warningBoxDisplay.js';
+
 
 const mainPageStates = combineReducers({
   selectedItem: mainPageSelectedItemReducer,
@@ -41,7 +54,19 @@ const mainPageStates = combineReducers({
 });
 
 const financialEntityPageStates = combineReducers({
-  selectedItem: financialEntitySelectedItemReducer,
+  selectedItem: financialEntityPageSelectedItemReducer,
+  currentSelectedItem: financialEntityPageCurrentSelectedItemReducer,
+  failBoxDisplayState: financialEntityPageFailBoxDisplayReducer,
+  filterDisplayState: financialEntityPageFilterDisplayReducer,
+  filterParamsVisibility: financialEntityPageFilterParamsVisibilityReducer,
+  searchParams: financialEntityPageSearchParamsReducer,
+  sideBarItems: financialEntityPageSideBarItemReducer,
+  successBoxDisplayState: financialEntityPageSuccessBoxDisplayReducer,
+  triggerAddEntryState: financialEntityPageTriggerAddEntryReducer,
+  triggerDeleteEntryState: financialEntityPageTriggerDeleteEntryReducer,
+  triggerModifyEntryState: financialEntityPageTriggerModifyEntryReducer,
+  triggerSearchState: financialEntityPageTriggerSearchReducer,
+  warningBoxDisplayState: financialEntityPageWarningBoxDisplayReducer,
 });
 
 const rootReducer = combineReducers({
