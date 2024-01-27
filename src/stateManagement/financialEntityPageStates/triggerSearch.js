@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const triggerSearchSlice = createSlice({
-    name: "triggerSearchState",
+    name: "financialEntityPage/triggerSearchState",
     initialState: false,
     reducers: {
         triggerSearch: (state) => {

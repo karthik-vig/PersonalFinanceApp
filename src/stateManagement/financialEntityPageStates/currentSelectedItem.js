@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'; 
 
 export const currentSelectedItemSlice = createSlice({
-    name: "currentSelectedItemState",
+    name: "financialEntityPage/currentSelectedItemState",
     initialState: null,
     reducers: {
         setCurrentSelectedItem: (state, action) => {

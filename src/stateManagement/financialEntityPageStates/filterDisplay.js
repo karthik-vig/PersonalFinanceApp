@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const filterDisplaySlice = createSlice({
-    name: "filterDisplayState",
+    name: "financialEntityPage/filterDisplayState",
     initialState: "hidden",
     reducers: {
         showFilter: (state) => {

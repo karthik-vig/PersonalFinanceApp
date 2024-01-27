@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const failBoxDisplaySlice = createSlice({
-    name: "failBoxDisplayState",
+    name: "financialEntityPage/failBoxDisplayState",
     initialState: "hidden",
     reducers: {
         showFailBox: (state) => {

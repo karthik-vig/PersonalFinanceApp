@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const filterParamsVisibilitySlice = createSlice({
-    name: "filterParamsVisibility",
+    name: "financialEntityPage/filterParamsVisibility",
     initialState: {
             entityType: false,
             createdDate: false,

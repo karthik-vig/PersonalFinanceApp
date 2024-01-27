@@ -17,7 +17,7 @@ getAllItems().then((result) => {
 */
 
 export const sideBarItemSlice = createSlice({
-    name: "sideBarItems",
+    name: "financialEntityPage/sideBarItems",
     initialState: [],
     reducers: {
         removeSideBarItem: (state, action) => {
