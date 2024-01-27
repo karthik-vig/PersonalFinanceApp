@@ -94,7 +94,9 @@ function setupDatabase() {
         db.run('CREATE TABLE IF NOT EXISTS financialEntities (\
                 id TEXT PRIMARY KEY, \
                 title TEXT UNIQUE, \
-                type TEXT \
+                type TEXT, \
+                createdDate datetime, \
+                modifiedDate datetime \
                 )', (err) => { 
                     if (err) { 
                         console.log(`financialEntities table creation ${err}`); 

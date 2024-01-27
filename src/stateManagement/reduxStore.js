@@ -1,42 +1,52 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
-import selectedItemReducer from './mainPageStates/selectedItem.js';
-import sideBarItemReducer from './mainPageStates/sideBarItems.js';
-import warningBoxDisplayReducer from './mainPageStates/warningBoxDisplay.js';
-import successBoxDisplayReducer from './mainPageStates/successBoxDisplay.js';
-import failBoxDisplayReducer from './mainPageStates/failBoxDisplay.js';
-import searchParamsReducer from './mainPageStates/searchParams.js';
-import filterParamsVisibilityReducer from './mainPageStates/filterParamsVisibility.js';
-import filterDisplayReducer from './mainPageStates/filterDisplay.js';
-import triggerModifyEntryReducer from './mainPageStates/triggerModifyEntry.js';
-import triggerDeleteEntryReducer from './mainPageStates/triggerDeleteEntry.js';
-import triggerAddEntryReducer from './mainPageStates/triggerAddEntry.js';
-import triggerSearchReducer from './mainPageStates/triggerSearch.js';
-import currentSelectedItemReducer from './mainPageStates/currentSelectedItem.js';
-import triggerUpdateFileReducer from './mainPageStates/triggerUpdateFile.js';
-import additionalInformationReducer from './mainPageStates/additionalInformation.js';
-import selectFilterFinancialEntityReducer from './mainPageStates/selectFilterFinancialEntity.js';
+
+//import all the reducers for the the main page states
+import mainPageSelectedItemReducer from './mainPageStates/selectedItem.js';
+import mainPageSideBarItemReducer from './mainPageStates/sideBarItems.js';
+import mainPageWarningBoxDisplayReducer from './mainPageStates/warningBoxDisplay.js';
+import mainPageSuccessBoxDisplayReducer from './mainPageStates/successBoxDisplay.js';
+import mainPageFailBoxDisplayReducer from './mainPageStates/failBoxDisplay.js';
+import mainPageSearchParamsReducer from './mainPageStates/searchParams.js';
+import mainPageFilterParamsVisibilityReducer from './mainPageStates/filterParamsVisibility.js';
+import mainPageFilterDisplayReducer from './mainPageStates/filterDisplay.js';
+import mainPageTriggerModifyEntryReducer from './mainPageStates/triggerModifyEntry.js';
+import mainPageTriggerDeleteEntryReducer from './mainPageStates/triggerDeleteEntry.js';
+import mainPageTriggerAddEntryReducer from './mainPageStates/triggerAddEntry.js';
+import mainPageTriggerSearchReducer from './mainPageStates/triggerSearch.js';
+import mainPageCurrentSelectedItemReducer from './mainPageStates/currentSelectedItem.js';
+import mainPageTriggerUpdateFileReducer from './mainPageStates/triggerUpdateFile.js';
+import mainPageAdditionalInformationReducer from './mainPageStates/additionalInformation.js';
+import mainPageSelectFilterFinancialEntityReducer from './mainPageStates/selectFilterFinancialEntity.js';
+
+//import all the reducers for the the financial entity page states
+import financialEntitySelectedItemReducer from './financialEntityPageStates/selectedItem.js';
 
 const mainPageStates = combineReducers({
-  selectedItem: selectedItemReducer,
-  sideBarItems: sideBarItemReducer,
-  warningBoxDisplayState: warningBoxDisplayReducer,
-  successBoxDisplayState: successBoxDisplayReducer,
-  failBoxDisplayState: failBoxDisplayReducer,
-  searchParams: searchParamsReducer,
-  filterParamsVisibility: filterParamsVisibilityReducer,
-  filterDisplayState: filterDisplayReducer,
-  triggerModifyEntryState: triggerModifyEntryReducer,
-  triggerDeleteEntryState: triggerDeleteEntryReducer,
-  triggerAddEntryState: triggerAddEntryReducer,
-  triggerSearchState: triggerSearchReducer,
-  currentSelectedItemState: currentSelectedItemReducer,
-  triggerUpdateFileState: triggerUpdateFileReducer,
-  additionalInformationState: additionalInformationReducer,
-  selectFilterFinancialEntityState: selectFilterFinancialEntityReducer,
+  selectedItem: mainPageSelectedItemReducer,
+  sideBarItems: mainPageSideBarItemReducer,
+  warningBoxDisplayState: mainPageWarningBoxDisplayReducer,
+  successBoxDisplayState: mainPageSuccessBoxDisplayReducer,
+  failBoxDisplayState: mainPageFailBoxDisplayReducer,
+  searchParams: mainPageSearchParamsReducer,
+  filterParamsVisibility: mainPageFilterParamsVisibilityReducer,
+  filterDisplayState: mainPageFilterDisplayReducer,
+  triggerModifyEntryState: mainPageTriggerModifyEntryReducer,
+  triggerDeleteEntryState: mainPageTriggerDeleteEntryReducer,
+  triggerAddEntryState: mainPageTriggerAddEntryReducer,
+  triggerSearchState: mainPageTriggerSearchReducer,
+  currentSelectedItemState: mainPageCurrentSelectedItemReducer,
+  triggerUpdateFileState: mainPageTriggerUpdateFileReducer,
+  additionalInformationState: mainPageAdditionalInformationReducer,
+  selectFilterFinancialEntityState: mainPageSelectFilterFinancialEntityReducer,
+});
+
+const financialEntityPageStates = combineReducers({
+  selectedItem: financialEntitySelectedItemReducer,
 });
 
 const rootReducer = combineReducers({
   mainPageStates,
+  financialEntityPageStates,
 });
 
 export default configureStore({

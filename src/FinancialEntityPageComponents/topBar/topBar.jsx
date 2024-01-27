@@ -1,23 +1,41 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import '../../index.css';
-import { useImmer } from 'use-immer';
-import FilterMenu from './FilterMenuComponents';
+//import { useImmer } from 'use-immer';
+//import { useEffect } from 'react';
+import FilterMenu from './FilterMenuComponents.jsx';
+import {  showFilter,
+    hideFilter,
+} from '../../stateManagement/financialEntityPageStates/filterDisplay.js';
+import { setSearchField, 
+        //setFilterParams,
+  } from '../../stateManagement/financialEntityPageStates/searchParams.js';
+import { triggerAddEntry } from '../../stateManagement/financialEntityPageStates/triggerAddEntry.js';
+import { setWarningBoxDisplayModifyState,
+         setWarningBoxDisplayDeleteState,
+    } from '../../stateManagement/financialEntityPageStates/warningBoxDisplay.js';
+import { useSelector, useDispatch } from 'react-redux';
+//import { setWarningBoxDisplayModifyState } from '../../stateManagement/financialEntityPageStates/warningBoxDisplay.js';
+import { faFilter, faSort, faPlus, faTrashCan, faEdit, faRefresh } from '@fortawesome/free-solid-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { triggerSearch } from '../../stateManagement/financialEntityPageStates/triggerSearch.js';
+library.add(faFilter, faSort, faPlus, faTrashCan, faEdit, faRefresh);
 
-function TopBarButton({ svgIcon, btnName, onClickHandler }) {
+function TopBarButton({ svgIcon, iconColor, btnName, onClickHandler }) {
 
     return (
         <>
         <button 
-            className="flex flex-nowrap flex-row my-3 mx-3 p-0.5 w-24 h-7 rounded-lg outline-1 hover:outline hover:outline-gray-800 hover:outline-offset-2 hover:bg-secondary-cl" 
+            className="flex flex-nowrap flex-row m-3 p-0.5 w-24 h-7 rounded-lg outline-1 hover:outline hover:outline-gray-800 hover:outline-offset-2 hover:bg-secondary-cl" 
             onClick={()=> onClickHandler()}
         >
             <FontAwesomeIcon 
-                className="m-[5%] p-[0%] w-[30%] h-[80%] " 
+                className="mx-[5%] my-0 p-[0%] w-[30%] h-[100%] " 
                 icon={svgIcon} 
+                color={iconColor}
             />
             <p 
-                className="w-auto h-[80%] text-start font-medium antialiased truncate"
+                className="w-auto h-[100%] text-start font-medium antialiased truncate"
             >
                 {btnName}
             </p>
@@ -28,127 +46,61 @@ function TopBarButton({ svgIcon, btnName, onClickHandler }) {
 
 TopBarButton.propTypes = {
     svgIcon: PropTypes.object,
+    iconColor: PropTypes.string,
     btnName: PropTypes.string,
     onClickHandler: PropTypes.func,
 };
 
-function TopBar({ svgIcons, handleSearch }) {
+function TopBar() {
 
-    const [searchParams, setSearchParams] = useImmer({
-                                                        search: "", //string input
-                                                        filter: {
-                                                            value: {
-                                                                min: null, //number input
-                                                                max: null, //number input
-                                                            },
-                                                            currency: null, //select list
-                                                            transactionType: null, //select list
-                                                            transactionCategory: null, //select list
-                                                            fromType: null, //select list
-                                                            fromEntity: null, //select list
-                                                            toType: null, //select list
-                                                            toEntity: null, //select list
-                                                            recurringEntity: null, //select list
-                                                            createdDate: { min: null, //date picker
-                                                                            max: null, //date picker
-                                                                            },
-                                                            modifiedDate: { min: null, //date picker
-                                                                            max: null, //date picker
-                                                                            },
-                                                            transactionDate: { min: null, //date picker
-                                                                                max: null, //date picker
-                                                                            },
-                                                            sort: { ascending: true, //can be true or false
-                                                                    field: null, //some valid field name
-                                                                },
-                                                        },   
-                                                    }); //set filter in searchParams
-                
-    const [filterParamsVisibility, setFilterParamsVisibility] = useImmer({
-                                                                            value: false,
-                                                                            currency: false,
-                                                                            transactionType: false,
-                                                                            transactionCategory: false,
-                                                                            fromType: false,
-                                                                            fromEntity: false,
-                                                                            toType: false,
-                                                                            toEntity: false,
-                                                                            recurringEntity: false,
-                                                                            createdDate: false,
-                                                                            modifiedDate: false,
-                                                                            transactionDate: false,
-                                                                            sort: false,
-                                                                        });
+    const filterDisplayState = useSelector((state) => state.financialEntityPageStates.filterDisplayState);
+    const dispatch = useDispatch();
 
-    /*
-    const handleFilterClick = (filterParams) => { //set filter in searchParams 
-        setSearchParams(draft => {
-            draft.filter = filterParams;
-        });
-    };
-    */
-
-    const [filterDisplayState, setFilterDisplayState] = useImmer("hidden"); //hidden or visible
-
-    const handleFilterBtnClick = () => { 
-        if ( filterDisplayState === "hidden" ) {
-            setFilterDisplayState("block");
-        }
-        else {
-            setFilterDisplayState("hidden");
-        }
-    };
 
     return (
         <div 
             className="flex flex-row flex-nowrap relative z-10 justify-center h-14 mx-7 mt-10 mb-4 rounded-lg border bg-surface-cl drop-shadow-lg " style={{ width: 'calc(100% - 56px)' }}
         >
             <TopBarButton 
-                svgIcon={svgIcons.faPlus} 
+                svgIcon={faPlus} 
+                iconColor="#00ff00"
                 btnName="Create" 
-                onClickHandler={ (event, btnName) => {return btnName;} }
+                onClickHandler={() => dispatch(triggerAddEntry()) }
             />
             <TopBarButton 
-                svgIcon={svgIcons.faEdit} 
+                svgIcon={faEdit} 
+                iconColor="#eab308"
                 btnName="Modify" 
-                onClickHandler={ (event, btnName) => {return btnName;} }
+                onClickHandler={ () => dispatch(setWarningBoxDisplayModifyState("block")) }
             />
             <TopBarButton 
-                svgIcon={svgIcons.faTrashCan} 
+                svgIcon={faTrashCan}
+                iconColor="#ff0000" 
                 btnName="Delete" 
-                onClickHandler={ (event, btnName) => {return btnName;} }
+                onClickHandler={ () => dispatch(setWarningBoxDisplayDeleteState("block")) }
             />
             <input 
                 type="text" 
                 placeholder="Search" 
-                className="h-10 w-[50%] mx-4 mt-2 mb-2 rounded-lg border bg-background-cl" 
-                onChange={(event) => setSearchParams(draft => {draft.search = event.target.value;})}
-                onKeyDown={ (event) => handleSearch(event.code, searchParams, filterParamsVisibility) }
+                className="h-10 w-[50%] mx-4 my-2 py-1 px-2 rounded-lg border bg-background-cl" 
+                onChange={(event) => dispatch(setSearchField(event.target.value))}
+                onKeyDown={ (event) => { if (event.code === "Enter") { dispatch(triggerSearch()); } } }
             />
             <TopBarButton 
-                svgIcon={svgIcons.faFilter} 
+                svgIcon={faFilter} 
+                iconColor="#0000ff"
                 btnName="Filter" 
-                onClickHandler={ handleFilterBtnClick }
+                onClickHandler={ filterDisplayState === "hidden" ? () => dispatch(showFilter()) : () => dispatch(hideFilter()) }
             />
             <TopBarButton 
-                svgIcon={svgIcons.faRefresh} 
+                svgIcon={faRefresh} 
+                iconColor="#00ff00"
                 btnName="Refresh" 
-                onClickHandler={ (event, btnName) => {return btnName;} }
+                onClickHandler={ () => console.log("Refresh button clicked") }
             />
-            <FilterMenu 
-                displayState={filterDisplayState}
-                setSearchParams={setSearchParams}
-                filterParamsVisibility={filterParamsVisibility}
-                setFilterParamsVisibility={setFilterParamsVisibility}
-                changeDisplayState={setFilterDisplayState}
-            />
+            <FilterMenu />
         </div>
     );
 }
-
-TopBar.propTypes = {
-    svgIcons: PropTypes.object,
-    handleSearch: PropTypes.func,
-};
 
 export default TopBar;
