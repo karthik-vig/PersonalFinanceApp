@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const warningBoxDisplaySlice = createSlice({
-    name: "warningBoxDisplayState",
+    name: "mainPage/warningBoxDisplayState",
     initialState: {
         refreshBtn: "hidden",
         addBtn: "hidden",

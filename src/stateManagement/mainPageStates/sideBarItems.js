@@ -17,7 +17,7 @@ getAllItems().then((result) => {
 */
 
 export const sideBarItemSlice = createSlice({
-    name: "sideBarItems",
+    name: "mainPage/sideBarItems",
     initialState: [],
     reducers: {
         removeSideBarItem: (state, action) => {

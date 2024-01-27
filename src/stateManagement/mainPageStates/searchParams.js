@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 export const searchParamsSlice = createSlice({
-    name: "searchParams",
+    name: "mainPage/searchParams",
     initialState: {
         search: "", //string input
         filter: {

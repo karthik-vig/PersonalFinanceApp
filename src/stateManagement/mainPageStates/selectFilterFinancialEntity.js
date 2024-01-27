@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const selectFilterFinancialEntitySlice = createSlice({
-    name: "selectFilterFinancialEntityState",
+    name: "mainPage/selectFilterFinancialEntityState",
     initialState: {
         type: null,
         fieldname: null,

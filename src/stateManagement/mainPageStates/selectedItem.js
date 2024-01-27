@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 //import  { useDispatch } from "react-redux";
 
 export const selectedItemSlice = createSlice({
-    name: "selectedItem",
+    name: "mainPage/selectedItem",
     initialState: {
                     id: "", //uuidv4 template
                     title: null,

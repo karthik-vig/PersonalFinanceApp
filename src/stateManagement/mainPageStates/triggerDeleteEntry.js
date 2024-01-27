@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"; 
 
 export const triggerDeleteEntrySlice = createSlice({
-    name: "triggerDeleteEntryState",
+    name: "mainPage/triggerDeleteEntryState",
     initialState: false,
     reducers: {
         triggerDeleteEntry: (state) => {

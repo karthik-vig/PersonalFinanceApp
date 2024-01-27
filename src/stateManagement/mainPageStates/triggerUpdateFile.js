@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const triggerUpdateFileSlice = createSlice({
-    name: "triggerUpdateFileState",
+    name: "mainPage/triggerUpdateFileState",
     initialState: {
         addFile: false,
         deleteFile: {status: false, fileName: null},
