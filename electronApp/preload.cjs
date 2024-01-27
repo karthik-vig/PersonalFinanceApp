@@ -24,6 +24,12 @@ contextBridge.exposeInMainWorld('financialEntityOperations', {
     //getFileBlob: (fileName) => {ipcRenderer.invoke('getFileBlob', fileName)},
     //setFileBlob: (fileName, arrayBuffer) => {ipcRenderer.invoke('setFileBlob', fileName, arrayBuffer)},
     getTransactionEntities: () => ipcRenderer.invoke('financialEntityOperations:getTransactionEntities'),
+    getAllItems: () => ipcRenderer.invoke('financialEntityOperations:getAllItems'),
+    getItems: (searchParams, filterParamsVisibility) => ipcRenderer.invoke('financialEntityOperations:getItems', searchParams, filterParamsVisibility),
+    createEntry: () => ipcRenderer.invoke('financialEntityOperations:createEntry'),
+    deleteItem: (uuid) => ipcRenderer.invoke('financialEntityOperations:deleteItem', uuid),
+    modifyItem: (selectedItem) => ipcRenderer.invoke('financialEntityOperations:modifyItem', selectedItem),
+    getSelectedItem: (uuid) => ipcRenderer.invoke('financialEntityOperations:getSelectedItem', uuid),
 });
 
 contextBridge.exposeInMainWorld('initializeDatabase', {

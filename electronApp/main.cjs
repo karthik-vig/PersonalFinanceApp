@@ -21,7 +21,7 @@ import {
 */
 const initializeDatabase = require('./database/initializeDatabase.cjs');
 const transactionOperations = require('./database/transactionOperations.cjs');
-const financialEntitiesOperation = require('./database/financialEntityOperation.cjs');
+const financialEntitiesOperations = require('./database/financialEntityOperation.cjs');
 const recurringTransactionOperations = require('./database/recurringTransactionOperations.cjs');
 
 function createWindow() {
@@ -101,7 +101,15 @@ app.whenReady().then(() => {
     });
 
     //FINANCIAL ENTITY OPERATIONS
-    ipcMain.handle('financialEntityOperations:getTransactionEntities', financialEntitiesOperation.getTransactionEntities);
+    ipcMain.handle('financialEntityOperations:getTransactionEntities', financialEntitiesOperations.getTransactionEntities);
+    ipcMain.handle('financialEntityOperations:getAllItems', financialEntitiesOperations.getAllItems);
+    ipcMain.handle('financialEntityOperations:getItems', financialEntitiesOperations.getItems);
+    ipcMain.handle('financialEntityOperations:createEntry', financialEntitiesOperations.createEntry);
+    ipcMain.handle('financialEntityOperations:deleteItem', financialEntitiesOperations.deleteItem);
+    ipcMain.handle('financialEntityOperations:modifyItem', financialEntitiesOperations.modifyItem);
+    ipcMain.handle('financialEntityOperations:getSelectedItem', financialEntitiesOperations.getSelectedItem);
+
+    
 
     //INITIALIZE DATABASE OPERATIONS
     ipcMain.handle('initializeDatabase:getCurrencies', initializeDatabase.getCurrencies);
