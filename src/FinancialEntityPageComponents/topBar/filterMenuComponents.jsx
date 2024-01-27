@@ -17,8 +17,8 @@ import { toggleFilterParamsVisibility } from '../../stateManagement/financialEnt
 import { setFilterParams } from '../../stateManagement/financialEntityPageStates/searchParams.js';
 import {FilterParamSection,
         FilterParamInputSection,
-        SelectInputField,
     } from '../../basicComponents/filterMenuLayoutComponents/filterMenuContainerLayouts.jsx';
+import { SelectInputField } from '../../basicComponents/filterMenuLayoutComponents/basicFilterInputComponents.jsx';
 
 
 function FilterSortInputParam({ toggleDisplay, handleInputChange, filterParamsVisibility}){

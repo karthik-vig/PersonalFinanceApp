@@ -271,4 +271,6 @@ export {
         FilterSelectInputParam,
         FilterSortInputParam,
         FilterSelectFinancialEntityInputParam,
+        FilterParamSection,
+        FilterParamInputSection,
     };
