@@ -41,7 +41,7 @@ function SideBar() {
 
     //get the selecteded item data from the main process
     useEffect(() => {
-        if (currentSelectedItemState === null) return;
+        if (currentSelectedItemState === null || currentSelectedItemState === undefined) return;
         console.log("currentSelectedItemState is not null, triggering getSelectedItem")
         console.log(currentSelectedItemState);
         window.financialEntityOperations.getSelectedItem(currentSelectedItemState).then((selectedItem) => {
@@ -62,8 +62,8 @@ function SideBar() {
         if (sideBarItem.type === "Internal") fontColor = "text-green-500";
         
         console.log("setting sidebaritem: ", sideBarItem.id);
-        console.log("setting sidebaritem cat: ", sideBarItem.transactionCategory);
-        console.log("setting svg icons cat: ", svgIcons.current[sideBarItem.transactionCategory]);
+        console.log("setting sidebaritem cat: ", sideBarItem.type);
+        console.log("setting svg icons cat: ", svgIcons.current[sideBarItem.type]);
 
         let icon = faTimes;
         let iconColor = "#FF0000";
@@ -91,6 +91,8 @@ function SideBar() {
         <GenericSideBar 
             items={genericItems} 
             handleItemClick={(uuid) => { //dispatch(triggerSearch());
+                 console.log('financialEntityPage: currentSelectedState is: ', currentSelectedItemState);
+                 console.log("dispatching setCurrentSelectedItem in financialEntityPage in sideBar.jsx; the uuid is: ", uuid);
                  dispatch(setCurrentSelectedItem(uuid));  
                 }}
             currentSelectedItemState={currentSelectedItemState}

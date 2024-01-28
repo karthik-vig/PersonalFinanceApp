@@ -47,6 +47,7 @@ app.whenReady().then(() => {
 
     const db = initializeDatabase.initDatabase();
     transactionOperations.setDB(db);
+    financialEntitiesOperations.setDB(db);
 
     createWindow();
 

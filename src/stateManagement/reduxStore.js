@@ -55,7 +55,7 @@ const mainPageStates = combineReducers({
 
 const financialEntityPageStates = combineReducers({
   selectedItem: financialEntityPageSelectedItemReducer,
-  currentSelectedItem: financialEntityPageCurrentSelectedItemReducer,
+  currentSelectedItemState: financialEntityPageCurrentSelectedItemReducer,
   failBoxDisplayState: financialEntityPageFailBoxDisplayReducer,
   filterDisplayState: financialEntityPageFilterDisplayReducer,
   filterParamsVisibility: financialEntityPageFilterParamsVisibilityReducer,
