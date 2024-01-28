@@ -161,6 +161,7 @@ function getItems(event, searchParams, filterParamsVisibility) {
         searchParams.filter.sort.field = searchParams.filter.sort.field === "currencyValue" ? "value" : searchParams.filter.sort.field;
         //there might be problem with min and max value for the value field as 0 value will be rejected.
         //will need to fix this later
+        //also manually creating the query statement is not a good idea; need to loop through the searchParams.filter object
         const filterValueStmt = filterParamsVisibility.value && searchParams.filter.value.max && searchParams.filter.value.min ? ` AND (value BETWEEN ${searchParams.filter.value.min} AND ${searchParams.filter.value.max})`: ``;
         const filterCurrencyStmt = filterParamsVisibility.currency && searchParams.filter.currency && searchParams.filter.currency !== "choose" ? ` AND (currency = "${searchParams.filter.currency}")` : "";
         const filterTransactionTypeStmt = filterParamsVisibility.transactionType && searchParams.filter.transactionType && searchParams.filter.transactionType !== "choose" ? ` AND (transactionType = "${searchParams.filter.transactionType}")` : ``;

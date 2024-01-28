@@ -63,9 +63,9 @@ function setupDatabase() {
                 toReference TEXT, \
                 recurringReference TEXT, \
                 file bool, \
-                createdDate datetime, \
-                modifiedDate datetime, \
-                transactionDate datetime \
+                createdDate DATETIME, \
+                modifiedDate DATETIME, \
+                transactionDate DATETIME \
                 )', (err) => { 
                     if (err) { 
                         console.log(`Transaction table creation ${err}`); 
@@ -95,8 +95,8 @@ function setupDatabase() {
                 id TEXT PRIMARY KEY, \
                 title TEXT UNIQUE, \
                 type TEXT, \
-                createdDate datetime, \
-                modifiedDate datetime \
+                createdDate DATETIME, \
+                modifiedDate DATETIME \
                 )', (err) => { 
                     if (err) { 
                         console.log(`financialEntities table creation ${err}`); 
