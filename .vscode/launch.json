@@ -5,6 +5,7 @@
         "name": "Debug Main Process",
         "type": "node",
         "request": "launch",
+        "preLaunchTask": "npm: build",
         "cwd": "${workspaceFolder}",
         "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
         "windows": {
@@ -13,5 +14,5 @@
         "args" : ["."],
         "outputCapture": "std"
       }
-    ]
+    ],
   }
