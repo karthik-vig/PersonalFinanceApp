@@ -23,10 +23,10 @@ import { SelectInputField } from '../../basicComponents/filterMenuLayoutComponen
 
 function FilterSortInputParam({ toggleDisplay, handleInputChange, filterParamsVisibility}){
     
-    const fields = ["createdDate",
-                    "modifiedDate",
-                    "entityType",
-                ]
+    const fields = ["type",
+                    "createdDate",
+                    "modifiedDate", 
+                    ]
     
     return (
         <FilterParamSection
@@ -88,7 +88,7 @@ function FilterMenu(){
             </button>
             <FilterSelectInputParam
                 headingText="Entity Type"
-                fieldName="entityType"
+                fieldName="type"
                 toggleDisplay={toggleFieldVisibility}
                 handleInputChange={handleInputChange}
                 filterParamsVisibility={filterParamsVisibility}

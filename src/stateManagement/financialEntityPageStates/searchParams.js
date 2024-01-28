@@ -5,7 +5,7 @@ export const searchParamsSlice = createSlice({
     initialState: {
         search: "", //string input
         filter: {
-            entityType: null, //string input must be "Internal" or "External"
+            type: null, //string input must be "Internal" or "External"
             createdDate: { min: null, //date picker
                             max: null, //date picker
                             },
@@ -28,8 +28,9 @@ export const searchParamsSlice = createSlice({
             if (fieldSuffice === "Min" || fieldSuffice === "Max") {
                 const filterFieldName = action.payload.fieldName.slice(0, -3);
                 state.filter[filterFieldName][fieldSuffice.toLowerCase()] = action.payload.fieldValue;
-            }
-            else {
+            } else if (action.payload.fieldName === "sortAscending" || action.payload.fieldName === "sortField") {
+                state.filter.sort[action.payload.fieldName.slice(4).toLowerCase()] = action.payload.fieldValue;
+            } else {
                 state.filter[action.payload.fieldName] = action.payload.fieldValue;
             }
         }
