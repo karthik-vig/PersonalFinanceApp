@@ -1,8 +1,10 @@
+import { PropTypes } from 'prop-types';
 import '../../index.css';
 import {H6HeadingText, 
         TextInputSection, 
         RadioButtonSection,  
-        SectionContainer
+        SectionContainer,
+        DatetimeInputSection,
     } from '../../basicComponents/userInputLayoutComponents/basicUserInputComponents.jsx';
 import { handleItemClick,
     } from '../../stateManagement/financialEntityPageStates/selectedItem.js';
@@ -68,8 +70,38 @@ function EntityTypeSection() {
     );
 }
 
+function DatetimeInput({ datetimeValue, 
+                         heading, 
+                         fieldName, 
+                         readonly, 
+                         }) {
 
+    return (
+        <SectionContainer additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80">
+            <H6HeadingText 
+                additonalClasses="h-[100%] w-[40%]"
+            >
+                {heading}
+            </H6HeadingText>
+            <DatetimeInputSection 
+                datetimeValue={datetimeValue}
+                additonalClasses="h-[100%] w-[30%]"
+                readonly={readonly}
+                fieldName={fieldName}
+                handleValueChange={handleItemClick}
+            />
+        </SectionContainer>
+    );
+}
+
+DatetimeInput.propTypes = {
+    datetimeValue: PropTypes.string,
+    heading: PropTypes.string,
+    fieldName: PropTypes.string,
+    readonly: PropTypes.bool,
+};
 
 export {TitleSection, 
     EntityTypeSection,
+    DatetimeInput,
     };

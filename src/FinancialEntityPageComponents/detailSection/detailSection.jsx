@@ -3,6 +3,7 @@
 import '../../index.css';
 import {TitleSection, 
         EntityTypeSection, 
+        DatetimeInput, 
     } from './sectionComponents';
 //import { useImmer } from 'use-immer';
 import { useSelector,
@@ -34,6 +35,18 @@ function DetailSection() {
         >
             <TitleSection />
             <EntityTypeSection />
+            <DatetimeInput 
+                datetimeValue={selectedItem.createdDate}
+                heading="Created Date"
+                fieldName="createdDate"
+                readonly={true}
+            />
+            <DatetimeInput 
+                datetimeValue={selectedItem.modifiedDate}
+                heading="Modified Date"
+                fieldName="modifiedDate"
+                readonly={true}
+            />
         </div>
     );
 }
