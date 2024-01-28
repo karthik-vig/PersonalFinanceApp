@@ -47,19 +47,26 @@ function getItems(event, searchParams, filterParamsVisibility) {
     console.log("filterParamsVisibility = ", filterParamsVisibility);
 
     return new Promise((resolve) => {
-        let queryStmt = `SELECT id, title, type FROM financialEntities WHERE title LIKE "%${searchParams.searchText}%"`;
+        let queryStmt = `SELECT id, title, type FROM financialEntities WHERE title LIKE "%${searchParams.search}%"`;
         Object.keys(filterParamsVisibility).forEach((fieldname) => {
-            if (filterParamsVisibility[fieldname] && searchParams.filter[fieldname]) {
+            if (fieldname !== "sort" && filterParamsVisibility[fieldname] && searchParams.filter[fieldname]) {
                 if (typeof searchParams.filter[fieldname] === "object" &&
                     searchParams.filter[fieldname].min !== null &&
                     searchParams.filter[fieldname].max !== null) {
-                        queryStmt += ` AND (${fieldname} BETWEEN ${searchParams.filter[fieldname].min} AND ${searchParams.filter.value.max})`;
+                        queryStmt += ` AND (${fieldname} BETWEEN ${searchParams.filter[fieldname].min} AND ${searchParams.filter[fieldname].max})`;
                 } else {
                     queryStmt += ` AND (${fieldname} = "${searchParams.filter[fieldname]}")`;
                 }
             }
         });
-        const filterSortStmt = filterParamsVisibility.sort && searchParams.filter.sort.ascending === true && searchParams.filter.sort.field ? ` ORDER BY ${searchParams.filter.sort.field} ASC` : searchParams.filter.sort.field && !searchParams.filter.sort.ascending === false ? ` ORDER BY ${searchParams.filter.sort.field} DESC` : ``;
+        const filterSortStmt = ((filterParamsVisibility.sort && 
+                                 searchParams.filter.sort.ascending === "true" && 
+                                 searchParams.filter.sort.field) ? 
+                                ` ORDER BY ${searchParams.filter.sort.field} ASC` : 
+                                    (searchParams.filter.sort.field && 
+                                     searchParams.filter.sort.ascending === false) ? 
+                                     ` ORDER BY ${searchParams.filter.sort.field} DESC` : ``
+                                );
         queryStmt += filterSortStmt;
 
         db.all(queryStmt, (err, rows) => { 
