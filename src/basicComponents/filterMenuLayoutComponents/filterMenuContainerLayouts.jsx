@@ -214,15 +214,9 @@ FilterSelectFinancialEntityInputParam.propTypes = {
 
 function FilterSortInputParam({ toggleDisplay, handleInputChange, filterParamsVisibility}){
     
-    const fields = ["currencyValue", 
-                    "currency", 
-                    "transactionType", 
-                    "transactionCategory", 
-                    "fromType", 
-                    "fromEntity", 
-                    "toType", 
-                    "toEntity", 
-                    "recurringEntity", 
+    const fields = ["title",
+                    "description",
+                    "value",  
                     "createdDate", 
                     "modifiedDate", 
                     "transactionDate",

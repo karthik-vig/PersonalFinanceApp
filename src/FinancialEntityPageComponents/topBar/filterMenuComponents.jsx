@@ -23,7 +23,8 @@ import { SelectInputField } from '../../basicComponents/filterMenuLayoutComponen
 
 function FilterSortInputParam({ toggleDisplay, handleInputChange, filterParamsVisibility}){
     
-    const fields = ["type",
+    const fields = ["title",
+                    "description",
                     "createdDate",
                     "modifiedDate", 
                     ]

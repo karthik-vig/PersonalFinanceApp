@@ -158,7 +158,41 @@ function getItems(event, searchParams, filterParamsVisibility) {
 
         fetchAllReferenceIDs.then(([filterFromEntityStmt, filterToEntityStmt, filterRecurringEntityStmt]) => {
 
-        searchParams.filter.sort.field = searchParams.filter.sort.field === "currencyValue" ? "value" : searchParams.filter.sort.field;
+        let queryStmt = `SELECT id, title, transactionDate, value, transactionType, transactionCategory FROM transactions WHERE (title LIKE "%${searchParams.search}%" OR description LIKE "%${searchParams.search}%")`;
+        Object.keys(filterParamsVisibility).forEach((fieldname) => { 
+            if (fieldname !== "sort" && 
+                filterParamsVisibility[fieldname] && 
+                searchParams.filter[fieldname] !== null &&
+                searchParams.filter[fieldname] !== undefined) {
+                if (typeof searchParams.filter[fieldname] === "object" &&
+                    searchParams.filter[fieldname].min !== null &&
+                    searchParams.filter[fieldname].max !== null &&
+                    searchParams.filter[fieldname].min !== undefined &&
+                    searchParams.filter[fieldname].max !== undefined) {
+                        if (fieldname.slice(-4) === "Date"){ 
+                            queryStmt += ` AND (${fieldname} BETWEEN "${searchParams.filter[fieldname].min + ":00"}" AND "${searchParams.filter[fieldname].max + ":00"}")`;
+                        } else {
+                            queryStmt += ` AND (${fieldname} BETWEEN ${searchParams.filter[fieldname].min} AND ${searchParams.filter[fieldname].max})`;
+                        }
+                } else if (fieldname !== "fromEntity" && 
+                           fieldname !== "toEntity" && 
+                           fieldname !== "recurringEntity") {
+                    queryStmt += ` AND (${fieldname} = "${searchParams.filter[fieldname]}")`;
+                }
+            }
+         });
+        queryStmt += filterFromEntityStmt;
+        queryStmt += filterToEntityStmt;
+        queryStmt += filterRecurringEntityStmt;
+         let filterSortStmt = ``;
+         if (filterParamsVisibility.sort && 
+            searchParams.filter.sort.field !== null && 
+            searchParams.filter.sort.field !== undefined) { 
+                filterSortStmt = ` ORDER BY ${searchParams.filter.sort.field}`;
+                filterSortStmt += searchParams.filter.sort.ascending === "true" ? " ASC" : searchParams.filter.sort.ascending === "false" ? " DESC" : ``;
+            }
+        queryStmt += filterSortStmt;
+        /*
         //there might be problem with min and max value for the value field as 0 value will be rejected.
         //will need to fix this later
         //also manually creating the query statement is not a good idea; need to loop through the searchParams.filter object
@@ -180,7 +214,8 @@ function getItems(event, searchParams, filterParamsVisibility) {
         const queryStmt = `SELECT id, title, transactionDate, value, transactionType, transactionCategory FROM transactions WHERE (title LIKE "%${searchParams.search}%" OR description LIKE "%${searchParams.search}%")`
         //add up all the query statements
         const finalQueryStmt = queryStmt + filterValueStmt + filterCurrencyStmt + filterTransactionTypeStmt + filterTransactionCategoryStmt + filterFromEntityStmt + filterToEntityStmt + filterRecurringEntityStmt + filterCreatedDateStmt + filterModifiedDateStmt + filterTransactionDateStmt + filterSortStmt;
-        db.all(finalQueryStmt, (err, rows) => { 
+        */
+        db.all(queryStmt, (err, rows) => { 
             if (err) {
                 console.log(`Get Items Error ${err}`);
                 resolve(null);
@@ -622,8 +657,8 @@ function modifyItem(event, selectedItem){
                             toReferenceID,
                             recurringReferenceID,
                             selectedItem.file.length > 0,
-                            new Date().toISOString(),
-                            selectedItem.transactionDate,
+                            new Date().toISOString().substring(0, 19),
+                            selectedItem.transactionDate + ":00",
                             selectedItem.id,
                             (err) => {
                             if (err) {
@@ -672,7 +707,7 @@ function createEntry() {
 
     db.serialize(() => {
         
-        const currentDateTime = new Date().toISOString();
+        const currentDateTime = new Date().toISOString().substring(0, 19);
 
         db.run(`INSERT INTO transactions (\
             id, \

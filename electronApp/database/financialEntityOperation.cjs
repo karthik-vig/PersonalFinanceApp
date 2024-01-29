@@ -49,24 +49,32 @@ function getItems(event, searchParams, filterParamsVisibility) {
     return new Promise((resolve) => {
         let queryStmt = `SELECT id, title, type FROM financialEntities WHERE title LIKE "%${searchParams.search}%"`;
         Object.keys(filterParamsVisibility).forEach((fieldname) => {
-            if (fieldname !== "sort" && filterParamsVisibility[fieldname] && searchParams.filter[fieldname]) {
+            if (fieldname !== "sort" && 
+                filterParamsVisibility[fieldname] && 
+                searchParams.filter[fieldname] !== null &&
+                searchParams.filter[fieldname] !== undefined) {
                 if (typeof searchParams.filter[fieldname] === "object" &&
                     searchParams.filter[fieldname].min !== null &&
-                    searchParams.filter[fieldname].max !== null) {
-                        queryStmt += ` AND (${fieldname} BETWEEN ${searchParams.filter[fieldname].min} AND ${searchParams.filter[fieldname].max})`;
+                    searchParams.filter[fieldname].max !== null &&
+                    searchParams.filter[fieldname].min !== undefined &&
+                    searchParams.filter[fieldname].max !== undefined) {
+                        if (fieldname.slice(-4) === "Date"){ 
+                            queryStmt += ` AND (${fieldname} BETWEEN "${searchParams.filter[fieldname].min + ":00"}" AND "${searchParams.filter[fieldname].max + ":00"}")`;
+                        } else {
+                            queryStmt += ` AND (${fieldname} BETWEEN ${searchParams.filter[fieldname].min} AND ${searchParams.filter[fieldname].max})`;
+                        }
                 } else {
                     queryStmt += ` AND (${fieldname} = "${searchParams.filter[fieldname]}")`;
                 }
             }
         });
-        const filterSortStmt = ((filterParamsVisibility.sort && 
-                                 searchParams.filter.sort.ascending === "true" && 
-                                 searchParams.filter.sort.field) ? 
-                                ` ORDER BY ${searchParams.filter.sort.field} ASC` : 
-                                    (searchParams.filter.sort.field && 
-                                     searchParams.filter.sort.ascending === false) ? 
-                                     ` ORDER BY ${searchParams.filter.sort.field} DESC` : ``
-                                );
+        let filterSortStmt = ``;
+         if (filterParamsVisibility.sort && 
+            searchParams.filter.sort.field !== null && 
+            searchParams.filter.sort.field !== undefined) { 
+                filterSortStmt = ` ORDER BY ${searchParams.filter.sort.field}`;
+                filterSortStmt += searchParams.filter.sort.ascending === "true" ? " ASC" : searchParams.filter.sort.ascending === "false" ? " DESC" : ``;
+            }
         queryStmt += filterSortStmt;
 
         db.all(queryStmt, (err, rows) => { 
@@ -95,7 +103,7 @@ function createEntry() {
 
     return new Promise((resolve) => {
         const uuid = uuidv4();
-        const currentDate = new Date().toISOString().substring(0, 16);
+        const currentDate = new Date().toISOString().substring(0, 19);
         db.run(`INSERT INTO financialEntities (id, title, type, createdDate, modifiedDate) \
                 VALUES (?, ?, ?, ?, ?)`, uuid, "New Entry", null, currentDate, currentDate, (err) => {
             if (err) {
@@ -139,7 +147,7 @@ function modifyItem(event, selectedItem) {
                 WHERE id = ?`, 
                 selectedItem.title, 
                 selectedItem.type, 
-                new Date().toISOString().substring(0, 16), 
+                new Date().toISOString().substring(0, 19), 
                 selectedItem.id,   
                 (err) => {
                     if (err) {
