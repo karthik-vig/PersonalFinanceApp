@@ -1,6 +1,6 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path');
-const fs = require('node:fs');
+//const fs = require('node:fs');
 /*
 import {
         //initializeDatabase, 
@@ -65,41 +65,8 @@ app.whenReady().then(() => {
     ipcMain.handle('transactionOperations:deleteItem', transactionOperations.deleteItem);
     ipcMain.handle('transactionOperations:modifyItem', transactionOperations.modifyItem);
     ipcMain.handle('transactionOperations:createEntry', transactionOperations.createEntry);
-
-    ipcMain.handle('transactionOperations:openFileDialog', async () => {
-        const { filePaths } = await dialog.showOpenDialog({
-            properties: ['openFile'],
-            filters: [
-                { name: 'All Files', extensions: ['*'] }
-              ],
-        });
-        const fileNames = []
-        filePaths.forEach((filePath) => {
-            console.log(path);
-            const bufferData = fs.readFileSync(filePath);
-            const fileName = path.basename(filePath);
-            fileNames.push(fileName);
-            transactionOperations.setFileBlob(fileName, bufferData);
-        });
-        return fileNames;
-    });
-
-    ipcMain.handle('transactionOperations:saveFileDialog', async ( fileName ) => {
-        const { filePath } = await dialog.showSaveDialog({
-            title: 'Save File',
-            //defaultPath: fileName,
-            filters: [
-                { name: 'All Files', extensions: ['*'] }
-              ],
-        });
-        if (filePath) {
-            const bufferData = transactionOperations.getFileBlob(fileName);
-            if (bufferData === null) return false;
-            fs.writeFileSync(filePath, bufferData);
-            return true;
-        }
-        return false;
-    });
+    ipcMain.handle('transactionOperations:openFileDialog', transactionOperations.openGetFileDialog);
+    ipcMain.handle('transactionOperations:saveFileDialog', transactionOperations.openSaveFileDialog);
 
     //FINANCIAL ENTITY OPERATIONS
     ipcMain.handle('financialEntityOperations:getTransactionEntities', financialEntitiesOperations.getTransactionEntities);

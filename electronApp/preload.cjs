@@ -16,7 +16,7 @@ contextBridge.exposeInMainWorld('transactionOperations', {
     createEntry: () => ipcRenderer.invoke('transactionOperations:createEntry'),
     //getTransactionEntities: () => ipcRenderer.invoke('financialEntityOperations:getTransactionEntities'),
     openFileDialog: () => ipcRenderer.invoke('transactionOperations:openFileDialog'),
-    saveFileDialog: () => ipcRenderer.invoke('transactionOperations:saveFileDialog'),
+    saveFileDialog: (fileName) => ipcRenderer.invoke('transactionOperations:saveFileDialog', fileName),
 });
 
 contextBridge.exposeInMainWorld('financialEntityOperations', {

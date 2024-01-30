@@ -1,4 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
+const { dialog } = require('electron');
+const path = require('node:path');
+const fs = require('node:fs');
 
 let currentSelectedItemFiles = {};
 let db = null;
@@ -13,8 +16,8 @@ function setDB(database) {
 function getFileBlob(fileName) {
     //communicate with backend to get the file blob
     console.log( "get file blob fileName: ", fileName);
-    const fileBufferData = currentSelectedItemFiles.fileName ?? null;
-    return  fileBufferData;//could also return null if the operation fails
+    return currentSelectedItemFiles[fileName] ?? null; //could also return null if the operation fails
+    //return  fileBufferData;
 }
 
 function setFileBlob(fileName, arrayBuffer) {
@@ -760,10 +763,49 @@ function createEntry() {
 }
 
 
+async function openGetFileDialog(){
+    const { filePaths } = await dialog.showOpenDialog({
+        properties: ['openFile'],
+        filters: [
+            { name: 'All Files', extensions: ['*'] }
+          ],
+    });
+    const fileNames = []
+    filePaths.forEach((filePath) => {
+        console.log(path);
+        const bufferData = fs.readFileSync(filePath);
+        const fileName = path.basename(filePath);
+        fileNames.push(fileName);
+        setFileBlob(fileName, bufferData);
+    });
+    return fileNames;
+}
+
+
+async function openSaveFileDialog(event, fileName ){
+    const bufferData = getFileBlob(fileName);
+    const saveFileResult = await dialog.showSaveDialog({
+        title: 'Save File',
+        defaultPath: path.join(__dirname, fileName),
+        filters: [
+            { name: 'All Files', extensions: ['*'] }
+          ],
+    });
+    if (saveFileResult.canceled || !saveFileResult.filePath || !bufferData) return false;
+    try {
+        fs.writeFileSync(saveFileResult.filePath, bufferData);
+    } catch (err) {
+        console.log(err);
+        return false;
+    }
+    return true;
+}
+
+
 module.exports = {
     setDB,
-    getFileBlob,
-    setFileBlob,
+    //getFileBlob,
+    //setFileBlob,
     deleteFileBlob,
     getFileEntries,
     getAllItems,
@@ -772,4 +814,6 @@ module.exports = {
     deleteItem,
     modifyItem,
     createEntry,
+    openGetFileDialog,
+    openSaveFileDialog,
 };
