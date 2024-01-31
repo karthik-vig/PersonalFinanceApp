@@ -22,7 +22,16 @@ export const selectedItemSlice = createSlice({
                 state = action.payload;
                 return state;
            }
-           return null;
+           else {
+                state = {
+                    id: "", //uuidv4 template
+                    title: null,
+                    type: null, 
+                    createdDate: "YYYY-MM-DDThh:mm",
+                    modifiedDate: "YYYY-MM-DDThh:mm",
+                }
+           }
+           return state;
         },
         resetSelectedItem: (state) => {
             state = {

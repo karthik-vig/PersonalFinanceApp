@@ -124,16 +124,62 @@ function deleteItem(event, uuid) {
     console.log("delete entry uuid = ", uuid);
 
     return new Promise((resolve) => {
-        db.run(`DELETE FROM financialEntities WHERE id = ?`, uuid, (err) => {
-            if (err) {
-                console.log("Financial Entity Operations : deleteItem error = ", err);
-                resolve(false);
-            }
-            else {
-                console.log("Financial Entity Operations : deleteItem success");
-                resolve(true);
-            }
+        const deleteFiancialEntity = new Promise((resolve, reject) => {
+            db.run(`DELETE FROM financialEntities WHERE id = ?`, uuid, (err) => {
+                if (err) {
+                    console.log("Financial Entity Operations : deleteItem error = ", err);
+                    reject(err);
+                }
+                else {
+                    console.log("Financial Entity Operations : deleteItem success");
+                    resolve(true);
+                }
+            });
         });
+
+        const deleteTransactionsFromReference = new Promise((resolve, reject) => {
+            db.run(`UPDATE transactions SET fromReference = NULL WHERE fromReference = ?`, uuid, (err) => {
+                if (err) {
+                    console.log("Financial Entity Operations : deleteItem error = ", err);
+                    reject(err);
+                }
+                else {
+                    console.log("Financial Entity Operations : deleteItem success");
+                    resolve(true);
+                }
+            });
+        });
+
+        const deleteTransactionsToReference = new Promise((resolve, reject) => {
+            db.run(`UPDATE transactions SET toReference = NULL WHERE toReference = ?`, uuid, (err) => {
+                if (err) {
+                    console.log("Financial Entity Operations : deleteItem error = ", err);
+                    reject(err);
+                }
+                else {
+                    console.log("Financial Entity Operations : deleteItem success");
+                    resolve(true);
+                }
+            });
+        });
+
+        Promise.all([deleteFiancialEntity, 
+                    deleteTransactionsFromReference, 
+                    deleteTransactionsToReference
+                    ]).then(([
+                            deleteFiancialEntityStatus, 
+                            deleteTransactionsFromReferenceStatus,
+                            deleteTransactionsToReferenceStatus
+                        ]) => {
+                            console.log("Financial Entity Operations : deleteItem all promises success");
+                            if (deleteFiancialEntityStatus && 
+                                deleteTransactionsFromReferenceStatus && 
+                                deleteTransactionsToReferenceStatus) {
+                                    resolve(true);
+                                }
+                    }).catch((err) => { 
+                        console.log("Financial Entity Operations : deleteItem error = ", err[0] || err[1] || err[2])
+                    });  
     });
     //return true;
 }
