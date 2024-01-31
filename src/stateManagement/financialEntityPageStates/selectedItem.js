@@ -21,8 +21,7 @@ export const selectedItemSlice = createSlice({
            if (action.payload !== null){
                 state = action.payload;
                 return state;
-           }
-           else {
+           } else {
                 state = {
                     id: "", //uuidv4 template
                     title: null,

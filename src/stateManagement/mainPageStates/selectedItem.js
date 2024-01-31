@@ -32,6 +32,25 @@ export const selectedItemSlice = createSlice({
            if (action.payload !== null){
                 state = action.payload;
                 return state;
+           } else {
+                state = {
+                    id: "", //uuidv4 template
+                    title: null,
+                    description: null,
+                    value: null,
+                    currency: null,
+                    transactionType: null,
+                    transactionCategory: null,
+                    fromEntity: null, //computed by backend
+                    fromType: null,
+                    toEntity: null, //computed by backend
+                    toType: null,
+                    recurringEntity: null, //computed by backend, could be null
+                    file: [],
+                    createdDate: "yyyy-MM-ddThh:mm:ss",
+                    modifiedDate: "yyyy-MM-ddThh:mm:ss",
+                    transactionDate: "yyyy-MM-ddThh:mm:ss",
+                }
            }
            return null;
         },
