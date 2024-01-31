@@ -2,16 +2,16 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const failBoxDisplaySlice = createSlice({
     name: "mainPage/failBoxDisplayState",
-    initialState: "hidden",
+    initialState: { state: "hidden", message: ""},
     reducers: {
-        showFailBox: (state) => {
-            //action.payload = {display: boolean, message: string}
-            state = "block";
+        showFailBox: (state, action) => {
+            //action.payload = string of message
+            state = { state: "block", message: action.payload };
             return state;
         },
         hideFailBox: (state) => {
             //action.payload = {display: boolean, message: string}
-            state = "hidden";
+            state = { state: "hidden", message: "" };
             return state;
         },
     }

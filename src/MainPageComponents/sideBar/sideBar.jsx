@@ -110,7 +110,7 @@ function SideBar() {
         window.transactionOperations.getSelectedItem(currentSelectedItemState).then((selectedItem) => {
             if (selectedItem === null) {
                 console.log("selectedItem is null, triggering fail box");
-                dispatch(showFailBox());
+                dispatch(showFailBox("Could not Load the Selected Item"));
             }
             dispatch(handleSelectItemClick(selectedItem));
         });

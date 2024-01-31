@@ -61,7 +61,7 @@ function MainPage() {
     useEffect(() => {
         window.transactionOperations.getAllItems().then(items => {
             if (items === null) {
-                dispatch(showFailBox());
+                dispatch(showFailBox("Could not load the items from the database"));
                 return;
             }
             dispatch(setCurrentSelectedItem(items && items.length > 0 ? items[0].id : null));
@@ -74,7 +74,7 @@ function MainPage() {
         if (!triggerSearchState) return;
         window.transactionOperations.getItems(searchParams, filterParamsVisibility).then(items => {
             if (items === null) {
-                dispatch(showFailBox());
+                dispatch(showFailBox("Search Operation Failed"));
                 return;
             }
             dispatch(setSideBarItems(items));
@@ -92,7 +92,7 @@ function MainPage() {
         if (!triggerAddEntryState) return;
         window.transactionOperations.createEntry().then(newEntrySideBarItem => {
             if (newEntrySideBarItem === null) {
-                dispatch(showFailBox());
+                dispatch(showFailBox("Could not create the entry in the database"));
                 return;
             }
             dispatch(addSideBarItem(newEntrySideBarItem));
@@ -117,7 +117,7 @@ function MainPage() {
                 dispatch(showSuccessBox());
             }
             else {
-                dispatch(showFailBox());
+                dispatch(showFailBox("Could not Modify the Entry"));
             }
         });
         dispatch(resetTriggerModifyEntry());
@@ -141,7 +141,7 @@ function MainPage() {
                 dispatch(showSuccessBox());
             }
             else {
-                dispatch(showFailBox());
+                dispatch(showFailBox("Could not Delete the Entry"));
             }
         });
         dispatch(resetTriggerDeleteEntry());       
