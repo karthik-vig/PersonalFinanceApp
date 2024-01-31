@@ -2,16 +2,16 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const successBoxDisplaySlice = createSlice({
     name: "financialEntityPage/successBoxDisplayState",
-    initialState: "hidden",
+    initialState: {state: "hidden", message: ""},
     reducers: {
-        showSuccessBox: (state) => {
-            //action.payload = {display: boolean, message: string}
-            state = "block";
+        showSuccessBox: (state, action) => {
+            //action.payload = string of a message to display
+            state = {state: "block", message: action.payload};
             return state;
         },
         hideSuccessBox: (state) => {
             //action.payload = {display: boolean, message: string}
-            state = "hidden";
+            state = {state: "hidden", message: ""};
             return state;
         },
     }

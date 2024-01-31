@@ -114,7 +114,7 @@ function FinancialEntityPage() {
             if (modifiedItem.modifyStatus){
                 //wrong
                 dispatch(modifySideBarItem({id: selectedItem.id, modifiedItem: modifiedItem }));
-                dispatch(showSuccessBox());
+                dispatch(showSuccessBox("Saved the Details to Disk"));
             }
             else {
                 dispatch(showFailBox("Could not Modify the Entry"));
@@ -139,7 +139,7 @@ function FinancialEntityPage() {
                 dispatch(removeSideBarItem(selectedItem.id));
                 dispatch(resetSelectedItem());
                 dispatch(resetCurrentSelectedItem());
-                dispatch(showSuccessBox());
+                dispatch(showSuccessBox("Removed the Entry from Disk"));
             }
             else {
                 dispatch(showFailBox("Could not Delete the Entry"));
