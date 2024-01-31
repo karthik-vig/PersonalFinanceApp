@@ -40,7 +40,7 @@ import {  removeSideBarItem,
 import {  //triggerSearch,
         resetTriggerSearch,
 } from '../stateManagement/mainPageStates/triggerSearch.js';
-import { setCurrentSelectedItem } from '../stateManagement/mainPageStates/currentSelectedItem.js';
+import { setCurrentSelectedItem, resetCurrentSelectedItem } from '../stateManagement/mainPageStates/currentSelectedItem.js';
 
 function MainPage() {
 
@@ -138,6 +138,7 @@ function MainPage() {
                 console.log(selectedItem.id);
                 dispatch(removeSideBarItem(selectedItem.id));
                 dispatch(resetSelectedItem());
+                dispatch(resetCurrentSelectedItem());
                 dispatch(showSuccessBox());
             }
             else {

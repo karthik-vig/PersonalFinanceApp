@@ -40,7 +40,7 @@ import {  removeSideBarItem,
 import {  //triggerSearch,
         resetTriggerSearch,
 } from '../stateManagement/financialEntityPageStates/triggerSearch.js';
-import { setCurrentSelectedItem } from '../stateManagement/financialEntityPageStates/currentSelectedItem.js';
+import { setCurrentSelectedItem, resetCurrentSelectedItem } from '../stateManagement/financialEntityPageStates/currentSelectedItem.js';
 
 function FinancialEntityPage() {
 
@@ -138,6 +138,7 @@ function FinancialEntityPage() {
                 console.log(selectedItem.id);
                 dispatch(removeSideBarItem(selectedItem.id));
                 dispatch(resetSelectedItem());
+                dispatch(resetCurrentSelectedItem());
                 dispatch(showSuccessBox());
             }
             else {
