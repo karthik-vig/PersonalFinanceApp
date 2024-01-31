@@ -67,12 +67,12 @@ function getAllItems() {
                 FROM transactions`, (err, rows) => {
             if (err) {
                 console.log(`Get All Items Error ${err}`);
-                reject(err);
+                reject([]);
             }
             else {
                 console.log("Get All Items Success");
                 console.log(typeof rows);
-                resolve(rows);
+                resolve(rows && rows.length > 0 ? rows : []);
             }
         });
     }); //could also return null if the operation fails
@@ -85,7 +85,7 @@ function getItems(event, searchParams, filterParamsVisibility) {
     //based on the searchParams
     console.log("getItems called with searchParams: ", searchParams);
     ///*
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
 
         const fetchFromReferenceID = new Promise((resolve, reject) => {
             if (filterParamsVisibility.fromEntity && searchParams.filter.fromEntity && searchParams.filter.fromEntity !== "choose") {
@@ -195,44 +195,22 @@ function getItems(event, searchParams, filterParamsVisibility) {
                 filterSortStmt += searchParams.filter.sort.ascending === "true" ? " ASC" : searchParams.filter.sort.ascending === "false" ? " DESC" : ``;
             }
         queryStmt += filterSortStmt;
-        /*
-        //there might be problem with min and max value for the value field as 0 value will be rejected.
-        //will need to fix this later
-        //also manually creating the query statement is not a good idea; need to loop through the searchParams.filter object
-        const filterValueStmt = filterParamsVisibility.value && searchParams.filter.value.max && searchParams.filter.value.min ? ` AND (value BETWEEN ${searchParams.filter.value.min} AND ${searchParams.filter.value.max})`: ``;
-        const filterCurrencyStmt = filterParamsVisibility.currency && searchParams.filter.currency && searchParams.filter.currency !== "choose" ? ` AND (currency = "${searchParams.filter.currency}")` : "";
-        const filterTransactionTypeStmt = filterParamsVisibility.transactionType && searchParams.filter.transactionType && searchParams.filter.transactionType !== "choose" ? ` AND (transactionType = "${searchParams.filter.transactionType}")` : ``;
-        const filterTransactionCategoryStmt = filterParamsVisibility.transactionCategory && searchParams.filter.transactionType && searchParams.filter.transactionCategory !== "choose" && searchParams.filter.transactionCategory !== null ? ` AND (transactionCategory = "${searchParams.filter.transactionCategory}")` : ``;
-        //const filterFromTypeStmt = filterParamsVisibility.fromType && searchParams.filter.fromType && searchParams.filter.fromType !== "choose" ? ` AND (fromType = "${searchParams.filter.fromType}")` : ``;
-        //const filterFromEntityStmt = filterParamsVisibility.fromEntity && searchParams.filter.fromEntity && searchParams.filter.fromEntity !== "choose" ? ` AND (fromEntity = "${searchParams.filter.fromEntity}")` : ``;
-        //const filterToTypeStmt = filterParamsVisibility.toType && searchParams.filter.toType && searchParams.filter.toType !== "choose" ? ` AND (toType = "${searchParams.filter.toType}")` : ``;
-        //const filterToEntityStmt = filterParamsVisibility.toEntity && searchParams.filter.toEntity && searchParams.filter.toEntity !== "choose" ? ` AND (toEntity = "${searchParams.filter.toEntity}")` : ``;
-        //const filterRecurringEntityStmt = filterParamsVisibility.recurringEntity && searchParams.filter.recurringEntity && searchParams.filter.recurringEntity !== "choose" ? ` AND (recurringEntity = "${searchParams.filter.recurringEntity}")` : ``;
-        const filterCreatedDateStmt = filterParamsVisibility.createdDate && searchParams.filter.createdDate.max && searchParams.filter.createdDate.min ? ` AND (createdDate BETWEEN "${searchParams.filter.createdDate.min}" AND "${searchParams.filter.createdDate.max}")` : ``;
-        const filterModifiedDateStmt = filterParamsVisibility.modifiedDate && searchParams.filter.modifiedDate.max && searchParams.filter.modifiedDate.min ? ` AND (modifiedDate BETWEEN "${searchParams.filter.modifiedDate.min}" AND "${searchParams.filter.modifiedDate.max}")` : ``;
-        const filterTransactionDateStmt = filterParamsVisibility.transactionDate && searchParams.filter.transactionDate.max && searchParams.filter.transactionDate.min ? ` AND (transactionDate BETWEEN "${searchParams.filter.transactionDate.min}" AND "${searchParams.filter.transactionDate.max}")` : ``;
-        const filterSortStmt = filterParamsVisibility.sort && searchParams.filter.sort.ascending === true && searchParams.filter.sort.field ? ` ORDER BY ${searchParams.filter.sort.field} ASC` : searchParams.filter.sort.field && !searchParams.filter.sort.ascending === false ? ` ORDER BY ${searchParams.filter.sort.field} DESC` : ``;
 
-        //create the main query statement
-        const queryStmt = `SELECT id, title, transactionDate, value, transactionType, transactionCategory FROM transactions WHERE (title LIKE "%${searchParams.search}%" OR description LIKE "%${searchParams.search}%")`
-        //add up all the query statements
-        const finalQueryStmt = queryStmt + filterValueStmt + filterCurrencyStmt + filterTransactionTypeStmt + filterTransactionCategoryStmt + filterFromEntityStmt + filterToEntityStmt + filterRecurringEntityStmt + filterCreatedDateStmt + filterModifiedDateStmt + filterTransactionDateStmt + filterSortStmt;
-        */
         db.all(queryStmt, (err, rows) => { 
             if (err) {
                 console.log(`Get Items Error ${err}`);
-                resolve(null);
+                reject(null);
             }
             else {
                 console.log("Get Items Success");
                 console.log(rows);
-                resolve(rows);
+                resolve(rows && rows.length > 0 ? rows : []);
             }
          });
 
         }).catch((err) => {
             console.log(`Get All Reference IDs Error ${err}`);
-            resolve(null);
+            reject(null);
         });
     });
     //*/
@@ -255,7 +233,7 @@ function getSelectedItem(event, uuid) {
     //clear any cotents in the currentSelectedItemFiles
     currentSelectedItemFiles = {};
     
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         db.serialize(() => {
 
             const selectedItem = {
@@ -435,12 +413,12 @@ function getSelectedItem(event, uuid) {
 
                                         }).catch((err) => {
                                             console.log(`Get Selected Item Error ${err}`);
-                                            resolve(null);
+                                            reject(null);
                                         });
             
         }).catch((err) => {
             console.log(`Get Selected Item Error ${err}`);
-            resolve(null);
+            reject(null);
         });
 
         });
@@ -451,7 +429,7 @@ function getSelectedItem(event, uuid) {
 function deleteItem(event, id) {
     //communicate with backend to delete the item
     console.log("deleteItem called with id: ", id);
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         db.serialize(() => {
 
             const fetchTransactionDelete = new Promise((resolve, reject) => {
@@ -482,11 +460,11 @@ function deleteItem(event, id) {
 
             const fetchAllDelete = Promise.all([fetchTransactionDelete, fetchFileDelete]);
             fetchAllDelete.then(([transactionDeleteStatus, fileDeleteStatus]) => {
-                if (transactionDeleteStatus && fileDeleteStatus) resolve(true);
-                else resolve(false);
+                if (transactionDeleteStatus && fileDeleteStatus) resolve();
+                else reject(true);
             }).catch((err) => {
                 console.log(`Delete Item Error ${err}`);
-                resolve(false);
+                reject(true);
             });
         });
     }); // return true; //could also return false if the operation fails
@@ -498,7 +476,7 @@ function modifyItem(event, selectedItem){
     console.log("modifyItem called with id: ", selectedItem.id);
     console.log("modifyItem called with selectedItem: ", selectedItem);
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         db.serialize(() => {
 
             const fetchFromReferenceID = new Promise((resolve, reject) => {
@@ -686,14 +664,14 @@ function modifyItem(event, selectedItem){
                                     });
                                 }
                                 else {
-                                    resolve({modifyStatus: false, item: null});
+                                    reject({modifyStatus: false, item: null});
                                 }
                             }
                         });
 
                 }).catch((err) => {
                     console.log(`Modify Item Error ${err}`);
-                    resolve({modifyStatus: false, item: null})
+                    reject({modifyStatus: false, item: null})
                 });
             })
     }); //could also return null if the operation fails
@@ -704,62 +682,64 @@ function modifyItem(event, selectedItem){
 //and return the following info for the side bar.
 function createEntry() {
 
-    if (db === null) return null;
+    return new Promise((resolve, reject) => {
+        if (db === null) return null;
 
-    const uuid = uuidv4();
+        const uuid = uuidv4();
 
-    db.serialize(() => {
-        
-        const currentDateTime = new Date().toISOString().substring(0, 19);
+        db.serialize(() => {
+            
+            const currentDateTime = new Date().toISOString().substring(0, 19);
 
-        db.run(`INSERT INTO transactions (\
-            id, \
-            title,\
-            description, \
-            value, \
-            currency, \
-            transactionType, \
-            transactionCategory, \
-            fromReference, \
-            toReference, \
-            recurringReference, \
-            file, \
-            createdDate, \
-            modifiedDate, \
-            transactionDate \
-            ) VALUES (\
-                "${uuid}", \
-                "NEW ENTRY", \
-                NULL, \
-                NULL, \
-                NULL, \
-                NULL, \
-                NULL, \
-                NULL, \
-                NULL, \
-                NULL, \
-                0, \
-                "${currentDateTime}", \
-                "${currentDateTime}", \
-                NULL \
-                )`, (err) => {
-                    if (err) {
-                        console.log(`Create Entry Error ${err}`);
-                    }
-                    else {
-                        console.log("Create Entry Success");
-                    }
-                });
-    });
-
-    return (
-            {id: uuid, 
-            title: "NEW ENTRY", 
-            transactionDate: null, 
-            value: null, 
-            transactionType: null, 
-            transactionCategory: null,}
-    ); //could also return null if the operation fails
+            db.run(`INSERT INTO transactions (\
+                id, \
+                title,\
+                description, \
+                value, \
+                currency, \
+                transactionType, \
+                transactionCategory, \
+                fromReference, \
+                toReference, \
+                recurringReference, \
+                file, \
+                createdDate, \
+                modifiedDate, \
+                transactionDate \
+                ) VALUES (\
+                    "${uuid}", \
+                    "NEW ENTRY", \
+                    NULL, \
+                    NULL, \
+                    NULL, \
+                    NULL, \
+                    NULL, \
+                    NULL, \
+                    NULL, \
+                    NULL, \
+                    0, \
+                    "${currentDateTime}", \
+                    "${currentDateTime}", \
+                    NULL \
+                    )`, (err) => {
+                        if (err) {
+                            console.log(`Create Entry Error ${err}`);
+                            reject(true);
+                        }
+                        else {
+                            console.log("Create Entry Success");
+                            resolve({
+                                id: uuid, 
+                                title: "NEW ENTRY", 
+                                transactionDate: null, 
+                                value: null, 
+                                transactionType: null, 
+                                transactionCategory: null,
+                            });
+                        }
+                    });
+        });
+    }); 
 }
 
 
@@ -804,8 +784,6 @@ async function openSaveFileDialog(event, fileName ){
 
 module.exports = {
     setDB,
-    //getFileBlob,
-    //setFileBlob,
     deleteFileBlob,
     getFileEntries,
     getAllItems,

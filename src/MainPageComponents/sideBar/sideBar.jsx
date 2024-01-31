@@ -108,11 +108,12 @@ function SideBar() {
         console.log("currentSelectedItemState is not null, triggering getSelectedItem")
         console.log(currentSelectedItemState);
         window.transactionOperations.getSelectedItem(currentSelectedItemState).then((selectedItem) => {
-            if (selectedItem === null) {
+            dispatch(handleSelectItemClick(selectedItem));
+        }).catch((err) => {
+            if (err === null) {
                 console.log("selectedItem is null, triggering fail box");
                 dispatch(showFailBox("Could not Load the Selected Item"));
             }
-            dispatch(handleSelectItemClick(selectedItem));
         });
     }, [currentSelectedItemState,
         dispatch,
