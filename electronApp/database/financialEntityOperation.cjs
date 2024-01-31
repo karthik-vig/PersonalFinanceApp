@@ -19,11 +19,11 @@ function getAllItems() {
 
     console.log("financial entity : getAllItems called");
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         db.all("SELECT id, title, type FROM financialEntities", [], (err, rows) => {
             if (err) {
                 console.log("financial entity : getAllItems error = ", err);
-                resolve([]);
+                reject([]);
             }
             else {
                 console.log("financial entity : getAllItems rows = ", rows);
@@ -46,7 +46,7 @@ function getItems(event, searchParams, filterParamsVisibility) {
     console.log("searchParams = ", searchParams);
     console.log("filterParamsVisibility = ", filterParamsVisibility);
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         let queryStmt = `SELECT id, title, type FROM financialEntities WHERE title LIKE "%${searchParams.search}%"`;
         Object.keys(filterParamsVisibility).forEach((fieldname) => {
             if (fieldname !== "sort" && 
@@ -80,11 +80,11 @@ function getItems(event, searchParams, filterParamsVisibility) {
         db.all(queryStmt, (err, rows) => { 
             if (err) {
                 console.log("Financial Entity Operations : getItems error = ", err);
-                resolve([]);
+                reject([]);
             }
             else {
                 console.log("Financial Entity Operations : getItems rows = ", rows);
-                resolve(rows);
+                resolve(rows && rows.length > 0 ? rows : []);
             }
          });
     });
@@ -101,14 +101,14 @@ function createEntry() {
 
     console.log("Financial Entity Operations : createEntry called");
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         const uuid = uuidv4();
         const currentDate = new Date().toISOString().substring(0, 19);
         db.run(`INSERT INTO financialEntities (id, title, type, createdDate, modifiedDate) \
                 VALUES (?, ?, ?, ?, ?)`, uuid, "New Entry", null, currentDate, currentDate, (err) => {
             if (err) {
                 console.log("Financial Entity Operations : createEntry error = ", err);
-                resolve(null);
+                reject(null);
             }
             else {
                 console.log("Financial Entity Operations : createEntry success");
@@ -123,7 +123,7 @@ function deleteItem(event, uuid) {
 
     console.log("delete entry uuid = ", uuid);
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         const deleteFiancialEntity = new Promise((resolve, reject) => {
             db.run(`DELETE FROM financialEntities WHERE id = ?`, uuid, (err) => {
                 if (err) {
@@ -175,10 +175,13 @@ function deleteItem(event, uuid) {
                             if (deleteFiancialEntityStatus && 
                                 deleteTransactionsFromReferenceStatus && 
                                 deleteTransactionsToReferenceStatus) {
-                                    resolve(true);
+                                    resolve();
+                                } else {
+                                    reject(true);
                                 }
                     }).catch((err) => { 
-                        console.log("Financial Entity Operations : deleteItem error = ", err[0] || err[1] || err[2])
+                        console.log("Financial Entity Operations : deleteItem error = ", err[0] || err[1] || err[2]);
+                        reject(true);
                     });  
     });
     //return true;
@@ -187,7 +190,7 @@ function deleteItem(event, uuid) {
 function modifyItem(event, selectedItem) {
     console.log("modifyItem selectedItem = ", selectedItem);
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         db.run(`UPDATE financialEntities \
                 SET title = ?, type = ?, modifiedDate = ? \
                 WHERE id = ?`, 
@@ -198,7 +201,7 @@ function modifyItem(event, selectedItem) {
                 (err) => {
                     if (err) {
                         console.log("Financial Entity Operations : modifyItem error = ", err);
-                        resolve({ modifyStatus: false, modifiedItem: null });
+                        reject({ modifyStatus: false, modifiedItem: null });
                     }
                     else {
                         console.log("Financial Entity Operations : modifyItem success");
@@ -219,11 +222,11 @@ function getSelectedItem(event, uuid) {
     
     console.log("getSelectedItem uuid = ", uuid);
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         db.all(`SELECT * FROM financialEntities WHERE id = ?`, uuid, (err, rows) => {
             if (err) {
                 console.log("Financial Entity Operations : getSelectedItem error = ", err);
-                resolve(null);
+                reject(null);
             }
             else {
                 console.log("Financial Entity Operations : getSelectedItem success");

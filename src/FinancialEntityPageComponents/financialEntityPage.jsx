@@ -60,12 +60,17 @@ function FinancialEntityPage() {
     //tigger getAllItems on page load
     useEffect(() => {
         window.financialEntityOperations.getAllItems().then(items => {
+            /*
             if (items === null) {
                 dispatch(showFailBox("Could not load the items from the database"));
                 return;
             }
+            */
             dispatch(setCurrentSelectedItem(items && items.length > 0 ? items[0].id : null));
             dispatch(setSideBarItems(items));
+        }).catch((err) => {
+            if (err)
+            dispatch(showFailBox("Could not load the items from the database"));
         });
     }, [dispatch]);
 
@@ -73,11 +78,14 @@ function FinancialEntityPage() {
     useEffect(() => {
         if (!triggerSearchState) return;
         window.financialEntityOperations.getItems(searchParams, filterParamsVisibility).then(items => {
-            if (items === null) {
+            /*if (items === null) {
                 dispatch(showFailBox("Search Operation Failed"));
                 return;
-            }
+            }*/
             dispatch(setSideBarItems(items));
+        }).catch((err) => {
+            if (err)
+            dispatch(showFailBox("Search Operation Failed"));
         });
         dispatch(resetTriggerSearch());
     }, [triggerSearchState,
@@ -91,12 +99,15 @@ function FinancialEntityPage() {
     useEffect(() => {
         if (!triggerAddEntryState) return;
         window.financialEntityOperations.createEntry().then(newEntrySideBarItem => {
-            if (newEntrySideBarItem === null) {
+            /*if (newEntrySideBarItem === null) {
                 dispatch(showFailBox("Could not create the entry in the database"));
                 return;
-            }
+            }*/
             dispatch(addSideBarItem(newEntrySideBarItem));
             //dispatch(showSuccessBox());
+        }).catch((err) => {
+            if (err === null)
+            dispatch(showFailBox("Could not create the entry in the database"));
         });
         dispatch(resetTriggerAddEntry());
     }, [triggerAddEntryState,
@@ -111,14 +122,11 @@ function FinancialEntityPage() {
         console.log("The Modify Entry trigger selected item is: ");
         console.log(selectedItem);
         window.financialEntityOperations.modifyItem(selectedItem).then(modifiedItem => {
-            if (modifiedItem.modifyStatus){
-                //wrong
-                dispatch(modifySideBarItem({id: selectedItem.id, modifiedItem: modifiedItem }));
-                dispatch(showSuccessBox("Saved the Details to Disk"));
-            }
-            else {
-                dispatch(showFailBox("Could not Modify the Entry"));
-            }
+            dispatch(modifySideBarItem({id: selectedItem.id, modifiedItem: modifiedItem }));
+            dispatch(showSuccessBox("Saved the Details to Disk"));
+        }).catch((err) => {
+            if (err.modifyStatus === false)
+            dispatch(showFailBox("Could not Modify the Entry"));
         });
         dispatch(resetTriggerModifyEntry());
    }, [triggerModifyEntryState,
@@ -132,24 +140,20 @@ function FinancialEntityPage() {
     useEffect(() => {
         if (!triggerDeleteEntryState) return;
         //delete the entry from the database
-        window.financialEntityOperations.deleteItem(selectedItem.id).then(deleteStatus => {
-            if (deleteStatus){
-                console.log("The Delete Entry trigger selected item ID is: ");
-                console.log(selectedItem.id);
-                dispatch(removeSideBarItem(selectedItem.id));
-                dispatch(resetSelectedItem());
-                dispatch(resetCurrentSelectedItem());
-                dispatch(showSuccessBox("Removed the Entry from Disk"));
-            }
-            else {
-                dispatch(showFailBox("Could not Delete the Entry"));
-            }
+        window.financialEntityOperations.deleteItem(selectedItem.id).then(() => {
+            console.log("The Delete Entry trigger selected item ID is: ");
+            console.log(selectedItem.id);
+            dispatch(removeSideBarItem(selectedItem.id));
+            dispatch(resetSelectedItem());
+            dispatch(resetCurrentSelectedItem());
+            dispatch(showSuccessBox("Removed the Entry from Disk"));
+        }).catch((err) => {
+            if (err)
+            dispatch(showFailBox("Could not Delete the Entry"));
         });
         dispatch(resetTriggerDeleteEntry());       
     }, [triggerDeleteEntryState,
         dispatch,
-        //resetTriggerDeleteEntry,
-        //removeSideBarItem,
         selectedItem.id,
     ]);
 
