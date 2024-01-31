@@ -12,7 +12,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import { setFilterFinancialEntity, resetFilterFinancialEntity } from '../../stateManagement/mainPageStates/selectFilterFinancialEntity.js';
 
-function FilterParamHeadingSection({ additionalClasses, fieldName, headingText, handleInputChange}){
+function FilterParamHeadingSection({ additionalClasses, fieldName, headingText, checkedStatus, handleInputChange}){
     return (
         <section
             className={"flex flex-row flex-wrap justify-start items-center w-[40%] " + additionalClasses}
@@ -20,6 +20,7 @@ function FilterParamHeadingSection({ additionalClasses, fieldName, headingText, 
             <CheckboxInputField
                 additionalClasses=""
                 fieldName={fieldName}
+                checkedStatus={checkedStatus}
                 handleInputChange={handleInputChange}
             />
             <H6Heading
@@ -34,6 +35,7 @@ FilterParamHeadingSection.propTypes = {
     additionalClasses: PropTypes.string,
     fieldName: PropTypes.string,
     headingText: PropTypes.string,
+    checkedStatus: PropTypes.bool,
     handleInputChange: PropTypes.func,
 };
 
@@ -57,7 +59,7 @@ FilterParamInputSection.propTypes = {
     children: PropTypes.node,
 };
 
-function FilterParamSection({additionalClasses, headingText, toggleDisplay, children}){
+function FilterParamSection({additionalClasses, headingText, toggleDisplay, checkedStatus, children}){
 
     return (
         <div
@@ -67,6 +69,7 @@ function FilterParamSection({additionalClasses, headingText, toggleDisplay, chil
                 additionalClasses=""
                 fieldName={headingText}
                 headingText={headingText}
+                checkedStatus={checkedStatus}
                 handleInputChange={toggleDisplay}
             />
             {children}
@@ -78,6 +81,7 @@ FilterParamSection.propTypes = {
     additionalClasses: PropTypes.string,
     headingText: PropTypes.string,
     toggleDisplay: PropTypes.func,
+    checkedStatus: PropTypes.bool,
     children: PropTypes.node,
 };
 
@@ -89,9 +93,10 @@ function FilterRangeInputParam({ labelText, headingText, fieldName, toggleDispla
     
     return (
         <FilterParamSection
-                additionalClasses=""
-                headingText={headingText}
-                toggleDisplay={() => toggleDisplay(fieldName)}
+            additionalClasses=""
+            headingText={headingText}
+            checkedStatus={filterParamsVisibility[fieldName]}
+            toggleDisplay={() => toggleDisplay(fieldName)}
         >
             <FilterParamInputSection
                 additionalClasses={filterParamsVisibility[fieldName] ? "flex" : "hidden"}
@@ -121,9 +126,10 @@ FilterRangeInputParam.propTypes = {
 function FilterSelectInputParam({ headingText, fieldName, toggleDisplay, handleInputChange, filterParamsVisibility, selectOptions}){
     return (
         <FilterParamSection
-                additionalClasses=""
-                headingText={headingText}
-                toggleDisplay={() => toggleDisplay(fieldName)}
+            additionalClasses=""
+            headingText={headingText}
+            checkedStatus={filterParamsVisibility[fieldName]}
+            toggleDisplay={() => toggleDisplay(fieldName)}
         >
             <FilterParamInputSection
                 additionalClasses={filterParamsVisibility[fieldName] ? "flex" : "hidden"}
@@ -175,6 +181,7 @@ function FilterSelectFinancialEntityInputParam({ headingText, fieldName, toggleD
         <FilterParamSection
             additionalClasses=""
             headingText={headingText}
+            checkedStatus={filterParamsVisibility[fieldName]}
             toggleDisplay={() => toggleDisplay(fieldName)}
         >
             <FilterParamInputSection
@@ -226,6 +233,7 @@ function FilterSortInputParam({ toggleDisplay, handleInputChange, filterParamsVi
         <FilterParamSection
             additionalClasses=""
             headingText="Sort"
+            checkedStatus={filterParamsVisibility["sort"]}
             toggleDisplay={() => toggleDisplay("sort")}
         >
             <FilterParamInputSection

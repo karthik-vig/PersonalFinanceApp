@@ -15,10 +15,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import {  //showFilter,
           hideFilter,
  } from '../../stateManagement/mainPageStates/filterDisplay.js';
-import { toggleFilterParamsVisibility } from '../../stateManagement/mainPageStates/filterParamsVisibility.js';
+import { toggleFilterParamsVisibility, resetFilterParamsVisibility } from '../../stateManagement/mainPageStates/filterParamsVisibility.js';
 import { setFilterParams } from '../../stateManagement/mainPageStates/searchParams.js';
 import { setRecurringTransactions } from '../../stateManagement/mainPageStates/additionalInformation.js';
 import { useEffect } from 'react';
+import { faTimes, faEraser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+library.add(faTimes, faEraser);
 
 function FilterMenu(){
     
@@ -50,12 +54,22 @@ function FilterMenu(){
         <div 
             className={" h-96 w-[50%] z-50 top-[65px] left-[30%] absolute rounded-lg border bg-surface-cl drop-shadow-lg overflow-x-hidden overflow-y-scroll " + displayState}
         >
-            <button
-                className="sticky top-0 left-[90%] h-8 w-16 rounded-lg border bg-red-500 border-red-700 hover:bg-red-800 drop-shadow-lg"
-                onClick={() => dispatch(hideFilter())}
+            <section 
+                className="flex justify-evenly items-center h-8 w-full"
             >
-                Close
-            </button>
+                <button
+                    className="flex justify-center items-center h-8 w-8 rounded-lg border bg-gray-100 border-gray-500 hover:bg-gray-300 hover:text-white drop-shadow-lg"
+                    onClick={() => dispatch(resetFilterParamsVisibility())}
+                >
+                    <FontAwesomeIcon icon={faEraser} color="#1a1a1a" className="h-6 w-6"/>
+                </button>
+                <button
+                    className="flex justify-center items-center h-8 w-8 rounded-lg border bg-red-500 border-red-700 hover:bg-red-800 drop-shadow-lg"
+                    onClick={() => dispatch(hideFilter())}
+                >
+                    <FontAwesomeIcon icon={faTimes} color="#ffffff" className="h-6 w-6"/>
+                </button>
+            </section>
             <FilterRangeInputParam
                 labelText={{"rangeStart": "Min", "rangeEnd": "Max"}}
                 headingText="Value"

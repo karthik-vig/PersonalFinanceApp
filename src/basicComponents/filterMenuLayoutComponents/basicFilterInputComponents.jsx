@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import '../../index.css';
-import { useImmer } from 'use-immer';
+//import { useImmer } from 'use-immer';
+//import { useSelector, } from 'react-redux';
 
 function H6Heading({additionalClasses, headingText}){
 
@@ -34,21 +35,16 @@ LabelText.propTypes = {
     labelText: PropTypes.string,
 };
 
-function CheckboxInputField({additionalClasses, fieldName, handleInputChange}){ 
+function CheckboxInputField({additionalClasses, fieldName, checkedStatus, handleInputChange}){ 
     
-        const [checkedStatus, setCheckedStatus] = useImmer(false);
-
-        const handleCheckedChange = () => {
-            setCheckedStatus(!checkedStatus);
-            handleInputChange(fieldName);
-        }
+        console.log("filter menu section checkedStatus: ", fieldName, checkedStatus);
 
         return (
             <input 
                 type="checkbox"
                 className={"w-4 h-4 rounded-md border border-primary-cl " + additionalClasses}
                 checked={checkedStatus}
-                onChange={handleCheckedChange}
+                onChange={() => handleInputChange(fieldName)}
             />
         );
 }
@@ -56,6 +52,7 @@ function CheckboxInputField({additionalClasses, fieldName, handleInputChange}){
 CheckboxInputField.propTypes = {
     additionalClasses: PropTypes.string,
     fieldName: PropTypes.string,
+    checkedStatus: PropTypes.bool,
     handleInputChange: PropTypes.func,
 };
 
