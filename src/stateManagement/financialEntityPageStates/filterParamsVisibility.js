@@ -13,9 +13,16 @@ export const filterParamsVisibilitySlice = createSlice({
             //action.payload = string value of a fieldName
             state[action.payload] = !state[action.payload];
         },
+        resetFilterParamsVisibility: (state) => {
+            Object.keys(state).forEach(key => {
+                state[key] = false;
+            });
+        }
     }
 });
 
-export const { toggleFilterParamsVisibility } = filterParamsVisibilitySlice.actions;
+export const { toggleFilterParamsVisibility,
+               resetFilterParamsVisibility,
+ } = filterParamsVisibilitySlice.actions;
 
 export default filterParamsVisibilitySlice.reducer;
