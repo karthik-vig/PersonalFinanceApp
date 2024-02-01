@@ -48,6 +48,7 @@ app.whenReady().then(() => {
     const db = initializeDatabase.initDatabase();
     transactionOperations.setDB(db);
     financialEntitiesOperations.setDB(db);
+    recurringTransactionOperations.setDB(db);
 
     createWindow();
 
@@ -85,9 +86,18 @@ app.whenReady().then(() => {
 
     //RECURRING TRANSACTION OPERATIONS
     ipcMain.handle('recurringTransactionOperations:getRecurringTransactions', recurringTransactionOperations.getRecurringTransactions);
+    ipcMain.handle('recurringTransactionOperations:createEntry', recurringTransactionOperations.createEntry);
+    ipcMain.handle('recurringTransactionOperations:deleteItem', recurringTransactionOperations.deleteItem);
+    ipcMain.handle('recurringTransactionOperations:modifyItem', recurringTransactionOperations.modifyItem);
+    ipcMain.handle('recurringTransactionOperations:getSelectedItem', recurringTransactionOperations.getSelectedItem);
+    ipcMain.handle('recurringTransactionOperations:getAllItems', recurringTransactionOperations.getAllItems);
+    ipcMain.handle('recurringTransactionOperations:getItems', recurringTransactionOperations.getItems);
 
 });
 
 app.on('window-all-closed', function () {
-    if (process.platform !== 'darwin') app.quit();
+    if (process.platform !== 'darwin') {
+        initializeDatabase.closeDB();
+        app.quit();
+    }
 });

@@ -59,7 +59,7 @@ function RecurringEntityPage() {
 
     //tigger getAllItems on page load
     useEffect(() => {
-        window.transactionOperations.getAllItems().then(items => {
+        window.recurringTransactionOperations.getAllItems().then(items => {
             dispatch(setCurrentSelectedItem(items && items.length > 0 ? items[0].id : null));
             dispatch(setSideBarItems(items));
         }).catch((err) => {
@@ -71,7 +71,7 @@ function RecurringEntityPage() {
    //trigger on search params set and enter key pressed
     useEffect(() => {
         if (!triggerSearchState) return;
-        window.transactionOperations.getItems(searchParams, filterParamsVisibility).then(items => {
+        window.recurringTransactionOperations.getItems(searchParams, filterParamsVisibility).then(items => {
             dispatch(setSideBarItems(items));
         }).catch((err) => {
             if (err === null)
@@ -88,7 +88,7 @@ function RecurringEntityPage() {
    //trigger on add entry
     useEffect(() => {
         if (!triggerAddEntryState) return;
-        window.transactionOperations.createEntry().then(newEntrySideBarItem => {
+        window.recurringTransactionOperations.createEntry().then(newEntrySideBarItem => {
             dispatch(addSideBarItem(newEntrySideBarItem));
         }).catch((err) => {
             if (err)
@@ -106,7 +106,7 @@ function RecurringEntityPage() {
         //modify the database
         console.log("The Modify Entry trigger selected item is: ");
         console.log(selectedItem);
-        window.transactionOperations.modifyItem(selectedItem).then(modifiedItem => {
+        window.recurringTransactionOperations.modifyItem(selectedItem).then(modifiedItem => {
             dispatch(modifySideBarItem({id: selectedItem.id, modifiedItem: modifiedItem }));
             dispatch(showSuccessBox("Saved the Details to Disk"));
         }).catch((err) => {
@@ -125,7 +125,7 @@ function RecurringEntityPage() {
     useEffect(() => {
         if (!triggerDeleteEntryState) return;
         //delete the entry from the database
-        window.transactionOperations.deleteItem(selectedItem.id).then(() => {
+        window.recurringTransactionOperations.deleteItem(selectedItem.id).then(() => {
             console.log("The Delete Entry trigger selected item ID is: ");
             console.log(selectedItem.id);
             dispatch(removeSideBarItem(selectedItem.id));

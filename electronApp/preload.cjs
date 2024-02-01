@@ -42,4 +42,10 @@ contextBridge.exposeInMainWorld('initializeDatabase', {
 
 contextBridge.exposeInMainWorld('recurringTransactionOperations', {
     getRecurringTransactions: () => ipcRenderer.invoke('recurringTransactionOperations:getRecurringTransactions'),
+    createEntry: () => ipcRenderer.invoke('recurringTransactionOperations:createEntry'),
+    deleteItem: (uuid) => ipcRenderer.invoke('recurringTransactionOperations:deleteItem', uuid),
+    modifyItem: (selectedItem) => ipcRenderer.invoke('recurringTransactionOperations:modifyItem', selectedItem),
+    getSelectedItem: (uuid) => ipcRenderer.invoke('recurringTransactionOperations:getSelectedItem', uuid),
+    getAllItems: () => ipcRenderer.invoke('recurringTransactionOperations:getAllItems'),
+    getItems: (searchParams, filterParamsVisibility) => ipcRenderer.invoke('recurringTransactionOperations:getItems', searchParams, filterParamsVisibility),
 });

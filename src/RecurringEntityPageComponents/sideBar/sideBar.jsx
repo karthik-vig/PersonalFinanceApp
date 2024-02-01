@@ -107,7 +107,7 @@ function SideBar() {
         if (currentSelectedItemState === null) return;
         console.log("currentSelectedItemState is not null, triggering getSelectedItem")
         console.log(currentSelectedItemState);
-        window.transactionOperations.getSelectedItem(currentSelectedItemState).then((selectedItem) => {
+        window.recurringTransactionOperations.getSelectedItem(currentSelectedItemState).then((selectedItem) => {
             dispatch(handleSelectItemClick(selectedItem));
         }).catch((err) => {
             if (err === null) {
