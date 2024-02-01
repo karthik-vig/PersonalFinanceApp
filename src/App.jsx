@@ -5,6 +5,7 @@ import './sideSectionButton.jsx';
 import SideSectionButton from './sideSectionButton.jsx';
 import MainPage from './MainPageComponents/mainPage.jsx';
 import FinancialEntityPage from './FinancialEntityPageComponents/financialEntityPage.jsx';
+import RecurringEntityPage from './RecurringEntityPageComponents/recurringEntityPage.jsx';
 import { useDispatch } from 'react-redux';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faHouse, faChartLine, faBuildingColumns, faTicketSimple,  } from '@fortawesome/free-solid-svg-icons';
@@ -72,7 +73,7 @@ function App() {
         {activeTab.mainPage && <MainPage />}
         {activeTab.analyticPage && <div>Analytics Page</div>}
         {activeTab.financialEntityPage && <FinancialEntityPage />}
-        {activeTab.recurringTransactionPage && <div>Recurring Transaction Page</div>}
+        {activeTab.recurringTransactionPage && <RecurringEntityPage />}
       </div>
     </div>
   );
