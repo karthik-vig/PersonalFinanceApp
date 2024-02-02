@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"; 
 
 export const triggerModifyEntrySlice = createSlice({
-    name: "mainPage/triggerModifyEntryState",
+    name: "recurringEntityPage/triggerModifyEntryState",
     initialState: false,
     reducers: {
         triggerModifyEntry: (state) => {

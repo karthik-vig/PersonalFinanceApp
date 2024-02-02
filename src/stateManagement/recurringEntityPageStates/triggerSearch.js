@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const triggerSearchSlice = createSlice({
-    name: "mainPage/triggerSearchState",
+    name: "recurringEntityPage/triggerSearchState",
     initialState: false,
     reducers: {
         triggerSearch: (state) => {

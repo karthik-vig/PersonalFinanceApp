@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 //import  { useDispatch } from "react-redux";
 
 export const selectedItemSlice = createSlice({
-    name: "mainPage/selectedItem",
+    name: "recurringEntityPage/selectedItem",
     initialState: {
                     id: "", //uuidv4 template
                     title: null,
@@ -15,16 +15,23 @@ export const selectedItemSlice = createSlice({
                     fromType: null,
                     toEntity: null, //computed by backend
                     toType: null,
-                    recurringEntity: null,
-                    file: [], 
+                    //recurringEntity: null,
+                    //file: [], 
                     createdDate: "YYYY-MM-DDThh:mm:ss",
                     modifiedDate: "YYYY-MM-DDThh:mm:ss",
-                    transactionDate: "YYYY-MM-DDThh:mm:ss",
+                    //transactionDate: "YYYY-MM-DDThh:mm:ss",
+                    recurringFrequency: {},
+                    recurringTransactionStartDate: "YYYY-MM-DDThh:mm:ss",
+                    recurringTransactionEndDate: "YYYY-MM-DDThh:mm:ss",
                 },
     reducers: {
         handleItemClick: (state, action) => {
             //action.payload = {fieldName: string, fieldValue: string}
-            state[action.payload.fieldName] = action.payload.fieldValue;
+            if (action.payload.fieldName.slice(0, 18) === "recurringFrequency") {
+                state.recurringFrequency[action.payload.fieldName.slice(19)] = action.payload.fieldValue;
+            } else {
+                state[action.payload.fieldName] = action.payload.fieldValue;
+            }
         },
         handleSelectItemClick: (state, action) => {
             /*action.payload = the selectedItem object structure with values
@@ -45,11 +52,14 @@ export const selectedItemSlice = createSlice({
                     fromType: null,
                     toEntity: null, //computed by backend
                     toType: null,
-                    recurringEntity: null, //computed by backend, could be null
-                    file: [],
-                    createdDate: "yyyy-MM-ddThh:mm:ss",
-                    modifiedDate: "yyyy-MM-ddThh:mm:ss",
-                    transactionDate: "yyyy-MM-ddThh:mm:ss",
+                    //recurringEntity: null,
+                    //file: [], 
+                    createdDate: "YYYY-MM-DDThh:mm:ss",
+                    modifiedDate: "YYYY-MM-DDThh:mm:ss",
+                    //transactionDate: "YYYY-MM-DDThh:mm:ss",
+                    recurringFrequency: {},
+                    recurringTransactionStartDate: "YYYY-MM-DDThh:mm:ss",
+                    recurringTransactionEndDate: "YYYY-MM-DDThh:mm:ss",
                 }
            }
            return null;
@@ -67,11 +77,14 @@ export const selectedItemSlice = createSlice({
                 fromType: null,
                 toEntity: null, //computed by backend
                 toType: null,
-                recurringEntity: null, //computed by backend, could be null
-                file: [],
-                createdDate: "yyyy-MM-ddThh:mm:ss",
-                modifiedDate: "yyyy-MM-ddThh:mm:ss",
-                transactionDate: "yyyy-MM-ddThh:mm:ss",
+                //recurringEntity: null,
+                //file: [], 
+                createdDate: "YYYY-MM-DDThh:mm:ss",
+                modifiedDate: "YYYY-MM-DDThh:mm:ss",
+                //transactionDate: "YYYY-MM-DDThh:mm:ss",
+                recurringFrequency: {},
+                recurringTransactionStartDate: "YYYY-MM-DDThh:mm:ss",
+                recurringTransactionEndDate: "YYYY-MM-DDThh:mm:ss",
             };
             return state;
         }

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const failBoxDisplaySlice = createSlice({
-    name: "mainPage/failBoxDisplayState",
+    name: "recurringEntityPage/failBoxDisplayState",
     initialState: { state: "hidden", message: ""},
     reducers: {
         showFailBox: (state, action) => {

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const successBoxDisplaySlice = createSlice({
-    name: "mainPage/successBoxDisplayState",
+    name: "recurringEntityPage/successBoxDisplayState",
     initialState: {state: "hidden", message: ""},
     reducers: {
         showSuccessBox: (state, action) => {

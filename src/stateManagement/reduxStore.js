@@ -33,6 +33,21 @@ import financialEntityPageTriggerModifyEntryReducer from './financialEntityPageS
 import financialEntityPageTriggerSearchReducer from './financialEntityPageStates/triggerSearch.js';
 import financialEntityPageWarningBoxDisplayReducer from './financialEntityPageStates/warningBoxDisplay.js';
 
+//import all the reducers for the recurring entity page states
+import recurringEntityPageSelectedItemReducer from './recurringEntityPageStates/selectedItem.js';
+import recurringEntityPageAdditionalInformationReducer from './recurringEntityPageStates/additionalInformation.js';
+import recurringEntityPageCurrentSelectedItemReducer from './recurringEntityPageStates/currentSelectedItem.js';
+import recurringEntityPageFailBoxDisplayReducer from './recurringEntityPageStates/failBoxDisplay.js';
+import recurringEntityPageFilterParamsVisibilityReducer from './recurringEntityPageStates/filterParamsVisibility.js';
+import recurringEntityPageSearchParamsReducer from './recurringEntityPageStates/searchParams.js';
+import recurringEntityPageSelectFilterFinancialEntityReducer from './recurringEntityPageStates/selectFilterFinancialEntity.js';
+import recurringEntityPageSideBarItemReducer from './recurringEntityPageStates/sideBarItems.js';
+import recurringEntityPageSuccessBoxDisplayReducer from './recurringEntityPageStates/successBoxDisplay.js';
+import recurringEntityPageTriggerAddEntryReducer from './recurringEntityPageStates/triggerAddEntry.js';
+import recurringEntityPageTriggerDeleteEntryReducer from './recurringEntityPageStates/triggerDeleteEntry.js';
+import recurringEntityPageTriggerModifyEntryReducer from './recurringEntityPageStates/triggerModifyEntry.js';
+import recurringEntityPageTriggerSearchReducer from './recurringEntityPageStates/triggerSearch.js';
+import recurringEntityPageWarningBoxDisplayReducer from './recurringEntityPageStates/warningBoxDisplay.js';
 
 const mainPageStates = combineReducers({
   selectedItem: mainPageSelectedItemReducer,
@@ -69,9 +84,27 @@ const financialEntityPageStates = combineReducers({
   warningBoxDisplayState: financialEntityPageWarningBoxDisplayReducer,
 });
 
+const recurringEntityPageStates = combineReducers({
+  selectedItem: recurringEntityPageSelectedItemReducer,
+  additionalInformationState: recurringEntityPageAdditionalInformationReducer,
+  currentSelectedItemState: recurringEntityPageCurrentSelectedItemReducer,
+  failBoxDisplayState: recurringEntityPageFailBoxDisplayReducer,
+  filterParamsVisibility: recurringEntityPageFilterParamsVisibilityReducer,
+  searchParams: recurringEntityPageSearchParamsReducer,
+  selectFilterFinancialEntityState: recurringEntityPageSelectFilterFinancialEntityReducer,
+  sideBarItems: recurringEntityPageSideBarItemReducer,
+  successBoxDisplayState: recurringEntityPageSuccessBoxDisplayReducer,
+  triggerAddEntryState: recurringEntityPageTriggerAddEntryReducer,
+  triggerDeleteEntryState: recurringEntityPageTriggerDeleteEntryReducer,
+  triggerModifyEntryState: recurringEntityPageTriggerModifyEntryReducer,
+  triggerSearchState: recurringEntityPageTriggerSearchReducer,
+  warningBoxDisplayState: recurringEntityPageWarningBoxDisplayReducer,
+});
+
 const rootReducer = combineReducers({
   mainPageStates,
   financialEntityPageStates,
+  recurringEntityPageStates,
 });
 
 export default configureStore({

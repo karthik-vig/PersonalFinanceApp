@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'; 
 
 export const currentSelectedItemSlice = createSlice({
-    name: "mainPage/currentSelectedItemState",
+    name: "recurringEntityPage/currentSelectedItemState",
     initialState: null,
     reducers: {
         setCurrentSelectedItem: (state, action) => {

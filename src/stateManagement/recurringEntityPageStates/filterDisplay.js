@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const filterDisplaySlice = createSlice({
-    name: "mainPage/filterDisplayState",
+    name: "recurringEntityPage/filterDisplayState",
     initialState: "hidden",
     reducers: {
         showFilter: (state) => {

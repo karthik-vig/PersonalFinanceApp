@@ -102,7 +102,7 @@ function deleteItem(event, uuid) {
 function getSelectedItem(event, uuid) {
     console.log("In getSelectedItem: uuid: " + uuid);
     return {
-        id: null, //uuidv4 template
+        id: "", //uuidv4 template
         title: null,
         description: null,
         value: null,
@@ -113,12 +113,14 @@ function getSelectedItem(event, uuid) {
         fromType: null,
         toEntity: null, //computed by backend
         toType: null,
-        recurringEntity: null, //computed by backend, could be null
-        file: [],
-        createdDate: "yyyy-MM-ddThh:mm:ss",
-        modifiedDate: "yyyy-MM-ddThh:mm:ss",
-        recurringFrequency: null,
-        recurringTransactionStartDate: "yyyy-MM-ddThh:mm:ss",
+        //recurringEntity: null,
+        //file: [], 
+        createdDate: "YYYY-MM-DDThh:mm:ss",
+        modifiedDate: "YYYY-MM-DDThh:mm:ss",
+        //transactionDate: "YYYY-MM-DDThh:mm:ss",
+        recurringFrequency: {},
+        recurringTransactionStartDate: "YYYY-MM-DDThh:mm:ss",
+        recurringTransactionEndDate: "YYYY-MM-DDThh:mm:ss",
     };
 }
 

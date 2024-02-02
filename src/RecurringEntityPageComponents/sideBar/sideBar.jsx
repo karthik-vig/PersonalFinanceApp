@@ -98,8 +98,8 @@ function SideBar() {
     });
 
 
-    const sideBarItems = useSelector((state) => state.mainPageStates.sideBarItems);
-    const currentSelectedItemState = useSelector((state) => state.mainPageStates.currentSelectedItemState);
+    const sideBarItems = useSelector((state) => state.recurringEntityPageStates.sideBarItems);
+    const currentSelectedItemState = useSelector((state) => state.recurringEntityPageStates.currentSelectedItemState);
     const dispatch = useDispatch();
 
     //get the selecteded item data from the main process

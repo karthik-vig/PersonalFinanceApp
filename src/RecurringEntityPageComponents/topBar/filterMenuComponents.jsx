@@ -27,18 +27,18 @@ library.add(faTimes, faEraser);
 function FilterMenu(){
     
 
-    const filterParamsVisibility = useSelector((state) => state.mainPageStates.filterParamsVisibility);
-    const displayState = useSelector((state) => state.mainPageStates.filterDisplayState);
+    const filterParamsVisibility = useSelector((state) => state.recurringEntityPageStates.filterParamsVisibility);
+    const displayState = useSelector((state) => state.recurringEntityPageStates.filterDisplayState);
     const dispatch = useDispatch();
 
     const handleInputChange = (fieldName, fieldValue) => dispatch(setFilterParams({fieldName, fieldValue}));
     const toggleFieldVisibility = (fieldName) => dispatch(toggleFilterParamsVisibility(fieldName));
 
     //get from backend api
-    const currencies = useSelector((state) => state.mainPageStates.additionalInformationState.currencies);
-    const transactionCategories = useSelector((state) => state.mainPageStates.additionalInformationState.transactionCategories);
-    const transactionEntities = useSelector((state) => state.mainPageStates.additionalInformationState.transactionEntities);
-    const recurringTransactions = useSelector((state) => state.mainPageStates.additionalInformationState.recurringTransactions);
+    const currencies = useSelector((state) => state.recurringEntityPageStates.additionalInformationState.currencies);
+    const transactionCategories = useSelector((state) => state.recurringEntityPageStates.additionalInformationState.transactionCategories);
+    const transactionEntities = useSelector((state) => state.recurringEntityPageStates.additionalInformationState.transactionEntities);
+    const recurringTransactions = useSelector((state) => state.recurringEntityPageStates.additionalInformationState.recurringTransactions);
 
     useEffect(() => {
         window.recurringTransactionOperations.getRecurringTransactions().then((retrievedRecurringTransactions) => {

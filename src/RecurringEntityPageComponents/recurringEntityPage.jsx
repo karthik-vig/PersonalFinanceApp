@@ -44,16 +44,16 @@ import { setCurrentSelectedItem, resetCurrentSelectedItem } from '../stateManage
 
 function RecurringEntityPage() {
 
-    const selectedItem = useSelector(state => state.mainPageStates.selectedItem);
-    const warningBoxDisplayState = useSelector(state => state.mainPageStates.warningBoxDisplayState);
-    const failBoxDisplayState = useSelector(state => state.mainPageStates.failBoxDisplayState);
-    const successBoxDisplayState = useSelector(state => state.mainPageStates.successBoxDisplayState);
-    const triggerModifyEntryState = useSelector(state => state.mainPageStates.triggerModifyEntryState);
-    const triggerDeleteEntryState = useSelector(state => state.mainPageStates.triggerDeleteEntryState);
-    const triggerAddEntryState = useSelector(state => state.mainPageStates.triggerAddEntryState);
-    const triggerSearchState = useSelector(state => state.mainPageStates.triggerSearchState);
-    const searchParams = useSelector(state => state.mainPageStates.searchParams);
-    const filterParamsVisibility = useSelector(state => state.mainPageStates.filterParamsVisibility);   
+    const selectedItem = useSelector(state => state.recurringEntityPageStates.selectedItem);
+    const warningBoxDisplayState = useSelector(state => state.recurringEntityPageStates.warningBoxDisplayState);
+    const failBoxDisplayState = useSelector(state => state.recurringEntityPageStates.failBoxDisplayState);
+    const successBoxDisplayState = useSelector(state => state.recurringEntityPageStates.successBoxDisplayState);
+    const triggerModifyEntryState = useSelector(state => state.recurringEntityPageStates.triggerModifyEntryState);
+    const triggerDeleteEntryState = useSelector(state => state.recurringEntityPageStates.triggerDeleteEntryState);
+    const triggerAddEntryState = useSelector(state => state.recurringEntityPageStates.triggerAddEntryState);
+    const triggerSearchState = useSelector(state => state.recurringEntityPageStates.triggerSearchState);
+    const searchParams = useSelector(state => state.recurringEntityPageStates.searchParams);
+    const filterParamsVisibility = useSelector(state => state.recurringEntityPageStates.filterParamsVisibility);   
     const dispatch = useDispatch();
 
 

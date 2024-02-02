@@ -4,9 +4,6 @@ import {H6HeadingText,
         H3HeadingText, 
         TextInputSection, 
         TextAreaSection, 
-        FileInputSection,
-        GetFileSection,
-        DeleteFileButtonSection, 
         DatetimeInputSection, 
         SelectInputSection, 
         NumberInputSection, 
@@ -20,7 +17,7 @@ import { useSelector } from 'react-redux';
 // below are the sections that are used in the detail section; built using the basic components
 function TitleSection() {
 
-    const titleValue = useSelector((state) => state.mainPageStates.selectedItem.title);
+    const titleValue = useSelector((state) => state.recurringEntityPageStates.selectedItem.title);
 
     return (
     <SectionContainer 
@@ -50,7 +47,7 @@ TitleSection.propTypes = {
 
 function DescriptionSection() {
 
-    const descriptionValue = useSelector((state) => state.mainPageStates.selectedItem.description);
+    const descriptionValue = useSelector((state) => state.recurringEntityPageStates.selectedItem.description);
 
     return (
     <SectionContainer 
@@ -79,9 +76,9 @@ DescriptionSection.propTypes = {
 
 function SalarySection() {
 
-    const transactionValue = useSelector((state) => state.mainPageStates.selectedItem.value);
-    const currencyValue = useSelector((state) => state.mainPageStates.selectedItem.currency);
-    const currencies = useSelector((state) => state.mainPageStates.additionalInformationState.currencies);
+    const transactionValue = useSelector((state) => state.recurringEntityPageStates.selectedItem.value);
+    const currencyValue = useSelector((state) => state.recurringEntityPageStates.selectedItem.currency);
+    const currencies = useSelector((state) => state.recurringEntityPageStates.additionalInformationState.currencies);
 
     return (
         <SectionContainer 
@@ -132,7 +129,7 @@ H3HeadingSection.propTypes = {
 
 function TransactionTypeSection() {
 
-    const transactionType = useSelector((state) => state.mainPageStates.selectedItem.transactionType);
+    const transactionType = useSelector((state) => state.recurringEntityPageStates.selectedItem.transactionType);
 
     return (
         <SectionContainer 
@@ -174,8 +171,8 @@ TransactionTypeSection.propTypes = {
 
 function TransactionCategorySection() {
 
-    const transactionCategory = useSelector((state) => state.mainPageStates.selectedItem.transactionCategory);
-    const transactionCategories = useSelector((state) => state.mainPageStates.additionalInformationState.transactionCategories);
+    const transactionCategory = useSelector((state) => state.recurringEntityPageStates.selectedItem.transactionCategory);
+    const transactionCategories = useSelector((state) => state.recurringEntityPageStates.additionalInformationState.transactionCategories);
 
     return (
         <SectionContainer 
@@ -208,7 +205,7 @@ TransactionCategorySection.propTypes = {
 
 function FromTypeSection() {
 
-    const fromType = useSelector((state) => state.mainPageStates.selectedItem.fromType);
+    const fromType = useSelector((state) => state.recurringEntityPageStates.selectedItem.fromType);
 
     return (
         <SectionContainer 
@@ -250,9 +247,9 @@ FromTypeSection.propTypes = {
 
 function FromEntitySection() {
     
-    const fromEntity = useSelector((state) => state.mainPageStates.selectedItem.fromEntity);
-    const fromType = useSelector((state) => state.mainPageStates.selectedItem.fromType);
-    let transactionEntities = useSelector((state) => state.mainPageStates.additionalInformationState.transactionEntities);
+    const fromEntity = useSelector((state) => state.recurringEntityPageStates.selectedItem.fromEntity);
+    const fromType = useSelector((state) => state.recurringEntityPageStates.selectedItem.fromType);
+    let transactionEntities = useSelector((state) => state.recurringEntityPageStates.additionalInformationState.transactionEntities);
     const transformedEntities = transactionEntities.filter((entity) => entity.type === fromType ).map((entity) => entity.name);
 
     return (
@@ -287,7 +284,7 @@ FromEntitySection.propTypes = {
 
 function ToTypeSection() {
 
-    const toType = useSelector((state) => state.mainPageStates.selectedItem.toType);
+    const toType = useSelector((state) => state.recurringEntityPageStates.selectedItem.toType);
 
     return (
         <SectionContainer 
@@ -330,9 +327,9 @@ ToTypeSection.propTypes = {
 
 function ToEntitySection() {
 
-    const toEntity = useSelector((state) => state.mainPageStates.selectedItem.toEntity);
-    const toType = useSelector((state) => state.mainPageStates.selectedItem.toType);
-    const transactionEntities = useSelector((state) => state.mainPageStates.additionalInformationState.transactionEntities);
+    const toEntity = useSelector((state) => state.recurringEntityPageStates.selectedItem.toEntity);
+    const toType = useSelector((state) => state.recurringEntityPageStates.selectedItem.toType);
+    const transactionEntities = useSelector((state) => state.recurringEntityPageStates.additionalInformationState.transactionEntities);
     const transformedEntities = transactionEntities.filter((entity) => entity.type === toType ).map((entity) => entity.name);
 
     return (
@@ -360,80 +357,6 @@ ToEntitySection.propTypes = {
     toEntity: PropTypes.string,
     toType: PropTypes.string,
     transactionEntities: PropTypes.array,
-    handleValueChange: PropTypes.func,
-};
-*/
-
-function RecurringEntity() {
-
-    const recurringEntity = useSelector((state) => state.mainPageStates.selectedItem.recurringEntity);
-
-    return (
-        <SectionContainer additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80">
-            <H6HeadingText 
-                additonalClasses="H-[100%] W-[40%]"
-            >
-                Recurring
-            </H6HeadingText>
-            <p 
-                className="h-[100%] w-[60%] text-start text-base font-normal truncate"
-            >
-                {recurringEntity}
-            </p>
-        </SectionContainer>
-    );
-}
-
-/*
-RecurringEntity.propTypes = {
-    recurringEntity: PropTypes.string,
-};
-*/
-
-
-function FileInput() {
-
-    const files = useSelector((state) => state.mainPageStates.selectedItem.file);
-
-    return (
-        <SectionContainer additonalClasses="w-auto h-auto border-b-2 pb-4 min-w-80">
-            <FileInputSection 
-                additonalClasses="h-10 w-[100%]"
-                files={files}
-                handleValueChange={handleItemClick}
-            />
-            <ul
-                className="flex flex-row flex-wrap h-auto w-[100%]"
-            >
-                {files.map((fileName) => {
-
-                    return (
-                        <li 
-                            key={fileName}
-                            className="list-decimal h-10 w-auto mx-4 my-1"
-                        >
-                            <GetFileSection
-                                additonalClasses="h-10 w-auto p-2"
-                                fileName={fileName}
-                            />
-                            <DeleteFileButtonSection
-                                additonalClasses="h-10 w-auto p-2"
-                                fileName={fileName}
-                                files={files}
-                                handleValueChange={handleItemClick}
-                            />
-                        </li>
-                    );
-                    } )
-                }
-            </ul>
-        </SectionContainer>
-    );
-}
-
-/*
-FileInput.propTypes = {
-    files: PropTypes.array,
     handleValueChange: PropTypes.func,
 };
 */
@@ -470,6 +393,65 @@ DatetimeInput.propTypes = {
 };
 
 
+function RecurringFrequencyInput() {
+
+    const recurringFrequency = useSelector((state) => state.recurringEntityPageStates.selectedItem.recurringFrequency);
+    //console.log(recurringFrequency)
+    
+    return (
+        <SectionContainer additonalClasses="flex flex-warp flex-row w-auto h-20 border-b-2 pb-4 min-w-80">
+            <H6HeadingText 
+                additonalClasses="h-[100%] w-[40%]"
+            >
+                Recurring Frequency
+            </H6HeadingText>
+            {/*The below select is for choosing the frequency*/}
+            <SelectInputSection 
+                selectedValue={recurringFrequency.frequency ?? "choose"} 
+                options={["Daily", "Weekly", "Monthly", "Yearly"]} 
+                additonalClasses="w-[15%] h-[100%] block"
+                fieldName={"recurringFrequency/frequency"}
+                handleValueChange={handleItemClick}
+            />
+            {/*The below select is for choosing the day of the week*/}
+            <SelectInputSection 
+                selectedValue={recurringFrequency.dayOfTheWeek ?? "choose"} 
+                options={["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]} 
+                additonalClasses={"w-[15%] h-[100%] " + (recurringFrequency.frequency === "Weekly" ? "block" : "hidden")}
+                fieldName={"recurringFrequency/dayOfTheWeek"}
+                handleValueChange={handleItemClick}
+            />
+            {/*The below select is for choosing the day of the month*/}
+            <SelectInputSection 
+                selectedValue={recurringFrequency.dayOfTheMonth ?? "choose"} 
+                options={Array(31).fill().map((_, idx) => idx + 1)} 
+                additonalClasses={"w-[15%] h-[100%] " + (recurringFrequency.frequency === "Monthly" || recurringFrequency.frequency === "Yearly" ? "block" : "hidden")}
+                fieldName={"recurringFrequency/dayOfTheMonth"}
+                handleValueChange={handleItemClick}
+            />
+            {/*The below select is for choosing the month*/}
+            <SelectInputSection 
+                selectedValue={recurringFrequency.month ?? "choose"} 
+                options={["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]} 
+                additonalClasses={"w-[15%] h-[100%] " + (recurringFrequency.frequency === "Yearly" ? "block" : "hidden")}
+                fieldName={"recurringFrequency/month"}
+                handleValueChange={handleItemClick}
+            />
+            {/*The below select is for choosing the time*/}
+            <input
+                className={"w-[15%] h-[100%] " + (recurringFrequency.frequency !== undefined && recurringFrequency.frequency !== "choose"? "block" : "hidden")}
+                type="time"
+                value={recurringFrequency.time ?? "HH:MM:SS"}
+                onChange={(event) => { console.log("time changed, time is: ", event.target.value)
+                                       handleItemClick({fieldname: "recurringFrequency/time", fieldvalue: event.target.value})
+                                    }
+                        }
+            />
+        </SectionContainer>
+    );
+}
+
+
 export {TitleSection, 
         DescriptionSection, 
         SalarySection, 
@@ -480,7 +462,6 @@ export {TitleSection,
         FromEntitySection,
         ToTypeSection,
         ToEntitySection,
-        RecurringEntity,
-        FileInput,
-        DatetimeInput
-    };
+        DatetimeInput,
+        RecurringFrequencyInput,
+};

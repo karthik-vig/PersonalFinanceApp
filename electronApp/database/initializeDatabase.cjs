@@ -126,8 +126,9 @@ function setupDatabase() {
                 files bool, \
                 createdDate DATETIME, \
                 modifiedDate DATETIME, \
-                recurringFrequency TEXT \
-                recurringTransactionStartDate DATETIME \
+                recurringFrequency TEXT, \
+                recurringTransactionStartDate DATETIME, \
+                recurringTransactionEndDate DATETIME \
                 )', (err) => { 
                     if (err) { 
                         console.log(`recurringTransactions table creation ${err}`); 

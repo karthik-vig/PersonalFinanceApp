@@ -11,9 +11,8 @@ import {TitleSection,
         FromEntitySection,
         ToTypeSection,
         ToEntitySection,
-        RecurringEntity,
-        FileInput,
         DatetimeInput,
+        RecurringFrequencyInput,
     } from './sectionComponents';
 //import { useImmer } from 'use-immer';
 import { useSelector,
@@ -24,7 +23,7 @@ import { useSelector,
 // this is the detail section that is used in the main page
 function DetailSection() {
 
-    const selectedItem = useSelector((state) => state.mainPageStates.selectedItem);
+    const selectedItem = useSelector((state) => state.recurringEntityPageStates.selectedItem);
 
     if (selectedItem === null) {
         return (
@@ -53,9 +52,6 @@ function DetailSection() {
             <FromEntitySection />
             <ToTypeSection />
             <ToEntitySection />
-            { selectedItem.recurringEntity && <RecurringEntity /> }
-            <H3HeadingSection>Files</H3HeadingSection>
-            <FileInput />
             <H3HeadingSection>Additional Information</H3HeadingSection>
             <DatetimeInput
                 datetimeValue={selectedItem.createdDate}
@@ -69,10 +65,17 @@ function DetailSection() {
                 fieldName={"modifiedDate"}
                 readonly={true}
             />
+            <RecurringFrequencyInput />
             <DatetimeInput
-                datetimeValue={selectedItem.transactionDate}
-                heading={"Set Transaction Date"}
-                fieldName={"transactionDate"}
+                datetimeValue={selectedItem.recurringTransactionStartDate}
+                heading={"Recurring Transaction Start Date"}
+                fieldName={"recurringTransactionStartDate"}
+                readonly={false}
+            />
+            <DatetimeInput
+                datetimeValue={selectedItem.recurringTransactionEndDate}
+                heading={"Recurring Transaction End Date"}
+                fieldName={"recurringTransactionEndDate"}
                 readonly={false}
             />
         </div>

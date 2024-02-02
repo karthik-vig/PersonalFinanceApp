@@ -53,7 +53,7 @@ TopBarButton.propTypes = {
 
 function TopBar() {
 
-    const filterDisplayState = useSelector((state) => state.mainPageStates.filterDisplayState);
+    const filterDisplayState = useSelector((state) => state.recurringEntityPageStates.filterDisplayState);
     const dispatch = useDispatch();
 
 

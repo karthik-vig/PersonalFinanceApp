@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 export const searchParamsSlice = createSlice({
-    name: "mainPage/searchParams",
+    name: "recurringEntityPage/searchParams",
     initialState: {
         search: "", //string input
         filter: {

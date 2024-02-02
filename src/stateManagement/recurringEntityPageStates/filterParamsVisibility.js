@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const filterParamsVisibilitySlice = createSlice({
-    name: "mainPage/filterParamsVisibility",
+    name: "recurringEntityPage/filterParamsVisibility",
     initialState: {
             value: false,
             currency: false,

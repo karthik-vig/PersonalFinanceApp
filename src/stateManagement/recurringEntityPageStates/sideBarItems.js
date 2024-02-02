@@ -17,7 +17,7 @@ getAllItems().then((result) => {
 */
 
 export const sideBarItemSlice = createSlice({
-    name: "mainPage/sideBarItems",
+    name: "recurringEntityPage/sideBarItems",
     initialState: [],
     reducers: {
         removeSideBarItem: (state, action) => {
