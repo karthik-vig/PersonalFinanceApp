@@ -83,10 +83,10 @@ function createEntry() {
 }
 
 function modifyItem(event, selectedItem) {
-    console.log("In modifyItem: selectedItem: " + selectedItem);
-    return { modifyStatus: true, modifyItem: { id: 1, 
-                                               title: "name",
-                                               recurringFrequency: "2024-01-01",
+    console.log("In modifyItem: selectedItem: ", selectedItem);
+    return { modifyStatus: true, modifiedItem: { id: 1, 
+                                               title: "Modified name",
+                                               recurringFrequency: "Monthly",
                                                value: 100,
                                                transactionType: "Out",
                                                transactionCategory: "Groceries",

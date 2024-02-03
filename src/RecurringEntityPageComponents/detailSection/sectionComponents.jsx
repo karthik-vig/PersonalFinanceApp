@@ -12,7 +12,7 @@ import {H6HeadingText,
     } from '../../basicComponents/userInputLayoutComponents/basicUserInputComponents.jsx';
 import { handleItemClick,
     } from '../../stateManagement/recurringEntityPageStates/selectedItem.js';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 // below are the sections that are used in the detail section; built using the basic components
 function TitleSection() {
@@ -396,6 +396,7 @@ DatetimeInput.propTypes = {
 function RecurringFrequencyInput() {
 
     const recurringFrequency = useSelector((state) => state.recurringEntityPageStates.selectedItem.recurringFrequency);
+    const dispatch = useDispatch();
     //console.log(recurringFrequency)
     
     return (
@@ -443,7 +444,7 @@ function RecurringFrequencyInput() {
                 type="time"
                 value={recurringFrequency.time ?? "HH:MM:SS"}
                 onChange={(event) => { console.log("time changed, time is: ", event.target.value)
-                                       handleItemClick({fieldname: "recurringFrequency/time", fieldvalue: event.target.value})
+                                       dispatch(handleItemClick({fieldName: "recurringFrequency/time", fieldValue: event.target.value}))
                                     }
                         }
             />
