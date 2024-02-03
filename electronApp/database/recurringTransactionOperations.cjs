@@ -46,7 +46,7 @@ function getAllItems() {
 }
 
 function getItems(event, searchParams, filterParamsVisibility) {
-    console.log("In getItems: searchParams: " + searchParams + " filterParamsVisibility: " + filterParamsVisibility)
+    console.log("In getItems: searchParams: ", searchParams, " filterParamsVisibility: ", filterParamsVisibility)
     return [
         { id: 91, 
             title: "name",

@@ -16,16 +16,37 @@ export const searchParamsSlice = createSlice({
             fromEntity: null, //select list
             //toType: null, //select list
             toEntity: null, //select list
-            recurringEntity: null, //select list
+            //recurringEntity: null, //select list
             createdDate: { min: null, //date picker
                             max: null, //date picker
                             },
             modifiedDate: { min: null, //date picker
                             max: null, //date picker
                             },
+            /*
             transactionDate: { min: null, //date picker
                                 max: null, //date picker
                             },
+            */
+            recurringFrequencyType: null, //select list
+            recurringFrequencyDayOfTheWeek: { min: null, //string input
+                                              max: null, //string input
+                                            },
+            recurringFrequencyDayOfTheMonth: { min: null, //number input
+                                                max: null, //number input
+                                            },
+            recurringFrequencyMonthOfTheYear: { min: null, //string input
+                                                max: null, //string input
+                                            },
+            recurringFrequencyTime: { min: null, //time picker
+                                    max: null, //time picker
+                                    },
+            recurringTransactionStartDate: { min: null, //date picker
+                                            max: null, //date picker
+                                            },
+            recurringTransactionEndDate: { min: null, //date picker
+                                            max: null, //date picker
+                                            },
             sort: { ascending: true, //can be true or false
                     field: null, //some valid field name
                 },

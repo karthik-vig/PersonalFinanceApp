@@ -35,7 +35,7 @@ import financialEntityPageWarningBoxDisplayReducer from './financialEntityPageSt
 
 //import all the reducers for the recurring entity page states
 import recurringEntityPageSelectedItemReducer from './recurringEntityPageStates/selectedItem.js';
-import recurringEntityPageAdditionalInformationReducer from './recurringEntityPageStates/additionalInformation.js';
+//import recurringEntityPageAdditionalInformationReducer from './recurringEntityPageStates/additionalInformation.js';
 import recurringEntityPageCurrentSelectedItemReducer from './recurringEntityPageStates/currentSelectedItem.js';
 import recurringEntityPageFailBoxDisplayReducer from './recurringEntityPageStates/failBoxDisplay.js';
 import recurringEntityPageFilterParamsVisibilityReducer from './recurringEntityPageStates/filterParamsVisibility.js';
@@ -87,7 +87,7 @@ const financialEntityPageStates = combineReducers({
 
 const recurringEntityPageStates = combineReducers({
   selectedItem: recurringEntityPageSelectedItemReducer,
-  additionalInformationState: recurringEntityPageAdditionalInformationReducer,
+  //additionalInformationState: recurringEntityPageAdditionalInformationReducer,
   currentSelectedItemState: recurringEntityPageCurrentSelectedItemReducer,
   failBoxDisplayState: recurringEntityPageFailBoxDisplayReducer,
   filterParamsVisibility: recurringEntityPageFilterParamsVisibilityReducer,

@@ -52,19 +52,7 @@ function DetailSection() {
             <FromEntitySection />
             <ToTypeSection />
             <ToEntitySection />
-            <H3HeadingSection>Additional Information</H3HeadingSection>
-            <DatetimeInput
-                datetimeValue={selectedItem.createdDate}
-                heading={"Created On"}
-                fieldName={"createdDate"}
-                readonly={true}
-            />
-            <DatetimeInput
-                datetimeValue={selectedItem.modifiedDate}
-                heading={"Last Modified On"}
-                fieldName={"modifiedDate"}
-                readonly={true}
-            />
+            <H3HeadingSection>Recurring Transaction Setup</H3HeadingSection>
             <RecurringFrequencyInput />
             <DatetimeInput
                 datetimeValue={selectedItem.recurringTransactionStartDate}
@@ -77,6 +65,19 @@ function DetailSection() {
                 heading={"Recurring Transaction End Date"}
                 fieldName={"recurringTransactionEndDate"}
                 readonly={false}
+            />
+            <H3HeadingSection>Additional Information</H3HeadingSection>
+            <DatetimeInput
+                datetimeValue={selectedItem.createdDate}
+                heading={"Created On"}
+                fieldName={"createdDate"}
+                readonly={true}
+            />
+            <DatetimeInput
+                datetimeValue={selectedItem.modifiedDate}
+                heading={"Last Modified On"}
+                fieldName={"modifiedDate"}
+                readonly={true}
             />
         </div>
     );

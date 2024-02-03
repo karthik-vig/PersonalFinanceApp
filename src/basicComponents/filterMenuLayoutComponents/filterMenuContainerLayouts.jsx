@@ -275,4 +275,5 @@ export {
         FilterSelectFinancialEntityInputParam,
         FilterParamSection,
         FilterParamInputSection,
+        SelectInputField,
     };

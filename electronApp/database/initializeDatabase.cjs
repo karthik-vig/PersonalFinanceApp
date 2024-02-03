@@ -126,7 +126,11 @@ function setupDatabase() {
                 files bool, \
                 createdDate DATETIME, \
                 modifiedDate DATETIME, \
-                recurringFrequency TEXT, \
+                recurringFrequencyType TEXT, \
+                recurringFrequencyDayOfTheWeek TEXT, \
+                recurringFrequencyDayOfTheMonth TEXT, \
+                recurringFrequencyMonthOfTheYear TEXT, \
+                recurringFrequencyTime TEXT, \
                 recurringTransactionStartDate DATETIME, \
                 recurringTransactionEndDate DATETIME \
                 )', (err) => { 

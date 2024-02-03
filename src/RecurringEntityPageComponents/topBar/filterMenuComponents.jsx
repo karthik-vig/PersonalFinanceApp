@@ -9,6 +9,7 @@ import {FilterRangeInputParam,
         FilterSelectInputParam,
         FilterSortInputParam,
         FilterSelectFinancialEntityInputParam,
+        SelectInputField,
     } from '../../basicComponents/filterMenuLayoutComponents/filterMenuContainerLayouts.jsx';
 //import { useImmer } from 'use-immer';
 import { useSelector, useDispatch } from 'react-redux';
@@ -17,8 +18,8 @@ import {  //showFilter,
  } from '../../stateManagement/recurringEntityPageStates/filterDisplay.js';
 import { toggleFilterParamsVisibility, resetFilterParamsVisibility } from '../../stateManagement/recurringEntityPageStates/filterParamsVisibility.js';
 import { setFilterParams } from '../../stateManagement/recurringEntityPageStates/searchParams.js';
-import { setRecurringTransactions } from '../../stateManagement/recurringEntityPageStates/additionalInformation.js';
-import { useEffect } from 'react';
+//import { setRecurringTransactions } from '../../stateManagement/mainPageStates/additionalInformation.js';
+//import { useEffect } from 'react';
 import { faTimes, faEraser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -35,17 +36,18 @@ function FilterMenu(){
     const toggleFieldVisibility = (fieldName) => dispatch(toggleFilterParamsVisibility(fieldName));
 
     //get from backend api
-    const currencies = useSelector((state) => state.recurringEntityPageStates.additionalInformationState.currencies);
-    const transactionCategories = useSelector((state) => state.recurringEntityPageStates.additionalInformationState.transactionCategories);
-    const transactionEntities = useSelector((state) => state.recurringEntityPageStates.additionalInformationState.transactionEntities);
-    const recurringTransactions = useSelector((state) => state.recurringEntityPageStates.additionalInformationState.recurringTransactions);
+    const currencies = useSelector((state) => state.mainPageStates.additionalInformationState.currencies);
+    const transactionCategories = useSelector((state) => state.mainPageStates.additionalInformationState.transactionCategories);
+    const transactionEntities = useSelector((state) => state.mainPageStates.additionalInformationState.transactionEntities);
 
+    /*
     useEffect(() => {
         window.recurringTransactionOperations.getRecurringTransactions().then((retrievedRecurringTransactions) => {
             dispatch(setRecurringTransactions(retrievedRecurringTransactions));
         });
     }, [dispatch,
     ]);
+    */
 
     //convert transactionEntities to an array of transactionEntity names
     const transactionEntityNames = Object.keys(transactionEntities).map((key) => transactionEntities[key].name );
@@ -128,14 +130,6 @@ function FilterMenu(){
                 filterParamsVisibility={filterParamsVisibility}
                 selectOptions={transactionEntityNames}
             />
-            <FilterSelectInputParam
-                headingText="Recurring Entity"
-                fieldName="recurringEntity"
-                toggleDisplay={toggleFieldVisibility}
-                handleInputChange={handleInputChange}
-                filterParamsVisibility={filterParamsVisibility}
-                selectOptions={recurringTransactions}
-            />
             <FilterRangeInputParam
                 labelText={{"rangeStart": "Min", "rangeEnd": "Max"}}
                 headingText="Created Date"
@@ -172,21 +166,127 @@ function FilterMenu(){
                     handleInputChange={handleInputChange}
                 />
             </FilterRangeInputParam>
+            <FilterSelectInputParam
+                headingText="Recurring: Frequency"
+                fieldName="recurringFrequencyType"
+                toggleDisplay={toggleFieldVisibility}
+                handleInputChange={handleInputChange}
+                filterParamsVisibility={filterParamsVisibility}
+                selectOptions={["Daily", "Weekly", "Monthly", "Yearly"]}
+            />
             <FilterRangeInputParam
                 labelText={{"rangeStart": "Min", "rangeEnd": "Max"}}
-                headingText="Transaction Date"
-                fieldName="transactionDate"
+                headingText="Recurring: Day of the Week"
+                fieldName="recurringFrequencyDayOfTheWeek"
+                toggleDisplay={toggleFieldVisibility}
+                filterParamsVisibility={filterParamsVisibility}
+            >
+                <SelectInputField
+                    additionalClasses=""
+                    fieldName="recurringFrequencyDayOfTheWeekMin"
+                    handleInputChange={handleInputChange}
+                    selectOptions={["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]}
+                />
+                <SelectInputField
+                    additionalClasses=""
+                    fieldName="recurringFrequencyDayOfTheWeekMax"
+                    handleInputChange={handleInputChange}
+                    selectOptions={["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]}
+                />
+            </FilterRangeInputParam>
+            <FilterRangeInputParam
+                labelText={{"rangeStart": "Min", "rangeEnd": "Max"}}
+                headingText="Recurring: Day of the Month"
+                fieldName="recurringFrequencyDayOfTheMonth"
+                toggleDisplay={toggleFieldVisibility}
+                filterParamsVisibility={filterParamsVisibility}
+            >
+                <SelectInputField
+                    additionalClasses=""
+                    fieldName="recurringFrequencyDayOfTheMonthMin"
+                    handleInputChange={handleInputChange}
+                    selectOptions={Array(31).fill().map((_, i) => i + 1)}
+                />
+                <SelectInputField
+                    additionalClasses=""
+                    fieldName="recurringFrequencyDayOfTheMonthMax"
+                    handleInputChange={handleInputChange}
+                    selectOptions={Array(31).fill().map((_, i) => i + 1)}
+                />
+            </FilterRangeInputParam>
+            <FilterRangeInputParam
+                labelText={{"rangeStart": "Min", "rangeEnd": "Max"}}
+                headingText="Recurring: Month of the Year"
+                fieldName="recurringFrequencyMonthOfTheYear"
+                toggleDisplay={toggleFieldVisibility}
+                filterParamsVisibility={filterParamsVisibility}
+            >
+                <SelectInputField
+                    additionalClasses=""
+                    fieldName="recurringFrequencyMonthOfTheYearMin"
+                    handleInputChange={handleInputChange}
+                    selectOptions={["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]}
+                />
+                <SelectInputField
+                    additionalClasses=""
+                    fieldName="recurringFrequencyMonthOfTheYearMax"
+                    handleInputChange={handleInputChange}
+                    selectOptions={["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]}
+                />
+            </FilterRangeInputParam>
+            <FilterRangeInputParam
+                labelText={{"rangeStart": "Min", "rangeEnd": "Max"}}
+                headingText="Recurring: Frequency Time"
+                fieldName="recurringFrequencyTime"
+                toggleDisplay={toggleFieldVisibility}
+                filterParamsVisibility={filterParamsVisibility}
+            >
+                <input
+                    type="time"
+                    className="w-full h-8 rounded-md border border-primary-cl "
+                    onChange={(event) => handleInputChange("recurringFrequencyTimeMin", event.target.value)}
+                    readOnly={false}
+                />
+                <input
+                    type="time"
+                    className="w-full h-8 rounded-md border border-primary-cl "
+                    onChange={(event) => handleInputChange("recurringFrequencyTimeMax", event.target.value)}
+                    readOnly={false}
+                />
+            </FilterRangeInputParam>
+            <FilterRangeInputParam
+                labelText={{"rangeStart": "Min", "rangeEnd": "Max"}}
+                headingText="Recucrring: Transaction Start Date"
+                fieldName="recurringTransactionStartDate"
                 toggleDisplay={toggleFieldVisibility}
                 filterParamsVisibility={filterParamsVisibility}
             >
                 <DateInputField
                     additionalClasses=""
-                    fieldName="transactionDateMin"
+                    fieldName="recurringTransactionStartDateMin"
                     handleInputChange={handleInputChange}
                 />
                 <DateInputField
                     additionalClasses=""
-                    fieldName="transactionDateMax"
+                    fieldName="recurringTransactionStartDateMax"
+                    handleInputChange={handleInputChange}
+                />
+            </FilterRangeInputParam>
+            <FilterRangeInputParam
+                labelText={{"rangeStart": "Min", "rangeEnd": "Max"}}
+                headingText="Recurring: Transaction End Date"
+                fieldName="recurringTransactionEndDate"
+                toggleDisplay={toggleFieldVisibility}
+                filterParamsVisibility={filterParamsVisibility}
+            >
+                <DateInputField
+                    additionalClasses=""
+                    fieldName="recurringTransactionEndDateMin"
+                    handleInputChange={handleInputChange}
+                />
+                <DateInputField
+                    additionalClasses=""
+                    fieldName="recurringTransactionEndDateMax"
                     handleInputChange={handleInputChange}
                 />
             </FilterRangeInputParam>
