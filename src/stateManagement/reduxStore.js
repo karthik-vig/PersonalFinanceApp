@@ -48,6 +48,7 @@ import recurringEntityPageTriggerDeleteEntryReducer from './recurringEntityPageS
 import recurringEntityPageTriggerModifyEntryReducer from './recurringEntityPageStates/triggerModifyEntry.js';
 import recurringEntityPageTriggerSearchReducer from './recurringEntityPageStates/triggerSearch.js';
 import recurringEntityPageWarningBoxDisplayReducer from './recurringEntityPageStates/warningBoxDisplay.js';
+import recurringEntityPageFilterDisplayReducer from './recurringEntityPageStates/filterDisplay.js';
 
 const mainPageStates = combineReducers({
   selectedItem: mainPageSelectedItemReducer,
@@ -99,6 +100,7 @@ const recurringEntityPageStates = combineReducers({
   triggerModifyEntryState: recurringEntityPageTriggerModifyEntryReducer,
   triggerSearchState: recurringEntityPageTriggerSearchReducer,
   warningBoxDisplayState: recurringEntityPageWarningBoxDisplayReducer,
+  filterDisplayState: recurringEntityPageFilterDisplayReducer,
 });
 
 const rootReducer = combineReducers({
