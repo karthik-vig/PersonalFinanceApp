@@ -219,15 +219,7 @@ FilterSelectFinancialEntityInputParam.propTypes = {
     filterParamsVisibility: PropTypes.object,
 };
 
-function FilterSortInputParam({ toggleDisplay, handleInputChange, filterParamsVisibility}){
-    
-    const fields = ["title",
-                    "description",
-                    "value",  
-                    "createdDate", 
-                    "modifiedDate", 
-                    "transactionDate",
-                ]
+function FilterSortInputParam({ toggleDisplay, handleInputChange, filterParamsVisibility, fields}){
     
     return (
         <FilterParamSection
@@ -266,6 +258,7 @@ FilterSortInputParam.propTypes = {
     toggleDisplay: PropTypes.func,
     handleInputChange: PropTypes.func,
     filterParamsVisibility: PropTypes.object,
+    fields: PropTypes.array,
 };
 
 export {

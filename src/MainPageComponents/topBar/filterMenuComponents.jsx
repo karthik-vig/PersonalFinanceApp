@@ -194,6 +194,13 @@ function FilterMenu(){
                 toggleDisplay={toggleFieldVisibility}
                 handleInputChange={handleInputChange}
                 filterParamsVisibility={filterParamsVisibility}
+                fields={["title",
+                        "description",
+                        "value",  
+                        "createdDate", 
+                        "modifiedDate", 
+                        "transactionDate",
+                        ]}
             />
         </div>
     );

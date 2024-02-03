@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+//import PropTypes from 'prop-types';
 import '../../index.css';
 import {
         DateInputField,
@@ -6,7 +6,7 @@ import {
     } from '../../basicComponents/filterMenuLayoutComponents/basicFilterInputComponents.jsx';
 import {FilterRangeInputParam,
         FilterSelectInputParam,
-        //FilterSortInputParam,
+        FilterSortInputParam,
     } from '../../basicComponents/filterMenuLayoutComponents/filterMenuContainerLayouts.jsx';
 //import { useImmer } from 'use-immer';
 import { useSelector, useDispatch } from 'react-redux';
@@ -15,15 +15,18 @@ import {  //showFilter,
  } from '../../stateManagement/financialEntityPageStates/filterDisplay.js';
 import { toggleFilterParamsVisibility, resetFilterParamsVisibility } from '../../stateManagement/financialEntityPageStates/filterParamsVisibility.js';
 import { setFilterParams } from '../../stateManagement/financialEntityPageStates/searchParams.js';
+/*
 import {FilterParamSection,
         FilterParamInputSection,
     } from '../../basicComponents/filterMenuLayoutComponents/filterMenuContainerLayouts.jsx';
-import { SelectInputField } from '../../basicComponents/filterMenuLayoutComponents/basicFilterInputComponents.jsx';
+*/
+//import { SelectInputField } from '../../basicComponents/filterMenuLayoutComponents/basicFilterInputComponents.jsx';
 import { faTimes, faEraser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 library.add(faTimes, faEraser);
 
+/*
 function FilterSortInputParam({ toggleDisplay, handleInputChange, filterParamsVisibility}){
     
     const fields = ["title",
@@ -70,6 +73,7 @@ FilterSortInputParam.propTypes = {
     handleInputChange: PropTypes.func,
     filterParamsVisibility: PropTypes.object,
 };
+*/
 
 function FilterMenu(){
     
@@ -149,6 +153,11 @@ function FilterMenu(){
                 toggleDisplay={toggleFieldVisibility}
                 handleInputChange={handleInputChange}
                 filterParamsVisibility={filterParamsVisibility}
+                fields={["title",
+                        "description",
+                        "createdDate",
+                        "modifiedDate", 
+                        ]}
             />
         </div>
     );
