@@ -123,7 +123,6 @@ function setupDatabase() {
                 transactionCategory TEXT, \
                 fromReference TEXT, \
                 toReference TEXT, \
-                files bool, \
                 createdDate DATETIME, \
                 modifiedDate DATETIME, \
                 recurringFrequencyType TEXT, \

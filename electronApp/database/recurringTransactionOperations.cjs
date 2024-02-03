@@ -1,3 +1,4 @@
+const { v4: uuidv4 } = require('uuid');
 
 let db = null;
 
@@ -73,6 +74,49 @@ function getItems(event, searchParams, filterParamsVisibility) {
 }
 
 function createEntry() {
+
+    return new Promise((resolve, reject) => {
+        db.serialize(() => {
+            const currentDateTime = new Date().toISOString().substring(0, 19);
+            const uuid = uuidv4();
+            db.run(`INSERT INTO recurringTransactions (\
+                    id, \
+                    title, \
+                    description, \
+                    value, \
+                    currency, \
+                    transactionType, \
+                    transactionCategory, \
+                    fromReference, \
+                    toReference, \
+                    createdDate, \
+                    modifiedDate, \
+                    recurringFrequencyType, \
+                    recurringFrequencyDayOfTheWeek, \
+                    recurringFrequencyDayOfTheMonth, \
+                    recurringFrequencyMonthOfTheYear, \
+                    recurringFrequencyTime, \
+                    recurringTransactionStartDate, \
+                    recurringTransactionEndDate \
+                    ) VALUES (?, "NEW Entry", NULL, NULL, NULL, NULL, NULL, NULL, NULL, ?, ?, NULL, NULL, NULL, NULL, NULL, NULL, NULL)`, 
+                    uuid, currentDateTime, currentDateTime, (err) => {
+                        if (err) {
+                            console.log("Recurring Entity: In createEntry: err: ", err);
+                            reject(true);
+                        } else {
+                            resolve({
+                                id: uuid, 
+                                title: "NEW Entry",
+                                recurringFrequency: null,
+                                value: null,
+                                transactionType: null,
+                                transactionCategory: null,
+                            });
+                        }
+                    });
+        });
+    });
+    /*
     return { id: 1, 
         title: "name",
         recurringFrequency: "2024-01-01",
@@ -80,6 +124,7 @@ function createEntry() {
         transactionType: "Out",
         transactionCategory: "Groceries",
         };
+    */
 }
 
 function modifyItem(event, selectedItem) {
