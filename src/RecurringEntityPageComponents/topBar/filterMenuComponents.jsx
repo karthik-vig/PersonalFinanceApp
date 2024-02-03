@@ -294,6 +294,18 @@ function FilterMenu(){
                 toggleDisplay={toggleFieldVisibility}
                 handleInputChange={handleInputChange}
                 filterParamsVisibility={filterParamsVisibility}
+                fields={["title",
+                        "description",
+                        "value",  
+                        "createdDate", 
+                        "modifiedDate", 
+                        "recurringTransactionStartDate",
+                        "recurringTransactionEndDate",
+                        "recurringFrequencyTime",
+                        "recurringFrequencyMonthOfTheYear",
+                        "recurringFrequencyDayOfTheMonth",
+                        "recurringFrequencyDayOfTheWeek",
+                        ]}
             />
         </div>
     );
