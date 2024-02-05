@@ -107,16 +107,15 @@ function RecurringEntityPage() {
         console.log("The Modify Entry trigger selected item is: ");
         console.log(selectedItem);
         window.recurringTransactionOperations.modifyItem(selectedItem).then(modifiedItem => {
-            dispatch(modifySideBarItem({id: selectedItem.id, modifiedItem: modifiedItem }));
+            dispatch(modifySideBarItem(modifiedItem));
             dispatch(showSuccessBox("Saved the Details to Disk"));
         }).catch((err) => {
-            if (err.modifyStatus === false)
+            if (err)
             dispatch(showFailBox("Could not Modify the Entry"));
         });
         dispatch(resetTriggerModifyEntry());
    }, [triggerModifyEntryState,
         dispatch,
-        //resetTriggerModifyEntry,
         selectedItem,
     ]);
 

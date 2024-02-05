@@ -31,10 +31,10 @@ export const sideBarItemSlice = createSlice({
         },
         modifySideBarItem: (state, action) => {
             //action.payload = {id: string, modifiedItem: object}
-            console.log("Attempting to modify sideBarItem with id = ", action.payload.modifiedItem.item.id);
+            console.log("Attempting to modify sideBarItem with id = ", action.payload.id);
             state = state.map(item => {
-                if (String(item.id) === String(action.payload.modifiedItem.item.id)) {
-                    return action.payload.modifiedItem.item;
+                if (String(item.id) === String(action.payload.id)) {
+                    return action.payload;
                 }
                 else {
                     return item;

@@ -36,6 +36,7 @@ import { faShoppingBasket,
          faEllipsisH,
          faTimes,
          faDollarSign,
+         faSync,
 } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -65,6 +66,7 @@ library.add(
     faEllipsisH,
     faTimes,
     faDollarSign,
+    faSync,
     );
 
 function SideBar() {
@@ -140,9 +142,9 @@ function SideBar() {
         const subTitle = <section className='flex flex-row flex-nowrap justify-stretch items-center'>
             <FontAwesomeIcon 
                 className='mx-1'
-                icon={['fas', 'shopping-cart']} 
+                icon={['fas', 'sync']} 
             />
-            {sideBarItem.transactionDate?.substring(0, 10)}
+            {sideBarItem.recurringFrequency}
             <FontAwesomeIcon 
                 className='mr-1 ml-2'
                 icon={['fas', 'dollar-sign']} 
