@@ -257,6 +257,31 @@ function modifyItem(event, selectedItem) {
 
 function deleteItem(event, uuid) {
     console.log("In deleteItem: uuid: " + uuid);
+    return new Promise((resolve, reject) => {
+        new Promise((resolve, reject) => {
+            db.run(`DELETE FROM recurringTransactions WHERE id = ?`, uuid, (err) => {
+                if (err) {
+                    console.log("Recurring Entity: In deleteItem: err: ", err);
+                    reject(true);
+                } else {
+                    resolve(uuid);
+                }
+            });
+        }).then((uuid) => {
+            db.run(`UPDATE transactions SET recurringReference = NULL \
+                    WHERE recurringReference = ?`, uuid, (err) => {
+                        if (err) {
+                            console.log("Recurring Entity: In deleteItem: err: ", err);
+                            reject(true);
+                        } else {
+                            resolve();
+                        }
+                     });
+        }).catch((err) => {
+            console.log("Recurring Entity: In deleteItem: err: ", err);
+            reject(true);
+        });
+    });
     //return true;
 }
 
