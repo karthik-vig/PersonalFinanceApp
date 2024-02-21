@@ -163,7 +163,7 @@ function modifyItem(event, selectedItem) {
     return new Promise((resolve, reject) => {
         db.serialize(() => {
             const getFromFinancialEntityID = new Promise((resolve, reject) => { 
-                db.run(`SELECT id FROM financialEntities WHERE title = ?`, selectedItem.fromEntity, (err, row) => { 
+                db.all(`SELECT id FROM financialEntities WHERE title = ?`, selectedItem.fromEntity, (err, row) => { 
                     if (err) { 
                         console.log("Recurring Entity: In modifyItem: getFromFinancialEntityID: err: ", err);
                         reject(true);
@@ -174,7 +174,7 @@ function modifyItem(event, selectedItem) {
             });
 
             const getToFinancialEntityID = new Promise((resolve, reject) => { 
-                db.run(`SELECT id FROM financialEntities WHERE title = ?`, selectedItem.toEntity, (err, row) => { 
+                db.all(`SELECT id FROM financialEntities WHERE title = ?`, selectedItem.toEntity, (err, row) => { 
                     if (err) { 
                         console.log("Recurring Entity: In modifyItem: getFromFinancialEntityID: err: ", err);
                         reject(true);
