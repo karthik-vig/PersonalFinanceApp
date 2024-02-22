@@ -302,11 +302,11 @@ function getSelectedItem(event, uuid) {
                     toReference, \
                     createdDate, \
                     modifiedDate, \
-                    recurringFrequencyType, \
-                    recurringFrequencyDayOfTheWeek, \
-                    recurringFrequencyDayOfTheMonth, \
-                    recurringFrequencyMonthOfTheYear, \
-                    recurringFrequencyTime, \
+                    recurringFrequencyType AS frequency, \
+                    recurringFrequencyDayOfTheWeek AS dayOfTheWeek, \
+                    recurringFrequencyDayOfTheMonth AS dayOfTheMonth, \
+                    recurringFrequencyMonthOfTheYear AS month, \
+                    recurringFrequencyTime AS time, \
                     recurringTransactionStartDate, \
                     recurringTransactionEndDate \
                     FROM recurringTransactions WHERE id = ?`, uuid, (err, row) => {
@@ -358,11 +358,11 @@ function getSelectedItem(event, uuid) {
                     createdDate: recurringTransactionRow.createdDate,
                     modifiedDate: recurringTransactionRow.modifiedDate,
                     recurringFrequency: {
-                        frequency: recurringTransactionRow.recurringFrequencyType ?? undefined,
-                        recurringFrequencyDayOfTheWeek: recurringTransactionRow.recurringFrequencyDayOfTheWeek ?? undefined,
-                        recurringFrequencyDayOfTheMonth: recurringTransactionRow.recurringFrequencyDayOfTheMonth ?? undefined,
-                        recurringFrequencyMonthOfTheYear: recurringTransactionRow.recurringFrequencyMonthOfTheYear ?? undefined,
-                        recurringFrequencyTime: recurringTransactionRow.recurringFrequencyTime?? undefined,
+                        frequency: recurringTransactionRow.frequency ?? undefined,
+                        dayOfTheWeek: recurringTransactionRow.dayOfTheWeek ?? undefined,
+                        dayOfTheMonth: recurringTransactionRow.dayOfTheMonth ?? undefined,
+                        month: recurringTransactionRow.month ?? undefined,
+                        time: recurringTransactionRow.time?? undefined,
                     },
                     recurringTransactionStartDate: recurringTransactionRow.recurringTransactionStartDate,
                     recurringTransactionEndDate: recurringTransactionRow.recurringTransactionEndDate,
