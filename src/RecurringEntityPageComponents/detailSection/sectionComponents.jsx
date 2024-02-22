@@ -400,54 +400,71 @@ function RecurringFrequencyInput() {
     //console.log(recurringFrequency)
     
     return (
-        <SectionContainer additonalClasses="flex flex-warp flex-row w-auto h-20 border-b-2 pb-4 min-w-80">
+        <SectionContainer additonalClasses="flex flex-nowarp flex-row w-auto h-auto border-b-2 pb-4 min-w-80">
             <H6HeadingText 
                 additonalClasses="h-[100%] w-[40%]"
             >
                 Recurring Frequency
             </H6HeadingText>
-            {/*The below select is for choosing the frequency*/}
-            <SelectInputSection 
-                selectedValue={recurringFrequency.frequency ?? "choose"} 
-                options={["Daily", "Weekly", "Monthly", "Yearly"]} 
-                additonalClasses="w-[15%] h-[100%] block"
-                fieldName={"recurringFrequency/frequency"}
-                handleValueChange={handleItemClick}
-            />
-            {/*The below select is for choosing the day of the week*/}
-            <SelectInputSection 
-                selectedValue={recurringFrequency.dayOfTheWeek ?? "choose"} 
-                options={["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]} 
-                additonalClasses={"w-[15%] h-[100%] " + (recurringFrequency.frequency === "Weekly" ? "block" : "hidden")}
-                fieldName={"recurringFrequency/dayOfTheWeek"}
-                handleValueChange={handleItemClick}
-            />
-            {/*The below select is for choosing the day of the month*/}
-            <SelectInputSection 
-                selectedValue={recurringFrequency.dayOfTheMonth ?? "choose"} 
-                options={Array(31).fill().map((_, idx) => idx + 1)} 
-                additonalClasses={"w-[15%] h-[100%] " + (recurringFrequency.frequency === "Monthly" || recurringFrequency.frequency === "Yearly" ? "block" : "hidden")}
-                fieldName={"recurringFrequency/dayOfTheMonth"}
-                handleValueChange={handleItemClick}
-            />
-            {/*The below select is for choosing the month*/}
-            <SelectInputSection 
-                selectedValue={recurringFrequency.month ?? "choose"} 
-                options={["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]} 
-                additonalClasses={"w-[15%] h-[100%] " + (recurringFrequency.frequency === "Yearly" ? "block" : "hidden")}
-                fieldName={"recurringFrequency/month"}
-                handleValueChange={handleItemClick}
-            />
-            {/*The below select is for choosing the time*/}
-            <input
-                className={"w-[15%] h-[100%] " + (recurringFrequency.frequency !== undefined && recurringFrequency.frequency !== "choose"? "block" : "hidden")}
-                type="time"
-                value={recurringFrequency.time ?? "HH:MM:SS"}
-                onChange={(event) => { console.log("time changed, time is: ", event.target.value)
-                                       dispatch(handleItemClick({fieldName: "recurringFrequency/time", fieldValue: event.target.value}))
-                                    }
-                        }
-            />
+            <section className="flex flex-col flex-nowrap h-[100%] w-[60%]">
+                {/*The below select is for choosing the frequency*/}
+                <section className="flex flex-row flex-nowrap w-[100%] h-auto">
+                    <h6 className="w-[50%] h-[100%]">Frequency</h6>
+                    <SelectInputSection 
+                        selectedValue={recurringFrequency.frequency ?? "choose"} 
+                        options={["Daily", "Weekly", "Monthly", "Yearly"]} 
+                        additonalClasses="w-[50%] h-[100%] block"
+                        fieldName={"recurringFrequency/frequency"}
+                        handleValueChange={handleItemClick}
+                    />
+                </section>
+                {/*The below select is for choosing the day of the week*/}
+                <section className={"flex flex-row flex-nowrap w-[100%] h-auto " + (recurringFrequency.frequency === "Weekly" ? "block" : "hidden")}>
+                    <h6 className="w-[50%] h-[100%]">Day of the Week</h6>
+                    <SelectInputSection 
+                        selectedValue={recurringFrequency.dayOfTheWeek ?? "choose"} 
+                        options={["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]} 
+                        additonalClasses="w-[50%] h-[100%] "
+                        fieldName={"recurringFrequency/dayOfTheWeek"}
+                        handleValueChange={handleItemClick}
+                    />
+                </section>
+                {/*The below select is for choosing the day of the month*/}
+                <section className={"flex flex-row flex-nowrap w-[100%] h-auto " + (recurringFrequency.frequency === "Monthly" || recurringFrequency.frequency === "Yearly" ? "block" : "hidden")}>
+                    <h6 className="w-[50%] h-[100%]">Day of the Month</h6>
+                    <SelectInputSection 
+                        selectedValue={recurringFrequency.dayOfTheMonth ?? "choose"} 
+                        options={Array(31).fill().map((_, idx) => idx + 1)} 
+                        additonalClasses="w-[50%] h-[100%] "
+                        fieldName={"recurringFrequency/dayOfTheMonth"}
+                        handleValueChange={handleItemClick}
+                    />
+                </section>
+                {/*The below select is for choosing the month*/}
+                <section className={"flex flex-row flex-nowrap w-[100%] h-auto "  + (recurringFrequency.frequency === "Yearly" ? "block" : "hidden")}>
+                    <h6 className="w-[50%] h-[100%]">Month</h6>
+                    <SelectInputSection 
+                        selectedValue={recurringFrequency.month ?? "choose"} 
+                        options={["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]} 
+                        additonalClasses="w-[50%] h-[100%] "
+                        fieldName={"recurringFrequency/month"}
+                        handleValueChange={handleItemClick}
+                    />
+                </section>
+                {/*The below select is for choosing the time*/}
+                <section className={"flex flex-row flex-nowrap w-[100%] h-auto " + (recurringFrequency.frequency !== undefined && recurringFrequency.frequency !== "choose"? "block" : "hidden")}>
+                    <h6 className="w-[50%] h-[100%]">Time</h6>
+                    <input
+                        className="w-[50%] h-[100%] "
+                        type="time"
+                        value={recurringFrequency.time ?? "HH:MM:SS"}
+                        onChange={(event) => { console.log("time changed, time is: ", event.target.value)
+                                            dispatch(handleItemClick({fieldName: "recurringFrequency/time", fieldValue: event.target.value}))
+                                            }
+                                }
+                    />
+                </section>
+            </section>
         </SectionContainer>
     );
 }
