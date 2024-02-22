@@ -320,29 +320,29 @@ function getSelectedItem(event, uuid) {
         }).then((recurringTransactionRow) => {
 
             const getFromEntityTitle = new Promise((resolve, reject) => {
-                db.all(`SELECT title FROM financialEntities WHERE id = ?`, recurringTransactionRow.fromReference, (err, row) => { 
+                db.get(`SELECT title, type FROM financialEntities WHERE id = ?`, recurringTransactionRow.fromReference, (err, row) => { 
                     if (err) { 
                         console.log("Recurring Entity: In getSelectedItem: getFromEntityTitle: err: ", err);
                         reject(true);
                     } else {
-                        resolve(row && row.length > 0 ? row[0].title : null);
+                        resolve(row ? row : null);
                     }
                 });
             });
 
             const getToEntityTitle = new Promise((resolve, reject) => {
-                db.all(`SELECT title FROM financialEntities WHERE id = ?`, recurringTransactionRow.toReference, (err, row) => { 
+                db.get(`SELECT title, type FROM financialEntities WHERE id = ?`, recurringTransactionRow.toReference, (err, row) => { 
                     if (err) { 
                         console.log("Recurring Entity: In getSelectedItem: getToEntityTitle: err: ", err);
                         reject(true);
                     } else {
-                        resolve(row && row.length > 0 ? row[0].title : null);
+                        resolve(row ? row : null);
                     }
                 });
             });
 
             Promise.all([getFromEntityTitle,
-                        getToEntityTitle]).then(([fromEntity, toEntity]) => {
+                        getToEntityTitle]).then(([fromFinancialEntityRow, toFinancialEntityRow]) => {
                 resolve({
                     id: uuid, 
                     title: recurringTransactionRow.title,
@@ -351,8 +351,10 @@ function getSelectedItem(event, uuid) {
                     currency: recurringTransactionRow.currency,
                     transactionType: recurringTransactionRow.transactionType,
                     transactionCategory: recurringTransactionRow.transactionCategory,
-                    fromEntity: fromEntity,
-                    toEntity: toEntity,
+                    fromType: fromFinancialEntityRow ? fromFinancialEntityRow.type : null,
+                    fromEntity: fromFinancialEntityRow ? fromFinancialEntityRow.title : null,
+                    toType: toFinancialEntityRow ? toFinancialEntityRow.type : null,
+                    toEntity: toFinancialEntityRow ? toFinancialEntityRow.title : null,
                     createdDate: recurringTransactionRow.createdDate,
                     modifiedDate: recurringTransactionRow.modifiedDate,
                     recurringFrequency: {
@@ -368,7 +370,7 @@ function getSelectedItem(event, uuid) {
             });
         }).catch((err) => {
             console.log("Recurring Entity: In getSelectedItem: err: ", err);
-            reject(true);
+            reject(null);
         });
     });
     /*
