@@ -23,6 +23,32 @@ function setDB(database) {
     console.log("In setDB: db: " + db);
 }
 
+function enterRecurringTransactions() {
+
+    return new Promise((resolve, reject) => {
+        db.all(`SELECT *
+                FROM recurringTransactions`, (err, rows) => { 
+                    if (err) { 
+                        console.log(`Error getting recurring transactions ${err}`); 
+                        reject(true);
+                    }
+                    else {
+                        console.log("Recurring transactions retrieved successfully");
+                        //console.log(rows);
+                        const currentDatetime = new Date().toISOString().substring(0, 19);
+                        rows.forEach( (row) => {
+                            const recurringTransactionStartDate = new Date(row.recurringTransactionStartDate);
+                            const recurringTransactionEndDate = new Date(row.recurringTransactionEndDate);
+                            if (currentDatetime < recurringTransactionStartDate || currentDatetime > recurringTransactionEndDate) return;
+                            //create a transaction entries based on the recurring frequency settings in transaction table
+                            //need to handle each frequency type separately
+                        });
+                        resolve();
+                    }
+        });
+    });
+}
+
 function convertDataFromDBFormat(data) {
     data = JSON.parse(JSON.stringify(data));
     const daysOfTheWeek = new Map(Object.entries({0: "Monday", 1: "Tuesday", 2: "Wednesday", 3: "Thursday", 4: "Friday", 5: "Saturday", 6: "Sunday"}));
@@ -618,4 +644,5 @@ module.exports = {
     deleteItem,
     getSelectedItem,
     getRecurringTransactions,
+    enterRecurringTransactions,
 };
