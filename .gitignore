@@ -24,4 +24,4 @@ dist-ssr
 
 # Custom Exclusions
 out/
-"temp file - auto generated sql query statements.txt"
+temp file - auto generated sql query statements.txt
