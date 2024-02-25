@@ -22,4 +22,6 @@ dist-ssr
 *.sln
 *.sw?
 
+# Custom Exclusions
 out/
+"temp file - auto generated sql query statements.txt"
