@@ -79,6 +79,12 @@ function DetailSection() {
                 fieldName={"modifiedDate"}
                 readonly={true}
             />
+            <DatetimeInput
+                datetimeValue={selectedItem.lastRecurringTransactionDate}
+                heading={"Last Transaction Done On"}
+                fieldName={"lastRecurringTransactionDate"}
+                readonly={true}
+            />
         </div>
     );
 }

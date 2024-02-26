@@ -1,3 +1,4 @@
+//const { current } = require('immer');
 const { v4: uuidv4 } = require('uuid');
 
 let db = null;
@@ -23,8 +24,64 @@ function setDB(database) {
     console.log("In setDB: db: " + db);
 }
 
-function enterRecurringTransactions() {
+function getDateFromDatetime(dateTime) {
+    const regex = /^\d{4}[-]\d{2}[-]\d{2}[T]\d{2}[:]\d{2}[:]\d{2}$/;
+    if( regex.test(dateTime) ) {
+        return dateTime.substring(0, 10);
+    }
+    return null;
+}
 
+/*
+function getDecimalTimeFromDateTime(dateTime) {
+    const regex = /^\d{4}[-]\d{2}[-]\d{2}[T]\d{2}[:]\d{2}[:]\d{2}$/;
+    if( regex.test(dateTime) ) {
+        const datetime = new Date(dateTime);
+        return (datetime.getHours() + datetime.getMinutes()/60);
+    }
+    return null;
+}
+*/
+
+//caculate the recurring transaction datetime based on the recurring transaction settings
+function calculateDailyRecurringTransactions(lastRecurringTransactionDatetime, recurringTransactionEndDatetime, recurringTransactionSettings) {
+    //calculate the recurring transactions based on the daily frequency
+    /* recurringTransactionSettings = {
+        frequency: [null, "Daily", "Weekly", "Monthly", "Yearly"],
+        dayOfTheWeek: from 0 to 6 or null,
+        dayOfTheMonth: from 1 to 31 or null,
+        month: from 0 to 11 or null,
+        time: "hh:mm:00" or null,
+     }
+    */ 
+    const currentDatetime = new Date().toISOString().substring(0, 16);
+    //const currentDate = getDateFromDatetime(currentDatetime);
+    //const currentTime = getDecimalTimeFromDateTime(currentDatetime);
+    const lastRecurringTransactionDate = getDateFromDatetime(lastRecurringTransactionDatetime);
+    //const lastRecurringTransactionTime = getDecimalTimeFromDateTime(lastRecurringTransactionDatetime);
+    //const recurringTransactionEndDate = getDateFromDatetime(recurringTransactionEndDatetime);
+    //const recurringTransactionEndTime = getDecimalTimeFromDateTime(recurringTransactionEndDatetime);
+    const recurringTransactionTime = recurringTransactionSettings.time;
+
+    if (currentDatetime <= lastRecurringTransactionDatetime || currentDatetime > recurringTransactionEndDatetime) return [];
+
+    const transactionDatetimes = [];
+    const selectDatetime = new Date(lastRecurringTransactionDate.getFullYear(), 
+                                    lastRecurringTransactionDate.getMonth(), 
+                                    lastRecurringTransactionDate.getDate() + 1, 
+                                    recurringTransactionTime.substring(0, 2), 
+                                    recurringTransactionTime.substring(3, 5), 
+                                    recurringTransactionTime.substring(6, 8), 
+                                    0);
+    while(selectDatetime.toISOString().substring(0, 16) <= currentDatetime) { 
+        transactionDatetimes.push(selectDatetime.toISOString().substring(0, 17) + "00");
+        selectDatetime.setDate(selectDatetime.getDate() + 1);
+    }
+    return transactionDatetimes;
+}
+
+function enterRecurringTransactions() {
+    console.log("In enterRecurringTransactions");
     return new Promise((resolve, reject) => {
         db.all(`SELECT *
                 FROM recurringTransactions`, (err, rows) => { 
@@ -35,15 +92,77 @@ function enterRecurringTransactions() {
                     else {
                         console.log("Recurring transactions retrieved successfully");
                         //console.log(rows);
-                        const currentDatetime = new Date().toISOString().substring(0, 19);
+                        let newLastRecuringTransactionDate = null;
                         rows.forEach( (row) => {
-                            const recurringTransactionStartDate = new Date(row.recurringTransactionStartDate);
-                            const recurringTransactionEndDate = new Date(row.recurringTransactionEndDate);
-                            if (currentDatetime < recurringTransactionStartDate || currentDatetime > recurringTransactionEndDate) return;
+                            if (row.lastRecurringTransactionDate === null) { 
+                                let datetime = new Date(row.recurringTransactionStartDate);
+                                datetime.setDate(datetime.getDate() - 1);
+                                row.lastRecurringTransactionDate = new Date(row.recurringTransactionStartDate).toISOString().substring(0, 19);
+                            }
                             //create a transaction entries based on the recurring frequency settings in transaction table
                             //need to handle each frequency type separately
+                            let transactionDatetimes = [];
+                            const recurringTransactionSettings =  {
+                                frequency: row.recurringFrequency,
+                                dayOfTheWeek: row.recurringFrequencyDayOfTheWeek,
+                                dayOfTheMonth: row.recurringFrequencyDayOfTheMonth,
+                                month: row.recurringFrequencyMonthOfTheYear,
+                                time: row.recurringFrequencyTime,
+                            };
+                            if (row.recurringFrequency === "Daily") {
+                                transactionDatetimes = calculateDailyRecurringTransactions(row.lastRecurringTransactionDate, 
+                                                                                        row.recurringTransactionEndDate,
+                                                                                        recurringTransactionSettings);
+                            }
+                            newLastRecuringTransactionDate = transactionDatetimes.length > 0? transactionDatetimes[transactionDatetimes.length - 1]: null;
+                            //insert the transaction entries into the transaction table
+                            transactionDatetimes.forEach((transactionDatetime) => { 
+                                db.run(`INSERT INTO transactions (\
+                                        id, \
+                                        title, \
+                                        description, \
+                                        value, \
+                                        currency, \
+                                        transactionType, \
+                                        transactionCategory, \
+                                        fromReference, \
+                                        toReference, \
+                                        recurringReference, \
+                                        file, \
+                                        createdDate, \
+                                        modifiedDate, \
+                                        transactionDate, \
+                                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                                        uuidv4(),
+                                        row.title,
+                                        row.description,
+                                        row.value,
+                                        row.currency,
+                                        row.transactionType,
+                                        row.transactionCategory,
+                                        row.fromReference,
+                                        row.toReference,
+                                        row.id,
+                                        0,
+                                        new Date().toISOString().substring(0, 19),
+                                        new Date().toISOString().substring(0, 19),
+                                        transactionDatetime,
+                                        (err) => {
+                                            if (err) {
+                                                console.log(`Error inserting recurring transaction ${err}`);
+                                                reject(true);
+                                            }
+                                        });
+                            });
+                            //update the lastRecurringTransactionDate in the recurringTransactions table
+                            db.run(`UPDATE recurringTransactions SET lastRecurringTransactionDate = ? WHERE id = ?`, newLastRecuringTransactionDate, row.id, (err) => { 
+                                if (err) { 
+                                    console.log(`Error updating lastRecurringTransactionDate ${err}`); 
+                                    reject(true);
+                                }
+                            });
                         });
-                        resolve();
+                        resolve(true);
                     }
         });
     });
@@ -363,8 +482,9 @@ function createEntry() {
                     recurringFrequencyMonthOfTheYear, \
                     recurringFrequencyTime, \
                     recurringTransactionStartDate, \
-                    recurringTransactionEndDate \
-                    ) VALUES (?, "NEW Entry", NULL, NULL, NULL, NULL, NULL, NULL, NULL, ?, ?, NULL, NULL, NULL, NULL, NULL, NULL, NULL)`, 
+                    recurringTransactionEndDate, \
+                    lastRecurringTransactionDate \
+                    ) VALUES (?, "NEW Entry", NULL, NULL, NULL, NULL, NULL, NULL, NULL, ?, ?, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)`, 
                     uuid, currentDateTime, currentDateTime, (err) => {
                         if (err) {
                             console.log("Recurring Entity: In createEntry: err: ", err);
@@ -544,7 +664,8 @@ function getSelectedItem(event, uuid) {
                     recurringFrequencyMonthOfTheYear AS month, \
                     recurringFrequencyTime AS time, \
                     recurringTransactionStartDate, \
-                    recurringTransactionEndDate \
+                    recurringTransactionEndDate, \
+                    lastRecurringTransactionDate \
                     FROM recurringTransactions WHERE id = ?`, uuid, (err, row) => {
                         if (err) {
                             console.log("Recurring Entity: In getSelectedItem: getRecurringTransactions: err: ", err);
@@ -602,6 +723,7 @@ function getSelectedItem(event, uuid) {
                                                                 },
                                                                 recurringTransactionStartDate: recurringTransactionRow.recurringTransactionStartDate,
                                                                 recurringTransactionEndDate: recurringTransactionRow.recurringTransactionEndDate,
+                                                                lastRecurringTransactionDate: recurringTransactionRow.lastRecurringTransactionDate,
                                                             });
                 resolve(selectedItem);
             });

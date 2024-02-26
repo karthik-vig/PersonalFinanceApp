@@ -23,6 +23,7 @@ export const selectedItemSlice = createSlice({
                     recurringFrequency: {},
                     recurringTransactionStartDate: "YYYY-MM-DDThh:mm:ss",
                     recurringTransactionEndDate: "YYYY-MM-DDThh:mm:ss",
+                    lastRecurringTransactionDate: "YYYY-MM-DDThh:mm:ss",
                 },
     reducers: {
         handleItemClick: (state, action) => {
@@ -60,6 +61,7 @@ export const selectedItemSlice = createSlice({
                     recurringFrequency: {},
                     recurringTransactionStartDate: "YYYY-MM-DDThh:mm:ss",
                     recurringTransactionEndDate: "YYYY-MM-DDThh:mm:ss",
+                    lastRecurringTransactionDate: "YYYY-MM-DDThh:mm:ss",
                 }
            }
            return null;

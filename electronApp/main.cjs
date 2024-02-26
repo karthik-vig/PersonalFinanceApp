@@ -49,6 +49,11 @@ app.whenReady().then(() => {
     transactionOperations.setDB(db);
     financialEntitiesOperations.setDB(db);
     recurringTransactionOperations.setDB(db);
+    recurringTransactionOperations.enterRecurringTransactions().then( (status) => { 
+        console.log("Recurring Transactions Entered: ", status);
+    }).catch( (err) => { 
+        console.log("Recurring Transactions Entry Error: ", err);
+    });
 
     createWindow();
 

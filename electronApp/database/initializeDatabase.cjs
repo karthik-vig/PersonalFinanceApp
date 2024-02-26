@@ -131,7 +131,8 @@ function setupDatabase() {
                 recurringFrequencyMonthOfTheYear TEXT, \
                 recurringFrequencyTime TEXT, \
                 recurringTransactionStartDate DATETIME, \
-                recurringTransactionEndDate DATETIME \
+                recurringTransactionEndDate DATETIME, \
+                lastRecurringTransactionDate DATETIME \
                 )', (err) => { 
                     if (err) { 
                         console.log(`recurringTransactions table creation ${err}`); 
