@@ -400,7 +400,7 @@ function getSelectedItem(event, uuid) {
                                                 selectedItem.toType = toFinancialEntityRows[0].type;
                                             }
 
-                                            recurringReferenceID = recurringEntityrows && recurringEntityrows.length > 0 ? recurringEntityrows[0].title : null;
+                                            selectedItem.recurringEntity = recurringEntityrows && recurringEntityrows.length > 0 ? recurringEntityrows[0].title : null;
 
                                             if (fileInformationRows && fileInformationRows.length > 0) {
                                                 fileInformationRows.forEach((row) => {
