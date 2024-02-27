@@ -40,7 +40,7 @@ function createLoadingWindow() {
 
     // Open the DevTools in development mode
    //if (process.env.NODE_ENV === 'development') {
-        //win.webContents.openDevTools();
+        win.webContents.openDevTools();
     //}
     return win;
 }
@@ -57,7 +57,7 @@ function createErrorWindow() {
         }
     });
 
-    win.loadFile( path.join(__dirname, '../dist/additionalPages/errorIndex.html'));
+    win.loadFile( path.join(__dirname, '../dist/src/additionalPages/errorIndex.html'));
 
     // Open the DevTools in development mode
    //if (process.env.NODE_ENV === 'development') {
@@ -76,6 +76,7 @@ function createWindow() {
         }
     });
 
+    //win.loadFile( path.join(__dirname, '../dist/src/additionalPages/loadingIndex.html'));
     win.loadFile( path.join(__dirname, '../dist/src/index.html'));
 
     // Open the DevTools in development mode
@@ -107,10 +108,11 @@ app.whenReady().then(() => {
         createErrorWindow();
     });
 
+    
     app.on('activate', function () {
         if (BrowserWindow.getAllWindows().length === 0) createWindow();
     });
-
+    
     //TRANSACTION OPERATIONS
     //ipcMain.handle('getFileBlob', getFileBlob);
     //ipcMain.handle('setFileBlob', setFileBlob);
