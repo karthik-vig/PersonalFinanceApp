@@ -24,46 +24,6 @@ const transactionOperations = require('./database/transactionOperations.cjs');
 const financialEntitiesOperations = require('./database/financialEntityOperation.cjs');
 const recurringTransactionOperations = require('./database/recurringTransactionOperations.cjs');
 
-function createLoadingWindow() {
-    const win = new BrowserWindow({
-        width: 800,
-        height: 600,
-        resizable: false,
-        webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true,
-            //preload: path.join(__dirname, 'preload.cjs') // Replace with the actual path to your preload script
-        }
-    });
-
-    win.loadFile( path.join(__dirname, '../dist/src/additionalPages/loadingIndex.html'));
-
-    // Open the DevTools in development mode
-   //if (process.env.NODE_ENV === 'development') {
-        win.webContents.openDevTools();
-    //}
-    return win;
-}
-
-function createErrorWindow() {
-    const win = new BrowserWindow({
-        width: 800,
-        height: 600,
-        resizable: false,
-        webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true,
-            //preload: path.join(__dirname, 'preload.cjs') // Replace with the actual path to your preload script
-        }
-    });
-
-    win.loadFile( path.join(__dirname, '../dist/src/additionalPages/errorIndex.html'));
-
-    // Open the DevTools in development mode
-   //if (process.env.NODE_ENV === 'development') {
-        //win.webContents.openDevTools();
-    //}
-}
 
 function createWindow() {
     const win = new BrowserWindow({
@@ -92,20 +52,12 @@ app.whenReady().then(() => {
     financialEntitiesOperations.setDB(db);
     recurringTransactionOperations.setDB(db);
 
-    //create a loading window here
-    const loadingWindow = createLoadingWindow();
-
     //add the recurring transactions to the transaction table
     recurringTransactionOperations.enterRecurringTransactions().then( (status) => { 
         console.log("Recurring Transactions Entered: ", status);
-        //close the loading window
-        loadingWindow.close();
         createWindow();
     }).catch((err) => { 
         console.log("Recurring Transactions Entry Error: ", err);
-        //show error dialog, exit
-        loadingWindow.close();
-        createErrorWindow();
     });
 
     

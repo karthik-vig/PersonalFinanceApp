@@ -9,8 +9,6 @@ export default defineConfig({
     minify: false,
     rollupOptions: {
       input: {
-        "loadingIndex": "src/additionalPages/loadingIndex.html",
-        "errorIndex": "src/additionalPages/errorIndex.html",
         "index": "src/index.html"
       },
       output: {
