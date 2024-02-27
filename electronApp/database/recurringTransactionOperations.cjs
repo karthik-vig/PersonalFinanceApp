@@ -111,6 +111,7 @@ function enterRecurringTransactions() {
                     //console.log(rows);
                     let newLastRecurringTransactionDatetime = null;
                     rows.forEach( (row) => {
+                        newLastRecurringTransactionDatetime = row.lastRecurringTransactionDate;
                         //create a transaction entries based on the recurring frequency settings in transaction table
                         //need to handle each frequency type separately
                         let transactionDatetimes = [];
@@ -128,7 +129,7 @@ function enterRecurringTransactions() {
                                                                                     row.recurringTransactionEndDate,
                                                                                     recurringTransactionSettings);
                         }
-                        newLastRecurringTransactionDatetime = transactionDatetimes.length > 0? transactionDatetimes[transactionDatetimes.length - 1]: null;
+                        newLastRecurringTransactionDatetime = transactionDatetimes.length > 0? transactionDatetimes[transactionDatetimes.length - 1]: newLastRecurringTransactionDatetime;
                         //insert the transaction entries into the transaction table
                         const transactionTableInsertionStmt = db.prepare(`INSERT INTO transactions (\
                                                                             id, \
