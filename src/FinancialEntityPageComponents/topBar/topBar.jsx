@@ -96,7 +96,7 @@ function TopBar() {
                 svgIcon={faRefresh} 
                 iconColor="#00ff00"
                 btnName="Refresh" 
-                onClickHandler={ () => console.log("Refresh button clicked") }
+                onClickHandler={ () => window.app.refresh("financialEntityPage") }
             />
             <FilterMenu />
         </div>

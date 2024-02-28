@@ -45,9 +45,12 @@ function createWindow() {
    //if (process.env.NODE_ENV === 'development') {
         win.webContents.openDevTools();
     //}
+    return win;
 }
 
 app.whenReady().then(() => {
+
+    let win = null;
 
     const db = initializeDatabase.initDatabase();
     transactionOperations.setDB(db);
@@ -57,14 +60,27 @@ app.whenReady().then(() => {
     //add the recurring transactions to the transaction table
     recurringTransactionOperations.enterRecurringTransactions().then( (status) => { 
         console.log("Recurring Transactions Entered: ", status);
-        createWindow();
+        win = createWindow();
     }).catch((err) => { 
         console.log("Recurring Transactions Entry Error: ", err);
     });
 
     
     app.on('activate', function () {
-        if (BrowserWindow.getAllWindows().length === 0) createWindow();
+        if (BrowserWindow.getAllWindows().length === 0) {
+            win = createWindow();
+        }
+    });
+
+    //refresh the application
+    ipcMain.handle('refresh', (event, page) => {
+        recurringTransactionOperations.enterRecurringTransactions().then( (status) => { 
+            console.log("Recurring Transactions Entered: ", status);
+            console.log("Refreshing the application, the page is: ", page);
+            win.reload();
+        }).catch((err) => { 
+            console.log("Recurring Transactions Entry Error: ", err);
+        });
     });
     
     //TRANSACTION OPERATIONS
