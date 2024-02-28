@@ -24,63 +24,111 @@ function setDB(database) {
     console.log("In setDB: db: " + db);
 }
 
-/*
-function getDateFromDatetime(dateTime) {
-    const regex = /^\d{4}[-]\d{2}[-]\d{2}[T]\d{2}[:]\d{2}[:]\d{2}$/;
-    if( regex.test(dateTime) ) {
-        return dateTime.substring(0, 10);
-    }
-    return null;
-}
-*/
 
-/*
-function getDecimalTimeFromDateTime(dateTime) {
-    const regex = /^\d{4}[-]\d{2}[-]\d{2}[T]\d{2}[:]\d{2}[:]\d{2}$/;
-    if( regex.test(dateTime) ) {
-        const datetime = new Date(dateTime);
-        return (datetime.getHours() + datetime.getMinutes()/60);
-    }
-    return null;
-}
-*/
+// function getDateFromDatetime(dateTime) {
+//     const regex = /^\d{4}[-]\d{2}[-]\d{2}[T]\d{2}[:]\d{2}[:]\d{2}$/;
+//     if( regex.test(dateTime) ) {
+//         return dateTime.substring(0, 10);
+//     }
+//     return null;
+// }
 
-//caculate the recurring transaction datetime based on the recurring transaction settings
+// function getDecimalTimeFromDateTime(dateTime) {
+//     const regex = /^\d{4}[-]\d{2}[-]\d{2}[T]\d{2}[:]\d{2}[:]\d{2}$/;
+//     if( regex.test(dateTime) ) {
+//         const datetime = new Date(dateTime);
+//         return (datetime.getHours() + datetime.getMinutes()/60);
+//     }
+//     return null;
+// }
+
+//caculate the weekly recurring transaction datetime based on the recurring transaction settings
+function caculateWeeklyRecurringTransactions(recurringTransactionStartDatetime,
+                                             lastRecurringTransactionDatetime,
+                                             recurringTransactionEndDatetime,
+                                             recurringTransactionSettings) {
+    // recurringTransactionSettings = {
+    //     frequency: [null, "Daily", "Weekly", "Monthly", "Yearly"],
+    //     dayOfTheWeek: from 0 to 6 [monday for sunday] or null, 
+    //     dayOfTheMonth: from 1 to 31 or null,
+    //     month: from 0 to 11 or null,
+    //     time: "hh:mm:00" or null,
+    // }
+
+    const currentDatetime = new Date().toISOString().substring(0, 16);
+    lastRecurringTransactionDatetime = lastRecurringTransactionDatetime !== null? new Date(lastRecurringTransactionDatetime): null;
+    const recurringTransactionStartDatetimeObject = new Date(recurringTransactionStartDatetime);
+    recurringTransactionEndDatetime = recurringTransactionEndDatetime.substring(0, 16);
+    recurringTransactionStartDatetime = recurringTransactionStartDatetime.substring(0, 16);
+    const recurringTransactionTime = recurringTransactionSettings.time;
+
+    if (currentDatetime <= lastRecurringTransactionDatetime || currentDatetime < recurringTransactionStartDatetime) return [];
+
+    const transactionDatetimes = [];
+
+    if (lastRecurringTransactionDatetime === null) { 
+        // lastRecurringTransactionDatetime = new Date(recurringTransactionStartDatetime);
+        // lastRecurringTransactionDatetime.setDate(lastRecurringTransactionDatetime.getDate() - 1);
+        //re map the number to fit the value used in our system, as our system uses 0 for monday and 6 for sunday
+        const recurringTransactionStartDay = recurringTransactionStartDatetimeObject.getDay() === 0? 6: recurringTransactionStartDatetimeObject.getDay() - 1;
+        const recurringTransactionDay = recurringTransactionSettings.dayOfTheWeek;
+        const dayDifference = recurringTransactionDay - recurringTransactionStartDay;
+        if (dayDifference > 0) {
+            lastRecurringTransactionDatetime = new Date(recurringTransactionStartDatetimeObject);
+            lastRecurringTransactionDatetime.setDate(lastRecurringTransactionDatetime.getDate() + dayDifference - 7);
+        } else if (dayDifference < 0) {
+            lastRecurringTransactionDatetime = recurringTransactionStartDatetimeObject;
+            lastRecurringTransactionDatetime.setDate(lastRecurringTransactionDatetime.getDate() + ( 7 + dayDifference ) - 7);
+        } else if (recurringTransactionTime.substring(0, 5) >= recurringTransactionStartDatetime.substring(11, 16)) {
+            lastRecurringTransactionDatetime = new Date(recurringTransactionStartDatetime - 7);
+        } else if (recurringTransactionTime.substring(0, 5) < recurringTransactionStartDatetime.substring(11, 16)) {
+            lastRecurringTransactionDatetime = new Date(recurringTransactionStartDatetime);
+        } 
+    }
+
+    const selectDatetime = new Date(lastRecurringTransactionDatetime.getFullYear(), 
+                                    lastRecurringTransactionDatetime.getMonth(), 
+                                    lastRecurringTransactionDatetime.getDate() + 7, 
+                                    recurringTransactionTime.substring(0, 2), 
+                                    recurringTransactionTime.substring(3, 5), 
+                                    recurringTransactionTime.substring(6, 8), 
+                                    0);
+
+    while(selectDatetime.toISOString().substring(0, 16) <= currentDatetime && selectDatetime.toISOString().substring(0, 16) <= recurringTransactionEndDatetime) { 
+        transactionDatetimes.push(selectDatetime.toISOString().substring(0, 17) + "00");
+        selectDatetime.setDate(selectDatetime.getDate() + 7);
+    }
+    return transactionDatetimes;
+}
+
+//caculate the daily recurring transaction datetime based on the recurring transaction settings
 function calculateDailyRecurringTransactions(recurringTransactionStartDatetime,
                                              lastRecurringTransactionDatetime, 
                                              recurringTransactionEndDatetime, 
                                              recurringTransactionSettings) {
     //calculate the recurring transactions based on the daily frequency
-    /* recurringTransactionSettings = {
-        frequency: [null, "Daily", "Weekly", "Monthly", "Yearly"],
-        dayOfTheWeek: from 0 to 6 or null,
-        dayOfTheMonth: from 1 to 31 or null,
-        month: from 0 to 11 or null,
-        time: "hh:mm:00" or null,
-     }
-    */ 
+    // recurringTransactionSettings = {
+    //     frequency: [null, "Daily", "Weekly", "Monthly", "Yearly"],
+    //     dayOfTheWeek: from 0 to 6 or null,
+    //     dayOfTheMonth: from 1 to 31 or null,
+    //     month: from 0 to 11 or null,
+    //     time: "hh:mm:00" or null,
+    // }
+    
     const currentDatetime = new Date().toISOString().substring(0, 16);
-    //const currentDate = getDateFromDatetime(currentDatetime);
-    //const currentTime = getDecimalTimeFromDateTime(currentDatetime);
     lastRecurringTransactionDatetime = lastRecurringTransactionDatetime !== null? new Date(lastRecurringTransactionDatetime): null;
     recurringTransactionEndDatetime = recurringTransactionEndDatetime.substring(0, 16);
     recurringTransactionStartDatetime = recurringTransactionStartDatetime.substring(0, 16);
-    //const lastRecurringTransactionTime = getDecimalTimeFromDateTime(lastRecurringTransactionDatetime);
-    //const recurringTransactionEndDate = getDateFromDatetime(recurringTransactionEndDatetime);
-    //const recurringTransactionEndTime = getDecimalTimeFromDateTime(recurringTransactionEndDatetime);
     const recurringTransactionTime = recurringTransactionSettings.time;
 
-    if (currentDatetime <= lastRecurringTransactionDatetime) return [];
+    if (currentDatetime <= lastRecurringTransactionDatetime || currentDatetime < recurringTransactionStartDatetime) return [];
 
     const transactionDatetimes = [];
     if (lastRecurringTransactionDatetime === null && recurringTransactionTime.substring(0, 5) >= recurringTransactionStartDatetime.substring(11, 16)) { 
         lastRecurringTransactionDatetime = new Date(recurringTransactionStartDatetime);
         lastRecurringTransactionDatetime.setDate(lastRecurringTransactionDatetime.getDate() - 1);
-        //lastRecurringTransactionDatetime = datetime.toISOString().substring(0, 16);
     } else if (lastRecurringTransactionDatetime === null && recurringTransactionTime.substring(0, 5) < recurringTransactionStartDatetime.substring(11, 16)) {
         lastRecurringTransactionDatetime = new Date(recurringTransactionStartDatetime);
-        //datetime.setDate(datetime.getDate() - 1);
-        //lastRecurringTransactionDatetime = datetime.toISOString().substring(0, 16);
     }
     const selectDatetime = new Date(lastRecurringTransactionDatetime.getFullYear(), 
                                     lastRecurringTransactionDatetime.getMonth(), 
@@ -122,10 +170,19 @@ function enterRecurringTransactions() {
                             month: row.recurringFrequencyMonthOfTheYear,
                             time: row.recurringFrequencyTime,
                         };
+                        // for daily recurring transactions
                         if (row.recurringFrequencyType === "Daily") {
                             transactionDatetimes = calculateDailyRecurringTransactions(
                                                                                     row.recurringTransactionStartDate,
                                                                                     row.lastRecurringTransactionDate, 
+                                                                                    row.recurringTransactionEndDate,
+                                                                                    recurringTransactionSettings);
+                        }
+                        // for weekly recurring transactions
+                        if (row.recurringFrequencyType === "Weekly") {
+                            transactionDatetimes = caculateWeeklyRecurringTransactions(
+                                                                                    row.recurringTransactionStartDate,
+                                                                                    row.lastRecurringTransactionDate,
                                                                                     row.recurringTransactionEndDate,
                                                                                     recurringTransactionSettings);
                         }
