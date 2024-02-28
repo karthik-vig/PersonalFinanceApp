@@ -42,7 +42,64 @@ function setDB(database) {
 //     return null;
 // }
 
-//caculate the monthly recurring transaction datetime based on the recurring transaction settings
+//calcualte the yearly recurring transaction datetime based on the recurring transaction settings
+function calcualteYearlyRecurringTransactions(recurringTransactionStartDatetime,
+                                              lastRecurringTransactionDatetime,
+                                              recurringTransactionEndDatetime,
+                                              recurringTransactionSettings) {
+    // recurringTransactionSettings = {
+    //     frequency: [null, "Daily", "Weekly", "Monthly", "Yearly"],
+    //     dayOfTheWeek: from 0 to 6 [monday for sunday] or null, 
+    //     dayOfTheMonth: from 1 to 31 or null,
+    //     month: from 0 to 11 or null,
+    //     time: "hh:mm:00" or null,
+    // }
+
+    const currentDatetime = new Date().toISOString().substring(0, 16);
+    lastRecurringTransactionDatetime = lastRecurringTransactionDatetime !== null? new Date(lastRecurringTransactionDatetime): null;
+    const recurringTransactionStartDatetimeObject = new Date(recurringTransactionStartDatetime);
+    recurringTransactionEndDatetime = recurringTransactionEndDatetime.substring(0, 16);
+    recurringTransactionStartDatetime = recurringTransactionStartDatetime.substring(0, 16);
+    const recurringTransactionTime = recurringTransactionSettings.time;
+
+    if (currentDatetime <= lastRecurringTransactionDatetime || currentDatetime < recurringTransactionStartDatetime) return [];
+
+    const transactionDatetimes = [];
+
+    if (lastRecurringTransactionDatetime === null) { 
+        const recurringTransactionStartDate = recurringTransactionStartDatetimeObject.getDate();
+        const recurringTransactionStartMonth = recurringTransactionStartDatetimeObject.getMonth();
+        lastRecurringTransactionDatetime = new Date(recurringTransactionStartDatetimeObject);
+        lastRecurringTransactionDatetime.setDate(recurringTransactionSettings.dayOfTheMonth);
+        lastRecurringTransactionDatetime.setMonth(recurringTransactionSettings.month);
+        if ( (recurringTransactionStartMonth < recurringTransactionSettings.month) ||
+             (recurringTransactionStartMonth === recurringTransactionSettings.month && 
+                recurringTransactionStartDate < recurringTransactionSettings.dayOfTheMonth) ||
+             (recurringTransactionStartMonth === recurringTransactionSettings.month && 
+                recurringTransactionStartDate === recurringTransactionSettings.dayOfTheMonth &&
+                recurringTransactionTime.substring(0, 5) >= recurringTransactionStartDatetime.substring(11, 16))
+           ) {
+            lastRecurringTransactionDatetime.setFullYear(lastRecurringTransactionDatetime.getFullYear() - 1);
+        }
+    }
+
+    const selectDatetime = new Date(lastRecurringTransactionDatetime.getFullYear() + 1, 
+                                    lastRecurringTransactionDatetime.getMonth(), 
+                                    lastRecurringTransactionDatetime.getDate(), 
+                                    recurringTransactionTime.substring(0, 2), 
+                                    recurringTransactionTime.substring(3, 5), 
+                                    recurringTransactionTime.substring(6, 8), 
+                                    0);
+
+    while(selectDatetime.toISOString().substring(0, 16) <= currentDatetime && selectDatetime.toISOString().substring(0, 16) <= recurringTransactionEndDatetime) { 
+        transactionDatetimes.push(selectDatetime.toISOString().substring(0, 17) + "00");
+        selectDatetime.setFullYear(selectDatetime.getFullYear() + 1);
+    }
+    return transactionDatetimes;
+}
+
+
+//calculate the monthly recurring transaction datetime based on the recurring transaction settings
 function caculateMonthlyRecurringTransactions(recurringTransactionStartDatetime,
                                               lastRecurringTransactionDatetime,
                                               recurringTransactionEndDatetime,
@@ -240,6 +297,13 @@ function enterRecurringTransactions() {
                         // for monthly recurring transactions
                         if (row.recurringFrequencyType === "Monthly") {
                             transactionDatetimes = caculateMonthlyRecurringTransactions(row.recurringTransactionStartDate,
+                                                                                        row.lastRecurringTransactionDate,
+                                                                                        row.recurringTransactionEndDate,
+                                                                                        recurringTransactionSettings);
+                        }
+                        // for yearly recurring transactions
+                        if (row.recurringFrequencyType === "Yearly") {
+                            transactionDatetimes = calcualteYearlyRecurringTransactions(row.recurringTransactionStartDate,
                                                                                         row.lastRecurringTransactionDate,
                                                                                         row.recurringTransactionEndDate,
                                                                                         recurringTransactionSettings);
