@@ -6,12 +6,12 @@ let db = null;
 function getRecurringTransactions() {
     //communicate with the database to get the recurring transactions
     return new Promise((resolve, reject) => {
-        db.run(`SELECT title FROM recurringTransactions`, (err, rows) => { 
+        db.all(`SELECT title FROM recurringTransactions`, (err, rows) => { 
             if (err) { 
                 console.log("Recurring Entity: In getRecurringTransactions: err: ", err);
                 reject(true);
             } else {
-                resolve(rows? rows : []);
+                resolve(rows && rows.length > 0? rows.map((row) => row.title): []);
             }
         });
     });

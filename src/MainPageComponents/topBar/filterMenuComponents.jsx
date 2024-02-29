@@ -40,15 +40,16 @@ function FilterMenu(){
     const transactionEntities = useSelector((state) => state.mainPageStates.additionalInformationState.transactionEntities);
     const recurringTransactions = useSelector((state) => state.mainPageStates.additionalInformationState.recurringTransactions);
 
+    //convert transactionEntities to an array of transactionEntity names
+    const transactionEntityNames = Object.keys(transactionEntities).map((key) => transactionEntities[key].name );
+
+    //fetch additional information from the main process
+    //and set transaction entities value
     useEffect(() => {
         window.recurringTransactionOperations.getRecurringTransactions().then((retrievedRecurringTransactions) => {
             dispatch(setRecurringTransactions(retrievedRecurringTransactions));
         });
-    }, [dispatch,
-    ]);
-
-    //convert transactionEntities to an array of transactionEntity names
-    const transactionEntityNames = Object.keys(transactionEntities).map((key) => transactionEntities[key].name );
+    }, [dispatch,]);
 
     return (
         <div 

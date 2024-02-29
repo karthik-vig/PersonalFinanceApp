@@ -6,6 +6,7 @@ import SideSectionButton from './sideSectionButton.jsx';
 import MainPage from './MainPageComponents/mainPage.jsx';
 import FinancialEntityPage from './FinancialEntityPageComponents/financialEntityPage.jsx';
 import RecurringEntityPage from './RecurringEntityPageComponents/recurringEntityPage.jsx';
+import { setRecurringTransactions } from './stateManagement/mainPageStates/additionalInformation.js';
 import { useDispatch } from 'react-redux';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faHouse, faChartLine, faBuildingColumns, faTicketSimple,  } from '@fortawesome/free-solid-svg-icons';
@@ -45,7 +46,15 @@ function App() {
       if (err) dispatch(setTransactionEntities([]));
     });
   }, [dispatch,]);
-  
+
+  //fetch additional information from the main process
+  //and set transaction entities value
+  useEffect(() => {
+    window.recurringTransactionOperations.getRecurringTransactions().then((retrievedRecurringTransactions) => {
+        dispatch(setRecurringTransactions(retrievedRecurringTransactions));
+    });
+  }, [dispatch,]);
+    
 
   const [activeTab, setActiveTab] = useImmer({
                                               mainPage: true,

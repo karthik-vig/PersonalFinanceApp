@@ -40,6 +40,7 @@ import {  removeSideBarItem,
 import {  //triggerSearch,
         resetTriggerSearch,
 } from '../stateManagement/recurringEntityPageStates/triggerSearch.js';
+import { setRecurringTransactions } from '../stateManagement/mainPageStates/additionalInformation.js';
 import { setCurrentSelectedItem, resetCurrentSelectedItem } from '../stateManagement/recurringEntityPageStates/currentSelectedItem.js';
 
 function RecurringEntityPage() {
@@ -94,6 +95,11 @@ function RecurringEntityPage() {
             if (err)
             dispatch(showFailBox("Could not create the entry in the database"));
         });
+        window.recurringTransactionOperations.getRecurringTransactions().then((retrievedRecurringTransactions) => {
+            dispatch(setRecurringTransactions(retrievedRecurringTransactions));
+        }).catch((err) => { 
+            if (err) dispatch(setRecurringTransactions([]));
+        });    
         dispatch(resetTriggerAddEntry());
     }, [triggerAddEntryState,
         dispatch,
@@ -113,6 +119,11 @@ function RecurringEntityPage() {
             if (err)
             dispatch(showFailBox("Could not Modify the Entry"));
         });
+        window.recurringTransactionOperations.getRecurringTransactions().then((retrievedRecurringTransactions) => {
+            dispatch(setRecurringTransactions(retrievedRecurringTransactions));
+        }).catch((err) => { 
+            if (err) dispatch(setRecurringTransactions([]));
+        });    
         dispatch(resetTriggerModifyEntry());
    }, [triggerModifyEntryState,
         dispatch,
