@@ -41,6 +41,8 @@ function App() {
   useEffect(() => {
     window.financialEntityOperations.getTransactionEntities().then((transactionEntities) => {
       dispatch(setTransactionEntities(transactionEntities));
+    }).catch((err) => { 
+      if (err) dispatch(setTransactionEntities([]));
     });
   }, [dispatch,]);
   

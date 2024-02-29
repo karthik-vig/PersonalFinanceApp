@@ -10,9 +10,23 @@ function setDB(database) {
 
 //backend simulation to get transaction entities
 function getTransactionEntities() {
-    return (
-            [{name: "entity1", type: "Internal"}, {name: "entity2", type: "Internal"}, {name: "entity3", type: "External"}, {name: "entity4", type: "External"}]
-    ); //could also return [] if the operation fails
+
+    return new Promise((resolve, reject) => {
+        db.all("SELECT title AS name, type FROM financialEntities", (err, rows) => {
+            if (err) {
+                console.log("financial entity : getAllItems error = ", err);
+                reject(true);
+            }
+            else {
+                console.log("financial entity : getAllItems rows = ", rows);
+                const transactionEntities = rows && rows.length > 0 ? rows : [];
+                resolve(transactionEntities);
+            }
+        });
+    });
+    // return (
+    //         [{name: "entity1", type: "Internal"}, {name: "entity2", type: "Internal"}, {name: "entity3", type: "External"}, {name: "entity4", type: "External"}]
+    // ); //could also return [] if the operation fails
 }
 
 function getAllItems() {
