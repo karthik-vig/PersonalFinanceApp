@@ -55,6 +55,15 @@ function calcualteYearlyRecurringTransactions(recurringTransactionStartDatetime,
     //     time: "hh:mm:00" or null,
     // }
 
+    const monthFormatRegex = /^[0-9][0, 1]?$/;
+    if ( !monthFormatRegex.test(recurringTransactionSettings.month) ) return [];
+
+    const dayOfTheMonthFormatRegex = /^[1-9]((?<=[1,2])[0-9]?|[0, 1]?)$/;
+    if ( !dayOfTheMonthFormatRegex.test(recurringTransactionSettings.dayOfTheMonth) ) return [];
+
+    const timeFormatRegex = /^\d{2}[:]\d{2}[:]\d{2}$/;
+    if( !timeFormatRegex.test(recurringTransactionSettings.time) ) return [];
+
     const currentDatetime = new Date().toISOString().substring(0, 16);
     lastRecurringTransactionDatetime = lastRecurringTransactionDatetime !== null? new Date(lastRecurringTransactionDatetime): null;
     const recurringTransactionStartDatetimeObject = new Date(recurringTransactionStartDatetime);
@@ -112,6 +121,12 @@ function caculateMonthlyRecurringTransactions(recurringTransactionStartDatetime,
     //     time: "hh:mm:00" or null,
     // }
 
+    const dayOfTheMonthFormatRegex = /^[1-9]((?<=[1,2])[0-9]?|[0, 1]?)$/;
+    if ( !dayOfTheMonthFormatRegex.test(recurringTransactionSettings.dayOfTheMonth) ) return [];
+
+    const timeFormatRegex = /^\d{2}[:]\d{2}[:]\d{2}$/;
+    if( !timeFormatRegex.test(recurringTransactionSettings.time) ) return [];
+
     const currentDatetime = new Date().toISOString().substring(0, 16);
     lastRecurringTransactionDatetime = lastRecurringTransactionDatetime !== null? new Date(lastRecurringTransactionDatetime): null;
     const recurringTransactionStartDatetimeObject = new Date(recurringTransactionStartDatetime);
@@ -163,6 +178,12 @@ function caculateWeeklyRecurringTransactions(recurringTransactionStartDatetime,
     //     month: from 0 to 11 or null,
     //     time: "hh:mm:00" or null,
     // }
+
+    const dayOfTheWeekFormatRegex = /^[0-6]$/;
+    if ( !dayOfTheWeekFormatRegex.test(recurringTransactionSettings.dayOfTheWeek) ) return [];
+
+    const timeFormatRegex = /^\d{2}[:]\d{2}[:]\d{2}$/;
+    if( !timeFormatRegex.test(recurringTransactionSettings.time) ) return [];
 
     const currentDatetime = new Date().toISOString().substring(0, 16);
     lastRecurringTransactionDatetime = lastRecurringTransactionDatetime !== null? new Date(lastRecurringTransactionDatetime): null;
@@ -223,7 +244,10 @@ function calculateDailyRecurringTransactions(recurringTransactionStartDatetime,
     //     month: from 0 to 11 or null,
     //     time: "hh:mm:00" or null,
     // }
-    
+
+    const timeFormatRegex = /^\d{2}[:]\d{2}[:]\d{2}$/;
+    if( !timeFormatRegex.test(recurringTransactionSettings.time) ) return [];
+
     const currentDatetime = new Date().toISOString().substring(0, 16);
     lastRecurringTransactionDatetime = lastRecurringTransactionDatetime !== null? new Date(lastRecurringTransactionDatetime): null;
     recurringTransactionEndDatetime = recurringTransactionEndDatetime.substring(0, 16);
@@ -274,9 +298,9 @@ function enterRecurringTransactions() {
                         let transactionDatetimes = [];
                         const recurringTransactionSettings =  {
                             frequency: row.recurringFrequencyType,
-                            dayOfTheWeek: row.recurringFrequencyDayOfTheWeek,
-                            dayOfTheMonth: row.recurringFrequencyDayOfTheMonth,
-                            month: row.recurringFrequencyMonthOfTheYear,
+                            dayOfTheWeek: row.recurringFrequencyDayOfTheWeek? Number(row.recurringFrequencyDayOfTheWeek): null,
+                            dayOfTheMonth: row.recurringFrequencyDayOfTheMonth? Number(row.recurringFrequencyDayOfTheMonth): null,
+                            month: row.recurringFrequencyMonthOfTheYear? Number(row.recurringFrequencyMonthOfTheYear): null,
                             time: row.recurringFrequencyTime,
                         };
                         // for daily recurring transactions
