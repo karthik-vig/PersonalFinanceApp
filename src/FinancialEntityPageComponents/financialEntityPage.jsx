@@ -41,7 +41,7 @@ import {  //triggerSearch,
         resetTriggerSearch,
 } from '../stateManagement/financialEntityPageStates/triggerSearch.js';
 import { setCurrentSelectedItem, resetCurrentSelectedItem } from '../stateManagement/financialEntityPageStates/currentSelectedItem.js';
-import { setTransactionEntities } from '../stateManagement/mainPageStates/additionalInformation.js';
+import { setTransactionEntities } from '../stateManagement/sharedStates/additionalInformation.js';
   
 
 function FinancialEntityPage() {

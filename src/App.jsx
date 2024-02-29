@@ -6,7 +6,7 @@ import SideSectionButton from './sideSectionButton.jsx';
 import MainPage from './MainPageComponents/mainPage.jsx';
 import FinancialEntityPage from './FinancialEntityPageComponents/financialEntityPage.jsx';
 import RecurringEntityPage from './RecurringEntityPageComponents/recurringEntityPage.jsx';
-import { setRecurringTransactions } from './stateManagement/mainPageStates/additionalInformation.js';
+import { setRecurringTransactions } from './stateManagement/sharedStates/additionalInformation.js';
 import { useDispatch } from 'react-redux';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faHouse, faChartLine, faBuildingColumns, faTicketSimple,  } from '@fortawesome/free-solid-svg-icons';
@@ -14,7 +14,7 @@ import { useEffect } from 'react';
 import { setCurrencies, 
   setTransactionCategories, 
   setTransactionEntities,
-} from './stateManagement/mainPageStates/additionalInformation.js';
+} from './stateManagement/sharedStates/additionalInformation.js';
 library.add(faHouse, faChartLine, faBuildingColumns, faTicketSimple);
 
 function App() {

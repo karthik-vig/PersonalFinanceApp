@@ -15,7 +15,7 @@ import mainPageTriggerAddEntryReducer from './mainPageStates/triggerAddEntry.js'
 import mainPageTriggerSearchReducer from './mainPageStates/triggerSearch.js';
 import mainPageCurrentSelectedItemReducer from './mainPageStates/currentSelectedItem.js';
 import mainPageTriggerUpdateFileReducer from './mainPageStates/triggerUpdateFile.js';
-import mainPageAdditionalInformationReducer from './mainPageStates/additionalInformation.js';
+// import mainPageAdditionalInformationReducer from './mainPageStates/additionalInformation.js';
 import mainPageSelectFilterFinancialEntityReducer from './mainPageStates/selectFilterFinancialEntity.js';
 
 //import all the reducers for the the financial entity page states
@@ -50,6 +50,10 @@ import recurringEntityPageTriggerSearchReducer from './recurringEntityPageStates
 import recurringEntityPageWarningBoxDisplayReducer from './recurringEntityPageStates/warningBoxDisplay.js';
 import recurringEntityPageFilterDisplayReducer from './recurringEntityPageStates/filterDisplay.js';
 
+//import all the reducers for the shared states
+import sharedStatesAdditionalInformationReducer from './sharedStates/additionalInformation.js';
+
+
 const mainPageStates = combineReducers({
   selectedItem: mainPageSelectedItemReducer,
   sideBarItems: mainPageSideBarItemReducer,
@@ -65,7 +69,7 @@ const mainPageStates = combineReducers({
   triggerSearchState: mainPageTriggerSearchReducer,
   currentSelectedItemState: mainPageCurrentSelectedItemReducer,
   triggerUpdateFileState: mainPageTriggerUpdateFileReducer,
-  additionalInformationState: mainPageAdditionalInformationReducer,
+  // additionalInformationState: mainPageAdditionalInformationReducer,
   selectFilterFinancialEntityState: mainPageSelectFilterFinancialEntityReducer,
 });
 
@@ -103,10 +107,15 @@ const recurringEntityPageStates = combineReducers({
   filterDisplayState: recurringEntityPageFilterDisplayReducer,
 });
 
+const sharedStates = combineReducers({
+  additionalInformationState: sharedStatesAdditionalInformationReducer,
+});
+
 const rootReducer = combineReducers({
   mainPageStates,
   financialEntityPageStates,
   recurringEntityPageStates,
+  sharedStates,
 });
 
 export default configureStore({

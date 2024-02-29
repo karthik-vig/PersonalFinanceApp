@@ -158,7 +158,7 @@ FilterSelectInputParam.propTypes = {
 
 function FilterSelectFinancialEntityInputParam({ headingText, fieldName, toggleDisplay, handleInputChange, filterParamsVisibility}){
 
-    const transactionEntities = useSelector(state => state.mainPageStates.additionalInformationState.transactionEntities);
+    const transactionEntities = useSelector(state => state.sharedStates.additionalInformationState.transactionEntities);
     const selectFilterFinancialEntityState = useSelector(state => state.mainPageStates.selectFilterFinancialEntityState);
     const dispatch = useDispatch();
 

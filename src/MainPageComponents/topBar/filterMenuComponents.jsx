@@ -17,7 +17,7 @@ import {  //showFilter,
  } from '../../stateManagement/mainPageStates/filterDisplay.js';
 import { toggleFilterParamsVisibility, resetFilterParamsVisibility } from '../../stateManagement/mainPageStates/filterParamsVisibility.js';
 import { setFilterParams } from '../../stateManagement/mainPageStates/searchParams.js';
-import { setRecurringTransactions } from '../../stateManagement/mainPageStates/additionalInformation.js';
+import { setRecurringTransactions } from '../../stateManagement/sharedStates/additionalInformation.js';
 import { useEffect } from 'react';
 import { faTimes, faEraser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -35,10 +35,10 @@ function FilterMenu(){
     const toggleFieldVisibility = (fieldName) => dispatch(toggleFilterParamsVisibility(fieldName));
 
     //get from backend api
-    const currencies = useSelector((state) => state.mainPageStates.additionalInformationState.currencies);
-    const transactionCategories = useSelector((state) => state.mainPageStates.additionalInformationState.transactionCategories);
-    const transactionEntities = useSelector((state) => state.mainPageStates.additionalInformationState.transactionEntities);
-    const recurringTransactions = useSelector((state) => state.mainPageStates.additionalInformationState.recurringTransactions);
+    const currencies = useSelector((state) => state.sharedStates.additionalInformationState.currencies);
+    const transactionCategories = useSelector((state) => state.sharedStates.additionalInformationState.transactionCategories);
+    const transactionEntities = useSelector((state) => state.sharedStates.additionalInformationState.transactionEntities);
+    const recurringTransactions = useSelector((state) => state.sharedStates.additionalInformationState.recurringTransactions);
 
     //convert transactionEntities to an array of transactionEntity names
     const transactionEntityNames = Object.keys(transactionEntities).map((key) => transactionEntities[key].name );

@@ -40,7 +40,7 @@ import {  removeSideBarItem,
 import {  //triggerSearch,
         resetTriggerSearch,
 } from '../stateManagement/recurringEntityPageStates/triggerSearch.js';
-import { setRecurringTransactions } from '../stateManagement/mainPageStates/additionalInformation.js';
+import { setRecurringTransactions } from '../stateManagement/sharedStates/additionalInformation.js';
 import { setCurrentSelectedItem, resetCurrentSelectedItem } from '../stateManagement/recurringEntityPageStates/currentSelectedItem.js';
 
 function RecurringEntityPage() {

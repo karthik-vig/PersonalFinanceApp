@@ -81,7 +81,7 @@ function SalarySection() {
 
     const transactionValue = useSelector((state) => state.mainPageStates.selectedItem.value);
     const currencyValue = useSelector((state) => state.mainPageStates.selectedItem.currency);
-    const currencies = useSelector((state) => state.mainPageStates.additionalInformationState.currencies);
+    const currencies = useSelector((state) => state.sharedStates.additionalInformationState.currencies);
 
     return (
         <SectionContainer 
@@ -175,7 +175,7 @@ TransactionTypeSection.propTypes = {
 function TransactionCategorySection() {
 
     const transactionCategory = useSelector((state) => state.mainPageStates.selectedItem.transactionCategory);
-    const transactionCategories = useSelector((state) => state.mainPageStates.additionalInformationState.transactionCategories);
+    const transactionCategories = useSelector((state) => state.sharedStates.additionalInformationState.transactionCategories);
 
     return (
         <SectionContainer 
@@ -252,7 +252,7 @@ function FromEntitySection() {
     
     const fromEntity = useSelector((state) => state.mainPageStates.selectedItem.fromEntity);
     const fromType = useSelector((state) => state.mainPageStates.selectedItem.fromType);
-    let transactionEntities = useSelector((state) => state.mainPageStates.additionalInformationState.transactionEntities);
+    let transactionEntities = useSelector((state) => state.sharedStates.additionalInformationState.transactionEntities);
     const transformedEntities = transactionEntities.filter((entity) => entity.type === fromType ).map((entity) => entity.name);
 
     return (
@@ -332,7 +332,7 @@ function ToEntitySection() {
 
     const toEntity = useSelector((state) => state.mainPageStates.selectedItem.toEntity);
     const toType = useSelector((state) => state.mainPageStates.selectedItem.toType);
-    const transactionEntities = useSelector((state) => state.mainPageStates.additionalInformationState.transactionEntities);
+    const transactionEntities = useSelector((state) => state.sharedStates.additionalInformationState.transactionEntities);
     const transformedEntities = transactionEntities.filter((entity) => entity.type === toType ).map((entity) => entity.name);
 
     return (
