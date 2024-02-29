@@ -52,7 +52,7 @@ import recurringEntityPageFilterDisplayReducer from './recurringEntityPageStates
 
 //import all the reducers for the shared states
 import sharedStatesAdditionalInformationReducer from './sharedStates/additionalInformation.js';
-
+import sharedStatesActiveTabReducer from './sharedStates/activeTab.js';
 
 const mainPageStates = combineReducers({
   selectedItem: mainPageSelectedItemReducer,
@@ -109,6 +109,7 @@ const recurringEntityPageStates = combineReducers({
 
 const sharedStates = combineReducers({
   additionalInformationState: sharedStatesAdditionalInformationReducer,
+  activeTabState: sharedStatesActiveTabReducer,
 });
 
 const rootReducer = combineReducers({

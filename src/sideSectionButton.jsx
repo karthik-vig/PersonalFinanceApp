@@ -3,7 +3,7 @@ import './index.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
-function SideSectionButton({ svgIcon, tabName, onClickHandler, isActive=false, isTop=false }) {
+function SideSectionButton({ svgIcon, onClickHandler, isActive=false, isTop=false }) {
     
     let currentBGColor = "bg-secondary-cl";
     let marginTop = "mt-5";
@@ -15,7 +15,7 @@ function SideSectionButton({ svgIcon, tabName, onClickHandler, isActive=false, i
     }
 
     return (
-            <button className={marginTop + " mb-0.5 mx-0.5 p-0.5 w-10 h-10 rounded-lg hover:bg-hover-cl outline outline-4 outline-cyan-500 outline-offset-2 " + currentBGColor} onClick={ ()=>{onClickHandler(tabName)}}>
+            <button className={marginTop + " mb-0.5 mx-0.5 p-0.5 w-10 h-10 rounded-lg hover:bg-hover-cl outline outline-4 outline-cyan-500 outline-offset-2 " + currentBGColor} onClick={ onClickHandler }>
                 <FontAwesomeIcon className="m-[0%] p-[0%] w-[100%] h-[100%]" icon={svgIcon} />
             </button>
     );
@@ -24,7 +24,6 @@ function SideSectionButton({ svgIcon, tabName, onClickHandler, isActive=false, i
 
 SideSectionButton.propTypes = {
     svgIcon: PropTypes.object,
-    tabName: PropTypes.string,
     onClickHandler: PropTypes.func,
     isActive: PropTypes.bool,
     isTop: PropTypes.bool,

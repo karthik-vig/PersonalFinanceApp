@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const additionalInformationSlice = createSlice({
-    name: "mainPage/additionalInformationState",
+    name: "sharedStates/additionalInformationState",
     initialState: {
         currencies: [],
         transactionCategories: [],
