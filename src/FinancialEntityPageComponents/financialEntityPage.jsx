@@ -41,6 +41,8 @@ import {  //triggerSearch,
         resetTriggerSearch,
 } from '../stateManagement/financialEntityPageStates/triggerSearch.js';
 import { setCurrentSelectedItem, resetCurrentSelectedItem } from '../stateManagement/financialEntityPageStates/currentSelectedItem.js';
+import { setTransactionEntities } from '../stateManagement/mainPageStates/additionalInformation.js';
+  
 
 function FinancialEntityPage() {
 
@@ -109,6 +111,11 @@ function FinancialEntityPage() {
             if (err === null)
             dispatch(showFailBox("Could not create the entry in the database"));
         });
+        window.financialEntityOperations.getTransactionEntities().then((transactionEntities) => {
+            dispatch(setTransactionEntities(transactionEntities));
+        }).catch((err) => { 
+            if (err) dispatch(setTransactionEntities([]));
+        });     
         dispatch(resetTriggerAddEntry());
     }, [triggerAddEntryState,
         dispatch,
@@ -128,6 +135,11 @@ function FinancialEntityPage() {
             if (err.modifyStatus === false)
             dispatch(showFailBox("Could not Modify the Entry"));
         });
+        window.financialEntityOperations.getTransactionEntities().then((transactionEntities) => {
+            dispatch(setTransactionEntities(transactionEntities));
+        }).catch((err) => { 
+            if (err) dispatch(setTransactionEntities([]));
+        });      
         dispatch(resetTriggerModifyEntry());
    }, [triggerModifyEntryState,
         dispatch,
