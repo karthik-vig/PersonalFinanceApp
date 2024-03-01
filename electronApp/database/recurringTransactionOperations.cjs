@@ -3,6 +3,20 @@ const { v4: uuidv4 } = require('uuid');
 
 let db = null;
 
+
+function getIdFromTitle(event, title) {
+
+    return new Promise((resolve, reject) => { 
+        db.get(`SELECT id FROM recurringTransactions WHERE title = ?`, title, (err, row) => { 
+            if (err) { 
+                console.log("Recurring Entity: In getIdFromTitle: err: ", err);
+                reject(true);
+            }
+            resolve(row? row.id: null);
+        });
+    });
+}
+
 function getRecurringTransactions() {
     //communicate with the database to get the recurring transactions
     return new Promise((resolve, reject) => {
@@ -988,4 +1002,5 @@ module.exports = {
     getSelectedItem,
     getRecurringTransactions,
     enterRecurringTransactions,
+    getIdFromTitle,
 };

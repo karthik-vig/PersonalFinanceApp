@@ -54,19 +54,20 @@ function RecurringEntityPage() {
     const triggerSearchState = useSelector(state => state.recurringEntityPageStates.triggerSearchState);
     const searchParams = useSelector(state => state.recurringEntityPageStates.searchParams);
     const filterParamsVisibility = useSelector(state => state.recurringEntityPageStates.filterParamsVisibility);   
+    const currentSelectedItemState = useSelector(state => state.recurringEntityPageStates.currentSelectedItemState);
     const dispatch = useDispatch();
 
 
     //tigger getAllItems on page load
     useEffect(() => {
         window.recurringTransactionOperations.getAllItems().then(items => {
-            dispatch(setCurrentSelectedItem(items && items.length > 0 ? items[0].id : null));
+            if (currentSelectedItemState === null) dispatch(setCurrentSelectedItem(items && items.length > 0 ? items[0].id : null));
             dispatch(setSideBarItems(items));
         }).catch((err) => {
             if (err)
             dispatch(showFailBox("Could not load the items from the database"));
         });
-    }, [dispatch]);
+    }, [dispatch, currentSelectedItemState]);
 
    //trigger on search params set and enter key pressed
     useEffect(() => {

@@ -19,7 +19,8 @@ import { handleItemClick,
 import { useSelector, useDispatch } from 'react-redux';
 import { selectTab } from '../../stateManagement/sharedStates/activeTab.js';
 import { showFailBox } from '../../stateManagement/mainPageStates/failBoxDisplay.js';
-import { setCurrentSelectedItem } from '../../stateManagement/financialEntityPageStates/currentSelectedItem.js';
+import { setCurrentSelectedItem as financialEntitySetCurrentSelectedItem } from '../../stateManagement/financialEntityPageStates/currentSelectedItem.js';
+import { setCurrentSelectedItem as recurringTransactionSetCurrentSelectedItem } from '../../stateManagement/recurringEntityPageStates/currentSelectedItem.js';
 
 // below are the sections that are used in the detail section; built using the basic components
 function TitleSection() {
@@ -263,7 +264,7 @@ function FromEntitySection() {
     const handlePopOut = () => { 
         console.log("External Link Clicked");
         window.financialEntityOperations.getIdFromTitle(fromEntity).then((id) => {
-            dispatch(setCurrentSelectedItem(id));
+            dispatch(financialEntitySetCurrentSelectedItem(id));
             dispatch(selectTab("financialEntityPage"));
         }).catch((err) => { 
             if (err) dispatch(showFailBox("Entity not found"));
@@ -358,7 +359,7 @@ function ToEntitySection() {
     const handlePopOut = () => { 
         console.log("External Link Clicked");
         window.financialEntityOperations.getIdFromTitle(toEntity).then((id) => {
-            dispatch(setCurrentSelectedItem(id));
+            dispatch(financialEntitySetCurrentSelectedItem(id));
             dispatch(selectTab("financialEntityPage"));
         }).catch((err) => { 
             if (err) dispatch(showFailBox("Entity not found"));
@@ -401,19 +402,34 @@ ToEntitySection.propTypes = {
 function RecurringEntity() {
 
     const recurringEntity = useSelector((state) => state.mainPageStates.selectedItem.recurringEntity);
+    const dispatch = useDispatch();
+
+    const handlePopOut = () => {
+        console.log("External Link Clicked");
+        window.recurringTransactionOperations.getIdFromTitle(recurringEntity).then((id) => {
+            dispatch(recurringTransactionSetCurrentSelectedItem(id));
+            dispatch(selectTab("recurringTransactionPage"));
+        }).catch((err) => { 
+            if (err) dispatch(showFailBox("Entity not found"));
+        });
+    }
 
     return (
-        <SectionContainer additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80">
+        <SectionContainer additonalClasses="w-auto h-12 border-b-2 pb-4 min-w-80">
             <H6HeadingText 
                 additonalClasses="H-[100%] W-[40%]"
             >
                 Recurring
             </H6HeadingText>
             <p 
-                className="h-[100%] w-[60%] text-start text-base font-normal truncate"
+                className="px-2 h-[100%] w-auto text-start text-base font-normal truncate"
             >
                 {recurringEntity}
             </p>
+            <PopOut
+                additonalClasses="h-[80%] w-[10%]"
+                handlePopOut={handlePopOut}
+            />
         </SectionContainer>
     );
 }

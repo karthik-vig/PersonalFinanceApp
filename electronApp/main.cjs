@@ -120,6 +120,7 @@ app.whenReady().then(() => {
     ipcMain.handle('recurringTransactionOperations:getSelectedItem', recurringTransactionOperations.getSelectedItem);
     ipcMain.handle('recurringTransactionOperations:getAllItems', recurringTransactionOperations.getAllItems);
     ipcMain.handle('recurringTransactionOperations:getItems', recurringTransactionOperations.getItems);
+    ipcMain.handle('recurringTransactionOperations:getIdFromTitle', recurringTransactionOperations.getIdFromTitle);
 
 });
 

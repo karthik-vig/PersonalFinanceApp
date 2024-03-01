@@ -49,6 +49,7 @@ contextBridge.exposeInMainWorld('recurringTransactionOperations', {
     getSelectedItem: (uuid) => ipcRenderer.invoke('recurringTransactionOperations:getSelectedItem', uuid),
     getAllItems: () => ipcRenderer.invoke('recurringTransactionOperations:getAllItems'),
     getItems: (searchParams, filterParamsVisibility) => ipcRenderer.invoke('recurringTransactionOperations:getItems', searchParams, filterParamsVisibility),
+    getIdFromTitle: (title) => ipcRenderer.invoke('recurringTransactionOperations:getIdFromTitle', title),
 });
 
 contextBridge.exposeInMainWorld('app', {
