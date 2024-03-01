@@ -41,6 +41,7 @@ import {  //triggerSearch,
 } from '../stateManagement/financialEntityPageStates/triggerSearch.js';
 import { setCurrentSelectedItem, resetCurrentSelectedItem } from '../stateManagement/financialEntityPageStates/currentSelectedItem.js';
 import { setTransactionEntities } from '../stateManagement/sharedStates/additionalInformation.js';
+// import { current } from 'immer';
   
 
 function FinancialEntityPage() {
@@ -55,6 +56,7 @@ function FinancialEntityPage() {
     const triggerSearchState = useSelector(state => state.financialEntityPageStates.triggerSearchState);
     const searchParams = useSelector(state => state.financialEntityPageStates.searchParams);
     const filterParamsVisibility = useSelector(state => state.financialEntityPageStates.filterParamsVisibility);   
+    const currentSelectedItemState = useSelector(state => state.financialEntityPageStates.currentSelectedItemState);
     const dispatch = useDispatch();
 
 
@@ -67,13 +69,14 @@ function FinancialEntityPage() {
                 return;
             }
             */
-            dispatch(setCurrentSelectedItem(items && items.length > 0 ? items[0].id : null));
+            console.log("financialEntity page : currentSelectedItem is: ", currentSelectedItemState);
+            if (currentSelectedItemState === null) dispatch(setCurrentSelectedItem(items && items.length > 0 ? items[0].id : null));
             dispatch(setSideBarItems(items));
         }).catch((err) => {
             if (err)
             dispatch(showFailBox("Could not load the items from the database"));
         });
-    }, [dispatch]);
+    }, [dispatch, currentSelectedItemState]);
 
    //trigger on search params set and enter key pressed
     useEffect(() => {

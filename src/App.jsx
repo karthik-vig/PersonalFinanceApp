@@ -47,6 +47,7 @@ import { faExchangeAlt,
           faTimesCircle,
           faCheckCircle,
           faSync,
+          faExternalLink,
           } from '@fortawesome/free-solid-svg-icons';
 import { useEffect } from 'react';
 import { setCurrencies, 
@@ -93,7 +94,8 @@ library.add(faExchangeAlt,
             faDollarSign,
             faTimesCircle,
             faCheckCircle,
-            faSync
+            faSync,
+            faExternalLink
             );
 
 function App() {

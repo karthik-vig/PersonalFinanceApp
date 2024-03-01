@@ -326,6 +326,26 @@ SectionContainer.propTypes = {
     additonalClasses: PropTypes.string,
 };
 
+function PopOut({additonalClasses, handlePopOut}) {
+    return (
+        <button 
+            className={additonalClasses}
+            onClick={handlePopOut}
+        >
+            <FontAwesomeIcon
+                icon="fa-external-link"
+                className="h-[100%] w-[100%]"
+                color="#34568B"
+            />
+        </button>
+    );
+}
+
+PopOut.propTypes = {
+    additonalClasses: PropTypes.string,
+    handlePopOut: PropTypes.func,
+};
+
 export {H6HeadingText, 
         H3HeadingText, 
         TextInputSection, 
@@ -337,5 +357,6 @@ export {H6HeadingText,
         GetFileSection,
         DeleteFileButtonSection, 
         DatetimeInputSection, 
-        SectionContainer
+        SectionContainer,
+        PopOut,
     };

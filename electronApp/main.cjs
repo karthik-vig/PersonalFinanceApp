@@ -104,6 +104,7 @@ app.whenReady().then(() => {
     ipcMain.handle('financialEntityOperations:deleteItem', financialEntitiesOperations.deleteItem);
     ipcMain.handle('financialEntityOperations:modifyItem', financialEntitiesOperations.modifyItem);
     ipcMain.handle('financialEntityOperations:getSelectedItem', financialEntitiesOperations.getSelectedItem);
+    ipcMain.handle('financialEntityOperations:getIdFromTitle', financialEntitiesOperations.getIdFromTitle);
 
     
 

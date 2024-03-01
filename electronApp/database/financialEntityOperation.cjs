@@ -8,6 +8,20 @@ function setDB(database) {
     db = database;
 }
 
+function getIdFromTitle(event, title) {
+
+    return new Promise((resolve, reject) => { 
+        db.get(`SELECT id FROM financialEntities WHERE title = ?`, title, (err, row) => {
+            if (err) {
+                console.log("financial entity : getIdFromTitle error = ", err);
+                reject(null);
+            }
+            console.log("financial entity : getIdFromTitle row = ", row);
+            resolve(row? row.id : null);
+        });
+    });
+}
+
 //backend simulation to get transaction entities
 function getTransactionEntities() {
 
@@ -263,4 +277,5 @@ module.exports = {
     deleteItem,
     modifyItem,
     getSelectedItem,
+    getIdFromTitle,
 };

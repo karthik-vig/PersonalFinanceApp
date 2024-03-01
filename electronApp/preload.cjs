@@ -30,6 +30,7 @@ contextBridge.exposeInMainWorld('financialEntityOperations', {
     deleteItem: (uuid) => ipcRenderer.invoke('financialEntityOperations:deleteItem', uuid),
     modifyItem: (selectedItem) => ipcRenderer.invoke('financialEntityOperations:modifyItem', selectedItem),
     getSelectedItem: (uuid) => ipcRenderer.invoke('financialEntityOperations:getSelectedItem', uuid),
+    getIdFromTitle: (title) => ipcRenderer.invoke('financialEntityOperations:getIdFromTitle', title),
 });
 
 contextBridge.exposeInMainWorld('initializeDatabase', {
