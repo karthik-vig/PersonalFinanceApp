@@ -7,10 +7,10 @@ import RecurringEntityPage from './RecurringEntityPageComponents/recurringEntity
 import { setRecurringTransactions } from './stateManagement/sharedStates/additionalInformation.js';
 import { useSelector, useDispatch } from 'react-redux';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faHouse, 
+import { faExchangeAlt, 
          faChartLine, 
          faBuildingColumns, 
-         faTicketSimple,
+         faRedoAlt,
          faTrashAlt,
          faTimes,
          faEraser,
@@ -54,10 +54,10 @@ import { setCurrencies,
   setTransactionEntities,
 } from './stateManagement/sharedStates/additionalInformation.js';
 import { selectTab } from './stateManagement/sharedStates/activeTab.js';
-library.add(faHouse, 
+library.add(faExchangeAlt, 
             faChartLine, 
             faBuildingColumns, 
-            faTicketSimple,
+            faRedoAlt,
             faTrashAlt,
             faTimes,
             faEraser,
@@ -139,10 +139,10 @@ function App() {
   return (
     <div className="flex flex-row flex-nowrap border-0 w-[100vw] h-[100vh]">
       <div className="flex flex-col flex-wrap justify-start content-center h-[100%] min-h-[500px] w-[50px] bg-primary-cl">
-        <SideSectionButton svgIcon="fa-house" onClickHandler={ () => dispatch(selectTab("mainPage")) } isActive={activeTab.mainPage} isTop={true} />
+        <SideSectionButton svgIcon="fa-exchange-alt" onClickHandler={ () => dispatch(selectTab("mainPage")) } isActive={activeTab.mainPage} isTop={true} />
         <SideSectionButton svgIcon="fa-chart-line" onClickHandler={ () => dispatch(selectTab("analyticPage")) } isActive={activeTab.analyticPage}/>
         <SideSectionButton svgIcon="fa-building-columns" onClickHandler={ () => dispatch(selectTab("financialEntityPage")) } isActive={activeTab.financialEntityPage}/>
-        <SideSectionButton svgIcon="fa-ticket-simple" onClickHandler={ () => dispatch(selectTab("recurringTransactionPage")) } isActive={activeTab.recurringTransactionPage}/>
+        <SideSectionButton svgIcon="fa-redo-alt" onClickHandler={ () => dispatch(selectTab("recurringTransactionPage")) } isActive={activeTab.recurringTransactionPage}/>
       </div>
       <div className="flex flex-row flex-wrap h-[100%] min-h-[500px] min-w-[600px]" style={{ width: 'calc(100% - 50px)' }}>
         {activeTab.mainPage && <MainPage />}
