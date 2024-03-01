@@ -16,10 +16,10 @@ import { setWarningBoxDisplayModifyState,
     } from '../../stateManagement/mainPageStates/warningBoxDisplay.js';
 import { useSelector, useDispatch } from 'react-redux';
 //import { setWarningBoxDisplayModifyState } from '../../stateManagement/mainPageStates/warningBoxDisplay.js';
-import { faFilter, faSort, faPlus, faTrashCan, faEdit, faRefresh } from '@fortawesome/free-solid-svg-icons';
-import { library } from '@fortawesome/fontawesome-svg-core';
+// import { faFilter, faSort, faPlus, faTrashCan, faEdit, faRefresh } from '@fortawesome/free-solid-svg-icons';
+// import { library } from '@fortawesome/fontawesome-svg-core';
 import { triggerSearch } from '../../stateManagement/mainPageStates/triggerSearch.js';
-library.add(faFilter, faSort, faPlus, faTrashCan, faEdit, faRefresh);
+// library.add(faFilter, faSort, faPlus, faTrashCan, faEdit, faRefresh);
 
 function TopBarButton({ svgIcon, iconColor, btnName, onClickHandler }) {
 
@@ -62,19 +62,19 @@ function TopBar() {
             className="flex flex-row flex-nowrap relative z-10 justify-center h-14 mx-7 mt-10 mb-4 rounded-lg border bg-surface-cl drop-shadow-lg " style={{ width: 'calc(100% - 56px)' }}
         >
             <TopBarButton 
-                svgIcon={faPlus} 
+                svgIcon="fa-plus"
                 iconColor="#00ff00"
                 btnName="Create" 
                 onClickHandler={() => dispatch(triggerAddEntry()) }
             />
             <TopBarButton 
-                svgIcon={faEdit} 
+                svgIcon="fa-edit" 
                 iconColor="#eab308"
                 btnName="Modify" 
                 onClickHandler={ () => dispatch(setWarningBoxDisplayModifyState("block")) }
             />
             <TopBarButton 
-                svgIcon={faTrashCan}
+                svgIcon="fa-trash-can"
                 iconColor="#ff0000" 
                 btnName="Delete" 
                 onClickHandler={ () => dispatch(setWarningBoxDisplayDeleteState("block")) }
@@ -87,13 +87,13 @@ function TopBar() {
                 onKeyDown={ (event) => { if (event.code === "Enter") { dispatch(triggerSearch()); } } }
             />
             <TopBarButton 
-                svgIcon={faFilter} 
+                svgIcon="fa-filter" 
                 iconColor="#0000ff"
                 btnName="Filter" 
                 onClickHandler={ filterDisplayState === "hidden" ? () => dispatch(showFilter()) : () => dispatch(hideFilter()) }
             />
             <TopBarButton 
-                svgIcon={faRefresh} 
+                svgIcon="fa-refresh" 
                 iconColor="#00ff00"
                 btnName="Refresh" 
                 onClickHandler={ () => window.app.refresh("mainPage") }

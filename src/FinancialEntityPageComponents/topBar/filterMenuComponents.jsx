@@ -21,10 +21,10 @@ import {FilterParamSection,
     } from '../../basicComponents/filterMenuLayoutComponents/filterMenuContainerLayouts.jsx';
 */
 //import { SelectInputField } from '../../basicComponents/filterMenuLayoutComponents/basicFilterInputComponents.jsx';
-import { faTimes, faEraser } from '@fortawesome/free-solid-svg-icons';
+// import { faTimes, faEraser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-library.add(faTimes, faEraser);
+// import { library } from '@fortawesome/fontawesome-svg-core';
+// library.add(faTimes, faEraser);
 
 /*
 function FilterSortInputParam({ toggleDisplay, handleInputChange, filterParamsVisibility}){
@@ -96,13 +96,13 @@ function FilterMenu(){
                     className="flex justify-center items-center h-8 w-8 rounded-lg border bg-gray-100 border-gray-500 hover:bg-gray-300 hover:text-white drop-shadow-lg"
                     onClick={() => dispatch(resetFilterParamsVisibility())}
                 >
-                    <FontAwesomeIcon icon={faEraser} color="#1a1a1a" className="h-6 w-6"/>
+                    <FontAwesomeIcon icon="fa-eraser" color="#1a1a1a" className="h-6 w-6"/>
                 </button>
                 <button
                     className="flex justify-center items-center h-8 w-8 rounded-lg border bg-red-500 border-red-700 hover:bg-red-800 drop-shadow-lg"
                     onClick={() => dispatch(hideFilter())}
                 >
-                    <FontAwesomeIcon icon={faTimes} color="#ffffff" className="h-6 w-6"/>
+                    <FontAwesomeIcon icon="fa-times" color="#ffffff" className="h-6 w-6"/>
             </button>
             </section>
             <FilterSelectInputParam

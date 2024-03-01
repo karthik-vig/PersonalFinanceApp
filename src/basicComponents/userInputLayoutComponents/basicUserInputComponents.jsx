@@ -1,4 +1,3 @@
-//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import '../../index.css';
 //import { useImmer } from 'use-immer';
@@ -12,9 +11,9 @@ import {  triggerAddFile,
     resetTriggerGetFile,
  } from '../../stateManagement/mainPageStates/triggerUpdateFile.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-library.add(faTrashAlt);
+// import { library } from '@fortawesome/fontawesome-svg-core';
+// import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+// library.add(faTrashAlt);
 
 
 // below are the basic components that can be used to build the detail section
@@ -278,7 +277,7 @@ function DeleteFileButtonSection({additonalClasses, fileName, files, handleValue
             className={ " " + additonalClasses + " "}
             onClick={() => { dispatch(triggerDeleteFile(fileName)); } }
         >
-            <FontAwesomeIcon icon={faTrashAlt} color='#ff0000'/>
+            <FontAwesomeIcon icon="fa-trash-alt" color='#ff0000'/>
         </button>
     );
 }
