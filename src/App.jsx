@@ -1,5 +1,3 @@
-//import { useState } from 'react';
-// import { useImmer } from 'use-immer';
 import './index.css';
 import './sideSectionButton.jsx';
 import SideSectionButton from './sideSectionButton.jsx';
@@ -135,34 +133,16 @@ function App() {
         dispatch(setRecurringTransactions(retrievedRecurringTransactions));
     });
   }, [dispatch,]);
-    
-
-  // const [activeTab, setActiveTab] = useImmer({
-  //                                             mainPage: true,
-  //                                            analyticPage: false,
-  //                                            financialEntityPage: false,
-  //                                            recurringTransactionPage: false,
-  //                                           });
 
   const activeTab = useSelector((state) => state.sharedStates.activeTabState);
-
-  // const changeActiveTab = (tabName) => {
-  //   // setActiveTab(draft => {
-  //   //   Object.keys(draft).forEach(key => {
-  //   //     draft[key] = false;
-  //   //   });
-  //   //   draft[tabName] = true;
-  //   // });
-  //   dispatch(selectTab(tabName));
-  // };
 
   return (
     <div className="flex flex-row flex-nowrap border-0 w-[100vw] h-[100vh]">
       <div className="flex flex-col flex-wrap justify-start content-center h-[100%] min-h-[500px] w-[50px] bg-primary-cl">
-        <SideSectionButton svgIcon={faHouse} onClickHandler={ () => dispatch(selectTab("mainPage")) } isActive={activeTab.mainPage} isTop={true} />
-        <SideSectionButton svgIcon={faChartLine} onClickHandler={ () => dispatch(selectTab("analyticPage")) } isActive={activeTab.analyticPage}/>
-        <SideSectionButton svgIcon={faBuildingColumns} onClickHandler={ () => dispatch(selectTab("financialEntityPage")) } isActive={activeTab.financialEntityPage}/>
-        <SideSectionButton svgIcon={faTicketSimple} onClickHandler={ () => dispatch(selectTab("recurringTransactionPage")) } isActive={activeTab.recurringTransactionPage}/>
+        <SideSectionButton svgIcon="fa-house" onClickHandler={ () => dispatch(selectTab("mainPage")) } isActive={activeTab.mainPage} isTop={true} />
+        <SideSectionButton svgIcon="fa-chart-line" onClickHandler={ () => dispatch(selectTab("analyticPage")) } isActive={activeTab.analyticPage}/>
+        <SideSectionButton svgIcon="fa-building-columns" onClickHandler={ () => dispatch(selectTab("financialEntityPage")) } isActive={activeTab.financialEntityPage}/>
+        <SideSectionButton svgIcon="fa-ticket-simple" onClickHandler={ () => dispatch(selectTab("recurringTransactionPage")) } isActive={activeTab.recurringTransactionPage}/>
       </div>
       <div className="flex flex-row flex-wrap h-[100%] min-h-[500px] min-w-[600px]" style={{ width: 'calc(100% - 50px)' }}>
         {activeTab.mainPage && <MainPage />}
