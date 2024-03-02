@@ -95,6 +95,7 @@ app.whenReady().then(() => {
     ipcMain.handle('transactionOperations:createEntry', transactionOperations.createEntry);
     ipcMain.handle('transactionOperations:openFileDialog', transactionOperations.openGetFileDialog);
     ipcMain.handle('transactionOperations:saveFileDialog', transactionOperations.openSaveFileDialog);
+    ipcMain.handle('transactionOperations:deleteTransactionOnRecurringReferenceID', transactionOperations.deleteTransactionOnRecurringReferenceID);
 
     //FINANCIAL ENTITY OPERATIONS
     ipcMain.handle('financialEntityOperations:getTransactionEntities', financialEntitiesOperations.getTransactionEntities);

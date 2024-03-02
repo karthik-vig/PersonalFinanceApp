@@ -10,6 +10,16 @@ function setDB(database) {
     db = database;
 }
 
+function deleteTransactionOnRecurringReferenceID(event, recurringReferenceID) {
+
+    return new Promise((resolve, reject) => {
+        db.run(`DELETE FROM transactions WHERE recurringReference = ?`, recurringReferenceID, (err) => { 
+            if (err) reject(true);
+            resolve(true);
+        });
+    });
+}
+
 //when we get selectedItem from the database, we set a object in the
 //nodejs to store the fileName and the fileBlob
 //file blob simulated backend functions
@@ -794,4 +804,5 @@ module.exports = {
     createEntry,
     openGetFileDialog,
     openSaveFileDialog,
+    deleteTransactionOnRecurringReferenceID,
 };

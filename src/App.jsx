@@ -48,6 +48,7 @@ import { faExchangeAlt,
           faCheckCircle,
           faSync,
           faExternalLink,
+          faExclamationTriangle
           } from '@fortawesome/free-solid-svg-icons';
 import { useEffect } from 'react';
 import { setCurrencies, 
@@ -95,7 +96,8 @@ library.add(faExchangeAlt,
             faTimesCircle,
             faCheckCircle,
             faSync,
-            faExternalLink
+            faExternalLink,
+            faExclamationTriangle
             );
 
 function App() {

@@ -12,8 +12,9 @@ import { setSearchField,
   } from '../../stateManagement/recurringEntityPageStates/searchParams.js';
 import { triggerAddEntry } from '../../stateManagement/recurringEntityPageStates/triggerAddEntry.js';
 import { setWarningBoxDisplayModifyState,
-         setWarningBoxDisplayDeleteState,
+         //setWarningBoxDisplayDeleteState,
     } from '../../stateManagement/recurringEntityPageStates/warningBoxDisplay.js';
+import { toggleDisplayState as toggleDeleteOptionsDisplayState } from '../../stateManagement/recurringEntityPageStates/deleteOptions.js';
 import { useSelector, useDispatch } from 'react-redux';
 //import { setWarningBoxDisplayModifyState } from '../../stateManagement/recurringEntityPageStates/warningBoxDisplay.js';
 // import {"fa-filter"faSort, faPlus, faTrashCan, faEdit, faRefresh } from '@fortawesome/free-solid-svg-icons';
@@ -77,7 +78,7 @@ function TopBar() {
                 svgIcon="fa-trash-can"
                 iconColor="#ff0000" 
                 btnName="Delete" 
-                onClickHandler={ () => dispatch(setWarningBoxDisplayDeleteState("block")) }
+                onClickHandler={ () => dispatch(toggleDeleteOptionsDisplayState()) }
             />
             <input 
                 type="text" 

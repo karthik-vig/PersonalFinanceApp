@@ -11,6 +11,7 @@ import DetailSection from './detailSection/detailSection.jsx';
 import GenericWarningBox from '../pageLayoutComponents/genericWarningBox.jsx';
 import GenericSuccess from '../pageLayoutComponents/genericSuccess.jsx';
 import GenericFail from '../pageLayoutComponents/genericFail.jsx';
+import CheckboxOptionsMenu from '../pageLayoutComponents/CheckboxOptionsMenu.jsx';
 //import SideSectionButton from './sideSectionButton';
 //import GenericIconButton from './genericIconBtn';
 import { resetSelectedItem,
@@ -40,6 +41,10 @@ import {  //triggerSearch,
         resetTriggerSearch,
 } from '../stateManagement/recurringEntityPageStates/triggerSearch.js';
 import { setRecurringTransactions } from '../stateManagement/sharedStates/additionalInformation.js';
+import { toggleDisplayState,
+        toggleSelectOptions,
+        setDisplayMessage,
+     } from '../stateManagement/recurringEntityPageStates/deleteOptions.js';
 import { setCurrentSelectedItem, resetCurrentSelectedItem } from '../stateManagement/recurringEntityPageStates/currentSelectedItem.js';
 
 function RecurringEntityPage() {
@@ -55,6 +60,7 @@ function RecurringEntityPage() {
     const searchParams = useSelector(state => state.recurringEntityPageStates.searchParams);
     const filterParamsVisibility = useSelector(state => state.recurringEntityPageStates.filterParamsVisibility);   
     const currentSelectedItemState = useSelector(state => state.recurringEntityPageStates.currentSelectedItemState);
+    const deleteOptionsState = useSelector(state => state.recurringEntityPageStates.deleteOptionsState);
     const dispatch = useDispatch();
 
 
@@ -134,28 +140,62 @@ function RecurringEntityPage() {
     //trigger on delete entry
     useEffect(() => {
         if (!triggerDeleteEntryState) return;
+        //delete the entry from transaction table retroactively the database
+        if (deleteOptionsState.selectOptions.deleteRetroactively) {
+            console.log("Delete the entry associated with the recurring transaction retroactively from the transaction table");
+            window.transactionOperations.deleteTransactionOnRecurringReferenceID(selectedItem.id).then((status) => {
+                if (status)
+                dispatch(showSuccessBox("Deleted the Associated Transaction Entries"));
+            }).catch((err) => {
+                if (err)
+                dispatch(showFailBox("Could not Delete the Associated Transaction Entries"));
+            });
+        }
         //delete the entry from the database
-        window.recurringTransactionOperations.deleteItem(selectedItem.id).then(() => {
-            console.log("The Delete Entry trigger selected item ID is: ");
-            console.log(selectedItem.id);
-            dispatch(removeSideBarItem(selectedItem.id));
-            dispatch(resetSelectedItem());
-            dispatch(resetCurrentSelectedItem());
-            dispatch(showSuccessBox("Removed the Entry from Disk"));
-        }).catch((err) => {
-            if (err)
-            dispatch(showFailBox("Could not Delete the Entry"));
-        });
+        if (deleteOptionsState.selectOptions.deleteOnlyThis) {
+            console.log("Delete the recurring transaction entry from the database");
+            window.recurringTransactionOperations.deleteItem(selectedItem.id).then(() => {
+                console.log("The Delete Entry trigger selected item ID is: ");
+                console.log(selectedItem.id);
+                dispatch(removeSideBarItem(selectedItem.id));
+                dispatch(resetSelectedItem());
+                dispatch(resetCurrentSelectedItem());
+                dispatch(showSuccessBox("Removed the Entry from Disk"));
+            }).catch((err) => {
+                if (err)
+                dispatch(showFailBox("Could not Delete the Entry"));
+            });
+        }
         dispatch(resetTriggerDeleteEntry());       
     }, [triggerDeleteEntryState,
         dispatch,
         selectedItem.id,
+        deleteOptionsState.selectOptions,
     ]);
+
+    const handleDeleteOptionsProceedBtnClick = () => {
+        if (!deleteOptionsState.selectOptions.deleteRetroactively && 
+            !deleteOptionsState.selectOptions.deleteOnlyThis) {
+                dispatch(setDisplayMessage("Please select an option:"));
+                return;
+            }
+        dispatch(toggleDisplayState()); 
+        dispatch(setWarningBoxDisplayDeleteState("block"));
+    };
+
+
 
     return (
         <div 
             className="relative z-0 flex flex-row flex-wrap h-[100%] w-[100%] bg-background-cl"
         >
+            <CheckboxOptionsMenu 
+                checkBoxOptions={deleteOptionsState.options}
+                setOptions={toggleSelectOptions} 
+                handleProceed={handleDeleteOptionsProceedBtnClick} 
+                displayState={deleteOptionsState.displayState}
+                changeDisplayState={toggleDisplayState}
+            />
             <GenericWarningBox 
                 warningText="Are you sure you want to modify the Entry?"
                 additionalClasses=""
