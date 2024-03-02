@@ -19,7 +19,7 @@ function GenericFail({additionalClasses,
                 <div className="flex flex-row flex-nowrap m-5 h-10 w-[90%] justify-center items-center">
                     <FontAwesomeIcon icon="fa-times-circle" color="#ff0000" className="h-10 w-10"/>
                     <p
-                     className="flex fles-wrap items-center ml-2 h-10 w-[80%] text-sm font-semibold text-red-800"
+                     className="flex flex-wrap items-center ml-2 h-10 w-[80%] text-sm font-semibold text-red-800"
                     >
                         Fail : {displayState.message}
                     </p>
