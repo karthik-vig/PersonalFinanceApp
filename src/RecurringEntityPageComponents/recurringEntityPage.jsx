@@ -127,6 +127,14 @@ function RecurringEntityPage() {
         //modify the transaction table retroactively
         if (modifyOptionsState.selectOptions.modifyRetroactively) {
             console.log("Modify the entry associated with the recurring transaction retroactively in the transaction table");
+            //back-end function to modify the transaction table retroactively
+            window.transactionOperations.modifyTransactionReferenceID(selectedItem).then((status) => {
+                if (status)
+                dispatch(showSuccessBox("Modified the Associated Transaction Entries"));
+            }).catch((err) => {
+                if (err)
+                dispatch(showFailBox("Could not Modify the Associated Transaction Entries"));
+            });
         }
         //modify the database
         if (modifyOptionsState.selectOptions.modifyOnlyThis) {     

@@ -10,6 +10,59 @@ function setDB(database) {
     db = database;
 }
 
+function modifyTransactionReferenceID(event, recurringTransactionSelectedItem) {
+    return new Promise((resolve, reject) => {
+
+        const fetchToFinanaicalEntityReferenceID = new Promise((resolve, reject) => {
+            db.get(`SELECT id from financialEntities WHERE title = ?`, 
+                    recurringTransactionSelectedItem.toEntity, 
+                    (err, row) => {
+                        if (err) reject(true);
+                        resolve(row.id);
+                });
+        });
+
+        const fetchFromFinanaicalEntityReferenceID = new Promise((resolve, reject) => {
+            db.get(`SELECT id from financialEntities WHERE title = ?`, 
+                    recurringTransactionSelectedItem.fromEntity, 
+                    (err, row) => {
+                        if (err) reject(true);
+                        resolve(row.id);
+                });
+        });
+
+        Promise.all([fetchToFinanaicalEntityReferenceID, 
+                    fetchFromFinanaicalEntityReferenceID]).then(([toReferenceID, fromReferenceID]) => {
+
+            db.run(`UPDATE transactions SET \
+                    title = ?, \
+                    description = ?, \
+                    value = ?, \
+                    currency = ?, \
+                    transactionType = ?, \
+                    transactionCategory = ?, \
+                    fromReference = ?, \
+                    toReference = ? \
+                    WHERE recurringReference = ?`,
+                    recurringTransactionSelectedItem.title,
+                    recurringTransactionSelectedItem.description,
+                    recurringTransactionSelectedItem.value,
+                    recurringTransactionSelectedItem.currency,
+                    recurringTransactionSelectedItem.transactionType,
+                    recurringTransactionSelectedItem.transactionCategory,
+                    fromReferenceID,
+                    toReferenceID,
+                    recurringTransactionSelectedItem.id, (err) => {
+                        if (err) reject(true);
+                        resolve(true);
+            }).catch((err) => {
+                console.log(`Modify Transaction Reference ID Error ${err}`);
+                reject(true);
+             });
+        }); 
+    });
+}
+
 function deleteTransactionOnRecurringReferenceID(event, recurringReferenceID) {
 
     return new Promise((resolve, reject) => {
@@ -805,4 +858,5 @@ module.exports = {
     openGetFileDialog,
     openSaveFileDialog,
     deleteTransactionOnRecurringReferenceID,
+    modifyTransactionReferenceID,
 };

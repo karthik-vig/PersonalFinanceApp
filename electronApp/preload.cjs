@@ -18,6 +18,7 @@ contextBridge.exposeInMainWorld('transactionOperations', {
     openFileDialog: () => ipcRenderer.invoke('transactionOperations:openFileDialog'),
     saveFileDialog: (fileName) => ipcRenderer.invoke('transactionOperations:saveFileDialog', fileName),
     deleteTransactionOnRecurringReferenceID: (recurringReferenceID) => ipcRenderer.invoke('transactionOperations:deleteTransactionOnRecurringReferenceID', recurringReferenceID),
+    modifyTransactionReferenceID: (recurringTransactionSelectedItem) => ipcRenderer.invoke('transactionOperations:modifyTransactionReferenceID', recurringTransactionSelectedItem),
 });
 
 contextBridge.exposeInMainWorld('financialEntityOperations', {
