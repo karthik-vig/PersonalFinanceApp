@@ -41,9 +41,10 @@ import {  //triggerSearch,
         resetTriggerSearch,
 } from '../stateManagement/recurringEntityPageStates/triggerSearch.js';
 import { setRecurringTransactions } from '../stateManagement/sharedStates/additionalInformation.js';
-import { toggleDisplayState,
-        toggleSelectOptions,
-        setDisplayMessage,
+import { toggleDisplayState as toggleDeleteOptionsDisplayState,
+        toggleSelectOptions as toggleDeleteOptionsSelectOptions,
+        setDisplayMessage as setDeleteOptionsDisplayMessage,
+        reset as resetDeleteOptions,
      } from '../stateManagement/recurringEntityPageStates/deleteOptions.js';
 import { setCurrentSelectedItem, resetCurrentSelectedItem } from '../stateManagement/recurringEntityPageStates/currentSelectedItem.js';
 
@@ -166,6 +167,7 @@ function RecurringEntityPage() {
                 dispatch(showFailBox("Could not Delete the Entry"));
             });
         }
+        dispatch(resetDeleteOptions());
         dispatch(resetTriggerDeleteEntry());       
     }, [triggerDeleteEntryState,
         dispatch,
@@ -176,13 +178,16 @@ function RecurringEntityPage() {
     const handleDeleteOptionsProceedBtnClick = () => {
         if (!deleteOptionsState.selectOptions.deleteRetroactively && 
             !deleteOptionsState.selectOptions.deleteOnlyThis) {
-                dispatch(setDisplayMessage("Please select an option:"));
+                dispatch(setDeleteOptionsDisplayMessage("Please select an option:"));
                 return;
             }
-        dispatch(toggleDisplayState()); 
+        dispatch(toggleDeleteOptionsDisplayState()); 
         dispatch(setWarningBoxDisplayDeleteState("block"));
     };
 
+    const handleDeleteOptionsCancelBtnClick = () => {
+        dispatch(toggleDeleteOptionsDisplayState());
+    };
 
 
     return (
@@ -191,10 +196,11 @@ function RecurringEntityPage() {
         >
             <CheckboxOptionsMenu 
                 checkBoxOptions={deleteOptionsState.options}
-                setOptions={toggleSelectOptions} 
+                checkBoxState={deleteOptionsState.selectOptions}
+                setOptions={toggleDeleteOptionsSelectOptions} 
                 handleProceed={handleDeleteOptionsProceedBtnClick} 
                 displayState={deleteOptionsState.displayState}
-                changeDisplayState={toggleDisplayState}
+                handleCancel={handleDeleteOptionsCancelBtnClick}
             />
             <GenericWarningBox 
                 warningText="Are you sure you want to modify the Entry?"

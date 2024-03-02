@@ -3,11 +3,12 @@ import '../index.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDispatch } from 'react-redux';
 
-function CheckboxOptionsMenu({checkBoxOptions=[], 
+function CheckboxOptionsMenu({checkBoxOptions=[],
+                              checkBoxState, 
                                 setOptions, 
                                 handleProceed, 
                                 displayState={ state: "hidden", message: ""},
-                                changeDisplayState
+                                handleCancel
                             }) {
     // checkBoxOptions = [{
     //     id: "deleteAll", // some id value
@@ -48,7 +49,7 @@ function CheckboxOptionsMenu({checkBoxOptions=[],
                                 className="flex flex-row flex-nowrap"
                                 key={checkBoxOption.id}
                             >
-                                <input type="checkbox" id={checkBoxOption.id} onChange={() => dispatch(setOptions(checkBoxOption.id))}/>
+                                <input type="checkbox" id={checkBoxOption.id} checked={checkBoxState[checkBoxOption.id]} onChange={() => dispatch(setOptions(checkBoxOption.id))}/>
                                 <label htmlFor={checkBoxOption.id}>{checkBoxOption.label}</label>
                             </section>
                         );
@@ -65,7 +66,7 @@ function CheckboxOptionsMenu({checkBoxOptions=[],
                     </button>
                     <button 
                         className="ml-14 border rounded-md bg-red-400 text-semibold text-white w-20 h-8 hover:bg-red-700 border-red-700"
-                        onClick={() => dispatch(changeDisplayState())}
+                        onClick={handleCancel}
                     >
                         Cancel
                     </button>
@@ -77,10 +78,11 @@ function CheckboxOptionsMenu({checkBoxOptions=[],
 
 CheckboxOptionsMenu.propTypes = {
     checkBoxOptions: ProtoType.array,
+    checkBoxState: ProtoType.object,
     setOptions: ProtoType.func,
     handleProceed: ProtoType.func,
     displayState: ProtoType.string,
-    changeDisplayState: ProtoType.func,
+    handleCancel: ProtoType.func,
 };
 
 export default CheckboxOptionsMenu;

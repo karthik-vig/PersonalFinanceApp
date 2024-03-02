@@ -30,6 +30,20 @@ export const deleteOptionsSlice = createSlice({
         setDisplayMessage: (state, action) => {
             state.displayState.message = action.payload;
             return state;
+        },
+        reset: (state) => {
+            state = {
+                displayState: { state: "hidden", message: "Delete Options:"},
+                options: [
+                    {id: "deleteRetroactively", label: "Delete Associated Transaction Entries Retroactively"},
+                    {id: "deleteOnlyThis", label: "Delete this Recurring Entry"},
+                ],
+                selectOptions: {
+                    deleteRetroactively: false,
+                    deleteOnlyThis: false,
+                },
+            }
+            return state;
         }
     }
 });
@@ -37,6 +51,7 @@ export const deleteOptionsSlice = createSlice({
 export const {  toggleDisplayState,
                 toggleSelectOptions,
                 setDisplayMessage,
+                reset,
             } = deleteOptionsSlice.actions;
 
 export default deleteOptionsSlice.reducer;
