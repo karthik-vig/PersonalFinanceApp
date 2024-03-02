@@ -121,9 +121,9 @@ function RecurringEntityPage() {
 
    //trigger on modify entry
    useEffect(() => {
+        if (!triggerModifyEntryState) return;
         console.log("The Modify Entry trigger selected item is: ");
         console.log(selectedItem);
-        if (!triggerModifyEntryState) return;
         //modify the transaction table retroactively
         if (modifyOptionsState.selectOptions.modifyRetroactively) {
             console.log("Modify the entry associated with the recurring transaction retroactively in the transaction table");

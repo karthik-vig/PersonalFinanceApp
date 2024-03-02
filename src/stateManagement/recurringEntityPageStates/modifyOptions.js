@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const modifyOptionsSlice = createSlice({
-    name: "recurringEntityPage/deleteOptions",
+    name: "recurringEntityPage/modifyOptions",
     initialState: {
         displayState: { state: "hidden", message: "Modify Options:"},
         options: [
@@ -35,8 +35,8 @@ export const modifyOptionsSlice = createSlice({
             state = {
                 displayState: { state: "hidden", message: "Modify Options:"},
                 options: [
-                    {id: "modifyRetroactively", label: "Past transactions will be modified retroactively to reflect changes"},
-                    {id: "modifyOnlyThis", label: "Only future transactions will reflect the changes"},
+                    {id: "modifyRetroactively", label: "Past transactions will be modified retroactively to reflect changes along with the information in this recurring transacton entry"},
+                    {id: "modifyOnlyThis", label: "Only Modify the select Recurring transaction Entry"},
                 ],
                 selectOptions: {
                     modifyRetroactively: false,
