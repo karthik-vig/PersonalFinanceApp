@@ -42,7 +42,8 @@ function modifyTransactionReferenceID(event, recurringTransactionSelectedItem) {
                     transactionType = ?, \
                     transactionCategory = ?, \
                     fromReference = ?, \
-                    toReference = ? \
+                    toReference = ?, \
+                    modifiedDate = ? \
                     WHERE recurringReference = ?`,
                     recurringTransactionSelectedItem.title,
                     recurringTransactionSelectedItem.description,
@@ -52,6 +53,7 @@ function modifyTransactionReferenceID(event, recurringTransactionSelectedItem) {
                     recurringTransactionSelectedItem.transactionCategory,
                     fromReferenceID,
                     toReferenceID,
+                    new Date().toISOString().substring(0, 19),
                     recurringTransactionSelectedItem.id, (err) => {
                         if (err) reject(true);
                         resolve(true);
