@@ -8,11 +8,15 @@ import {H6HeadingText,
         SelectInputSection, 
         NumberInputSection, 
         RadioButtonSection, 
-        SectionContainer
+        SectionContainer,
+        PopOut,
     } from '../../basicComponents/userInputLayoutComponents/basicUserInputComponents.jsx';
 import { handleItemClick,
     } from '../../stateManagement/recurringEntityPageStates/selectedItem.js';
 import { useSelector, useDispatch } from 'react-redux';
+import { selectTab } from '../../stateManagement/sharedStates/activeTab.js';
+import { showFailBox } from '../../stateManagement/mainPageStates/failBoxDisplay.js';
+import { setCurrentSelectedItem as financialEntitySetCurrentSelectedItem } from '../../stateManagement/financialEntityPageStates/currentSelectedItem.js';
 
 // below are the sections that are used in the detail section; built using the basic components
 function TitleSection() {
@@ -251,10 +255,21 @@ function FromEntitySection() {
     const fromType = useSelector((state) => state.recurringEntityPageStates.selectedItem.fromType);
     let transactionEntities = useSelector((state) => state.sharedStates.additionalInformationState.transactionEntities);
     const transformedEntities = transactionEntities.filter((entity) => entity.type === fromType ).map((entity) => entity.name);
+    const dispatch = useDispatch();
+
+    const handlePopOut = () => { 
+        console.log("External Link Clicked");
+        window.financialEntityOperations.getIdFromTitle(fromEntity).then((id) => {
+            dispatch(financialEntitySetCurrentSelectedItem(id));
+            dispatch(selectTab("financialEntityPage"));
+        }).catch((err) => { 
+            if (err) dispatch(showFailBox("Entity not found"));
+        });
+    };
 
     return (
         <SectionContainer 
-            additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80"
+            additonalClasses="w-auto h-12 border-b-2 pb-4 min-w-80"
         >
             <H6HeadingText 
                 additonalClasses="h-[100%] w-[40%]"
@@ -267,6 +282,10 @@ function FromEntitySection() {
                 additonalClasses="w-[30%] h-[100%]"
                 fieldName={"fromEntity"}
                 handleValueChange={handleItemClick}
+            />
+            <PopOut
+                additonalClasses="h-[80%] w-[10%]"
+                handlePopOut={handlePopOut}
             />
         </SectionContainer>
     );
@@ -331,10 +350,21 @@ function ToEntitySection() {
     const toType = useSelector((state) => state.recurringEntityPageStates.selectedItem.toType);
     const transactionEntities = useSelector((state) => state.sharedStates.additionalInformationState.transactionEntities);
     const transformedEntities = transactionEntities.filter((entity) => entity.type === toType ).map((entity) => entity.name);
+    const dispatch = useDispatch();
+
+    const handlePopOut = () => { 
+        console.log("External Link Clicked");
+        window.financialEntityOperations.getIdFromTitle(toEntity).then((id) => {
+            dispatch(financialEntitySetCurrentSelectedItem(id));
+            dispatch(selectTab("financialEntityPage"));
+        }).catch((err) => { 
+            if (err) dispatch(showFailBox("Entity not found"));
+        });
+    };
 
     return (
         <SectionContainer 
-            additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80"
+            additonalClasses="w-auto h-12 border-b-2 pb-4 min-w-80"
         >
             <H6HeadingText 
                 additonalClasses="h-[100%] w-[40%]"
@@ -347,6 +377,10 @@ function ToEntitySection() {
                 additonalClasses="w-[30%] h-[100%]"
                 fieldName={"toEntity"}
                 handleValueChange={handleItemClick}
+            />
+            <PopOut
+                additonalClasses="h-[80%] w-[10%]"
+                handlePopOut={handlePopOut}
             />
         </SectionContainer>
     );
