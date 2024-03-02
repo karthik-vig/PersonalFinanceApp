@@ -5,8 +5,8 @@ export const modifyOptionsSlice = createSlice({
     initialState: {
         displayState: { state: "hidden", message: "Modify Options:"},
         options: [
-            {id: "modifyRetroactively", label: "Past transactions will be modified retroactively to reflect changes along with the information in this recurring transacton entry"},
-            {id: "modifyOnlyThis", label: "Only Modify the select Recurring transaction Entry"},
+            {id: "modifyRetroactively", label: "Only modify the past transactions retroactively to reflect changes."},
+            {id: "modifyOnlyThis", label: "Modify the select Recurring transaction Entry"},
         ],
         selectOptions: {
             modifyRetroactively: false,
