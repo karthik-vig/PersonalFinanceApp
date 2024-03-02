@@ -46,6 +46,11 @@ import { toggleDisplayState as toggleDeleteOptionsDisplayState,
         setDisplayMessage as setDeleteOptionsDisplayMessage,
         reset as resetDeleteOptions,
      } from '../stateManagement/recurringEntityPageStates/deleteOptions.js';
+import { toggleDisplayState as toggleModifyOptionsDisplayState,
+        toggleSelectOptions as toggleModifyOptionsSelectOptions,
+        setDisplayMessage as setModifyOptionsDisplayMessage,
+        reset as resetModifyOptions,
+     } from '../stateManagement/recurringEntityPageStates/modifyOptions.js'; 
 import { setCurrentSelectedItem, resetCurrentSelectedItem } from '../stateManagement/recurringEntityPageStates/currentSelectedItem.js';
 
 function RecurringEntityPage() {
@@ -62,6 +67,7 @@ function RecurringEntityPage() {
     const filterParamsVisibility = useSelector(state => state.recurringEntityPageStates.filterParamsVisibility);   
     const currentSelectedItemState = useSelector(state => state.recurringEntityPageStates.currentSelectedItemState);
     const deleteOptionsState = useSelector(state => state.recurringEntityPageStates.deleteOptionsState);
+    const modifyOptionsState = useSelector(state => state.recurringEntityPageStates.modifyOptionsState);
     const dispatch = useDispatch();
 
 
@@ -115,26 +121,34 @@ function RecurringEntityPage() {
 
    //trigger on modify entry
    useEffect(() => {
-        if (!triggerModifyEntryState) return;
-        //modify the database
         console.log("The Modify Entry trigger selected item is: ");
         console.log(selectedItem);
-        window.recurringTransactionOperations.modifyItem(selectedItem).then(modifiedItem => {
-            dispatch(modifySideBarItem(modifiedItem));
-            dispatch(showSuccessBox("Saved the Details to Disk"));
-        }).catch((err) => {
-            if (err)
-            dispatch(showFailBox("Could not Modify the Entry"));
-        });
+        if (!triggerModifyEntryState) return;
+        //modify the transaction table retroactively
+        if (modifyOptionsState.selectOptions.modifyRetroactively) {
+            console.log("Modify the entry associated with the recurring transaction retroactively in the transaction table");
+        }
+        //modify the database
+        if (modifyOptionsState.selectOptions.modifyOnlyThis) {     
+            window.recurringTransactionOperations.modifyItem(selectedItem).then(modifiedItem => {
+                dispatch(modifySideBarItem(modifiedItem));
+                dispatch(showSuccessBox("Saved the Details to Disk"));
+            }).catch((err) => {
+                if (err)
+                dispatch(showFailBox("Could not Modify the Entry"));
+            });
+        }
         window.recurringTransactionOperations.getRecurringTransactions().then((retrievedRecurringTransactions) => {
             dispatch(setRecurringTransactions(retrievedRecurringTransactions));
         }).catch((err) => { 
             if (err) dispatch(setRecurringTransactions([]));
-        });    
+        });
+        dispatch(resetModifyOptions());
         dispatch(resetTriggerModifyEntry());
    }, [triggerModifyEntryState,
         dispatch,
         selectedItem,
+        modifyOptionsState.selectOptions,
     ]);
 
 
@@ -152,7 +166,7 @@ function RecurringEntityPage() {
                 dispatch(showFailBox("Could not Delete the Associated Transaction Entries"));
             });
         }
-        //delete the entry from the database
+        //delete the entry from recrurring transaction table in the database
         if (deleteOptionsState.selectOptions.deleteOnlyThis) {
             console.log("Delete the recurring transaction entry from the database");
             window.recurringTransactionOperations.deleteItem(selectedItem.id).then(() => {
@@ -175,6 +189,8 @@ function RecurringEntityPage() {
         deleteOptionsState.selectOptions,
     ]);
 
+    //handler functions for delete options btn click
+    //proceed btn
     const handleDeleteOptionsProceedBtnClick = () => {
         if (!deleteOptionsState.selectOptions.deleteRetroactively && 
             !deleteOptionsState.selectOptions.deleteOnlyThis) {
@@ -185,8 +201,26 @@ function RecurringEntityPage() {
         dispatch(setWarningBoxDisplayDeleteState("block"));
     };
 
+    //cancel btn
     const handleDeleteOptionsCancelBtnClick = () => {
         dispatch(toggleDeleteOptionsDisplayState());
+    };
+
+    //handler functions for modify options btn click
+    //proceed btn
+    const handleModifyOptionsProceedBtnClick = () => {
+        if (!modifyOptionsState.selectOptions.modifyRetroactively &&
+            !modifyOptionsState.selectOptions.modifyOnlyThis) {
+                dispatch(setModifyOptionsDisplayMessage("Please select an option:"));
+                return;
+            }
+        dispatch(toggleModifyOptionsDisplayState());
+        dispatch(setWarningBoxDisplayModifyState("block"));
+    };
+
+    //cancel btn
+    const handleModifyOptionsCancelBtnClick = () => {
+        dispatch(toggleModifyOptionsDisplayState());
     };
 
 
@@ -194,6 +228,7 @@ function RecurringEntityPage() {
         <div 
             className="relative z-0 flex flex-row flex-wrap h-[100%] w-[100%] bg-background-cl"
         >
+            {/*Delete option menu*/}
             <CheckboxOptionsMenu 
                 checkBoxOptions={deleteOptionsState.options}
                 checkBoxState={deleteOptionsState.selectOptions}
@@ -201,6 +236,15 @@ function RecurringEntityPage() {
                 handleProceed={handleDeleteOptionsProceedBtnClick} 
                 displayState={deleteOptionsState.displayState}
                 handleCancel={handleDeleteOptionsCancelBtnClick}
+            />
+            {/*Modify option menu*/}
+            <CheckboxOptionsMenu 
+                checkBoxOptions={modifyOptionsState.options}
+                checkBoxState={modifyOptionsState.selectOptions}
+                setOptions={toggleModifyOptionsSelectOptions} 
+                handleProceed={handleModifyOptionsProceedBtnClick} 
+                displayState={modifyOptionsState.displayState}
+                handleCancel={handleModifyOptionsCancelBtnClick}
             />
             <GenericWarningBox 
                 warningText="Are you sure you want to modify the Entry?"

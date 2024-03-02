@@ -11,12 +11,15 @@ import { setSearchField,
         //setFilterParams,
   } from '../../stateManagement/recurringEntityPageStates/searchParams.js';
 import { triggerAddEntry } from '../../stateManagement/recurringEntityPageStates/triggerAddEntry.js';
-import { setWarningBoxDisplayModifyState,
-         //setWarningBoxDisplayDeleteState,
-    } from '../../stateManagement/recurringEntityPageStates/warningBoxDisplay.js';
+// import { setWarningBoxDisplayModifyState,
+//          //setWarningBoxDisplayDeleteState,
+//     } from '../../stateManagement/recurringEntityPageStates/warningBoxDisplay.js';
 import { toggleDisplayState as toggleDeleteOptionsDisplayState,
         reset as resetDeleteOptions,
          } from '../../stateManagement/recurringEntityPageStates/deleteOptions.js';
+import { toggleDisplayState as toggleModifyOptionsDisplayState,
+        reset as resetModifyOptions,
+        } from '../../stateManagement/recurringEntityPageStates/modifyOptions.js';
 import { useSelector, useDispatch } from 'react-redux';
 //import { setWarningBoxDisplayModifyState } from '../../stateManagement/recurringEntityPageStates/warningBoxDisplay.js';
 // import {"fa-filter"faSort, faPlus, faTrashCan, faEdit, faRefresh } from '@fortawesome/free-solid-svg-icons';
@@ -74,7 +77,7 @@ function TopBar() {
                 svgIcon="fa-edit" 
                 iconColor="#eab308"
                 btnName="Modify" 
-                onClickHandler={ () => dispatch(setWarningBoxDisplayModifyState("block")) }
+                onClickHandler={ () => { dispatch(resetModifyOptions()); dispatch(toggleModifyOptionsDisplayState());} }
             />
             <TopBarButton 
                 svgIcon="fa-trash-can"

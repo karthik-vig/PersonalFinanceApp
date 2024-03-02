@@ -49,7 +49,8 @@ import recurringEntityPageTriggerModifyEntryReducer from './recurringEntityPageS
 import recurringEntityPageTriggerSearchReducer from './recurringEntityPageStates/triggerSearch.js';
 import recurringEntityPageWarningBoxDisplayReducer from './recurringEntityPageStates/warningBoxDisplay.js';
 import recurringEntityPageFilterDisplayReducer from './recurringEntityPageStates/filterDisplay.js';
-import recurringEntityPageDeleteOptions from './recurringEntityPageStates/deleteOptions.js';
+import recurringEntityPageDeleteOptionsReducer from './recurringEntityPageStates/deleteOptions.js';
+import recurringEntityPageModifyOptionsReducer from './recurringEntityPageStates/modifyOptions.js';
 
 //import all the reducers for the shared states
 import sharedStatesAdditionalInformationReducer from './sharedStates/additionalInformation.js';
@@ -106,7 +107,8 @@ const recurringEntityPageStates = combineReducers({
   triggerSearchState: recurringEntityPageTriggerSearchReducer,
   warningBoxDisplayState: recurringEntityPageWarningBoxDisplayReducer,
   filterDisplayState: recurringEntityPageFilterDisplayReducer,
-  deleteOptionsState: recurringEntityPageDeleteOptions,
+  deleteOptionsState: recurringEntityPageDeleteOptionsReducer,
+  modifyOptionsState: recurringEntityPageModifyOptionsReducer,
 });
 
 const sharedStates = combineReducers({
