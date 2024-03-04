@@ -97,6 +97,7 @@ app.whenReady().then(() => {
     ipcMain.handle('transactionOperations:saveFileDialog', transactionOperations.openSaveFileDialog);
     ipcMain.handle('transactionOperations:deleteTransactionOnRecurringReferenceID', transactionOperations.deleteTransactionOnRecurringReferenceID);
     ipcMain.handle('transactionOperations:modifyTransactionReferenceID', transactionOperations.modifyTransactionReferenceID);
+    ipcMain.handle('transactionOperations:updateFinancialEntityReferenceID', transactionOperations.updateFinancialEntityReferenceID);
 
     //FINANCIAL ENTITY OPERATIONS
     ipcMain.handle('financialEntityOperations:getTransactionEntities', financialEntitiesOperations.getTransactionEntities);
@@ -107,7 +108,7 @@ app.whenReady().then(() => {
     ipcMain.handle('financialEntityOperations:modifyItem', financialEntitiesOperations.modifyItem);
     ipcMain.handle('financialEntityOperations:getSelectedItem', financialEntitiesOperations.getSelectedItem);
     ipcMain.handle('financialEntityOperations:getIdFromTitle', financialEntitiesOperations.getIdFromTitle);
-
+    ipcMain.handle('financialEntityOperations:getReferenceIdOnTitle', financialEntitiesOperations.getReferenceIdOnTitle);
     
 
     //INITIALIZE DATABASE OPERATIONS

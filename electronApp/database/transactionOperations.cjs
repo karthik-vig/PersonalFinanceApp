@@ -10,6 +10,43 @@ function setDB(database) {
     db = database;
 }
 
+function updateFinancialEntityReferenceID(event, 
+                                          oldFinancialEntityReferenceID, 
+                                          newFinancialEntityReferenceID) {
+    return new Promise((resolve, reject) => {
+        const upateFromReferenceID = new Promise((resolve, reject) => {
+            db.run(`UPDATE transactions SET \
+                    fromReference = ? \
+                    WHERE fromReference = ?`, 
+                    newFinancialEntityReferenceID, 
+                    oldFinancialEntityReferenceID, 
+                    (err) => {
+                        if (err) reject(true);
+                        resolve();
+                    });
+        });
+
+        const upateToReferenceID = new Promise((resolve, reject) => {
+            db.run(`UPDATE transactions SET \
+                    toReference = ? \
+                    WHERE toReference = ?`, 
+                    newFinancialEntityReferenceID, 
+                    oldFinancialEntityReferenceID, 
+                    (err) => {
+                        if (err) reject(true);
+                        resolve();
+                    });
+        });
+
+        Promise.all([upateFromReferenceID, upateToReferenceID]).then(() => {
+            resolve();
+        }).catch((err) => {
+            console.log(`Update Financial Entity Reference ID Error ${err}`);
+            reject(true);
+        });
+    });
+}
+
 function modifyTransactionReferenceID(event, recurringTransactionSelectedItem) {
     return new Promise((resolve, reject) => {
 
@@ -861,4 +898,5 @@ module.exports = {
     openSaveFileDialog,
     deleteTransactionOnRecurringReferenceID,
     modifyTransactionReferenceID,
+    updateFinancialEntityReferenceID,
 };

@@ -8,6 +8,20 @@ function setDB(database) {
     db = database;
 }
 
+function getReferenceIdOnTitle(event, title) {
+    return new Promise((resolve, reject) => {
+        if (title === "choose" || title === "Empty Value") resolve(null);
+        db.get(`SELECT id FROM financialEntities WHERE title = ?`, title, (err, row) => {
+            if (err) {
+                console.log("financial entity : getReferenceIdOnTitle error = ", err);
+                reject(null);
+            }
+            console.log("financial entity : getReferenceIdOnTitle row = ", row);
+            resolve(row? row.id : null);
+        });
+    });
+}
+
 function getIdFromTitle(event, title) {
 
     return new Promise((resolve, reject) => { 
@@ -278,4 +292,5 @@ module.exports = {
     modifyItem,
     getSelectedItem,
     getIdFromTitle,
+    getReferenceIdOnTitle
 };

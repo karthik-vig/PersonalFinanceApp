@@ -167,18 +167,28 @@ function FinancialEntityPage() {
         //replace the entry with the selected option in the necessary transaction rows/entries
         console.log("The Delete Entry trigger selected item is: ", deleteSettings.selectState.replaceOnDelete);
         //get id of the selected item from financialEntities table
-        //give both the current selected item id and the id to be replace with to the deleteItem function
-        //delete the entry from the database
-        window.financialEntityOperations.deleteItem(selectedItem.id).then(() => {
-            console.log("The Delete Entry trigger selected item ID is: ");
-            console.log(selectedItem.id);
-            dispatch(removeSideBarItem(selectedItem.id));
-            dispatch(resetSelectedItem());
-            dispatch(resetCurrentSelectedItem());
-            dispatch(showSuccessBox("Removed the Entry from Disk"));
-        }).catch((err) => {
-            if (err)
-            dispatch(showFailBox("Could not Delete the Entry"));
+        window.financialEntityOperations.getReferenceIdOnTitle(deleteSettings.selectState.replaceOnDelete).then((referenceID) => { 
+            //give both the current selected item id and the id to be replace with to the deleteItem function
+            window.transactionOperations.updateFinancialEntityReferenceID(selectedItem.id, referenceID).then(() => {
+                console.log("The Delete Entry trigger selected item ID is: ", selectedItem.id);
+                //dispatch(showSuccessBox("Updated the Financial Entity reference for all transactions"));
+            }).catch((err) => {
+                if (err) dispatch(showFailBox("Could not update the Entry"));
+            });
+            //delete the entry from the database
+            window.financialEntityOperations.deleteItem(selectedItem.id).then(() => {
+                console.log("The Delete Entry trigger selected item ID is: ");
+                console.log(selectedItem.id);
+                dispatch(removeSideBarItem(selectedItem.id));
+                dispatch(resetSelectedItem());
+                dispatch(resetCurrentSelectedItem());
+                dispatch(showSuccessBox("Removed the Entry from Disk"));
+            }).catch((err) => {
+                if (err)
+                dispatch(showFailBox("Could not Delete the Entry"));
+            });
+        }).catch((err) => { 
+            if (err) dispatch(showFailBox("Could not fetch the financial entity's reference ID"));
         });
         dispatch(resetDeleteSettings());
         dispatch(resetTriggerDeleteEntry());       

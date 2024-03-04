@@ -19,6 +19,7 @@ contextBridge.exposeInMainWorld('transactionOperations', {
     saveFileDialog: (fileName) => ipcRenderer.invoke('transactionOperations:saveFileDialog', fileName),
     deleteTransactionOnRecurringReferenceID: (recurringReferenceID) => ipcRenderer.invoke('transactionOperations:deleteTransactionOnRecurringReferenceID', recurringReferenceID),
     modifyTransactionReferenceID: (recurringTransactionSelectedItem) => ipcRenderer.invoke('transactionOperations:modifyTransactionReferenceID', recurringTransactionSelectedItem),
+    updateFinancialEntityReferenceID: (oldFinancialEntityReferenceID, newFinancialEntityReferenceID) => ipcRenderer.invoke('transactionOperations:updateFinancialEntityReferenceID', oldFinancialEntityReferenceID, newFinancialEntityReferenceID),
 });
 
 contextBridge.exposeInMainWorld('financialEntityOperations', {
@@ -33,6 +34,7 @@ contextBridge.exposeInMainWorld('financialEntityOperations', {
     modifyItem: (selectedItem) => ipcRenderer.invoke('financialEntityOperations:modifyItem', selectedItem),
     getSelectedItem: (uuid) => ipcRenderer.invoke('financialEntityOperations:getSelectedItem', uuid),
     getIdFromTitle: (title) => ipcRenderer.invoke('financialEntityOperations:getIdFromTitle', title),
+    getReferenceIdOnTitle: (title) => ipcRenderer.invoke('financialEntityOperations:getReferenceIdOnTitle', title),
 });
 
 contextBridge.exposeInMainWorld('initializeDatabase', {
