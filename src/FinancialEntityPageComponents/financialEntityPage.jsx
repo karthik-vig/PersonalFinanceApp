@@ -168,12 +168,18 @@ function FinancialEntityPage() {
         console.log("The Delete Entry trigger selected item is: ", deleteSettings.selectState.replaceOnDelete);
         //get id of the selected item from financialEntities table
         window.financialEntityOperations.getReferenceIdOnTitle(deleteSettings.selectState.replaceOnDelete).then((referenceID) => { 
-            //give both the current selected item id and the id to be replace with to the deleteItem function
+            //give both the current selected item id and the id to be replace with to the transactionOperations
             window.transactionOperations.updateFinancialEntityReferenceID(selectedItem.id, referenceID).then(() => {
                 console.log("The Delete Entry trigger selected item ID is: ", selectedItem.id);
                 //dispatch(showSuccessBox("Updated the Financial Entity reference for all transactions"));
             }).catch((err) => {
-                if (err) dispatch(showFailBox("Could not update the Entry"));
+                if (err) dispatch(showFailBox("Could not update the Entry in Transactions Page"));
+            });
+            //give both the selected item id and the id to be replace with to the recurringTransactionOperations
+            window.recurringTransactionOperations.updateFinancialEntityReferenceID(selectedItem.id, referenceID).then(() => {
+                console.log("The Delete Entry trigger selected item ID is: ", selectedItem.id);
+            }).catch((err) => {
+                if (err) dispatch(showFailBox("Could not update the Entry in Recurring Transactions Settings Page"));
             });
             //delete the entry from the database
             window.financialEntityOperations.deleteItem(selectedItem.id).then(() => {

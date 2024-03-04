@@ -124,6 +124,7 @@ app.whenReady().then(() => {
     ipcMain.handle('recurringTransactionOperations:getAllItems', recurringTransactionOperations.getAllItems);
     ipcMain.handle('recurringTransactionOperations:getItems', recurringTransactionOperations.getItems);
     ipcMain.handle('recurringTransactionOperations:getIdFromTitle', recurringTransactionOperations.getIdFromTitle);
+    ipcMain.handle('recurringTransactionOperations:updateFinancialEntityReferenceID', recurringTransactionOperations.updateFinancialEntityReferenceID);
 
 });
 

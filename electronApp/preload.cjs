@@ -54,6 +54,7 @@ contextBridge.exposeInMainWorld('recurringTransactionOperations', {
     getAllItems: () => ipcRenderer.invoke('recurringTransactionOperations:getAllItems'),
     getItems: (searchParams, filterParamsVisibility) => ipcRenderer.invoke('recurringTransactionOperations:getItems', searchParams, filterParamsVisibility),
     getIdFromTitle: (title) => ipcRenderer.invoke('recurringTransactionOperations:getIdFromTitle', title),
+    updateFinancialEntityReferenceID: (oldFinancialEntityReferenceID, newFinancialEntityReferenceID) => ipcRenderer.invoke('recurringTransactionOperations:updateFinancialEntityReferenceID', oldFinancialEntityReferenceID, newFinancialEntityReferenceID),
 });
 
 contextBridge.exposeInMainWorld('app', {

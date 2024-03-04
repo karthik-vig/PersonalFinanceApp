@@ -38,6 +38,43 @@ function setDB(database) {
     console.log("In setDB: db: " + db);
 }
 
+function updateFinancialEntityReferenceID(event,
+                                          oldFinancialEntityReferenceID,
+                                          newFinancialEntityReferenceID) {
+    return new Promise((resolve, reject) => {
+        const upateFromReferenceID = new Promise((resolve, reject) => {
+            db.run(`UPDATE recurringTransactions SET \
+                    fromReference = ? \
+                    WHERE fromReference = ?`,
+                    newFinancialEntityReferenceID,
+                    oldFinancialEntityReferenceID,
+                    (err) => {
+                        if (err) reject(true);
+                        resolve();
+                    });
+        });
+
+        const upateToReferenceID = new Promise((resolve, reject) => {
+            db.run(`UPDATE recurringTransactions SET \
+                    toReference = ? \
+                    WHERE toReference = ?`,
+                    newFinancialEntityReferenceID,
+                    oldFinancialEntityReferenceID,
+                    (err) => {
+                        if (err) reject(true);
+                        resolve();
+                    });
+        });
+
+        Promise.all([upateFromReferenceID, upateToReferenceID]).then(() => {
+            resolve();
+        }).catch((err) => {
+            console.log(`Update Financial Entity Reference ID Error ${err}`);
+            reject(true);
+        });
+    });
+}
+
 
 // function getDateFromDatetime(dateTime) {
 //     const regex = /^\d{4}[-]\d{2}[-]\d{2}[T]\d{2}[:]\d{2}[:]\d{2}$/;
@@ -1003,4 +1040,5 @@ module.exports = {
     getRecurringTransactions,
     enterRecurringTransactions,
     getIdFromTitle,
+    updateFinancialEntityReferenceID,
 };
