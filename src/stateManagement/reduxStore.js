@@ -32,6 +32,7 @@ import financialEntityPageTriggerDeleteEntryReducer from './financialEntityPageS
 import financialEntityPageTriggerModifyEntryReducer from './financialEntityPageStates/triggerModifyEntry.js';
 import financialEntityPageTriggerSearchReducer from './financialEntityPageStates/triggerSearch.js';
 import financialEntityPageWarningBoxDisplayReducer from './financialEntityPageStates/warningBoxDisplay.js';
+import financialEntityPageDeleteSettingsReducer from './financialEntityPageStates/deleteSettings.js';
 
 //import all the reducers for the recurring entity page states
 import recurringEntityPageSelectedItemReducer from './recurringEntityPageStates/selectedItem.js';
@@ -89,6 +90,7 @@ const financialEntityPageStates = combineReducers({
   triggerModifyEntryState: financialEntityPageTriggerModifyEntryReducer,
   triggerSearchState: financialEntityPageTriggerSearchReducer,
   warningBoxDisplayState: financialEntityPageWarningBoxDisplayReducer,
+  deleteSettings: financialEntityPageDeleteSettingsReducer,
 });
 
 const recurringEntityPageStates = combineReducers({

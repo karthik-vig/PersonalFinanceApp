@@ -41,6 +41,12 @@ import {  //triggerSearch,
 } from '../stateManagement/financialEntityPageStates/triggerSearch.js';
 import { setCurrentSelectedItem, resetCurrentSelectedItem } from '../stateManagement/financialEntityPageStates/currentSelectedItem.js';
 import { setTransactionEntities } from '../stateManagement/sharedStates/additionalInformation.js';
+import SelectOptionMenu from '../pageLayoutComponents/selectOptionMenu.jsx';
+import {    toggleDisplayState as toggleDeleteSettingsDisplayState,
+            setDisplayMessage as setDeleteSettingsDisplayMessage,
+            setOption as setDeleteSettingsOption,
+            reset as resetDeleteSettings,
+} from '../stateManagement/financialEntityPageStates/deleteSettings.js';
 // import { current } from 'immer';
   
 
@@ -57,6 +63,7 @@ function FinancialEntityPage() {
     const searchParams = useSelector(state => state.financialEntityPageStates.searchParams);
     const filterParamsVisibility = useSelector(state => state.financialEntityPageStates.filterParamsVisibility);   
     const currentSelectedItemState = useSelector(state => state.financialEntityPageStates.currentSelectedItemState);
+    const deleteSettings = useSelector(state => state.financialEntityPageStates.deleteSettings);
     const dispatch = useDispatch();
 
 
@@ -153,6 +160,14 @@ function FinancialEntityPage() {
     //trigger on delete entry
     useEffect(() => {
         if (!triggerDeleteEntryState) return;
+        if (deleteSettings.selectState.replaceOnDelete === "choose") {
+            dispatch(showFailBox("Please select a value to replace the deleted entry with!"));
+            return;
+        }
+        //replace the entry with the selected option in the necessary transaction rows/entries
+        console.log("The Delete Entry trigger selected item is: ", deleteSettings.selectState.replaceOnDelete);
+        //get id of the selected item from financialEntities table
+        //give both the current selected item id and the id to be replace with to the deleteItem function
         //delete the entry from the database
         window.financialEntityOperations.deleteItem(selectedItem.id).then(() => {
             console.log("The Delete Entry trigger selected item ID is: ");
@@ -165,16 +180,42 @@ function FinancialEntityPage() {
             if (err)
             dispatch(showFailBox("Could not Delete the Entry"));
         });
+        dispatch(resetDeleteSettings());
         dispatch(resetTriggerDeleteEntry());       
     }, [triggerDeleteEntryState,
         dispatch,
         selectedItem.id,
+        deleteSettings,
     ]);
+
+    // functions to handle the delete menu - proceed btn click for SelectOptionMenu
+    const handleDeleteOptionsProceedBtnClick = () => {
+        if (deleteSettings.selectState.replaceOnDelete === "choose"){
+            dispatch(setDeleteSettingsDisplayMessage("Please select a value to replace the deleted entry with:"));
+            return;
+        }
+        dispatch(toggleDeleteSettingsDisplayState());
+        dispatch(setWarningBoxDisplayDeleteState("block"));
+    };
+
+    // functions to handle the delete menu - cancel btn click for SelectOptionMenu
+    const handleDeleteOptionsCancelBtnClick = () => {
+        dispatch(toggleDeleteSettingsDisplayState());
+    };
+ 
 
     return (
         <div 
             className="relative z-0 flex flex-row flex-wrap h-[100%] w-[100%] bg-background-cl"
         >
+            <SelectOptionMenu 
+                selectOptions={deleteSettings.options}
+                selectState={deleteSettings.selectState}
+                setOptions={setDeleteSettingsOption}
+                handleProceed={handleDeleteOptionsProceedBtnClick}
+                displayState={deleteSettings.displayState}
+                handleCancel={handleDeleteOptionsCancelBtnClick}
+            />
             <GenericWarningBox 
                 warningText="Are you sure you want to modify the Entry?"
                 additionalClasses=""

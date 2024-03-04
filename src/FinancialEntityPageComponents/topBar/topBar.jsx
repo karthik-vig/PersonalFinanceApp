@@ -12,7 +12,7 @@ import { setSearchField,
   } from '../../stateManagement/financialEntityPageStates/searchParams.js';
 import { triggerAddEntry } from '../../stateManagement/financialEntityPageStates/triggerAddEntry.js';
 import { setWarningBoxDisplayModifyState,
-         setWarningBoxDisplayDeleteState,
+        //  setWarningBoxDisplayDeleteState,
     } from '../../stateManagement/financialEntityPageStates/warningBoxDisplay.js';
 import { useSelector, useDispatch } from 'react-redux';
 //import { setWarningBoxDisplayModifyState } from '../../stateManagement/financialEntityPageStates/warningBoxDisplay.js';
@@ -20,6 +20,11 @@ import { useSelector, useDispatch } from 'react-redux';
 // import { library } from '@fortawesome/fontawesome-svg-core';
 import { triggerSearch } from '../../stateManagement/financialEntityPageStates/triggerSearch.js';
 // library.add(faFilter, faSort, faPlus, faTrashCan, faEdit, faRefresh);
+import {
+    toggleDisplayState as toggleDeleteSettingsDisplayState,
+    setAllPossibleOptions as setDeleteSettingsAllPossibleOptions,
+    reset as resetDeleteSettings,
+ } from '../../stateManagement/financialEntityPageStates/deleteSettings.js';
 
 function TopBarButton({ svgIcon, iconColor, btnName, onClickHandler }) {
 
@@ -54,8 +59,14 @@ TopBarButton.propTypes = {
 function TopBar() {
 
     const filterDisplayState = useSelector((state) => state.financialEntityPageStates.filterDisplayState);
+    const transactionEntities = useSelector((state) => state.sharedStates.additionalInformationState.transactionEntities);
     const dispatch = useDispatch();
 
+    const handleDeleteBtnClick = () => {
+        dispatch(resetDeleteSettings());
+        dispatch(setDeleteSettingsAllPossibleOptions( {replaceOnDelete: transactionEntities.map((entity) => entity.name)} ));
+        dispatch(toggleDeleteSettingsDisplayState());
+    }
 
     return (
         <div 
@@ -77,7 +88,7 @@ function TopBar() {
                 svgIcon="fa-trash-can"
                 iconColor="#ff0000" 
                 btnName="Delete" 
-                onClickHandler={ () => dispatch(setWarningBoxDisplayDeleteState("block")) }
+                onClickHandler={ handleDeleteBtnClick }
             />
             <input 
                 type="text" 
