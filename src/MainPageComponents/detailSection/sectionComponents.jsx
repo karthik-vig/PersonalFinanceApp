@@ -263,6 +263,10 @@ function FromEntitySection() {
 
     const handlePopOut = () => { 
         console.log("External Link Clicked");
+        if (fromEntity === "" || fromEntity === null || fromEntity === undefined) { 
+            dispatch(showFailBox("No Entity Selected!"));
+            return;
+        }
         window.financialEntityOperations.getIdFromTitle(fromEntity).then((id) => {
             dispatch(financialEntitySetCurrentSelectedItem(id));
             dispatch(selectTab("financialEntityPage"));
@@ -358,6 +362,10 @@ function ToEntitySection() {
 
     const handlePopOut = () => { 
         console.log("External Link Clicked");
+        if (toEntity === "" || toEntity === null || toEntity === undefined) { 
+            dispatch(showFailBox("No Entity Selected!"));
+            return;
+        }
         window.financialEntityOperations.getIdFromTitle(toEntity).then((id) => {
             dispatch(financialEntitySetCurrentSelectedItem(id));
             dispatch(selectTab("financialEntityPage"));
