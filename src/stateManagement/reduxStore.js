@@ -57,6 +57,9 @@ import recurringEntityPageModifyOptionsReducer from './recurringEntityPageStates
 import sharedStatesAdditionalInformationReducer from './sharedStates/additionalInformation.js';
 import sharedStatesActiveTabReducer from './sharedStates/activeTab.js';
 
+//import all the reducers for the analytics page states
+import analyticsPageAnalyticsStatsReducer from './analyticsPageStates/analyticsStats.js';
+
 const mainPageStates = combineReducers({
   selectedItem: mainPageSelectedItemReducer,
   sideBarItems: mainPageSideBarItemReducer,
@@ -118,11 +121,16 @@ const sharedStates = combineReducers({
   activeTabState: sharedStatesActiveTabReducer,
 });
 
+const analyticsPageStates = combineReducers({
+  analyticsStats: analyticsPageAnalyticsStatsReducer,
+});
+
 const rootReducer = combineReducers({
   mainPageStates,
   financialEntityPageStates,
   recurringEntityPageStates,
   sharedStates,
+  analyticsPageStates,
 });
 
 export default configureStore({

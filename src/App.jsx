@@ -4,6 +4,7 @@ import SideSectionButton from './sideSectionButton.jsx';
 import MainPage from './MainPageComponents/mainPage.jsx';
 import FinancialEntityPage from './FinancialEntityPageComponents/financialEntityPage.jsx';
 import RecurringEntityPage from './RecurringEntityPageComponents/recurringEntityPage.jsx';
+import AnalyticsPage from './AnalyticsPageComponents/analyticsPage.jsx';
 import { setRecurringTransactions } from './stateManagement/sharedStates/additionalInformation.js';
 import { useSelector, useDispatch } from 'react-redux';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -150,7 +151,7 @@ function App() {
       </div>
       <div className="flex flex-row flex-wrap h-[100%] min-h-[500px] min-w-[600px]" style={{ width: 'calc(100% - 50px)' }}>
         {activeTab.mainPage && <MainPage />}
-        {activeTab.analyticPage && <div>Analytics Page</div>}
+        {activeTab.analyticPage && <AnalyticsPage />}
         {activeTab.financialEntityPage && <FinancialEntityPage />}
         {activeTab.recurringTransactionPage && <RecurringEntityPage />}
       </div>
