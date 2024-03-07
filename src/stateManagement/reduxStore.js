@@ -58,7 +58,8 @@ import sharedStatesAdditionalInformationReducer from './sharedStates/additionalI
 import sharedStatesActiveTabReducer from './sharedStates/activeTab.js';
 
 //import all the reducers for the analytics page states
-import analyticsPageAnalyticsStatsReducer from './analyticsPageStates/analyticsStats.js';
+import analyticsPageFilterMenuReducer from './analyticsPageStates/filterMenu.js';
+import analyticsPageExpenditureStatsReducer from './analyticsPageStates/expenditureStats.js';
 
 const mainPageStates = combineReducers({
   selectedItem: mainPageSelectedItemReducer,
@@ -122,7 +123,8 @@ const sharedStates = combineReducers({
 });
 
 const analyticsPageStates = combineReducers({
-  analyticsStats: analyticsPageAnalyticsStatsReducer,
+  filterMenu: analyticsPageFilterMenuReducer,
+  expenditureStats: analyticsPageExpenditureStatsReducer,
 });
 
 const rootReducer = combineReducers({
