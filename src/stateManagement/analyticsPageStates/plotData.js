@@ -11,17 +11,28 @@ const expenditureStatsSlice = createSlice({
                         {id: 2, label: "Expenditure", data: [0]},
                     ]
         },
+        statsByCategoryPlotData: {
+            labels: ["Default"],
+            datasets: [
+                        {data: [1]},
+                    ]
+        },
     },
     reducers: {
         setExpenditurePlotData: (state, action) => {
             //action.payload = an object with the following properties: labels, datasets
             state.expenditurePlotData = action.payload;
         },
+        setStatsByCategoryPlotData: (state, action) => {
+            //action.payload = an object with the following properties: labels, datasets
+            state.statsByCategoryPlotData = action.payload;
+        },
     },
 });
 
 export const {
     setExpenditurePlotData,
+    setStatsByCategoryPlotData,
 } = expenditureStatsSlice.actions;
 
 export default expenditureStatsSlice.reducer;

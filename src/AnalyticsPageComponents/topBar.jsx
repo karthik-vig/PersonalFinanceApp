@@ -8,7 +8,7 @@ import {
     setStartDate,
     setEndDate,
 } from '../stateManagement/analyticsPageStates/filterMenu.js';
-import { setExpenditurePlotData } from '../stateManagement/analyticsPageStates/plotData.js';
+import { setExpenditurePlotData, setStatsByCategoryPlotData } from '../stateManagement/analyticsPageStates/plotData.js';
 import { showFailBox } from '../stateManagement/financialEntityPageStates/failBoxDisplay.js';
 
 
@@ -95,14 +95,23 @@ function Topbar() {
                         }
                     ],
         }
+        const doughnutPlotData = {
+            labels: ['Food', 'Transport', 'Entertainment'],
+            datasets: [
+                        {
+                            data: [5, 6, 7],
+                        }
+                    ],
+        };
         dispatch(setExpenditurePlotData(plotData));
+        dispatch(setStatsByCategoryPlotData(doughnutPlotData));
     };
 
 
 
     return (
         <div 
-            className="flex flex-col flex-nowrap items-center h-32 mx-7 mt-10 mb-4 rounded-lg border bg-surface-cl drop-shadow-lg "
+            className="flex flex-col flex-nowrap items-center h-36 mx-7 mt-10 mb-4 rounded-lg border bg-surface-cl drop-shadow-lg "
             style={{ width: 'calc(100% - 56px)' }}
         >
             <h2>Filter Menu</h2>
@@ -206,7 +215,7 @@ function Topbar() {
                 </section>
             </section>
             <button
-                className="truncate border rounded-md bg-green-600 text-semibold text-white w-[15%] h-12 hover:bg-green-700 border-green-700"
+                className="truncate border rounded-md bg-green-600 text-semibold text-white my-1 w-[15%] h-12 hover:bg-green-700 border-green-700"
                 onClick={handleGenerateAnalytics}
             >
                 Generate Analytics

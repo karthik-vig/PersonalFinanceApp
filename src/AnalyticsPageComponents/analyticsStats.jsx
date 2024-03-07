@@ -26,7 +26,7 @@ function AnalyticsStats() {
 
     return (
         <section 
-            className="flex flex-col flex-nowrap items-center justify-center mx-7 my-2 p-1 h-[40%] w-[40%] bg-surface-cl border border-slate-300 rounded-md drop-shadow-lg"
+            className="flex flex-col flex-nowrap items-center justify-center mx-7 my-2 p-1 sm:h-[50%] sm:w-[90%] md:w-[90%] md:h-[60%] lg:h-[50%] lg:w-[45%] bg-surface-cl border border-slate-300 rounded-md drop-shadow-lg"
         >
             <Line 
                 height="100%"
