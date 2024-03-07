@@ -22,7 +22,7 @@ function AnalyticsStats() {
     //     ],
     //   };
 
-    const expenditureStats = useSelector(state => state.analyticsPageStates.expenditureStats);
+    const expenditurePlotData = useSelector(state => state.analyticsPageStates.plotData.expenditurePlotData);
 
     return (
         <section 
@@ -32,7 +32,7 @@ function AnalyticsStats() {
                 height="100%"
                 width="200%"
                 datasetIdKey="analyticsStatsLineChartIdKey"
-                data={expenditureStats.plotData} 
+                data={expenditurePlotData} 
             />
         </section>
     );

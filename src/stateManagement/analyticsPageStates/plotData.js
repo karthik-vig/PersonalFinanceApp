@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const expenditureStatsSlice = createSlice({
-    name: "analyticsPageStates/expenditureStats",
+    name: "analyticsPageStates/plotData",
     initialState: {
-        plotData : {
+        expenditurePlotData : {
             labels: [""],
             datasets: [
                         {id: 0, label: "In", data: [0]},
@@ -13,15 +13,15 @@ const expenditureStatsSlice = createSlice({
         },
     },
     reducers: {
-        setPlotData: (state, action) => {
+        setExpenditurePlotData: (state, action) => {
             //action.payload = an object with the following properties: labels, datasets
-            state.plotData = action.payload;
+            state.expenditurePlotData = action.payload;
         },
     },
 });
 
 export const {
-    setPlotData,
+    setExpenditurePlotData,
 } = expenditureStatsSlice.actions;
 
 export default expenditureStatsSlice.reducer;

@@ -8,7 +8,7 @@ import {
     setStartDate,
     setEndDate,
 } from '../stateManagement/analyticsPageStates/filterMenu.js';
-import { setPlotData as expenditureStatsSetPlotData } from '../stateManagement/analyticsPageStates/expenditureStats.js';
+import { setExpenditurePlotData } from '../stateManagement/analyticsPageStates/plotData.js';
 import { showFailBox } from '../stateManagement/financialEntityPageStates/failBoxDisplay.js';
 
 
@@ -95,7 +95,7 @@ function Topbar() {
                         }
                     ],
         }
-        dispatch(expenditureStatsSetPlotData(plotData));
+        dispatch(setExpenditurePlotData(plotData));
     };
 
 
