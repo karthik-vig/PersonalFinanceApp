@@ -100,12 +100,36 @@ function Topbar() {
                     ],
         }
         const doughnutPlotData = {
-            labels: ['Food', 'Transport', 'Entertainment'],
+            labels: ["Groceries", "Restaurants and Dining", "Shopping", "Utilities", "Telecommunication",
+                     "Transportation", "Rent or Mortgage", "Insurance", "Healthcare", "Education", "Entertainment",
+                     "Travel and Lodging", "Personal Care", "Fitness and Wellness", "Investments and Savings", "Loans and Credit Payments",
+                     "Charity and Donations", "Home Improvement and Maintenance", "Childcare and Education", "Pet Care", "Taxes", 
+                     "Legal Services", "Other"],
             datasets: [
                         {
-                            data: [5, 6, 7],
-                        }
-                    ],
+                            data: Array(23).fill(1).map(() => Math.floor(Math.random() * 1000) + 1),
+                            backgroundColor: [
+                                '#4CAF50', '#FF5722', '#9C27B0',
+                                '#607D8B', '#3F51B5', '#FFEB3B',
+                                '#795548', '#9E9E9E', '#F44336',
+                                '#03A9F4', '#E91E63', '#00BCD4',
+                                '#FFC107', '#8BC34A', '#CDDC39',
+                                '#FF9800', '#673AB7', '#9E9D24',
+                                '#2196F3', '#4CAF50', '#F44336',
+                                '#3F51B5', '#607D8B'
+                              ],
+                            hoverBackgroundColor: [
+                                '#1A7D1E', '#CD2500', '#6A007E',
+                                '#2E4B59', '#0D1F83', '#CDB909',
+                                '#472316', '#6C6C6C', '#C21104',
+                                '#0077C2', '#B70031', '#008AA2',
+                                '#CD8F00', '#599118', '#9BAA07',
+                                '#CD6600', '#350885', '#6C6B00',
+                                '#0064C1', '#1A7D1E', '#C21104',
+                                '#0D1F83', '#2E4B59'
+                              ],
+                        },
+                    ]
         };
         const someStatBoxData = [
             {
