@@ -822,7 +822,7 @@ function createEntry() {
                     0, \
                     "${currentDateTime}", \
                     "${currentDateTime}", \
-                    NULL \
+                    "${currentDateTime.substring(0, 16) + ":00"}" \
                     )`, (err) => {
                         if (err) {
                             console.log(`Create Entry Error ${err}`);
