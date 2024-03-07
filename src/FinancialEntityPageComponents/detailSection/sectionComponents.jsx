@@ -17,7 +17,7 @@ function TitleSection() {
 
     return (
     <SectionContainer 
-        additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80"
+        additonalClasses="w-auto h-20 pb-4 min-w-80"
     >
         <H6HeadingText 
             additonalClasses={"w-[100%] h-[38%] mb-2"}
@@ -41,7 +41,7 @@ function EntityTypeSection() {
 
     return (
         <SectionContainer 
-            additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80"
+            additonalClasses="w-auto h-20 pb-4 min-w-80"
         >
             <H6HeadingText 
                 additonalClasses="h-[100%] w-[40%]"
@@ -77,7 +77,7 @@ function DatetimeInput({ datetimeValue,
                          }) {
 
     return (
-        <SectionContainer additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80">
+        <SectionContainer additonalClasses="w-auto h-20 pb-4 min-w-80">
             <H6HeadingText 
                 additonalClasses="h-[100%] w-[40%]"
             >

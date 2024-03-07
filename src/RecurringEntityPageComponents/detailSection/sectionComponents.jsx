@@ -25,7 +25,7 @@ function TitleSection() {
 
     return (
     <SectionContainer 
-        additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80"
+        additonalClasses="w-auto h-20 pb-4 min-w-80"
     >
         <H6HeadingText 
             additonalClasses={"w-[100%] h-[38%] mb-2"}
@@ -55,7 +55,7 @@ function DescriptionSection() {
 
     return (
     <SectionContainer 
-        additonalClasses="w-auto h-auto border-b-2 pb-4 min-w-80"
+        additonalClasses="w-auto h-auto pb-4 min-w-80"
     >
         <H6HeadingText 
             additonalClasses={"w-[100%] h-6 mb-2"}
@@ -86,7 +86,7 @@ function SalarySection() {
 
     return (
         <SectionContainer 
-            additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80"
+            additonalClasses="w-auto h-20 pb-4 min-w-80"
         >
             <H6HeadingText 
                 additonalClasses={"w-[40%] h-[100%]"}
@@ -121,7 +121,7 @@ SalarySection.propTypes = {
 
 function H3HeadingSection({children}) {
     return (
-        <SectionContainer additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80 justify-center">
+        <SectionContainer additonalClasses="w-auto h-20 pb-4 min-w-80 justify-center">
             <H3HeadingText>{children}</H3HeadingText>
         </SectionContainer>
     );
@@ -137,7 +137,7 @@ function TransactionTypeSection() {
 
     return (
         <SectionContainer 
-            additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80"
+            additonalClasses="w-auto h-20 pb-4 min-w-80"
         >
             <H6HeadingText 
                 additonalClasses={"w-[40%] h-[100%]"}
@@ -180,7 +180,7 @@ function TransactionCategorySection() {
 
     return (
         <SectionContainer 
-            additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80"
+            additonalClasses="w-auto h-20 pb-4 min-w-80"
         >
             <H6HeadingText 
                 additonalClasses={"w-[40%] h-[100%]"}
@@ -213,7 +213,7 @@ function FromTypeSection() {
 
     return (
         <SectionContainer 
-            additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80"
+            additonalClasses="w-auto h-20 pb-4 min-w-80"
         >
             <H6HeadingText 
                 additonalClasses="h-[100%] w-[40%]"
@@ -273,7 +273,7 @@ function FromEntitySection() {
 
     return (
         <SectionContainer 
-            additonalClasses="w-auto h-12 border-b-2 pb-4 min-w-80"
+            additonalClasses="w-auto h-12 pb-4 min-w-80"
         >
             <H6HeadingText 
                 additonalClasses="h-[100%] w-[40%]"
@@ -311,7 +311,7 @@ function ToTypeSection() {
 
     return (
         <SectionContainer 
-            additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80"
+            additonalClasses="w-auto h-20 pb-4 min-w-80"
         >
             <H6HeadingText 
                 additonalClasses="h-[100%] w-[40%]"
@@ -372,7 +372,7 @@ function ToEntitySection() {
 
     return (
         <SectionContainer 
-            additonalClasses="w-auto h-12 border-b-2 pb-4 min-w-80"
+            additonalClasses="w-auto h-12 pb-4 min-w-80"
         >
             <H6HeadingText 
                 additonalClasses="h-[100%] w-[40%]"
@@ -410,7 +410,7 @@ function DatetimeInput({ datetimeValue,
                          }) {
 
     return (
-        <SectionContainer additonalClasses="w-auto h-20 border-b-2 pb-4 min-w-80">
+        <SectionContainer additonalClasses="w-auto h-20 pb-4 min-w-80">
             <H6HeadingText 
                 additonalClasses="h-[100%] w-[40%]"
             >
@@ -442,7 +442,7 @@ function RecurringFrequencyInput() {
     //console.log(recurringFrequency)
     
     return (
-        <SectionContainer additonalClasses="flex flex-nowarp flex-row w-auto h-auto border-b-2 pb-4 min-w-80">
+        <SectionContainer additonalClasses="flex flex-nowarp flex-row w-auto h-auto pb-4 min-w-80">
             <H6HeadingText 
                 additonalClasses="h-[100%] w-[40%]"
             >
