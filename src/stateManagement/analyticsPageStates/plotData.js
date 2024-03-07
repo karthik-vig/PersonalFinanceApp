@@ -17,6 +17,7 @@ const expenditureStatsSlice = createSlice({
                         {data: [1]},
                     ]
         },
+        statBoxData: [],
     },
     reducers: {
         setExpenditurePlotData: (state, action) => {
@@ -27,12 +28,17 @@ const expenditureStatsSlice = createSlice({
             //action.payload = an object with the following properties: labels, datasets
             state.statsByCategoryPlotData = action.payload;
         },
+        setStatBoxData: (state, action) => {
+            //action.payload = an array of objects with the following properties: label, data
+            state.statBoxData = action.payload;
+        },
     },
 });
 
 export const {
     setExpenditurePlotData,
     setStatsByCategoryPlotData,
+    setStatBoxData,
 } = expenditureStatsSlice.actions;
 
 export default expenditureStatsSlice.reducer;

@@ -8,7 +8,11 @@ import {
     setStartDate,
     setEndDate,
 } from '../stateManagement/analyticsPageStates/filterMenu.js';
-import { setExpenditurePlotData, setStatsByCategoryPlotData } from '../stateManagement/analyticsPageStates/plotData.js';
+import { 
+    setExpenditurePlotData, 
+    setStatsByCategoryPlotData, 
+    setStatBoxData,
+} from '../stateManagement/analyticsPageStates/plotData.js';
 import { showFailBox } from '../stateManagement/financialEntityPageStates/failBoxDisplay.js';
 
 
@@ -103,8 +107,71 @@ function Topbar() {
                         }
                     ],
         };
+        const someStatBoxData = [
+            {
+              title: "Total Expenditure",
+              value: "1000",
+              color: "red",
+            },
+            {
+              title: "Transaction In - Amount",
+              value: "2000",
+              color: "green",
+            },
+            {
+              title: "Transaction Out - Amount",
+              value: "1000",
+              color: "green",
+            },
+            {
+              title: "Transaction In - Number",
+              value: "1000",
+              color: "green",
+            },
+            {
+              title: "Transaction Out - Number",
+              value: "500",
+              color: "green",
+            },
+            {
+              title: "Number of Transactions",
+              value: "1500",
+              color: "green",
+            },
+            {
+              title: "Number of Financial Entities",
+              value: "10",
+              color: "blue",
+            },
+            {
+              title: "Number of Recurring Transactions Entities",
+              value: "10",
+              color: "orange",
+            },
+            {
+              title: "Number of Transactins using Internal Financial Entities as Source",
+              value: "10",
+              color: "purple",
+            },
+            {
+              title: "Number of Transactins using External Financial Entities as Source",
+              value: "10",
+              color: "pink",
+            },
+            {
+              title: "Number of Transactins using Internal Financial Entities as Destination",
+              value: "10",
+              color: "yellow",
+            },
+            {
+              title: "Number of Transactins using External Financial Entities as Destination",
+              value: "10",
+              color: "brown",
+            },
+          ];
         dispatch(setExpenditurePlotData(plotData));
         dispatch(setStatsByCategoryPlotData(doughnutPlotData));
+        dispatch(setStatBoxData(someStatBoxData));
     };
 
 
