@@ -169,66 +169,129 @@ function Topbar() {
         //                 },
         //             ]
         // };
+        // const someStatBoxData = [
+        //     {
+        //       title: "Total Expenditure",
+        //       value: "1000",
+        //       color: "red",
+        //     },
+        //     {
+        //       title: "Transaction In - Amount",
+        //       value: "2000",
+        //       color: "green",
+        //     },
+        //     {
+        //       title: "Transaction Out - Amount",
+        //       value: "1000",
+        //       color: "green",
+        //     },
+        //     {
+        //       title: "Transaction In - Number",
+        //       value: "1000",
+        //       color: "green",
+        //     },
+        //     {
+        //       title: "Transaction Out - Number",
+        //       value: "500",
+        //       color: "green",
+        //     },
+        //     {
+        //       title: "Number of Transactions",
+        //       value: "1500",
+        //       color: "green",
+        //     },
+        //     {
+        //       title: "Number of Financial Entities",
+        //       value: "10",
+        //       color: "blue",
+        //     },
+        //     {
+        //       title: "Number of Recurring Transactions Entities",
+        //       value: "10",
+        //       color: "orange",
+        //     },
+        //     {
+        //       title: "Number of Transactins using Internal Financial Entities as Source",
+        //       value: "10",
+        //       color: "purple",
+        //     },
+        //     {
+        //       title: "Number of Transactins using External Financial Entities as Source",
+        //       value: "10",
+        //       color: "pink",
+        //     },
+        //     {
+        //       title: "Number of Transactins using Internal Financial Entities as Destination",
+        //       value: "10",
+        //       color: "yellow",
+        //     },
+        //     {
+        //       title: "Number of Transactins using External Financial Entities as Destination",
+        //       value: "10",
+        //       color: "brown",
+        //     },
+        //   ];
+
         const someStatBoxData = [
             {
-              title: "Total Expenditure",
+              title: "Total Exp.",
               value: "1000",
-              color: "red",
+              color: "#FF0000", // Red
             },
             {
-              title: "Transaction In - Amount",
+              title: "In - Amount",
               value: "2000",
-              color: "green",
+              color: "#008000", // Green
             },
             {
-              title: "Transaction Out - Amount",
+              title: "Out - Amount",
               value: "1000",
-              color: "green",
+              color: "#800000", // Maroon
             },
             {
-              title: "Transaction In - Number",
+              title: "In - Num",
               value: "1000",
-              color: "green",
+              color: "#00FF00", // Lime
             },
             {
-              title: "Transaction Out - Number",
+              title: "Out - Num",
               value: "500",
-              color: "green",
+              color: "#808000", // Olive
             },
             {
-              title: "Number of Transactions",
+              title: "Num Trans.",
               value: "1500",
-              color: "green",
+              color: "#008080", // Teal
             },
             {
-              title: "Number of Financial Entities",
+              title: "Num Fin. Entities",
               value: "10",
-              color: "blue",
+              color: "#0000FF", // Blue
             },
             {
-              title: "Number of Recurring Transactions Entities",
+              title: "Num Recur. Trans. Entities",
               value: "10",
-              color: "orange",
+              color: "#FF00FF", // Fuchsia
             },
             {
-              title: "Number of Transactins using Internal Financial Entities as Source",
+              title: "Num Trans. Int. Source",
               value: "10",
-              color: "purple",
+              color: "#800080", // Purple
             },
             {
-              title: "Number of Transactins using External Financial Entities as Source",
+              title: "Num Trans. Ext. Source",
               value: "10",
-              color: "pink",
+              color: "#FFA500", // Orange
             },
             {
-              title: "Number of Transactins using Internal Financial Entities as Destination",
+              title: "Num Trans. Int. Dest.",
               value: "10",
-              color: "yellow",
+              color: "#FFFF00", // Yellow
             },
             {
-              title: "Number of Transactins using External Financial Entities as Destination",
+              title: "Num Trans. Ext. Dest.",
               value: "10",
-              color: "brown",
+              color: "#A52A2A", // Brown
             },
           ];
         // dispatch(setExpenditurePlotData(plotData.expenditurePlotData));
@@ -242,15 +305,19 @@ function Topbar() {
 
     return (
         <div 
-            className="flex flex-col flex-nowrap items-center h-36 mx-7 mt-10 mb-4 rounded-lg border bg-surface-cl drop-shadow-lg "
+            className="flex flex-col flex-nowrap items-center h-auto mx-7 mt-10 mb-4 rounded-lg border bg-surface-cl drop-shadow-lg "
             style={{ width: 'calc(100% - 56px)' }}
         >
-            <h2>Filter Menu</h2>
+            <h2
+                className="text-bold text-xl my-1 w-[100%] h-8 text-center"
+            >
+                Filter Menu
+            </h2>
             <section
-                className="flex flex-row flex-nowrap justify-evenly w-[100%] h-[95%] p-1"
+                className="flex flex-row flex-wrap justify-evenly w-[100%] h-auto p-1"
             >
                 <section
-                    className="mb-1 p-1 flex flex-col items-center flex-nowrap justify-start w-[15%] h-[100%]"
+                    className="mb-1 p-1 flex flex-col flex-nowrap items-center justify-start w-auto h-auto"
                 >
                     <p
                         className="truncate"
@@ -269,7 +336,7 @@ function Topbar() {
                     </select>
                 </section>
                 <section
-                    className="mb-1 p-1 flex flex-col flex-nowrap items-center w-[15%] h-auto"
+                    className="mb-1 p-1 flex flex-col flex-nowrap items-center w-auto h-auto"
                 >
                     <p
                         className="truncate"
@@ -288,7 +355,7 @@ function Topbar() {
                     </select>
                 </section>
                 <section
-                    className="mb-1 p-1 flex flex-col flex-nowrap items-center w-[15%] h-auto"
+                    className="mb-1 p-1 flex flex-col flex-nowrap items-center w-auto h-auto"
                 >
                     <p
                         className="truncate"
@@ -307,7 +374,7 @@ function Topbar() {
                     </select>
                 </section>
                 <section
-                    className="p-1 flex flex-col flex-nowrap items-center w-[30%] h-auto"
+                    className="p-1 flex flex-col flex-nowrap items-center w-auto h-auto"
                 >
                     <p
                         className="truncate"
