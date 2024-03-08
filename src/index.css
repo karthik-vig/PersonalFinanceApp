@@ -24,6 +24,27 @@
     background: #bebebe;
 }
 
+/* Add custom fonts */
+@font-face {
+    font-family: "Montserrat-Medium";
+    src: url("./fonts/Montserrat-Medium.ttf") format("truetype");
+    font-weight: 400 400;
+}
+
+@font-face {
+    font-family: "Roboto-Condensed";
+    src: url("./fonts/RobotoCondensed-VariableFont_wght.ttf") format("truetype");
+    font-weight: 400 400;
+}
+
+* {
+    font-family: "Montserrat-Medium";
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Roboto-Condensed";
+}
+
 /*disabled later; for layout de-bugging*/
 * {
     outline: 1px solid #f00 !important;
