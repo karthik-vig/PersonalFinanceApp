@@ -10,6 +10,102 @@ function setDB(database) {
     db = database;
 }
 
+function getLinePlotData(event, filterOptions) {
+    return new Promise((resolve, reject) => { 
+        const expenditurePlotData = {
+            labels: [],
+            datasets: []
+        };
+        // if (filterOptions.transactionType !== "All") { 
+        //     if (filterOptions.transactionType === "In") expenditurePlotData.datasets.push({id: 0, label: "In", data: []});
+        //     if (filterOptions.transactionType === "Out") expenditurePlotData.datasets.push({id: 1, label: "Out", data: []});
+        //     if (filterOptions.transactionType === "Expenditure") expenditurePlotData.datasets.push({id: 2, label: "Expenditure", data: []});
+        // } else {
+        //     expenditurePlotData.datasets.push({id: 0, label: "In", data: []});
+        //     expenditurePlotData.datasets.push({id: 1, label: "Out", data: []});
+        //     expenditurePlotData.datasets.push({id: 2, label: "Expenditure", data: []});
+        // }
+        switch (filterOptions.transactionType) {
+            case "In":
+                expenditurePlotData.datasets.push({id: 0, label: "In", data: []});
+                break;
+            case "Out":
+                expenditurePlotData.datasets.push({id: 1, label: "Out", data: []});
+                break;
+            case "Expenditure":
+                expenditurePlotData.datasets.push({id: 2, label: "Expenditure", data: []});
+                break;
+            default:
+                expenditurePlotData.datasets.push({id: 0, label: "In", data: []});
+                expenditurePlotData.datasets.push({id: 1, label: "Out", data: []});
+                expenditurePlotData.datasets.push({id: 2, label: "Expenditure", data: []});
+        }
+
+        let queryStmt = `SELECT \
+                        transactionDate, \
+                        value, \
+                        transactionType \
+                        FROM transactions \
+                        WHERE 1=1`;
+        //build query based on the filter options
+        if (filterOptions.transactionType !== "All" && filterOptions.transactionType !== "Expenditure") queryStmt += ` AND (transactionType = "${filterOptions.transactionType}")`;
+        if (filterOptions.transactionCategory !== "All") queryStmt += ` AND (transactionCategory = "${filterOptions.transactionCategory}")`;
+        if (filterOptions.currency !== "") queryStmt += ` AND (currency = "${filterOptions.currency}")`;
+        if (filterOptions.startDate !== "yyyy-mm-ddThh:mm") queryStmt += ` AND (transactionDate BETWEEN "${filterOptions.startDate} AND ${filterOptions.endDate}")`;
+        queryStmt += ` ORDER BY transactionDate ASC`;
+        db.all(queryStmt,
+            (err, rows) => {
+                if (err) {
+                    console.log(`Get Line Plot Data Error ${err}`);
+                    reject(true);
+                }
+
+                const expenditurePlotDataMap = new Map();
+                if (!Array.isArray(rows) || rows.length === 0) resolve([]);
+                rows.forEach((row) => {
+                    const date = row.transactionDate.substring(0, 10);
+                    if (expenditurePlotDataMap.has(date)) {
+                        if (row.transactionType === "In") {
+                            expenditurePlotDataMap.get(date).In += row.value;
+                        } else {
+                            expenditurePlotDataMap.get(date).Out += row.value;
+                        }
+                    } else {
+                        expenditurePlotDataMap.set(date, {
+                            In: row.transactionType === "In" ? row.value : 0,
+                            Out: row.transactionType === "Out" ? row.value : 0,
+                        });
+                    }
+                });
+   
+
+                expenditurePlotData.datasets.push()
+                 for (const [label, value] of expenditurePlotDataMap) {
+                    expenditurePlotData.labels.push(label);
+                    // expenditurePlotData.datasets[0].data.push(value.In);
+                    // expenditurePlotData.datasets[1].data.push(value.Out);
+                    // expenditurePlotData.datasets[2].data.push(value.In - value.Out);
+                    switch (filterOptions.transactionType) {
+                        case "In":
+                            expenditurePlotData.datasets[0].data.push(value.In);
+                            break;
+                        case "Out":
+                            expenditurePlotData.datasets[0].data.push(value.Out);
+                            break;
+                        case "Expenditure":
+                            expenditurePlotData.datasets[0].data.push(value.In - value.Out);
+                            break;
+                        default:
+                            expenditurePlotData.datasets[0].data.push(value.In);
+                            expenditurePlotData.datasets[1].data.push(value.Out);
+                            expenditurePlotData.datasets[2].data.push(value.In - value.Out);
+                    }
+                }
+                resolve(expenditurePlotData);
+            });
+    });
+}
+
 function updateFinancialEntityReferenceID(event, 
                                           oldFinancialEntityReferenceID, 
                                           newFinancialEntityReferenceID) {
@@ -899,4 +995,5 @@ module.exports = {
     deleteTransactionOnRecurringReferenceID,
     modifyTransactionReferenceID,
     updateFinancialEntityReferenceID,
+    getLinePlotData,
 };

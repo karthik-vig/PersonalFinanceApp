@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 import {
     // setPlotData,
     setTransactionType,
@@ -8,6 +9,11 @@ import {
     setStartDate,
     setEndDate,
 } from '../stateManagement/analyticsPageStates/filterMenu.js';
+import {
+    toggleUpdateExpenditurePlot,
+    // toggleUpdateStatsByCategoryPlot,
+    // toggleUpdateStatBox,
+} from '../stateManagement/analyticsPageStates/generateAnalytics.js';
 import { 
     setExpenditurePlotData, 
     setStatsByCategoryPlotData, 
@@ -23,8 +29,23 @@ function Topbar() {
     const filterMenuStates = useSelector(state => state.analyticsPageStates.filterMenu);
     const currencies = useSelector(state => state.sharedStates.additionalInformationState.currencies);
     const transactionCategories = useSelector(state => state.sharedStates.additionalInformationState.transactionCategories);
+    const plotData = useSelector(state => state.analyticsPageStates.plotData);
+    const generateAnalytics = useSelector(state => state.analyticsPageStates.generateAnalytics);
 
-
+    // set the line plot data
+    useEffect(() => {
+        //get the plot data from the backend
+        if (!generateAnalytics.updateExpenditurePlot) return;
+        window.transactionOperations.getLinePlotData(filterMenuStates).then((expenditurePlotData) => {
+            dispatch(setExpenditurePlotData(expenditurePlotData));
+        }).catch((err) => {
+            console.log("Error getting the plot data: ", err);
+        });
+        dispatch(toggleUpdateExpenditurePlot());
+    }, [generateAnalytics.updateExpenditurePlot,
+        filterMenuStates,
+        dispatch,
+    ]);
 
     const handleSetCurrency = (event) => {
         //dispatch set currency action
@@ -76,61 +97,62 @@ function Topbar() {
                 dispatch(showFailBox("Start date cannot be greater than End date"));
                 return;
             }
-        const plotData = {
-            labels: ['Jun', 'Jul', 'Aug'],
-            datasets: [
-                        {
-                            id: 1,
-                            label: 'In',
-                            color: 'green',
-                            data: [5, 6, 7],
-                        },
-                        {
-                            id: 2,
-                            label: 'Out',
-                            color: 'red',
-                            data: [3, 2, 1],
-                        },
-                        {
-                            id: 3,
-                            label: 'Expenditure',
-                            color: 'yellow',
-                            data: [1, 2, 3],
-                        }
-                    ],
-        }
-        const doughnutPlotData = {
-            labels: ["Groceries", "Restaurants and Dining", "Shopping", "Utilities", "Telecommunication",
-                     "Transportation", "Rent or Mortgage", "Insurance", "Healthcare", "Education", "Entertainment",
-                     "Travel and Lodging", "Personal Care", "Fitness and Wellness", "Investments and Savings", "Loans and Credit Payments",
-                     "Charity and Donations", "Home Improvement and Maintenance", "Childcare and Education", "Pet Care", "Taxes", 
-                     "Legal Services", "Other"],
-            datasets: [
-                        {
-                            data: Array(23).fill(1).map(() => Math.floor(Math.random() * 1000) + 1),
-                            backgroundColor: [
-                                '#4CAF50', '#FF5722', '#9C27B0',
-                                '#607D8B', '#3F51B5', '#FFEB3B',
-                                '#795548', '#9E9E9E', '#F44336',
-                                '#03A9F4', '#E91E63', '#00BCD4',
-                                '#FFC107', '#8BC34A', '#CDDC39',
-                                '#FF9800', '#673AB7', '#9E9D24',
-                                '#2196F3', '#4CAF50', '#F44336',
-                                '#3F51B5', '#607D8B'
-                              ],
-                            hoverBackgroundColor: [
-                                '#1A7D1E', '#CD2500', '#6A007E',
-                                '#2E4B59', '#0D1F83', '#CDB909',
-                                '#472316', '#6C6C6C', '#C21104',
-                                '#0077C2', '#B70031', '#008AA2',
-                                '#CD8F00', '#599118', '#9BAA07',
-                                '#CD6600', '#350885', '#6C6B00',
-                                '#0064C1', '#1A7D1E', '#C21104',
-                                '#0D1F83', '#2E4B59'
-                              ],
-                        },
-                    ]
-        };
+        // const plotData = {
+        //     labels: ['Jun', 'Jul', 'Aug'],
+        //     datasets: [
+        //                 {
+        //                     id: 1,
+        //                     label: 'In',
+        //                     color: 'green',
+        //                     data: [5, 6, 7],
+        //                 },
+        //                 {
+        //                     id: 2,
+        //                     label: 'Out',
+        //                     color: 'red',
+        //                     data: [3, 2, 1],
+        //                 },
+        //                 {
+        //                     id: 3,
+        //                     label: 'Expenditure',
+        //                     color: 'yellow',
+        //                     data: [1, 2, 3],
+        //                 }
+        //             ],
+        // }
+        
+        // const doughnutPlotData = {
+        //     labels: ["Groceries", "Restaurants and Dining", "Shopping", "Utilities", "Telecommunication",
+        //              "Transportation", "Rent or Mortgage", "Insurance", "Healthcare", "Education", "Entertainment",
+        //              "Travel and Lodging", "Personal Care", "Fitness and Wellness", "Investments and Savings", "Loans and Credit Payments",
+        //              "Charity and Donations", "Home Improvement and Maintenance", "Childcare and Education", "Pet Care", "Taxes", 
+        //              "Legal Services", "Other"],
+        //     datasets: [
+        //                 {
+        //                     data: Array(23).fill(1).map(() => Math.floor(Math.random() * 1000) + 1),
+        //                     backgroundColor: [
+        //                         '#4CAF50', '#FF5722', '#9C27B0',
+        //                         '#607D8B', '#3F51B5', '#FFEB3B',
+        //                         '#795548', '#9E9E9E', '#F44336',
+        //                         '#03A9F4', '#E91E63', '#00BCD4',
+        //                         '#FFC107', '#8BC34A', '#CDDC39',
+        //                         '#FF9800', '#673AB7', '#9E9D24',
+        //                         '#2196F3', '#4CAF50', '#F44336',
+        //                         '#3F51B5', '#607D8B'
+        //                       ],
+        //                     hoverBackgroundColor: [
+        //                         '#1A7D1E', '#CD2500', '#6A007E',
+        //                         '#2E4B59', '#0D1F83', '#CDB909',
+        //                         '#472316', '#6C6C6C', '#C21104',
+        //                         '#0077C2', '#B70031', '#008AA2',
+        //                         '#CD8F00', '#599118', '#9BAA07',
+        //                         '#CD6600', '#350885', '#6C6B00',
+        //                         '#0064C1', '#1A7D1E', '#C21104',
+        //                         '#0D1F83', '#2E4B59'
+        //                       ],
+        //                 },
+        //             ]
+        // };
         const someStatBoxData = [
             {
               title: "Total Expenditure",
@@ -193,8 +215,9 @@ function Topbar() {
               color: "brown",
             },
           ];
-        dispatch(setExpenditurePlotData(plotData));
-        dispatch(setStatsByCategoryPlotData(doughnutPlotData));
+        // dispatch(setExpenditurePlotData(plotData.expenditurePlotData));
+        dispatch(toggleUpdateExpenditurePlot());
+        dispatch(setStatsByCategoryPlotData(plotData.statsByCategoryPlotData));
         dispatch(setStatBoxData(someStatBoxData));
     };
 

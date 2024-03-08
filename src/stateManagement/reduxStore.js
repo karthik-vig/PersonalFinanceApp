@@ -60,6 +60,7 @@ import sharedStatesActiveTabReducer from './sharedStates/activeTab.js';
 //import all the reducers for the analytics page states
 import analyticsPageFilterMenuReducer from './analyticsPageStates/filterMenu.js';
 import analyticsPagePlotDataReducer from './analyticsPageStates/plotData.js';
+import analyticsPageGenerateAnalyticsReducer from './analyticsPageStates/generateAnalytics.js';
 
 const mainPageStates = combineReducers({
   selectedItem: mainPageSelectedItemReducer,
@@ -125,6 +126,7 @@ const sharedStates = combineReducers({
 const analyticsPageStates = combineReducers({
   filterMenu: analyticsPageFilterMenuReducer,
   plotData: analyticsPagePlotDataReducer,
+  generateAnalytics: analyticsPageGenerateAnalyticsReducer,
 });
 
 const rootReducer = combineReducers({

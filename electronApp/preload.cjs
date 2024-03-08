@@ -20,6 +20,7 @@ contextBridge.exposeInMainWorld('transactionOperations', {
     deleteTransactionOnRecurringReferenceID: (recurringReferenceID) => ipcRenderer.invoke('transactionOperations:deleteTransactionOnRecurringReferenceID', recurringReferenceID),
     modifyTransactionReferenceID: (recurringTransactionSelectedItem) => ipcRenderer.invoke('transactionOperations:modifyTransactionReferenceID', recurringTransactionSelectedItem),
     updateFinancialEntityReferenceID: (oldFinancialEntityReferenceID, newFinancialEntityReferenceID) => ipcRenderer.invoke('transactionOperations:updateFinancialEntityReferenceID', oldFinancialEntityReferenceID, newFinancialEntityReferenceID),
+    getLinePlotData: (filterOptions) => ipcRenderer.invoke('transactionOperations:getLinePlotData', filterOptions),
 });
 
 contextBridge.exposeInMainWorld('financialEntityOperations', {

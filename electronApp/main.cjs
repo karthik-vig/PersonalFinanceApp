@@ -98,6 +98,7 @@ app.whenReady().then(() => {
     ipcMain.handle('transactionOperations:deleteTransactionOnRecurringReferenceID', transactionOperations.deleteTransactionOnRecurringReferenceID);
     ipcMain.handle('transactionOperations:modifyTransactionReferenceID', transactionOperations.modifyTransactionReferenceID);
     ipcMain.handle('transactionOperations:updateFinancialEntityReferenceID', transactionOperations.updateFinancialEntityReferenceID);
+    ipcMain.handle('transactionOperations:getLinePlotData', transactionOperations.getLinePlotData);
 
     //FINANCIAL ENTITY OPERATIONS
     ipcMain.handle('financialEntityOperations:getTransactionEntities', financialEntitiesOperations.getTransactionEntities);
