@@ -10,6 +10,62 @@ function setDB(database) {
     db = database;
 }
 
+function getStatsByCategoryPlotData(event, filterOptions) {
+    return new Promise((resolve, reject) => {
+        const statsByCategoryPlotData = {
+            labels: ["Groceries", "Restaurants and Dining", "Shopping", "Utilities", "Telecommunication",
+                     "Transportation", "Rent or Mortgage", "Insurance", "Healthcare", "Education", "Entertainment",
+                     "Travel and Lodging", "Personal Care", "Fitness and Wellness", "Investments and Savings", "Loans and Credit Payments",
+                     "Charity and Donations", "Home Improvement and Maintenance", "Childcare and Education", "Pet Care", "Taxes", 
+                     "Legal Services", "Other"],
+            datasets: [
+                        {
+                            data: Array(23).fill(0),
+                            backgroundColor: [
+                                '#4CAF50', '#FF5722', '#9C27B0',
+                                '#607D8B', '#3F51B5', '#FFEB3B',
+                                '#795548', '#9E9E9E', '#F44336',
+                                '#03A9F4', '#E91E63', '#00BCD4',
+                                '#FFC107', '#8BC34A', '#CDDC39',
+                                '#FF9800', '#673AB7', '#9E9D24',
+                                '#2196F3', '#4CAF50', '#F44336',
+                                '#3F51B5', '#607D8B'
+                              ],
+                            hoverBackgroundColor: [
+                                '#1A7D1E', '#CD2500', '#6A007E',
+                                '#2E4B59', '#0D1F83', '#CDB909',
+                                '#472316', '#6C6C6C', '#C21104',
+                                '#0077C2', '#B70031', '#008AA2',
+                                '#CD8F00', '#599118', '#9BAA07',
+                                '#CD6600', '#350885', '#6C6B00',
+                                '#0064C1', '#1A7D1E', '#C21104',
+                                '#0D1F83', '#2E4B59'
+                              ],
+                        },
+                    ]
+        }
+        const labelIndexMap = new Map(statsByCategoryPlotData.labels.map((label, index) => [label, index]));
+        let queryStmt = `SELECT COUNT(transactionCategory) AS transactionCount, transactionCategory FROM transactions WHERE 1=1`;
+        if (filterOptions.transactionType !== "All" && filterOptions.transactionType !== "Expenditure") queryStmt += ` AND (transactionType = "${filterOptions.transactionType}")`;
+        //if (filterOptions.transactionCategory !== "All") queryStmt += ` AND (transactionCategory = "${filterOptions.transactionCategory}")`;
+        if (filterOptions.currency !== "") queryStmt += ` AND (currency = "${filterOptions.currency}")`;
+        if (filterOptions.startDate !== "yyyy-mm-ddThh:mm") queryStmt += ` AND (transactionDate BETWEEN "${filterOptions.startDate} AND ${filterOptions.endDate}")`;
+        queryStmt += ` GROUP BY transactionCategory`;
+        db.all(queryStmt,
+              (err, rows) => {
+                if (err) {
+                    console.log(`Get Stats By Category Plot Data Error ${err}`);
+                    reject(true);
+                }
+                rows.forEach((row) => { 
+                    const index = labelIndexMap.get(row.transactionCategory);
+                    statsByCategoryPlotData.datasets[0].data[index] = row.transactionCount;
+                });
+                resolve(statsByCategoryPlotData);
+        });
+    });
+}
+
 function getLinePlotData(event, filterOptions) {
     return new Promise((resolve, reject) => { 
         const expenditurePlotData = {
@@ -996,4 +1052,5 @@ module.exports = {
     modifyTransactionReferenceID,
     updateFinancialEntityReferenceID,
     getLinePlotData,
+    getStatsByCategoryPlotData,
 };

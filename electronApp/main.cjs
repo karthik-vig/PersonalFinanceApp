@@ -99,6 +99,7 @@ app.whenReady().then(() => {
     ipcMain.handle('transactionOperations:modifyTransactionReferenceID', transactionOperations.modifyTransactionReferenceID);
     ipcMain.handle('transactionOperations:updateFinancialEntityReferenceID', transactionOperations.updateFinancialEntityReferenceID);
     ipcMain.handle('transactionOperations:getLinePlotData', transactionOperations.getLinePlotData);
+    ipcMain.handle('transactionOperations:getStatsByCategoryPlotData', transactionOperations.getStatsByCategoryPlotData);
 
     //FINANCIAL ENTITY OPERATIONS
     ipcMain.handle('financialEntityOperations:getTransactionEntities', financialEntitiesOperations.getTransactionEntities);

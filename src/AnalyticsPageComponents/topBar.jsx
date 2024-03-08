@@ -10,7 +10,7 @@ import {
     setEndDate,
 } from '../stateManagement/analyticsPageStates/filterMenu.js';
 import {
-    toggleUpdateExpenditurePlot,
+    toggleUpdateExpenditurePlot, toggleUpdateStatsByCategoryPlot,
     // toggleUpdateStatsByCategoryPlot,
     // toggleUpdateStatBox,
 } from '../stateManagement/analyticsPageStates/generateAnalytics.js';
@@ -29,7 +29,8 @@ function Topbar() {
     const filterMenuStates = useSelector(state => state.analyticsPageStates.filterMenu);
     const currencies = useSelector(state => state.sharedStates.additionalInformationState.currencies);
     const transactionCategories = useSelector(state => state.sharedStates.additionalInformationState.transactionCategories);
-    const plotData = useSelector(state => state.analyticsPageStates.plotData);
+    // the plotData state might have to be removed; it is only used for testing purposes
+    //const plotData = useSelector(state => state.analyticsPageStates.plotData);
     const generateAnalytics = useSelector(state => state.analyticsPageStates.generateAnalytics);
 
     // set the line plot data
@@ -43,6 +44,21 @@ function Topbar() {
         });
         dispatch(toggleUpdateExpenditurePlot());
     }, [generateAnalytics.updateExpenditurePlot,
+        filterMenuStates,
+        dispatch,
+    ]);
+
+    // set the stats by category plot data
+    useEffect(() => {
+        //get the plot data from the backend
+        if (!generateAnalytics.updateStatsByCategoryPlot) return;
+        window.transactionOperations.getStatsByCategoryPlotData(filterMenuStates).then((statsByCategoryPlotData) => {
+            dispatch(setStatsByCategoryPlotData(statsByCategoryPlotData));
+        }).catch((err) => {
+            console.log("Error getting the plot data: ", err);
+        });
+        dispatch(toggleUpdateStatsByCategoryPlot());
+    }, [generateAnalytics.updateStatsByCategoryPlot,
         filterMenuStates,
         dispatch,
     ]);
@@ -217,7 +233,8 @@ function Topbar() {
           ];
         // dispatch(setExpenditurePlotData(plotData.expenditurePlotData));
         dispatch(toggleUpdateExpenditurePlot());
-        dispatch(setStatsByCategoryPlotData(plotData.statsByCategoryPlotData));
+        //dispatch(setStatsByCategoryPlotData(plotData.statsByCategoryPlotData));
+        dispatch(toggleUpdateStatsByCategoryPlot());
         dispatch(setStatBoxData(someStatBoxData));
     };
 
