@@ -14,7 +14,7 @@ function StatsByCategory() {
             <h2
                 className="text-semibold my-2 sm:text-sm md:text-md lg:text-xl"
             >
-                Stats By Category
+                Number of Transaction By Category
             </h2>
             <section
                 className="overflow-y-scroll w-[100%] h-[90%] flex flex-col flex-nowrap items-center justify-center"
