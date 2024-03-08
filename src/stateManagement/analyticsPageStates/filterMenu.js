@@ -5,7 +5,7 @@ const filterMenuSlice = createSlice({
     initialState: {
         transactionType: "All", //In, Out, Expenditure, All
         transactionCategory: "All", //All, Food, Transport, etc
-        currency: "",
+        currency: "All",
         // dateRangeSelection: false,
         startDate: "yyyy-mm-ddThh:mm",
         endDate: "yyyy-mm-ddThh:mm",

@@ -300,8 +300,9 @@ function Topbar() {
                         value={filterMenuStates.currency}
                         onChange={handleSetCurrency}
                     >
+                        <option key={0} value="All">All</option>
                         {currencies.map((currency, index) => {
-                            return <option key={index} value={currency}>{currency}</option>
+                            return <option key={index + 1} value={currency}>{currency}</option>
                         })}
                     </select>
                 </section>

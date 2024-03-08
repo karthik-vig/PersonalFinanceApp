@@ -48,7 +48,7 @@ function getStatsByCategoryPlotData(event, filterOptions) {
         let queryStmt = `SELECT COUNT(transactionCategory) AS transactionCount, transactionCategory FROM transactions WHERE 1=1`;
         if (filterOptions.transactionType !== "All" && filterOptions.transactionType !== "Expenditure") queryStmt += ` AND (transactionType = "${filterOptions.transactionType}")`;
         //if (filterOptions.transactionCategory !== "All") queryStmt += ` AND (transactionCategory = "${filterOptions.transactionCategory}")`;
-        if (filterOptions.currency !== "") queryStmt += ` AND (currency = "${filterOptions.currency}")`;
+        if (filterOptions.currency !== "All") queryStmt += ` AND (currency = "${filterOptions.currency}")`;
         if (filterOptions.startDate !== "yyyy-mm-ddThh:mm") queryStmt += ` AND (transactionDate BETWEEN "${filterOptions.startDate} AND ${filterOptions.endDate}")`;
         queryStmt += ` GROUP BY transactionCategory`;
         db.all(queryStmt,
@@ -106,7 +106,7 @@ function getLinePlotData(event, filterOptions) {
         //build query based on the filter options
         if (filterOptions.transactionType !== "All" && filterOptions.transactionType !== "Expenditure") queryStmt += ` AND (transactionType = "${filterOptions.transactionType}")`;
         if (filterOptions.transactionCategory !== "All") queryStmt += ` AND (transactionCategory = "${filterOptions.transactionCategory}")`;
-        if (filterOptions.currency !== "") queryStmt += ` AND (currency = "${filterOptions.currency}")`;
+        if (filterOptions.currency !== "All") queryStmt += ` AND (currency = "${filterOptions.currency}")`;
         if (filterOptions.startDate !== "yyyy-mm-ddThh:mm") queryStmt += ` AND (transactionDate BETWEEN "${filterOptions.startDate} AND ${filterOptions.endDate}")`;
         queryStmt += ` ORDER BY transactionDate ASC`;
         db.all(queryStmt,
