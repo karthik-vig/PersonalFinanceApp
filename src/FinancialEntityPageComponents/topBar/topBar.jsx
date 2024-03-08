@@ -31,7 +31,7 @@ function TopBarButton({ svgIcon, iconColor, btnName, onClickHandler }) {
     return (
         <>
         <button 
-            className="flex flex-nowrap flex-row m-3 p-0.5 w-24 h-7 rounded-lg outline-1 hover:outline hover:outline-gray-800 hover:outline-offset-2 hover:bg-secondary-cl" 
+            className="flex flex-nowrap flex-row m-3 p-0.5 w-32 h-7 rounded-lg outline-1 hover:outline hover:outline-gray-800 hover:outline-offset-2 hover:bg-secondary-cl" 
             onClick={()=> onClickHandler()}
         >
             <FontAwesomeIcon 
