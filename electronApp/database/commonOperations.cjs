@@ -13,7 +13,7 @@ function getTotalExpenditure(filterOptions) {
                             FROM transactions WHERE transactionType = "In" `;
             if (filterOptions.transactionCategory !== "All") queryStmt += ` AND (transactionCategory = "${filterOptions.transactionCategory}")`;
             if (filterOptions.currency !== "All") queryStmt += ` AND (currency = "${filterOptions.currency}")`;
-            if (filterOptions.startDate !== "yyyy-mm-ddThh:mm") queryStmt += ` AND (transactionDate BETWEEN "${filterOptions.startDate} AND ${filterOptions.endDate}")`;
+            if (filterOptions.startDate !== "yyyy-mm-ddThh:mm" && filterOptions.endDate !== "yyyy-mm-ddThh:mm") queryStmt += ` AND (transactionDate BETWEEN "${filterOptions.startDate}" AND "${filterOptions.endDate}")`;
             db.get(queryStmt, 
                     (err, row) => { 
                         if (err) reject(err);
@@ -25,7 +25,7 @@ function getTotalExpenditure(filterOptions) {
                             FROM transactions WHERE transactionType = "Out" `;
             if (filterOptions.transactionCategory !== "All") queryStmt += ` AND (transactionCategory = "${filterOptions.transactionCategory}")`;
             if (filterOptions.currency !== "All") queryStmt += ` AND (currency = "${filterOptions.currency}")`;
-            if (filterOptions.startDate !== "yyyy-mm-ddThh:mm") queryStmt += ` AND (transactionDate BETWEEN "${filterOptions.startDate} AND ${filterOptions.endDate}")`;    
+            if (filterOptions.startDate !== "yyyy-mm-ddThh:mm" && filterOptions.endDate !== "yyyy-mm-ddThh:mm") queryStmt += ` AND (transactionDate BETWEEN "${filterOptions.startDate}" AND "${filterOptions.endDate}")`;
             db.get(queryStmt, 
                     (err, row) => { 
                         if (err) reject(err);
