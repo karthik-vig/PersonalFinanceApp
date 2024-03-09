@@ -382,29 +382,29 @@ function Topbar() {
                         Transaction Date Range
                     </p>
                     <section
-                        className="flex flex-row flex-nowrap justify-start w-[100%] h-auto"
+                        className="flex flex-row flex-nowrap justify-start items-center w-[100%] h-auto"
                     >
                         <label 
-                            className="truncate w-[50%]"
+                            className="truncate w-[8%] ml-1"
                             htmlFor="analyticsStatsStartDate"
                         >
                             Start
                         </label>
                         <input 
-                            className="h-[100%] w-[50%] py-1 text-start font-serif antialiased tracking-widest truncate text-base text-black bg-background-cl border rounded-lg outline-1 hover:outline hover:outline-gray-500 hover:outline-offset-2 hover:bg-back"
+                            className="h-[100%] w-[38%] py-1 text-start font-serif antialiased tracking-widest truncate text-base text-black bg-background-cl border rounded-lg outline-1 hover:outline hover:outline-gray-500 hover:outline-offset-2 hover:bg-back"
                             type="datetime-local" 
                             id="analyticsStatsStartDate"
                             value={filterMenuStates.startDate}
                             onChange={handleSetStartDate}
                         />
                         <label 
-                            className="truncate w-[50%]"
+                            className="truncate w-[8%] ml-1"
                             htmlFor="analyticsStatsEndDate"
                         >
                             End
                         </label>
                         <input 
-                            className="h-[100%] w-[50%] py-1 text-start font-serif antialiased tracking-widest truncate text-base text-black bg-background-cl border rounded-lg outline-1 hover:outline hover:outline-gray-500 hover:outline-offset-2 hover:bg-back"
+                            className="h-[100%] w-[38%] py-1 text-start font-serif antialiased tracking-widest truncate text-base text-black bg-background-cl border rounded-lg outline-1 hover:outline hover:outline-gray-500 hover:outline-offset-2 hover:bg-back"
                             type="datetime-local" 
                             id="analyticsStatsEndDate"
                             value={filterMenuStates.endDate}
