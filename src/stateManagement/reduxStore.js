@@ -61,6 +61,7 @@ import sharedStatesActiveTabReducer from './sharedStates/activeTab.js';
 import analyticsPageFilterMenuReducer from './analyticsPageStates/filterMenu.js';
 import analyticsPagePlotDataReducer from './analyticsPageStates/plotData.js';
 import analyticsPageGenerateAnalyticsReducer from './analyticsPageStates/generateAnalytics.js';
+import analyticsPageFailBoxReducer from './analyticsPageStates/failBox.js';
 
 const mainPageStates = combineReducers({
   selectedItem: mainPageSelectedItemReducer,
@@ -127,6 +128,7 @@ const analyticsPageStates = combineReducers({
   filterMenu: analyticsPageFilterMenuReducer,
   plotData: analyticsPagePlotDataReducer,
   generateAnalytics: analyticsPageGenerateAnalyticsReducer,
+  failBox: analyticsPageFailBoxReducer,
 });
 
 const rootReducer = combineReducers({

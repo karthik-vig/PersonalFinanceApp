@@ -19,7 +19,10 @@ import {
     setStatsByCategoryPlotData, 
     setStatBoxData,
 } from '../stateManagement/analyticsPageStates/plotData.js';
-import { showFailBox } from '../stateManagement/financialEntityPageStates/failBoxDisplay.js';
+import { 
+    setFailBoxMessage,
+    toggleFailBoxDisplay,
+} from '../stateManagement/analyticsPageStates/failBox.js';
 
 
 function Topbar() {
@@ -32,7 +35,6 @@ function Topbar() {
     // the plotData state might have to be removed; it is only used for testing purposes
     //const plotData = useSelector(state => state.analyticsPageStates.plotData);
     const generateAnalytics = useSelector(state => state.analyticsPageStates.generateAnalytics);
-
     // set the line plot data
     useEffect(() => {
         //get the plot data from the backend
@@ -110,13 +112,13 @@ function Topbar() {
     const handleSetStartDate = (event) => {
         //dispatch set start date action
         console.log(event.target.value);
-        dispatch(setStartDate(event.target.value));
+        dispatch(setStartDate(event.target.value + ":00"));
     };
 
     const handleSetEndDate = (event) => {
         //dispatch set end date action
         console.log(event.target.value);
-        dispatch(setEndDate(event.target.value));
+        dispatch(setEndDate(event.target.value + ":00"));
     };
 
     const handleGenerateAnalytics = () => {
@@ -125,7 +127,8 @@ function Topbar() {
         //send the analytics States state to the backend
         //get the plot data from the backend
         if ( filterMenuStates.startDate > filterMenuStates.endDate) {
-                dispatch(showFailBox("Start date cannot be greater than End date"));
+                dispatch(setFailBoxMessage("Start datetime should not be greater than End datetime"));
+                dispatch(toggleFailBoxDisplay());
                 return;
             }
         // const plotData = {
