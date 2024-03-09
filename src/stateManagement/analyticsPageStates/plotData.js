@@ -43,7 +43,68 @@ const expenditureStatsSlice = createSlice({
                         },
                     ]
         },
-        statBoxData: [],
+        statBoxData: [
+            {
+              title: "Total Exp.",
+              value: "N/A",
+              color: "#FF0000", // Red
+            },
+            {
+              title: "In - Amount",
+              value: "N/A",
+              color: "#008000", // Green
+            },
+            {
+              title: "Out - Amount",
+              value: "N/A",
+              color: "#800000", // Maroon
+            },
+            {
+              title: "In - Num",
+              value: "N/A",
+              color: "#00FF00", // Lime
+            },
+            {
+              title: "Out - Num",
+              value: "N/A",
+              color: "#808000", // Olive
+            },
+            {
+              title: "Num Trans.",
+              value: "N/A",
+              color: "#008080", // Teal
+            },
+            {
+              title: "Num Fin. Entities",
+              value: "N/A",
+              color: "#0000FF", // Blue
+            },
+            {
+              title: "Num Recur. Trans. Entities",
+              value: "N/A",
+              color: "#FF00FF", // Fuchsia
+            },
+            {
+              title: "Num Trans. Int. Source",
+              value: "N/A",
+              color: "#800080", // Purple
+            },
+            {
+              title: "Num Trans. Ext. Source",
+              value: "N/A",
+              color: "#FFA500", // Orange
+            },
+            {
+              title: "Num Trans. Int. Dest.",
+              value: "N/A",
+              color: "#FFFF00", // Yellow
+            },
+            {
+              title: "Num Trans. Ext. Dest.",
+              value: "N/A",
+              color: "#A52A2A", // Brown
+            },
+          ],
     },
     reducers: {
         setExpenditurePlotData: (state, action) => {

@@ -23,7 +23,7 @@ const initializeDatabase = require('./database/initializeDatabase.cjs');
 const transactionOperations = require('./database/transactionOperations.cjs');
 const financialEntitiesOperations = require('./database/financialEntityOperation.cjs');
 const recurringTransactionOperations = require('./database/recurringTransactionOperations.cjs');
-
+const commonOperations = require('./database/commonOperations.cjs');
 
 function createWindow() {
     const win = new BrowserWindow({
@@ -56,6 +56,7 @@ app.whenReady().then(() => {
     transactionOperations.setDB(db);
     financialEntitiesOperations.setDB(db);
     recurringTransactionOperations.setDB(db);
+    commonOperations.setDB(db);
 
     //add the recurring transactions to the transaction table
     recurringTransactionOperations.enterRecurringTransactions().then( (status) => { 
@@ -82,6 +83,9 @@ app.whenReady().then(() => {
             console.log("Recurring Transactions Entry Error: ", err);
         });
     });
+
+    //COMMON OPERATIONS
+    ipcMain.handle('commonOperations:getStatsAboutDB', commonOperations.getStatsAboutDB);
     
     //TRANSACTION OPERATIONS
     //ipcMain.handle('getFileBlob', getFileBlob);

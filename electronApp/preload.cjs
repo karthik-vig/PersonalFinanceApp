@@ -2,6 +2,7 @@
 // It has the same sandbox as a Chrome extension.
 const { contextBridge, ipcRenderer } = require('electron');
 
+
 // Expose selected APIs to the renderer process
 contextBridge.exposeInMainWorld('transactionOperations', {
     // Add your API methods here
@@ -61,4 +62,8 @@ contextBridge.exposeInMainWorld('recurringTransactionOperations', {
 
 contextBridge.exposeInMainWorld('app', {
     refresh: (page) => ipcRenderer.invoke('refresh', page),
+});
+
+contextBridge.exposeInMainWorld('commonOperations', {
+    getStatsAboutDB: (fitlerOptions) => ipcRenderer.invoke('commonOperations:getStatsAboutDB', fitlerOptions),
 });

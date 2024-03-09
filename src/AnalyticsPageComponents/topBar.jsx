@@ -10,9 +10,9 @@ import {
     setEndDate,
 } from '../stateManagement/analyticsPageStates/filterMenu.js';
 import {
-    toggleUpdateExpenditurePlot, toggleUpdateStatsByCategoryPlot,
-    // toggleUpdateStatsByCategoryPlot,
-    // toggleUpdateStatBox,
+    toggleUpdateExpenditurePlot, 
+    toggleUpdateStatsByCategoryPlot,
+    toggleUpdateStatBox,
 } from '../stateManagement/analyticsPageStates/generateAnalytics.js';
 import { 
     setExpenditurePlotData, 
@@ -59,6 +59,21 @@ function Topbar() {
         });
         dispatch(toggleUpdateStatsByCategoryPlot());
     }, [generateAnalytics.updateStatsByCategoryPlot,
+        filterMenuStates,
+        dispatch,
+    ]);
+
+    // set the stat box data
+    useEffect(() => {
+        //get the plot data from the backend
+        if (!generateAnalytics.updateStatBox) return;
+        window.commonOperations.getStatsAboutDB(filterMenuStates).then((statBoxData) => {
+            dispatch(setStatBoxData(statBoxData));
+        }).catch((err) => {
+            console.log("Error getting the plot data: ", err);
+        });
+        dispatch(toggleUpdateStatBox());
+    }, [generateAnalytics.updateStatBox,
         filterMenuStates,
         dispatch,
     ]);
@@ -232,73 +247,74 @@ function Topbar() {
         //     },
         //   ];
 
-        const someStatBoxData = [
-            {
-              title: "Total Exp.",
-              value: "1000",
-              color: "#FF0000", // Red
-            },
-            {
-              title: "In - Amount",
-              value: "2000",
-              color: "#008000", // Green
-            },
-            {
-              title: "Out - Amount",
-              value: "1000",
-              color: "#800000", // Maroon
-            },
-            {
-              title: "In - Num",
-              value: "1000",
-              color: "#00FF00", // Lime
-            },
-            {
-              title: "Out - Num",
-              value: "500",
-              color: "#808000", // Olive
-            },
-            {
-              title: "Num Trans.",
-              value: "1500",
-              color: "#008080", // Teal
-            },
-            {
-              title: "Num Fin. Entities",
-              value: "10",
-              color: "#0000FF", // Blue
-            },
-            {
-              title: "Num Recur. Trans. Entities",
-              value: "10",
-              color: "#FF00FF", // Fuchsia
-            },
-            {
-              title: "Num Trans. Int. Source",
-              value: "10",
-              color: "#800080", // Purple
-            },
-            {
-              title: "Num Trans. Ext. Source",
-              value: "10",
-              color: "#FFA500", // Orange
-            },
-            {
-              title: "Num Trans. Int. Dest.",
-              value: "10",
-              color: "#FFFF00", // Yellow
-            },
-            {
-              title: "Num Trans. Ext. Dest.",
-              value: "10",
-              color: "#A52A2A", // Brown
-            },
-          ];
+        // const someStatBoxData = [
+        //     {
+        //       title: "Total Exp.",
+        //       value: "1000",
+        //       color: "#FF0000", // Red
+        //     },
+        //     {
+        //       title: "In - Amount",
+        //       value: "2000",
+        //       color: "#008000", // Green
+        //     },
+        //     {
+        //       title: "Out - Amount",
+        //       value: "1000",
+        //       color: "#800000", // Maroon
+        //     },
+        //     {
+        //       title: "In - Num",
+        //       value: "1000",
+        //       color: "#00FF00", // Lime
+        //     },
+        //     {
+        //       title: "Out - Num",
+        //       value: "500",
+        //       color: "#808000", // Olive
+        //     },
+        //     {
+        //       title: "Num Trans.",
+        //       value: "1500",
+        //       color: "#008080", // Teal
+        //     },
+        //     {
+        //       title: "Num Fin. Entities",
+        //       value: "10",
+        //       color: "#0000FF", // Blue
+        //     },
+        //     {
+        //       title: "Num Recur. Trans. Entities",
+        //       value: "10",
+        //       color: "#FF00FF", // Fuchsia
+        //     },
+        //     {
+        //       title: "Num Trans. Int. Source",
+        //       value: "10",
+        //       color: "#800080", // Purple
+        //     },
+        //     {
+        //       title: "Num Trans. Ext. Source",
+        //       value: "10",
+        //       color: "#FFA500", // Orange
+        //     },
+        //     {
+        //       title: "Num Trans. Int. Dest.",
+        //       value: "10",
+        //       color: "#FFFF00", // Yellow
+        //     },
+        //     {
+        //       title: "Num Trans. Ext. Dest.",
+        //       value: "10",
+        //       color: "#A52A2A", // Brown
+        //     },
+        //   ];
         // dispatch(setExpenditurePlotData(plotData.expenditurePlotData));
         dispatch(toggleUpdateExpenditurePlot());
         //dispatch(setStatsByCategoryPlotData(plotData.statsByCategoryPlotData));
         dispatch(toggleUpdateStatsByCategoryPlot());
-        dispatch(setStatBoxData(someStatBoxData));
+        //dispatch(setStatBoxData(someStatBoxData));
+        dispatch(toggleUpdateStatBox());
     };
 
 
