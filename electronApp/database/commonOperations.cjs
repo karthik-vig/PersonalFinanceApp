@@ -123,14 +123,22 @@ function getNumberOfRecurringTransactionEntities(filterOptions) {
 }
 
 
-function getNumberOfInternalTypeFinancialEntityAsSource(filterOptions) {
+function getTransactionFinancialEntityStats(filterOptions, financialEntityType, financialEntityRole) {
   return new Promise((resolve, reject) => {
-    let queryStmt = `SELECT COUNT(*) AS numInternalFinancialEntiryAsSource \
+    switch (financialEntityRole) {
+      case "From":
+        financialEntityRole = "fromReference";
+        break;
+      case "To":
+        financialEntityRole = "toReference";
+        break;
+    }
+    let queryStmt = `SELECT COUNT(*) AS transactionFinancialEntityStats \
                       FROM transactions \
                       LEFT JOIN financialEntities \
-                      ON transactions.fromReference = financialEntities.id \
+                      ON transactions.${financialEntityRole} = financialEntities.id \
                       WHERE \
-                      financialEntities.type = "Internal"`;
+                      financialEntities.type = "${financialEntityType}"`;
     const selectFilterOptions = {
       transactionType: true,
       transactionCategory: true,
@@ -141,79 +149,7 @@ function getNumberOfInternalTypeFinancialEntityAsSource(filterOptions) {
     db.get(queryStmt, 
             (err, row) => { 
                 if (err) reject(err);
-                resolve(row.numInternalFinancialEntiryAsSource);
-            });
-  });
-}
-
-
-function getNumberOfInternalTypeFinancialEntityAsDestination(filterOptions) {
-  return new Promise((resolve, reject) => {
-    let queryStmt = `SELECT COUNT(*) AS numInternalFinancialEntiryAsDestination \
-                      FROM transactions \
-                      LEFT JOIN financialEntities \
-                      ON transactions.toReference = financialEntities.id \
-                      WHERE \
-                      financialEntities.type = "Internal"`;
-    const selectFilterOptions = {
-      transactionType: true,
-      transactionCategory: true,
-      currency: true,
-      date: true,
-    };
-    queryStmt = addFilterOptionsToQueryStmt(queryStmt, filterOptions, selectFilterOptions);
-    db.get(queryStmt, 
-            (err, row) => { 
-                if (err) reject(err);
-                resolve(row.numInternalFinancialEntiryAsDestination);
-            });
-  });
-}
-
-
-function getNumberOfExternalTypeFinancialEntityAsSource(filterOptions) {
-  return new Promise((resolve, reject) => {
-    let queryStmt = `SELECT COUNT(*) AS numInternalFinancialEntiryAsSource \
-    FROM transactions \
-    LEFT JOIN financialEntities \
-    ON transactions.fromReference = financialEntities.id \
-    WHERE \
-    financialEntities.type = "External"`;
-    const selectFilterOptions = {
-      transactionType: true,
-      transactionCategory: true,
-      currency: true,
-      date: true,
-    };
-    queryStmt = addFilterOptionsToQueryStmt(queryStmt, filterOptions, selectFilterOptions);
-    db.get(queryStmt, 
-      (err, row) => { 
-        if (err) reject(err);
-        resolve(row.numInternalFinancialEntiryAsSource);
-      });
-    });
-}
-
-  
-function getNumberOfExternalTypeFinancialEntityAsDestination(filterOptions) {
-  return new Promise((resolve, reject) => {
-    let queryStmt = `SELECT COUNT(*) AS numExternalFinancialEntiryAsDestination \
-                      FROM transactions \
-                      LEFT JOIN financialEntities \
-                      ON transactions.toReference = financialEntities.id \
-                      WHERE \
-                      financialEntities.type = "External"`;
-    const selectFilterOptions = {
-      transactionType: true,
-      transactionCategory: true,
-      currency: true,
-      date: true,
-    };
-    queryStmt = addFilterOptionsToQueryStmt(queryStmt, filterOptions, selectFilterOptions);
-    db.get(queryStmt, 
-            (err, row) => { 
-                if (err) reject(err);
-                resolve(row.numExternalFinancialEntiryAsDestination);
+                resolve(row.transactionFinancialEntityStats);
             });
   });
 }
@@ -224,10 +160,10 @@ async function getStatsAboutDB(event, filterOptions) {
         const numTransactions = await getNumberOfTransactions(filterOptions);
         const numFinancialEntities = await getNumberOfFinancialEntities(filterOptions);
         const numRecurringTransactionEntities = await getNumberOfRecurringTransactionEntities(filterOptions);
-        const numInternalFinancialEntityAsSource = await getNumberOfInternalTypeFinancialEntityAsSource(filterOptions);
-        const numInternalFinancialEntityAsDestination = await getNumberOfInternalTypeFinancialEntityAsDestination(filterOptions);
-        const numExternalFinancialEntityAsSource = await getNumberOfExternalTypeFinancialEntityAsSource(filterOptions);
-        const numExternalFinancialEntityAsDestination = await getNumberOfExternalTypeFinancialEntityAsDestination(filterOptions);
+        const numInternalFinancialEntityAsSource = await getTransactionFinancialEntityStats(filterOptions, "Internal", "From");
+        const numInternalFinancialEntityAsDestination = await getTransactionFinancialEntityStats(filterOptions, "Internal", "To");
+        const numExternalFinancialEntityAsSource = await getTransactionFinancialEntityStats(filterOptions, "External", "From");
+        const numExternalFinancialEntityAsDestination = await getTransactionFinancialEntityStats(filterOptions, "External", "To");
         const statBoxData = [
             {
               title: "Total Exp.",
