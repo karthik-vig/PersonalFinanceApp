@@ -66,24 +66,168 @@ function getSumOfTransactionTypeOut(filterOptions) {
   });
 } 
 
-// function getTotalExpenditure(filterOptions) {
-//     return new Promise((resolve, reject) => {
-//         const getSumOfTransactionTypeIn = getSumOfTransactionTypeIn(filterOptions);
-//         const getSumOfTransactionTypeOut = getSumOfTransactionTypeOut(filterOptions);
-//         Promise.all([getSumOfTransactionTypeIn, getSumOfTransactionTypeOut])
-//             .then(([sumOfTransactionTypeIn, sumOfTransactionTypeOut]) => {
-//                 const expenditure = sumOfTransactionTypeIn - sumOfTransactionTypeOut;
-//                 resolve(expenditure);
-//             }).catch((err) => reject(err));
-//     });
 
-// }
+function getNumberOfTransactions(filterOptions) {
+
+  return new Promise((resolve, reject) => {
+    let queryStmt = `SELECT COUNT(*) as numTransactions FROM transactions WHERE 1=1 `;
+    const selectFilterOptions = {
+      transactionType: false,
+      transactionCategory: true,
+      currency: true,
+      date: true,
+    };
+    queryStmt = addFilterOptionsToQueryStmt(queryStmt, filterOptions, selectFilterOptions);
+    db.get(queryStmt, 
+            (err, row) => { 
+                if (err) reject(err);
+                resolve(row.numTransactions);
+            });
+  });
+}
+
+function getNumberOfFinancialEntities(filterOptions) {
+  return new Promise((resolve, reject) => {
+    let queryStmt = `SELECT COUNT(*) as numFinancialEntities FROM financialEntities WHERE 1=1 `;
+    const selectFilterOptions = {
+      transactionType: false,
+      transactionCategory: false,
+      currency: false,
+      date: true,
+    };
+    queryStmt = addFilterOptionsToQueryStmt(queryStmt, filterOptions, selectFilterOptions);
+    db.get(queryStmt, 
+            (err, row) => { 
+                if (err) reject(err);
+                resolve(row.numFinancialEntities);
+            });
+  });
+}
+
+function getNumberOfRecurringTransactionEntities(filterOptions) {
+  return new Promise((resolve, reject) => {
+    let queryStmt = `SELECT COUNT(*) as numRecurringTransactionEntities FROM recurringTransactions WHERE 1=1 `;
+    const selectFilterOptions = {
+      transactionType: true,
+      transactionCategory: true,
+      currency: true,
+      date: true,
+    };
+    queryStmt = addFilterOptionsToQueryStmt(queryStmt, filterOptions, selectFilterOptions);
+    db.get(queryStmt, 
+            (err, row) => { 
+                if (err) reject(err);
+                resolve(row.numRecurringTransactionEntities);
+            });
+  });
+}
 
 
+function getNumberOfInternalTypeFinancialEntityAsSource(filterOptions) {
+  return new Promise((resolve, reject) => {
+    let queryStmt = `SELECT COUNT(*) AS numInternalFinancialEntiryAsSource \
+                      FROM transactions \
+                      LEFT JOIN financialEntities \
+                      ON transactions.fromReference = financialEntities.id \
+                      WHERE \
+                      financialEntities.type = "Internal"`;
+    const selectFilterOptions = {
+      transactionType: true,
+      transactionCategory: true,
+      currency: true,
+      date: true,
+    };
+    queryStmt = addFilterOptionsToQueryStmt(queryStmt, filterOptions, selectFilterOptions);
+    db.get(queryStmt, 
+            (err, row) => { 
+                if (err) reject(err);
+                resolve(row.numInternalFinancialEntiryAsSource);
+            });
+  });
+}
 
+
+function getNumberOfInternalTypeFinancialEntityAsDestination(filterOptions) {
+  return new Promise((resolve, reject) => {
+    let queryStmt = `SELECT COUNT(*) AS numInternalFinancialEntiryAsDestination \
+                      FROM transactions \
+                      LEFT JOIN financialEntities \
+                      ON transactions.toReference = financialEntities.id \
+                      WHERE \
+                      financialEntities.type = "Internal"`;
+    const selectFilterOptions = {
+      transactionType: true,
+      transactionCategory: true,
+      currency: true,
+      date: true,
+    };
+    queryStmt = addFilterOptionsToQueryStmt(queryStmt, filterOptions, selectFilterOptions);
+    db.get(queryStmt, 
+            (err, row) => { 
+                if (err) reject(err);
+                resolve(row.numInternalFinancialEntiryAsDestination);
+            });
+  });
+}
+
+
+function getNumberOfExternalTypeFinancialEntityAsSource(filterOptions) {
+  return new Promise((resolve, reject) => {
+    let queryStmt = `SELECT COUNT(*) AS numInternalFinancialEntiryAsSource \
+    FROM transactions \
+    LEFT JOIN financialEntities \
+    ON transactions.fromReference = financialEntities.id \
+    WHERE \
+    financialEntities.type = "External"`;
+    const selectFilterOptions = {
+      transactionType: true,
+      transactionCategory: true,
+      currency: true,
+      date: true,
+    };
+    queryStmt = addFilterOptionsToQueryStmt(queryStmt, filterOptions, selectFilterOptions);
+    db.get(queryStmt, 
+      (err, row) => { 
+        if (err) reject(err);
+        resolve(row.numInternalFinancialEntiryAsSource);
+      });
+    });
+}
+
+  
+function getNumberOfExternalTypeFinancialEntityAsDestination(filterOptions) {
+  return new Promise((resolve, reject) => {
+    let queryStmt = `SELECT COUNT(*) AS numExternalFinancialEntiryAsDestination \
+                      FROM transactions \
+                      LEFT JOIN financialEntities \
+                      ON transactions.toReference = financialEntities.id \
+                      WHERE \
+                      financialEntities.type = "External"`;
+    const selectFilterOptions = {
+      transactionType: true,
+      transactionCategory: true,
+      currency: true,
+      date: true,
+    };
+    queryStmt = addFilterOptionsToQueryStmt(queryStmt, filterOptions, selectFilterOptions);
+    db.get(queryStmt, 
+            (err, row) => { 
+                if (err) reject(err);
+                resolve(row.numExternalFinancialEntiryAsDestination);
+            });
+  });
+}
+  
 async function getStatsAboutDB(event, filterOptions) {
         const [sumOfTransactionTypeIn, numInTransactions] = await getSumOfTransactionTypeIn(filterOptions);
         const [sumOfTransactionTypeOut, numOutTransactions] = await getSumOfTransactionTypeOut(filterOptions);
+        const numTransactions = await getNumberOfTransactions(filterOptions);
+        const numFinancialEntities = await getNumberOfFinancialEntities(filterOptions);
+        const numRecurringTransactionEntities = await getNumberOfRecurringTransactionEntities(filterOptions);
+        const numInternalFinancialEntityAsSource = await getNumberOfInternalTypeFinancialEntityAsSource(filterOptions);
+        const numInternalFinancialEntityAsDestination = await getNumberOfInternalTypeFinancialEntityAsDestination(filterOptions);
+        const numExternalFinancialEntityAsSource = await getNumberOfExternalTypeFinancialEntityAsSource(filterOptions);
+        const numExternalFinancialEntityAsDestination = await getNumberOfExternalTypeFinancialEntityAsDestination(filterOptions);
         const statBoxData = [
             {
               title: "Total Exp.",
@@ -112,37 +256,37 @@ async function getStatsAboutDB(event, filterOptions) {
             },
             {
               title: "Num Trans.",
-              value: "N/A",
+              value: numTransactions ?? "N/A",
               color: "#008080", // Teal
             },
             {
               title: "Num Fin. Entities",
-              value: "N/A",
+              value: numFinancialEntities ?? "N/A",
               color: "#0000FF", // Blue
             },
             {
               title: "Num Recur. Trans. Entities",
-              value: "N/A",
+              value: numRecurringTransactionEntities ?? "N/A",
               color: "#FF00FF", // Fuchsia
             },
             {
               title: "Num Trans. Int. Source",
-              value: "N/A",
+              value: numInternalFinancialEntityAsSource ?? "N/A",
               color: "#800080", // Purple
             },
             {
               title: "Num Trans. Ext. Source",
-              value: "N/A",
+              value: numExternalFinancialEntityAsSource ?? "N/A",
               color: "#FFA500", // Orange
             },
             {
               title: "Num Trans. Int. Dest.",
-              value: "N/A",
+              value: numInternalFinancialEntityAsDestination ?? "N/A",
               color: "#FFFF00", // Yellow
             },
             {
               title: "Num Trans. Ext. Dest.",
-              value: "N/A",
+              value: numExternalFinancialEntityAsDestination ?? "N/A",
               color: "#A52A2A", // Brown
             },
           ];
