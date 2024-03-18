@@ -20,7 +20,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 function H6HeadingText({children, additonalClasses}) {
 
     return (
-        <h6 className={"text-start font-bold font-serif antialiased tracking-widest truncate text-lg text-black/50" + " " + additonalClasses + " "}>{children}</h6>
+        <h6 className={"text-start font-semibold antialiased tracking-widest truncate text-base text-black/75" + " " + additonalClasses + " "}>{children}</h6>
     );
 }
 
@@ -32,7 +32,7 @@ H6HeadingText.propTypes = {
 function H3HeadingText({children, additonalClasses}) {
 
     return (
-        <h3 className={"justify-self-center text-start font-bold font-serif antialiased tracking-widest truncate text-xl text-black" + " " + additonalClasses + " "}>{children}</h3>
+        <h3 className={"justify-self-center text-start font-bold antialiased tracking-widest truncate text-xl text-black" + " " + additonalClasses + " "}>{children}</h3>
     );
 }
 

@@ -90,23 +90,23 @@ function SalarySection() {
 
     return (
         <SectionContainer 
-            additonalClasses="w-auto h-20 pb-4 min-w-80"
+            additonalClasses="w-auto sm:h-32 md:h-32 lg:h-20 pb-4 min-w-80"
         >
             <H6HeadingText 
-                additonalClasses={"w-[40%] h-[100%]"}
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
                 Transaction Value
             </H6HeadingText>
             <NumberInputSection 
                 numberValue={transactionValue} 
-                additonalClasses="w-[20%] h-[100%] mx-2"
+                additonalClasses="sm:w-[35%] md:w-[35%] lg:w-[20%] sm:h-[50%] md:h-[50%] lg:h-[100%] mx-2"
                 fieldName={"value"}
                 handleValueChange={handleItemClick}
             />
             <SelectInputSection 
                 selectedValue={currencyValue} 
                 options={currencies} 
-                additonalClasses="w-[20%] h-[100%]"
+                additonalClasses="sm:w-[35%] md:w-[35%] lg:w-[20%] sm:h-[50%] md:h-[50%] lg:h-[100%]"
                 fieldName={"currency"}
                 handleValueChange={handleItemClick}
             />
@@ -141,17 +141,17 @@ function TransactionTypeSection() {
 
     return (
         <SectionContainer 
-            additonalClasses="w-auto h-20 pb-4 min-w-80"
+            additonalClasses="w-auto sm:h-32 md:h-32 lg:h-20 pb-4 min-w-80"
         >
             <H6HeadingText 
-                additonalClasses={"w-[40%] h-[100%]"}
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
                 Transaction Type
             </H6HeadingText>
             <RadioButtonSection 
                 radioBtnID="transactionTypeIn"
                 fieldName="transactionType" 
-                additonalClasses="h-[100%] w-[20%] mx-2" 
+                additonalClasses="sm:h-[50%] md:h-[50%] lg:h-[100%] sm:w-[40%] md:w-[40%] lg:w-[20%] mx-2" 
                 checked={transactionType === "In"} 
                 handleValueChange={handleItemClick}
             >
@@ -160,7 +160,7 @@ function TransactionTypeSection() {
             <RadioButtonSection
                 radioBtnID="transactionTypeOut"
                 fieldName="transactionType" 
-                additonalClasses="h-[100%] w-[20%]" 
+                additonalClasses="sm:h-[50%] md:h-[50%] lg:h-[100%] sm:w-[40%] md:w-[40%] lg:w-[20%]" 
                 checked={transactionType === "Out"} 
                 handleValueChange={handleItemClick}
             >
@@ -184,17 +184,17 @@ function TransactionCategorySection() {
 
     return (
         <SectionContainer 
-            additonalClasses="w-auto h-20 pb-4 min-w-80"
+            additonalClasses="w-auto sm:h-32 md:h-32 lg:h-20 pb-4 min-w-80"
         >
             <H6HeadingText 
-                additonalClasses={"w-[40%] h-[100%]"}
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
                 Transaction Category
             </H6HeadingText>
             <SelectInputSection 
                 selectedValue={transactionCategory} 
                 options={transactionCategories} 
-                additonalClasses="w-[30%] h-[100%]"
+                additonalClasses="sm:w-[60%] md:[60%] lg:w-[30%] sm:h-[50%] md:h-[50%] lg:h-[100%]"
                 fieldName={"transactionCategory"}
                 handleValueChange={handleItemClick}
             />
@@ -217,17 +217,17 @@ function FromTypeSection() {
 
     return (
         <SectionContainer 
-            additonalClasses="w-auto h-20 pb-4 min-w-80"
+            additonalClasses="w-auto sm:h-32 md:h-32 lg:h-20 pb-4 min-w-80"
         >
             <H6HeadingText 
-                additonalClasses="h-[100%] w-[40%]"
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
                 From Type
             </H6HeadingText>
             <RadioButtonSection 
                 radioBtnID="transactionFromInternal"
                 fieldName="fromType" 
-                additonalClasses="h-[100%] w-[20%] mx-2" 
+                additonalClasses="sm:h-[50%] md:h-[50%] lg:h-[100%] sm:w-[40%] md:w-[40%] lg:w-[20%] mx-2" 
                 checked={fromType === "Internal"} 
                 handleValueChange={handleItemClick}
             >
@@ -236,7 +236,7 @@ function FromTypeSection() {
             <RadioButtonSection
                 radioBtnID="transactionFromExternal"
                 fieldName="fromType" 
-                additonalClasses="h-[100%] w-[20%]" 
+                additonalClasses="sm:h-[50%] md:h-[50%] lg:h-[100%] sm:w-[40%] md:w-[40%] lg:w-[20%]" 
                 checked={fromType === "External"} 
                 handleValueChange={handleItemClick}
             >
@@ -277,22 +277,22 @@ function FromEntitySection() {
 
     return (
         <SectionContainer 
-            additonalClasses="w-auto h-12 pb-4 min-w-80"
+            additonalClasses="w-auto sm:h-16 md:h-16 lg:h-10 pb-4 min-w-80"
         >
             <H6HeadingText 
-                additonalClasses="h-[100%] w-[40%]"
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
                 From Entity
             </H6HeadingText>
             <SelectInputSection 
                 selectedValue={fromEntity} 
                 options={transformedEntities} 
-                additonalClasses="w-[30%] h-[100%]"
+                additonalClasses="sm:w-[60%] md:w-[60%] lg:w-[30%] h-auto"
                 fieldName={"fromEntity"}
                 handleValueChange={handleItemClick}
             />
             <PopOut
-                additonalClasses="h-[80%] w-[10%]"
+                additonalClasses="sm:h-[50%] md:h-[50%] lg:h-[80%] w-[10%]"
                 handlePopOut={handlePopOut}
             />
         </SectionContainer>
@@ -315,17 +315,17 @@ function ToTypeSection() {
 
     return (
         <SectionContainer 
-            additonalClasses="w-auto h-20 pb-4 min-w-80"
+            additonalClasses="w-auto sm:h-32 md:h-32 lg:h-20 pb-4 min-w-80"
         >
             <H6HeadingText 
-                additonalClasses="h-[100%] w-[40%]"
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
                 To Type
             </H6HeadingText>
             <RadioButtonSection 
                 radioBtnID="transactionToInternal"
                 fieldName="toType" 
-                additonalClasses="h-[100%] w-[20%] mx-2" 
+                additonalClasses="sm:h-[50%] md:h-[50%] lg:h-[100%] sm:w-[40%] md:w-[40%] lg:w-[20%] mx-2" 
                 checked={toType === "Internal"} 
                 handleValueChange={handleItemClick}
             >
@@ -334,7 +334,7 @@ function ToTypeSection() {
             <RadioButtonSection
                 radioBtnID="transactionToExternal"
                 fieldName="toType" 
-                additonalClasses="h-[100%] w-[20%]" 
+                additonalClasses="sm:h-[50%] md:h-[50%] lg:h-[100%] sm:w-[40%] md:w-[40%] lg:w-[20%]" 
                 checked={toType === "External"} 
                 handleValueChange={handleItemClick}
             >
@@ -376,22 +376,22 @@ function ToEntitySection() {
 
     return (
         <SectionContainer 
-            additonalClasses="w-auto h-12 pb-4 min-w-80"
+            additonalClasses="w-auto sm:h-16 md:h-16 lg:h-10 pb-4 min-w-80"
         >
             <H6HeadingText 
-                additonalClasses="h-[100%] w-[40%]"
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
                 To Entity
             </H6HeadingText>
             <SelectInputSection 
                 selectedValue={toEntity} 
                 options={transformedEntities} 
-                additonalClasses="w-[30%] h-[100%]"
+                additonalClasses="sm:w-[60%] md:w-[60%] lg:w-[30%] sm:h-[50%] md:h-[50%] lg:h-[100%]"
                 fieldName={"toEntity"}
                 handleValueChange={handleItemClick}
             />
             <PopOut
-                additonalClasses="h-[80%] w-[10%]"
+                additonalClasses="sm:h-[50%] md:h-[50%] lg:h-[80%] w-[10%]"
                 handlePopOut={handlePopOut}
             />
         </SectionContainer>
@@ -423,19 +423,19 @@ function RecurringEntity() {
     }
 
     return (
-        <SectionContainer additonalClasses="w-auto h-12 pb-4 min-w-80">
+        <SectionContainer additonalClasses="w-auto sm:h-16 md:h-16 lg:h-10 pb-4 min-w-80">
             <H6HeadingText 
-                additonalClasses="H-[100%] W-[40%]"
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
                 Recurring
             </H6HeadingText>
             <p 
-                className="px-2 h-[100%] w-auto text-start text-base font-normal truncate"
+                className="px-2 sm:h-[50%] md:h-[50%] lg:h-[100%] w-auto text-start text-base font-normal truncate"
             >
                 {recurringEntity}
             </p>
             <PopOut
-                additonalClasses="h-[80%] w-[10%]"
+                additonalClasses="sm:h-[50%] md:h-[50%] lg:h-[80%] w-[10%]"
                 handlePopOut={handlePopOut}
             />
         </SectionContainer>
@@ -503,15 +503,15 @@ function DatetimeInput({ datetimeValue,
                          }) {
 
     return (
-        <SectionContainer additonalClasses="w-auto h-20 pb-4 min-w-80">
+        <SectionContainer additonalClasses="w-auto sm:h-32 md:h-32 lg:h-20 pb-4 min-w-80">
             <H6HeadingText 
-                additonalClasses="h-[100%] w-[40%]"
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
                 {heading}
             </H6HeadingText>
             <DatetimeInputSection 
                 datetimeValue={datetimeValue}
-                additonalClasses="h-[100%] w-[30%]"
+                additonalClasses="sm:w-[70%] md:w-[70%] lg:w-[30%] sm:h-[50%] md:h-[50%] lg:h-[100%]"
                 readonly={readonly}
                 fieldName={fieldName}
                 handleValueChange={handleItemClick}
