@@ -121,10 +121,18 @@ function getLinePlotData(event, filterOptions) {
                 rows.forEach((row) => {
                     const date = row.transactionDate.substring(0, 10);
                     if (expenditurePlotDataMap.has(date)) {
-                        if (row.transactionType === "In") {
-                            expenditurePlotDataMap.get(date).In += row.value;
-                        } else {
-                            expenditurePlotDataMap.get(date).Out += row.value;
+                    //     if (row.transactionType === "In") {
+                    //         expenditurePlotDataMap.get(date).In += row.value;
+                    //     } else if (row.transactionType === "Out"){
+                    //         expenditurePlotDataMap.get(date).Out += row.value;
+                    //     }
+                        switch (filterOptions.transactionType) {
+                            case "In":
+                                expenditurePlotDataMap.get(date).In += row.value;
+                                break;
+                            case "Out":
+                                expenditurePlotDataMap.get(date).Out += row.value;
+                                break;
                         }
                     } else {
                         expenditurePlotDataMap.set(date, {
