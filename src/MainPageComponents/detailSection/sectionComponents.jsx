@@ -99,14 +99,14 @@ function SalarySection() {
             </H6HeadingText>
             <NumberInputSection 
                 numberValue={transactionValue} 
-                additonalClasses="sm:w-[35%] md:w-[35%] lg:w-[20%] sm:h-[50%] md:h-[50%] lg:h-[100%] mx-2"
+                additonalClasses="sm:w-[40%] md:w-[40%] lg:w-[20%] sm:h-[50%] md:h-[50%] lg:h-[100%] mx-2"
                 fieldName={"value"}
                 handleValueChange={handleItemClick}
             />
             <SelectInputSection 
                 selectedValue={currencyValue} 
                 options={currencies} 
-                additonalClasses="sm:w-[35%] md:w-[35%] lg:w-[20%] sm:h-[50%] md:h-[50%] lg:h-[100%]"
+                additonalClasses="sm:w-[40%] md:w-[40%] lg:w-[20%] sm:h-[50%] md:h-[50%] lg:h-[100%]"
                 fieldName={"currency"}
                 handleValueChange={handleItemClick}
             />
@@ -194,7 +194,7 @@ function TransactionCategorySection() {
             <SelectInputSection 
                 selectedValue={transactionCategory} 
                 options={transactionCategories} 
-                additonalClasses="sm:w-[60%] md:[60%] lg:w-[30%] sm:h-[50%] md:h-[50%] lg:h-[100%]"
+                additonalClasses="sm:w-[60%] md:[60%] lg:w-[50%] sm:h-[50%] md:h-[50%] lg:h-[100%]"
                 fieldName={"transactionCategory"}
                 handleValueChange={handleItemClick}
             />
@@ -287,7 +287,7 @@ function FromEntitySection() {
             <SelectInputSection 
                 selectedValue={fromEntity} 
                 options={transformedEntities} 
-                additonalClasses="sm:w-[60%] md:w-[60%] lg:w-[30%] h-auto"
+                additonalClasses="sm:w-[60%] md:w-[60%] lg:w-[50%] sm:h-[50%] md:h-[50%] lg:h-[100%]"
                 fieldName={"fromEntity"}
                 handleValueChange={handleItemClick}
             />
@@ -386,7 +386,7 @@ function ToEntitySection() {
             <SelectInputSection 
                 selectedValue={toEntity} 
                 options={transformedEntities} 
-                additonalClasses="sm:w-[60%] md:w-[60%] lg:w-[30%] sm:h-[50%] md:h-[50%] lg:h-[100%]"
+                additonalClasses="sm:w-[60%] md:w-[60%] lg:w-[50%] sm:h-[50%] md:h-[50%] lg:h-[100%]"
                 fieldName={"toEntity"}
                 handleValueChange={handleItemClick}
             />
