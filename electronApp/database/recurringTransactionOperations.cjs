@@ -130,8 +130,8 @@ function calcualteYearlyRecurringTransactions(recurringTransactionStartDatetime,
         const recurringTransactionStartDate = recurringTransactionStartDatetimeObject.getUTCDate();
         const recurringTransactionStartMonth = recurringTransactionStartDatetimeObject.getUTCMonth();
         lastRecurringTransactionDatetime = new Date(recurringTransactionStartDatetimeObject);
-        lastRecurringTransactionDatetime.setDate(recurringTransactionSettings.dayOfTheMonth);
-        lastRecurringTransactionDatetime.setMonth(recurringTransactionSettings.month);
+        lastRecurringTransactionDatetime.setUTCDate(recurringTransactionSettings.dayOfTheMonth);
+        lastRecurringTransactionDatetime.setUTCMonth(recurringTransactionSettings.month);
         if ( (recurringTransactionStartMonth < recurringTransactionSettings.month) ||
              (recurringTransactionStartMonth === recurringTransactionSettings.month && 
                 recurringTransactionStartDate < recurringTransactionSettings.dayOfTheMonth) ||
@@ -139,7 +139,7 @@ function calcualteYearlyRecurringTransactions(recurringTransactionStartDatetime,
                 recurringTransactionStartDate === recurringTransactionSettings.dayOfTheMonth &&
                 recurringTransactionTime.substring(0, 5) >= recurringTransactionStartDatetime.substring(11, 16))
            ) {
-            lastRecurringTransactionDatetime.setFullYear(lastRecurringTransactionDatetime.getUTCFullYear() - 1);
+            lastRecurringTransactionDatetime.setUTCFullYear(lastRecurringTransactionDatetime.getUTCFullYear() - 1);
         }
     }
 
@@ -153,7 +153,7 @@ function calcualteYearlyRecurringTransactions(recurringTransactionStartDatetime,
 
     while(selectDatetime.toISOString().substring(0, 16) <= currentDatetime && selectDatetime.toISOString().substring(0, 16) <= recurringTransactionEndDatetime) { 
         transactionDatetimes.push(selectDatetime.toISOString().substring(0, 17) + "00");
-        selectDatetime.setFullYear(selectDatetime.getUTCFullYear() + 1);
+        selectDatetime.setUTCFullYear(selectDatetime.getUTCFullYear() + 1);
     }
     return transactionDatetimes;
 }
@@ -192,11 +192,11 @@ function caculateMonthlyRecurringTransactions(recurringTransactionStartDatetime,
     if (lastRecurringTransactionDatetime === null) { 
         const recurringTransactionStartDate = recurringTransactionStartDatetimeObject.getUTCDate();
         lastRecurringTransactionDatetime = new Date(recurringTransactionStartDatetimeObject);
-        lastRecurringTransactionDatetime.setDate(recurringTransactionSettings.dayOfTheMonth);
+        lastRecurringTransactionDatetime.setUTCDate(recurringTransactionSettings.dayOfTheMonth);
         if ( (recurringTransactionStartDate < recurringTransactionSettings.dayOfTheMonth) ||
              (recurringTransactionStartDate === recurringTransactionSettings.dayOfTheMonth && recurringTransactionTime.substring(0, 5) >= recurringTransactionStartDatetime.substring(11, 16))
            ) {
-            lastRecurringTransactionDatetime.setMonth(lastRecurringTransactionDatetime.getUTCMonth() - 1);
+            lastRecurringTransactionDatetime.setUTCMonth(lastRecurringTransactionDatetime.getUTCMonth() - 1);
         }
     }
 
@@ -210,7 +210,7 @@ function caculateMonthlyRecurringTransactions(recurringTransactionStartDatetime,
 
     while(selectDatetime.toISOString().substring(0, 16) <= currentDatetime && selectDatetime.toISOString().substring(0, 16) <= recurringTransactionEndDatetime) { 
         transactionDatetimes.push(selectDatetime.toISOString().substring(0, 17) + "00");
-        selectDatetime.setMonth(selectDatetime.getUTCMonth() + 1);
+        selectDatetime.setUTCMonth(selectDatetime.getUTCMonth() + 1);
     }
     return transactionDatetimes;
 }
@@ -249,17 +249,17 @@ function caculateWeeklyRecurringTransactions(recurringTransactionStartDatetime,
 
     if (lastRecurringTransactionDatetime === null) { 
         // lastRecurringTransactionDatetime = new Date(recurringTransactionStartDatetime);
-        // lastRecurringTransactionDatetime.setDate(lastRecurringTransactionDatetime.getUTCDate() - 1);
+        // lastRecurringTransactionDatetime.setUTCDate(lastRecurringTransactionDatetime.getUTCDate() - 1);
         //re map the number to fit the value used in our system, as our system uses 0 for monday and 6 for sunday
         const recurringTransactionStartDay = recurringTransactionStartDatetimeObject.getUTCDay() === 0? 6: recurringTransactionStartDatetimeObject.getUTCDay() - 1;
         const recurringTransactionDay = recurringTransactionSettings.dayOfTheWeek;
         const dayDifference = recurringTransactionDay - recurringTransactionStartDay;
         if (dayDifference > 0) {
             lastRecurringTransactionDatetime = new Date(recurringTransactionStartDatetimeObject);
-            lastRecurringTransactionDatetime.setDate(lastRecurringTransactionDatetime.getUTCDate() + dayDifference - 7);
+            lastRecurringTransactionDatetime.setUTCDate(lastRecurringTransactionDatetime.getUTCDate() + dayDifference - 7);
         } else if (dayDifference < 0) {
             lastRecurringTransactionDatetime = recurringTransactionStartDatetimeObject;
-            lastRecurringTransactionDatetime.setDate(lastRecurringTransactionDatetime.getUTCDate() + ( 7 + dayDifference ) - 7);
+            lastRecurringTransactionDatetime.setUTCDate(lastRecurringTransactionDatetime.getUTCDate() + ( 7 + dayDifference ) - 7);
         } else if (recurringTransactionTime.substring(0, 5) >= recurringTransactionStartDatetime.substring(11, 16)) {
             lastRecurringTransactionDatetime = new Date(recurringTransactionStartDatetime - 7);
         } else if (recurringTransactionTime.substring(0, 5) < recurringTransactionStartDatetime.substring(11, 16)) {
@@ -277,7 +277,7 @@ function caculateWeeklyRecurringTransactions(recurringTransactionStartDatetime,
 
     while(selectDatetime.toISOString().substring(0, 16) <= currentDatetime && selectDatetime.toISOString().substring(0, 16) <= recurringTransactionEndDatetime) { 
         transactionDatetimes.push(selectDatetime.toISOString().substring(0, 17) + "00");
-        selectDatetime.setDate(selectDatetime.getUTCDate() + 7);
+        selectDatetime.setUTCDate(selectDatetime.getUTCDate() + 7);
     }
     return transactionDatetimes;
 }
@@ -310,7 +310,7 @@ function calculateDailyRecurringTransactions(recurringTransactionStartDatetime,
     const transactionDatetimes = [];
     if (lastRecurringTransactionDatetime === null && recurringTransactionTime.substring(0, 5) >= recurringTransactionStartDatetime.substring(11, 16)) { 
         lastRecurringTransactionDatetime = new Date(recurringTransactionStartDatetime);
-        lastRecurringTransactionDatetime.setDate(lastRecurringTransactionDatetime.getUTCDate() - 1);
+        lastRecurringTransactionDatetime.setUTCDate(lastRecurringTransactionDatetime.getUTCDate() - 1);
     } else if (lastRecurringTransactionDatetime === null && recurringTransactionTime.substring(0, 5) < recurringTransactionStartDatetime.substring(11, 16)) {
         lastRecurringTransactionDatetime = new Date(recurringTransactionStartDatetime);
     }
@@ -324,7 +324,7 @@ function calculateDailyRecurringTransactions(recurringTransactionStartDatetime,
 
     while(selectDatetime.toISOString().substring(0, 16) <= currentDatetime && selectDatetime.toISOString().substring(0, 16) <= recurringTransactionEndDatetime) { 
         transactionDatetimes.push(selectDatetime.toISOString().substring(0, 17) + "00");
-        selectDatetime.setDate(selectDatetime.getUTCDate() + 1);
+        selectDatetime.setUTCDate(selectDatetime.getUTCDate() + 1);
     }
     return transactionDatetimes;
 }
