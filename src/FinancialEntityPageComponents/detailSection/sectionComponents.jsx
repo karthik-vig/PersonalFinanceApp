@@ -41,17 +41,17 @@ function EntityTypeSection() {
 
     return (
         <SectionContainer 
-            additonalClasses="w-auto h-20 pb-4 min-w-80"
+            additonalClasses="w-auto sm:h-16 md:h-16 lg:h-10 pb-4 min-w-80"
         >
             <H6HeadingText 
-                additonalClasses="h-[100%] w-[40%]"
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
                 Entity Type
             </H6HeadingText>
             <RadioButtonSection 
                 radioBtnID="financialEntityInternal"
                 fieldName="type" 
-                additonalClasses="h-[100%] w-[20%] mx-2" 
+                additonalClasses="sm:h-[50%] md:h-[50%] lg:h-[100%] sm:w-[40%] md:w-[40%] lg:w-[20%] mx-2" 
                 checked={entityType === "Internal"} 
                 handleValueChange={handleItemClick}
             >
@@ -60,7 +60,7 @@ function EntityTypeSection() {
             <RadioButtonSection
                 radioBtnID="financialEntityExternal"
                 fieldName="type" 
-                additonalClasses="h-[100%] w-[20%]" 
+                additonalClasses="sm:h-[50%] md:h-[50%] lg:h-[100%] sm:w-[40%] md:w-[40%] lg:w-[20%]" 
                 checked={entityType === "External"} 
                 handleValueChange={handleItemClick}
             >
@@ -77,15 +77,15 @@ function DatetimeInput({ datetimeValue,
                          }) {
 
     return (
-        <SectionContainer additonalClasses="w-auto h-20 pb-4 min-w-80">
+        <SectionContainer additonalClasses="w-auto sm:h-16 md:h-16 lg:h-10 pb-4 min-w-80">
             <H6HeadingText 
-                additonalClasses="h-[100%] w-[40%]"
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
                 {heading}
             </H6HeadingText>
             <DatetimeInputSection 
                 datetimeValue={datetimeValue}
-                additonalClasses="h-[100%] w-[30%]"
+                additonalClasses="sm:w-[70%] md:w-[70%] lg:w-[50%] sm:h-[50%] md:h-[50%] lg:h-[100%]"
                 readonly={readonly}
                 fieldName={fieldName}
                 handleValueChange={handleItemClick}

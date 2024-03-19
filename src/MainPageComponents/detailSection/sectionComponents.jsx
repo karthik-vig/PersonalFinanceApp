@@ -90,7 +90,7 @@ function SalarySection() {
 
     return (
         <SectionContainer 
-            additonalClasses="w-auto sm:h-32 md:h-32 lg:h-20 pb-4 min-w-80"
+            additonalClasses="w-auto sm:h-16 md:h-16 lg:h-10 pb-4 min-w-80"
         >
             <H6HeadingText 
                 additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
@@ -141,7 +141,7 @@ function TransactionTypeSection() {
 
     return (
         <SectionContainer 
-            additonalClasses="w-auto sm:h-32 md:h-32 lg:h-20 pb-4 min-w-80"
+            additonalClasses="w-auto sm:h-16 md:h-16 lg:h-10 pb-4 min-w-80"
         >
             <H6HeadingText 
                 additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
@@ -184,7 +184,7 @@ function TransactionCategorySection() {
 
     return (
         <SectionContainer 
-            additonalClasses="w-auto sm:h-32 md:h-32 lg:h-20 pb-4 min-w-80"
+            additonalClasses="w-auto sm:h-16 md:h-16 lg:h-10 pb-4 min-w-80"
         >
             <H6HeadingText 
                 additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
@@ -217,7 +217,7 @@ function FromTypeSection() {
 
     return (
         <SectionContainer 
-            additonalClasses="w-auto sm:h-32 md:h-32 lg:h-20 pb-4 min-w-80"
+            additonalClasses="w-auto sm:h-16 md:h-16 lg:h-10 pb-4 min-w-80"
         >
             <H6HeadingText 
                 additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
@@ -315,7 +315,7 @@ function ToTypeSection() {
 
     return (
         <SectionContainer 
-            additonalClasses="w-auto sm:h-32 md:h-32 lg:h-20 pb-4 min-w-80"
+            additonalClasses="w-auto sm:h-16 md:h-16 lg:h-10 pb-4 min-w-80"
         >
             <H6HeadingText 
                 additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
@@ -503,7 +503,7 @@ function DatetimeInput({ datetimeValue,
                          }) {
 
     return (
-        <SectionContainer additonalClasses="w-auto sm:h-32 md:h-32 lg:h-20 pb-4 min-w-80">
+        <SectionContainer additonalClasses="w-auto sm:h-16 md:h-16 lg:h-10 pb-4 min-w-80">
             <H6HeadingText 
                 additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
@@ -511,7 +511,7 @@ function DatetimeInput({ datetimeValue,
             </H6HeadingText>
             <DatetimeInputSection 
                 datetimeValue={datetimeValue}
-                additonalClasses="sm:w-[70%] md:w-[70%] lg:w-[30%] sm:h-[50%] md:h-[50%] lg:h-[100%]"
+                additonalClasses="sm:w-[70%] md:w-[70%] lg:w-[50%] sm:h-[50%] md:h-[50%] lg:h-[100%]"
                 readonly={readonly}
                 fieldName={fieldName}
                 handleValueChange={handleItemClick}
