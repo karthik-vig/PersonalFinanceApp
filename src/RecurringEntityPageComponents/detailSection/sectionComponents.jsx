@@ -89,7 +89,7 @@ function SalarySection() {
             additonalClasses="w-auto sm:h-16 md:h-16 lg:h-10 pb-4 min-w-80"
         >
             <H6HeadingText 
-                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] xl:w-[25%] 2xl:w-[20%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
                 Transaction Value
             </H6HeadingText>
@@ -140,7 +140,7 @@ function TransactionTypeSection() {
             additonalClasses="w-auto sm:h-16 md:h-16 lg:h-10 pb-4 min-w-80"
         >
             <H6HeadingText 
-                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] xl:w-[25%] 2xl:w-[20%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
                 Transaction Type
             </H6HeadingText>
@@ -183,7 +183,7 @@ function TransactionCategorySection() {
             additonalClasses="w-auto sm:h-16 md:h-16 lg:h-10 pb-4 min-w-80"
         >
             <H6HeadingText 
-                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] xl:w-[25%] 2xl:w-[20%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
                 Transaction Category
             </H6HeadingText>
@@ -216,7 +216,7 @@ function FromTypeSection() {
             additonalClasses="w-auto sm:h-16 md:h-16 lg:h-10 pb-4 min-w-80"
         >
             <H6HeadingText 
-                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] xl:w-[25%] 2xl:w-[20%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
                 From Type
             </H6HeadingText>
@@ -276,7 +276,7 @@ function FromEntitySection() {
             additonalClasses="w-auto sm:h-16 md:h-16 lg:h-10 pb-4 min-w-80"
         >
             <H6HeadingText 
-                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] xl:w-[25%] 2xl:w-[20%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
                 From Entity
             </H6HeadingText>
@@ -314,7 +314,7 @@ function ToTypeSection() {
             additonalClasses="w-auto sm:h-16 md:h-16 lg:h-10 pb-4 min-w-80"
         >
             <H6HeadingText 
-                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] xl:w-[25%] 2xl:w-[20%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
                 To Type
             </H6HeadingText>
@@ -375,7 +375,7 @@ function ToEntitySection() {
             additonalClasses="w-auto sm:h-16 md:h-16 lg:h-10 pb-4 min-w-80"
         >
             <H6HeadingText 
-                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] xl:w-[25%] 2xl:w-[20%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
                 To Entity
             </H6HeadingText>
@@ -412,7 +412,7 @@ function DatetimeInput({ datetimeValue,
     return (
         <SectionContainer additonalClasses="w-auto sm:h-16 md:h-16 lg:h-10 pb-4 min-w-80">
             <H6HeadingText 
-                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] xl:w-[35%] 2xl:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
                 {heading}
             </H6HeadingText>
@@ -444,14 +444,14 @@ function RecurringFrequencyInput() {
     return (
         <SectionContainer additonalClasses="w-auto sm:h-40 md:h-40 lg:h-40 pb-4 min-w-80">
             <H6HeadingText 
-                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[25%] md:h-[25%] lg:h-[100%]"}
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] xl:w-[30%] 2xl:w-[30%] sm:h-[25%] md:h-[25%] lg:h-[100%]"}
             >
                 Recurring Frequency
             </H6HeadingText>
             <section className="flex flex-col flex-nowrap h-[100%] w-[60%]">
                 {/*The below select is for choosing the frequency*/}
                 <section className="flex flex-row flex-nowrap w-[100%] h-auto">
-                    <h6 className="w-[50%] h-[100%]">Frequency</h6>
+                    <h6 className="sm:w-[50%] md:w-[50%] lg:w-[50%] xl:w-[30%] 2xl:sm:w-[30%] h-[100%]">Frequency</h6>
                     <SelectInputSection 
                         selectedValue={recurringFrequency.frequency ?? "choose"} 
                         options={["Daily", "Weekly", "Monthly", "Yearly"]} 
@@ -462,7 +462,7 @@ function RecurringFrequencyInput() {
                 </section>
                 {/*The below select is for choosing the day of the week*/}
                 <section className={"flex flex-row flex-nowrap w-[100%] h-auto " + (recurringFrequency.frequency === "Weekly" ? "block" : "hidden")}>
-                    <h6 className="w-[50%] h-[100%]">Day of the Week</h6>
+                    <h6 className="sm:w-[50%] md:w-[50%] lg:w-[50%] xl:w-[30%] 2xl:sm:w-[30%] h-[100%]">Day of the Week</h6>
                     <SelectInputSection 
                         selectedValue={recurringFrequency.dayOfTheWeek ?? "choose"} 
                         options={["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]} 
@@ -473,7 +473,7 @@ function RecurringFrequencyInput() {
                 </section>
                 {/*The below select is for choosing the day of the month*/}
                 <section className={"flex flex-row flex-nowrap w-[100%] h-auto " + (recurringFrequency.frequency === "Monthly" || recurringFrequency.frequency === "Yearly" ? "block" : "hidden")}>
-                    <h6 className="w-[50%] h-[100%]">Day of the Month</h6>
+                    <h6 className="sm:w-[50%] md:w-[50%] lg:w-[50%] xl:w-[30%] 2xl:sm:w-[30%] h-[100%]">Day of the Month</h6>
                     <SelectInputSection 
                         selectedValue={recurringFrequency.dayOfTheMonth ?? "choose"} 
                         options={Array(31).fill().map((_, idx) => idx + 1)} 
@@ -484,7 +484,7 @@ function RecurringFrequencyInput() {
                 </section>
                 {/*The below select is for choosing the month*/}
                 <section className={"flex flex-row flex-nowrap w-[100%] h-auto "  + (recurringFrequency.frequency === "Yearly" ? "block" : "hidden")}>
-                    <h6 className="w-[50%] h-[100%]">Month</h6>
+                    <h6 className="sm:w-[50%] md:w-[50%] lg:w-[50%] xl:w-[30%] 2xl:sm:w-[30%] h-[100%]">Month</h6>
                     <SelectInputSection 
                         selectedValue={recurringFrequency.month ?? "choose"} 
                         options={["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]} 
@@ -495,7 +495,7 @@ function RecurringFrequencyInput() {
                 </section>
                 {/*The below select is for choosing the time*/}
                 <section className={"flex flex-row flex-nowrap w-[100%] h-auto " + (recurringFrequency.frequency !== undefined && recurringFrequency.frequency !== "choose"? "block" : "hidden")}>
-                    <h6 className="w-[50%] h-[100%]">Time</h6>
+                    <h6 className="sm:w-[50%] md:w-[50%] lg:w-[50%] xl:w-[30%] 2xl:sm:w-[30%] h-[100%]">Time</h6>
                     <input
                         className="w-[50%] h-[100%] "
                         type="time"

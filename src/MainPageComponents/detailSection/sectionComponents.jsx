@@ -93,7 +93,7 @@ function SalarySection() {
             additonalClasses="w-auto sm:h-16 md:h-16 lg:h-10 pb-4 min-w-80"
         >
             <H6HeadingText 
-                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] xl:w-[25%] 2xl:w-[20%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
                 Transaction Value
             </H6HeadingText>
@@ -144,7 +144,7 @@ function TransactionTypeSection() {
             additonalClasses="w-auto sm:h-16 md:h-16 lg:h-10 pb-4 min-w-80"
         >
             <H6HeadingText 
-                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] xl:w-[25%] 2xl:w-[20%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
                 Transaction Type
             </H6HeadingText>
@@ -187,7 +187,7 @@ function TransactionCategorySection() {
             additonalClasses="w-auto sm:h-16 md:h-16 lg:h-10 pb-4 min-w-80"
         >
             <H6HeadingText 
-                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] xl:w-[25%] 2xl:w-[20%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
                 Transaction Category
             </H6HeadingText>
@@ -220,7 +220,7 @@ function FromTypeSection() {
             additonalClasses="w-auto sm:h-16 md:h-16 lg:h-10 pb-4 min-w-80"
         >
             <H6HeadingText 
-                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] xl:w-[25%] 2xl:w-[20%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
                 From Type
             </H6HeadingText>
@@ -280,7 +280,7 @@ function FromEntitySection() {
             additonalClasses="w-auto sm:h-16 md:h-16 lg:h-10 pb-4 min-w-80"
         >
             <H6HeadingText 
-                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] xl:w-[25%] 2xl:w-[20%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
                 From Entity
             </H6HeadingText>
@@ -318,7 +318,7 @@ function ToTypeSection() {
             additonalClasses="w-auto sm:h-16 md:h-16 lg:h-10 pb-4 min-w-80"
         >
             <H6HeadingText 
-                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] xl:w-[25%] 2xl:w-[20%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
                 To Type
             </H6HeadingText>
@@ -379,7 +379,7 @@ function ToEntitySection() {
             additonalClasses="w-auto sm:h-16 md:h-16 lg:h-10 pb-4 min-w-80"
         >
             <H6HeadingText 
-                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] xl:w-[25%] 2xl:w-[20%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
                 To Entity
             </H6HeadingText>
@@ -425,7 +425,7 @@ function RecurringEntity() {
     return (
         <SectionContainer additonalClasses="w-auto sm:h-16 md:h-16 lg:h-10 pb-4 min-w-80">
             <H6HeadingText 
-                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] xl:w-[25%] 2xl:w-[20%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
                 Recurring
             </H6HeadingText>
@@ -505,7 +505,7 @@ function DatetimeInput({ datetimeValue,
     return (
         <SectionContainer additonalClasses="w-auto sm:h-16 md:h-16 lg:h-10 pb-4 min-w-80">
             <H6HeadingText 
-                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
+                additonalClasses={"sm:w-[100%] md:w-[100%] lg:w-[40%] xl:w-[25%] 2xl:w-[20%] sm:h-[50%] md:h-[50%] lg:h-[100%]"}
             >
                 {heading}
             </H6HeadingText>
