@@ -11,11 +11,11 @@ function SideSectionButton({ svgIcon, onClickHandler, isActive=false, isTop=fals
         marginTop = "mt-10";
     }
     if (isActive) { 
-        currentBGColor = "bg-lime-100";
+        currentBGColor = "bg-lime-400";
     }
 
     return (
-            <button className={marginTop + " mb-0.5 mx-0.5 p-0.5 w-10 h-10 rounded-lg hover:bg-hover-cl outline outline-4 outline-cyan-500 outline-offset-2 " + currentBGColor} onClick={ onClickHandler }>
+            <button className={marginTop + " mb-0.5 mx-0.5 p-0.5 w-10 h-10 rounded-lg hover:bg-lime-100 outline outline-4 outline-cyan-500 outline-offset-2 " + currentBGColor} onClick={ onClickHandler }>
                 <FontAwesomeIcon className="m-[0%] p-[0%] w-[100%] h-[100%]" icon={svgIcon} />
             </button>
     );
