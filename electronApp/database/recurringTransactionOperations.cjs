@@ -681,7 +681,19 @@ function getItems(event, searchParams, filterParamsVisibility) {
                     //range based query construction
                     if (typeof searchParams.filter[searchField] === "object" && searchField !== "sort") {
                         if (searchParams.filter[searchField].min !== null && searchParams.filter[searchField].max !== null) {
-                            query += ` AND (${searchField} BETWEEN "${searchParams.filter[searchField].min}" AND "${searchParams.filter[searchField].max}")`;
+                            let minField = null;
+                            let maxField = null;
+                            switch(searchField.slice(-4)) {
+                                case "Date":
+                                    minField = moment.tz(searchParams.filter[searchField].min, timeZone).tz("UTC").format().substring(0, 19) + "Z";
+                                    maxField = moment.tz(searchParams.filter[searchField].max, timeZone).tz("UTC").format().substring(0, 19) + "Z";
+                                    break;
+                                default:
+                                    minField = searchParams.filter[searchField].min;
+                                    maxField = searchParams.filter[searchField].max;
+                                    break;
+                            }
+                            query += ` AND (${searchField} BETWEEN "${minField}" AND "${maxField}")`;
                         }
                         return;
                     }

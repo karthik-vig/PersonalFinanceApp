@@ -107,7 +107,9 @@ function getItems(event, searchParams, filterParamsVisibility) {
                     searchParams.filter[fieldname].min !== undefined &&
                     searchParams.filter[fieldname].max !== undefined) {
                         if (fieldname.slice(-4) === "Date"){ 
-                            queryStmt += ` AND (${fieldname} BETWEEN "${searchParams.filter[fieldname].min + ":00"}" AND "${searchParams.filter[fieldname].max + ":00"}")`;
+                            const minDate = moment.tz(searchParams.filter[fieldname].min + ":00", timeZone).tz("UTC").format().substring(0, 19) + "Z";
+                            const maxDate = moment.tz(searchParams.filter[fieldname].max + ":00", timeZone).tz("UTC").format().substring(0, 19) + "Z";
+                            queryStmt += ` AND (${fieldname} BETWEEN "${minDate}" AND "${maxDate}")`;
                         } else {
                             queryStmt += ` AND (${fieldname} BETWEEN ${searchParams.filter[fieldname].min} AND ${searchParams.filter[fieldname].max})`;
                         }
