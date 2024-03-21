@@ -1,7 +1,9 @@
 //const { current } = require('immer');
 const { v4: uuidv4 } = require('uuid');
+const moment = require('moment-timezone');
 
 let db = null;
+let timeZone = null;
 
 
 function getIdFromTitle(event, title) {
@@ -36,6 +38,10 @@ function setDB(database) {
     //set the database to be used by the module
     db = database;
     console.log("In setDB: db: " + db);
+}
+
+function setTimeZone(selectedTimeZone) {
+    timeZone = selectedTimeZone;
 }
 
 function updateFinancialEntityReferenceID(event,
@@ -152,7 +158,7 @@ function calcualteYearlyRecurringTransactions(recurringTransactionStartDatetime,
                                     0);
 
     while(selectDatetime.toISOString().substring(0, 16) <= currentDatetime && selectDatetime.toISOString().substring(0, 16) <= recurringTransactionEndDatetime) { 
-        transactionDatetimes.push(selectDatetime.toISOString().substring(0, 17) + "00");
+        transactionDatetimes.push(selectDatetime.toISOString().substring(0, 17) + "00Z");
         selectDatetime.setUTCFullYear(selectDatetime.getUTCFullYear() + 1);
     }
     return transactionDatetimes;
@@ -209,7 +215,7 @@ function caculateMonthlyRecurringTransactions(recurringTransactionStartDatetime,
                                     0);
 
     while(selectDatetime.toISOString().substring(0, 16) <= currentDatetime && selectDatetime.toISOString().substring(0, 16) <= recurringTransactionEndDatetime) { 
-        transactionDatetimes.push(selectDatetime.toISOString().substring(0, 17) + "00");
+        transactionDatetimes.push(selectDatetime.toISOString().substring(0, 17) + "00Z");
         selectDatetime.setUTCMonth(selectDatetime.getUTCMonth() + 1);
     }
     return transactionDatetimes;
@@ -276,7 +282,7 @@ function caculateWeeklyRecurringTransactions(recurringTransactionStartDatetime,
                                     0);
 
     while(selectDatetime.toISOString().substring(0, 16) <= currentDatetime && selectDatetime.toISOString().substring(0, 16) <= recurringTransactionEndDatetime) { 
-        transactionDatetimes.push(selectDatetime.toISOString().substring(0, 17) + "00");
+        transactionDatetimes.push(selectDatetime.toISOString().substring(0, 17) + "00Z");
         selectDatetime.setUTCDate(selectDatetime.getUTCDate() + 7);
     }
     return transactionDatetimes;
@@ -323,7 +329,7 @@ function calculateDailyRecurringTransactions(recurringTransactionStartDatetime,
                                     0);
 
     while(selectDatetime.toISOString().substring(0, 16) <= currentDatetime && selectDatetime.toISOString().substring(0, 16) <= recurringTransactionEndDatetime) { 
-        transactionDatetimes.push(selectDatetime.toISOString().substring(0, 17) + "00");
+        transactionDatetimes.push(selectDatetime.toISOString().substring(0, 17) + "00Z");
         selectDatetime.setUTCDate(selectDatetime.getUTCDate() + 1);
     }
     return transactionDatetimes;
@@ -413,8 +419,8 @@ function enterRecurringTransactions() {
                                                                 row.toReference,
                                                                 row.id,
                                                                 0,
-                                                                new Date().toISOString().substring(0, 19),
-                                                                new Date().toISOString().substring(0, 19),
+                                                                new Date().toISOString().substring(0, 19) + "Z",
+                                                                new Date().toISOString().substring(0, 19) + "Z",
                                                                 transactionDatetime);
                         });
                         transactionTableInsertionStmt.finalize((err) => {
@@ -734,7 +740,7 @@ function createEntry() {
 
     return new Promise((resolve, reject) => {
         db.serialize(() => {
-            const currentDateTime = new Date().toISOString().substring(0, 19);
+            const currentDateTime = new Date().toISOString().substring(0, 19) + "Z";
             const uuid = uuidv4();
             db.run(`INSERT INTO recurringTransactions (\
                     id, \
@@ -814,7 +820,8 @@ function modifyItem(event, selectedItem) {
 
             Promise.all([getFromFinancialEntityID, 
                         getToFinancialEntityID]).then(([fromReference, toReference]) => {
-
+                const recurringTransactionStartDate = moment.tz(selectedItem.recurringTransactionStartDate, timeZone).tz("UTC").format().substring(0, 19) + "Z";
+                const recurringTransactionEndDate = moment.tz(selectedItem.recurringTransactionEndDate, timeZone).tz("UTC").format().substring(0, 19) + "Z";
                 db.run(`UPDATE recurringTransactions SET \
                         title = ?, \
                         description = ?, \
@@ -841,14 +848,14 @@ function modifyItem(event, selectedItem) {
                         selectedItem.transactionCategory !== "choose"? selectedItem.transactionCategory : null,
                         fromReference,
                         toReference,
-                        new Date().toISOString().substring(0, 19),
+                        new Date().toISOString().substring(0, 19) + "Z",
                         selectedItem.recurringFrequency.frequency && selectedItem.recurringFrequency.frequency !== "choose"? selectedItem.recurringFrequency.frequency : null,
                         selectedItem.recurringFrequency.frequency === "Weekly" ? selectedItem.recurringFrequency.dayOfTheWeek: null,
                         selectedItem.recurringFrequency.frequency === "Monthly" || selectedItem.recurringFrequency.frequency === "Yearly"? selectedItem.recurringFrequency.dayOfTheMonth: null,
                         selectedItem.recurringFrequency.frequency === "Yearly" ? selectedItem.recurringFrequency.month: null,
                         selectedItem.recurringFrequency.frequency !== "choose"? selectedItem.recurringFrequency.time : null,
-                        selectedItem.recurringTransactionStartDate,
-                        selectedItem.recurringTransactionEndDate,
+                        recurringTransactionStartDate,
+                        recurringTransactionEndDate,
                         selectedItem.id,
                         (err) => {
                             if (err) {
@@ -972,6 +979,11 @@ function getSelectedItem(event, uuid) {
 
             Promise.all([getFromEntityTitle,
                         getToEntityTitle]).then(([fromFinancialEntityRow, toFinancialEntityRow]) => {
+                const creatdDate = moment(recurringTransactionRow.createdDate).tz(timeZone).format().substring(0, 19);
+                const modifiedDate = moment(recurringTransactionRow.modifiedDate).tz(timeZone).format().substring(0, 19);
+                const recurringTransactionStartDate = moment(recurringTransactionRow.recurringTransactionStartDate).tz(timeZone).format().substring(0, 19);
+                const recurringTransactionEndDate = moment(recurringTransactionRow.recurringTransactionEndDate).tz(timeZone).format().substring(0, 19);
+                const lastRecurringTransactionDate = moment(recurringTransactionRow.lastRecurringTransactionDate).tz(timeZone).format().substring(0, 19);
                 const selectedItem = convertDataFromDBFormat({
                                                                 id: uuid, 
                                                                 title: recurringTransactionRow.title,
@@ -984,8 +996,8 @@ function getSelectedItem(event, uuid) {
                                                                 fromEntity: fromFinancialEntityRow ? fromFinancialEntityRow.title : null,
                                                                 toType: toFinancialEntityRow ? toFinancialEntityRow.type : null,
                                                                 toEntity: toFinancialEntityRow ? toFinancialEntityRow.title : null,
-                                                                createdDate: recurringTransactionRow.createdDate,
-                                                                modifiedDate: recurringTransactionRow.modifiedDate,
+                                                                createdDate: creatdDate,
+                                                                modifiedDate: modifiedDate,
                                                                 recurringFrequency: {
                                                                     frequency: recurringTransactionRow.frequency ?? undefined,
                                                                     dayOfTheWeek: recurringTransactionRow.dayOfTheWeek ?? undefined,
@@ -993,9 +1005,9 @@ function getSelectedItem(event, uuid) {
                                                                     month: recurringTransactionRow.month ?? undefined,
                                                                     time: recurringTransactionRow.time?? undefined,
                                                                 },
-                                                                recurringTransactionStartDate: recurringTransactionRow.recurringTransactionStartDate,
-                                                                recurringTransactionEndDate: recurringTransactionRow.recurringTransactionEndDate,
-                                                                lastRecurringTransactionDate: recurringTransactionRow.lastRecurringTransactionDate,
+                                                                recurringTransactionStartDate: recurringTransactionStartDate,
+                                                                recurringTransactionEndDate: recurringTransactionEndDate,
+                                                                lastRecurringTransactionDate: lastRecurringTransactionDate,
                                                             });
                 resolve(selectedItem);
             });
@@ -1031,6 +1043,7 @@ function getSelectedItem(event, uuid) {
 
 module.exports = {
     setDB,
+    setTimeZone,
     getAllItems,
     getItems,
     createEntry,

@@ -1,11 +1,17 @@
 //const sqlite = require('sqlite3');
 //const fs = require('node:fs');
+const moment = require('moment-timezone');
 const { v4: uuidv4 } = require('uuid');
 
 let db = null;
+let timeZone = null;
 
 function setDB(database) {
     db = database;
+}
+
+function setTimeZone(selectedTimeZone) {
+    timeZone = selectedTimeZone;
 }
 
 function getReferenceIdOnTitle(event, title) {
@@ -145,7 +151,7 @@ function createEntry() {
 
     return new Promise((resolve, reject) => {
         const uuid = uuidv4();
-        const currentDate = new Date().toISOString().substring(0, 19);
+        const currentDate = new Date().toISOString().substring(0, 19) + "Z";
         db.run(`INSERT INTO financialEntities (id, title, type, createdDate, modifiedDate) \
                 VALUES (?, ?, ?, ?, ?)`, uuid, "New Entry", null, currentDate, currentDate, (err) => {
             if (err) {
@@ -238,7 +244,7 @@ function modifyItem(event, selectedItem) {
                 WHERE id = ?`, 
                 selectedItem.title, 
                 selectedItem.type, 
-                new Date().toISOString().substring(0, 19), 
+                new Date().toISOString().substring(0, 19) + "Z", 
                 selectedItem.id,   
                 (err) => {
                     if (err) {
@@ -265,14 +271,20 @@ function getSelectedItem(event, uuid) {
     console.log("getSelectedItem uuid = ", uuid);
 
     return new Promise((resolve, reject) => {
-        db.all(`SELECT * FROM financialEntities WHERE id = ?`, uuid, (err, rows) => {
+        db.get(`SELECT * FROM financialEntities WHERE id = ?`, uuid, (err, row) => {
             if (err) {
                 console.log("Financial Entity Operations : getSelectedItem error = ", err);
                 reject(null);
             }
             else {
                 console.log("Financial Entity Operations : getSelectedItem success");
-                const selectedItem = rows && rows.length > 0 ? rows[0] : null;
+                const selectedItem = row? row : null;
+                if(selectedItem) {
+                    selectedItem.createdDate = moment(selectedItem.createdDate).tz(timeZone).format().substring(0, 19);
+                    selectedItem.modifiedDate = moment(selectedItem.modifiedDate).tz(timeZone).format().substring(0, 19);
+                }
+                selectedItem.createdDate = selectedItem.createdDate.substring(0, 19);
+                selectedItem.modifiedDate = selectedItem.modifiedDate.substring(0, 19);
                 resolve(selectedItem);
             }
         });
@@ -284,6 +296,7 @@ function getSelectedItem(event, uuid) {
 
 module.exports = {
     setDB,
+    setTimeZone,
     getTransactionEntities,
     getAllItems,
     getItems,

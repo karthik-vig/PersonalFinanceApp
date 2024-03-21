@@ -1,8 +1,14 @@
+const moment = require("moment-timezone");
 
 let db = null;
+let timeZone = null;
 
 function setDB(database) {
   db = database;
+}
+
+function setTimeZone(selectedTimeZone) {
+  timeZone = selectedTimeZone;
 }
 
 function addFilterOptionsToQueryStmt(queryStmt,
@@ -12,11 +18,15 @@ function addFilterOptionsToQueryStmt(queryStmt,
                                         transactionCategory: false,
                                         currency: false,
                                         date: false,
-                                     }) {
+                                      }) {
   if (filterOptions.transactionType !== "All" && filterOptions.transactionType !== "Expenditure" && selectFilterOptions.transactionType) queryStmt += ` AND (transactionType = "${filterOptions.transactionType}")`;
   if (filterOptions.transactionCategory !== "All" && selectFilterOptions.transactionCategory) queryStmt += ` AND (transactionCategory = "${filterOptions.transactionCategory}")`;
   if (filterOptions.currency !== "All" && selectFilterOptions.currency) queryStmt += ` AND (currency = "${filterOptions.currency}")`;
-  if (filterOptions.startDate !== "yyyy-mm-ddThh:mm" && filterOptions.endDate !== "yyyy-mm-ddThh:mm" && selectFilterOptions.date) queryStmt += ` AND (transactionDate BETWEEN "${filterOptions.startDate}" AND "${filterOptions.endDate}")`;
+  if (filterOptions.startDate !== "yyyy-mm-ddThh:mm" && filterOptions.endDate !== "yyyy-mm-ddThh:mm" && selectFilterOptions.date) { 
+    const filterOptionsStartDate = moment.tz(filterOptions.startDate, timeZone).tz("UTC").format().substring(0, 19) + "Z";
+    const filterOptionsEndDate = moment.tz(filterOptions.endDate, timeZone).tz("UTC").format().substring(0, 19) + "Z";
+    queryStmt += ` AND (transactionDate BETWEEN "${filterOptionsStartDate}" AND "${filterOptionsEndDate}")`;
+  }
   return queryStmt;
 }
 
@@ -93,7 +103,7 @@ function getNumberOfFinancialEntities(filterOptions) {
       transactionType: false,
       transactionCategory: false,
       currency: false,
-      date: true,
+      date: false,
     };
     queryStmt = addFilterOptionsToQueryStmt(queryStmt, filterOptions, selectFilterOptions);
     db.get(queryStmt, 
@@ -111,7 +121,7 @@ function getNumberOfRecurringTransactionEntities(filterOptions) {
       transactionType: true,
       transactionCategory: true,
       currency: true,
-      date: true,
+      date: false,
     };
     queryStmt = addFilterOptionsToQueryStmt(queryStmt, filterOptions, selectFilterOptions);
     db.get(queryStmt, 
@@ -232,4 +242,5 @@ async function getStatsAboutDB(event, filterOptions) {
 module.exports = {
     getStatsAboutDB,
     setDB,
+    setTimeZone,
 };

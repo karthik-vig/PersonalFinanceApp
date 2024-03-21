@@ -2,12 +2,18 @@ const { v4: uuidv4 } = require('uuid');
 const { dialog } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs');
+const moment = require('moment-timezone');
 
 let currentSelectedItemFiles = {};
 let db = null;
+let timeZone = null;
 
 function setDB(database) {
     db = database;
+}
+
+function setTimeZone(selectedTimeZone) {
+    timeZone = selectedTimeZone;
 }
 
 function getStatsByCategoryPlotData(event, filterOptions) {
@@ -250,7 +256,7 @@ function modifyTransactionReferenceID(event, recurringTransactionSelectedItem) {
                     recurringTransactionSelectedItem.transactionCategory,
                     fromReferenceID,
                     toReferenceID,
-                    new Date().toISOString().substring(0, 19),
+                    new Date().toISOString().substring(0, 19) + "Z",
                     recurringTransactionSelectedItem.id, (err) => {
                         if (err) reject(true);
                         resolve(true);
@@ -334,6 +340,11 @@ function getAllItems() {
             else {
                 console.log("Get All Items Success");
                 console.log(typeof rows);
+                if(rows && rows.length > 0) {
+                    rows.forEach((row) => {
+                        row.transactionDate = moment(row.transactionDate).tz(timeZone).format().substring(0, 19);
+                    });
+                }
                 resolve(rows && rows.length > 0 ? rows : []);
             }
         });
@@ -466,6 +477,11 @@ function getItems(event, searchParams, filterParamsVisibility) {
             else {
                 console.log("Get Items Success");
                 console.log(rows);
+                if(rows && rows.length > 0) {
+                    rows.forEach((row) => {
+                        row.transactionDate = moment(row.transactionDate).tz(timeZone).format().substring(0, 19);
+                    });
+                }
                 resolve(rows && rows.length > 0 ? rows : []);
             }
          });
@@ -522,7 +538,7 @@ function getSelectedItem(event, uuid) {
             let recurringReferenceID = null;
 
             const fetchTransactionDetail = new Promise((resolve, reject) => {
-                db.all(`SELECT \
+                db.get(`SELECT \
                         title,\
                         description,\
                         value,\
@@ -537,29 +553,32 @@ function getSelectedItem(event, uuid) {
                         modifiedDate,\
                         transactionDate\
                         FROM transactions \
-                        WHERE id = "${uuid}"`, (err, rows) => {
+                        WHERE id = "${uuid}"`, (err, row) => {
                     if (err) {
                         console.log(`Get Selected Item Error ${err}`);
                         reject(err);
                     }
                     else {
                         console.log("Transaction Table Information (getSelectedItem):");
-                        console.log(rows);
-                        if (rows && rows.length > 0) {
+                        console.log(row);
+                        const createdDate = moment(row.createdDate).tz(timeZone).format().substring(0, 16);
+                        const modifiedDate = moment(row.modifiedDate).tz(timeZone).format().substring(0, 16);
+                        const transactionDate = moment(row.transactionDate).tz(timeZone).format().substring(0, 16);
+                        if (row) {
                             selectedItem.id = uuid;
-                            selectedItem.title = rows[0].title;
-                            selectedItem.description = rows[0].description;
-                            selectedItem.value = rows[0].value;
-                            selectedItem.currency = rows[0].currency;
-                            selectedItem.transactionType = rows[0].transactionType;
-                            selectedItem.transactionCategory = rows[0].transactionCategory;
-                            selectedItem.createdDate = rows[0].createdDate?.substring(0, 16);
-                            selectedItem.modifiedDate = rows[0].modifiedDate?.substring(0, 16);
-                            selectedItem.transactionDate = rows[0].transactionDate?.substring(0, 16);
+                            selectedItem.title = row.title;
+                            selectedItem.description = row.description;
+                            selectedItem.value = row.value;
+                            selectedItem.currency = row.currency;
+                            selectedItem.transactionType = row.transactionType;
+                            selectedItem.transactionCategory = row.transactionCategory;
+                            selectedItem.createdDate = createdDate;
+                            selectedItem.modifiedDate = modifiedDate;
+                            selectedItem.transactionDate = transactionDate;
             
-                            fromReferenceID = rows[0].fromReference;
-                            toReferenceID = rows[0].toReference;
-                            recurringReferenceID = rows[0].recurringReference;
+                            fromReferenceID = row.fromReference;
+                            toReferenceID = row.toReference;
+                            recurringReferenceID = row.recurringReference;
                         }
                         resolve();
                     }
@@ -876,6 +895,8 @@ function modifyItem(event, selectedItem){
                 console.log("fromReferenceID: ", fromReferenceID);
                 console.log("toReferenceID: ", toReferenceID);
                 console.log("recurringReferenceID: ", recurringReferenceID);
+                const transactionDate = moment.tz(selectedItem.transactionDate, timeZone).tz("UTC").format().substring(0, 19) + "Z";
+                const modifiedDate = new Date().toISOString().substring(0, 19) + "Z";
                 db.run(`UPDATE transactions SET \
                         title = ?, \
                         description = ?, \
@@ -900,8 +921,8 @@ function modifyItem(event, selectedItem){
                             toReferenceID,
                             recurringReferenceID,
                             selectedItem.file.length > 0,
-                            new Date().toISOString().substring(0, 19),
-                            selectedItem.transactionDate + ":00",
+                            modifiedDate,
+                            transactionDate,
                             selectedItem.id,
                             (err) => {
                             if (err) {
@@ -951,7 +972,7 @@ function createEntry() {
 
         db.serialize(() => {
             
-            const currentDateTime = new Date().toISOString().substring(0, 19);
+            const currentDateTime = new Date().toISOString().substring(0, 19) + "Z";
 
             db.run(`INSERT INTO transactions (\
                 id, \
@@ -982,7 +1003,7 @@ function createEntry() {
                     0, \
                     "${currentDateTime}", \
                     "${currentDateTime}", \
-                    "${currentDateTime.substring(0, 16) + ":00"}" \
+                    "${currentDateTime.substring(0, 16) + ":00Z"}" \
                     )`, (err) => {
                         if (err) {
                             console.log(`Create Entry Error ${err}`);
@@ -1046,6 +1067,7 @@ async function openSaveFileDialog(event, fileName ){
 
 module.exports = {
     setDB,
+    setTimeZone,
     deleteFileBlob,
     getFileEntries,
     getAllItems,

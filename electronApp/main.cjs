@@ -53,10 +53,15 @@ app.whenReady().then(() => {
     let win = null;
 
     const db = initializeDatabase.initDatabase();
+    const timeZone = 'America/New_York';
     transactionOperations.setDB(db);
+    transactionOperations.setTimeZone(timeZone);
     financialEntitiesOperations.setDB(db);
+    financialEntitiesOperations.setTimeZone(timeZone);
     recurringTransactionOperations.setDB(db);
+    recurringTransactionOperations.setTimeZone(timeZone);
     commonOperations.setDB(db);
+    commonOperations.setTimeZone(timeZone);
 
     //add the recurring transactions to the transaction table
     recurringTransactionOperations.enterRecurringTransactions().then( (status) => { 
