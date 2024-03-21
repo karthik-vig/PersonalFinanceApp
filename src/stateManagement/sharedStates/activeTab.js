@@ -7,6 +7,7 @@ const activeTabSlice = createSlice({
         analyticPage: false,
         financialEntityPage: false,
         recurringTransactionPage: false,
+        settingsPage: false,
     },
     reducers: {
         selectTab: (state, action) => {

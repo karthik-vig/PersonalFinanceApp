@@ -5,6 +5,7 @@ import MainPage from './MainPageComponents/mainPage.jsx';
 import FinancialEntityPage from './FinancialEntityPageComponents/financialEntityPage.jsx';
 import RecurringEntityPage from './RecurringEntityPageComponents/recurringEntityPage.jsx';
 import AnalyticsPage from './AnalyticsPageComponents/analyticsPage.jsx';
+import SettingsPage from './SettingsPageComponents/settingsPage.jsx';
 import { setRecurringTransactions } from './stateManagement/sharedStates/additionalInformation.js';
 import { useSelector, useDispatch } from 'react-redux';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -49,7 +50,8 @@ import { faExchangeAlt,
           faCheckCircle,
           faSync,
           faExternalLink,
-          faExclamationTriangle
+          faExclamationTriangle,
+          faGear,
           } from '@fortawesome/free-solid-svg-icons';
 import { useEffect } from 'react';
 import { setCurrencies, 
@@ -98,7 +100,8 @@ library.add(faExchangeAlt,
             faCheckCircle,
             faSync,
             faExternalLink,
-            faExclamationTriangle
+            faExclamationTriangle,
+            faGear,
             );
 
 function App() {
@@ -148,12 +151,14 @@ function App() {
         <SideSectionButton svgIcon="fa-chart-line" onClickHandler={ () => dispatch(selectTab("analyticPage")) } isActive={activeTab.analyticPage}/>
         <SideSectionButton svgIcon="fa-building-columns" onClickHandler={ () => dispatch(selectTab("financialEntityPage")) } isActive={activeTab.financialEntityPage}/>
         <SideSectionButton svgIcon="fa-redo-alt" onClickHandler={ () => dispatch(selectTab("recurringTransactionPage")) } isActive={activeTab.recurringTransactionPage}/>
+        <SideSectionButton svgIcon="fa-gear" onClickHandler={ () => dispatch(selectTab("settingsPage")) } isActive={activeTab.settingsPage}/>
       </div>
       <div className="flex flex-row flex-wrap h-[100%] min-h-[500px] min-w-[600px]" style={{ width: 'calc(100% - 50px)' }}>
         {activeTab.mainPage && <MainPage />}
         {activeTab.analyticPage && <AnalyticsPage />}
         {activeTab.financialEntityPage && <FinancialEntityPage />}
         {activeTab.recurringTransactionPage && <RecurringEntityPage />}
+        {activeTab.settingsPage && <SettingsPage />}
       </div>
     </div>
   );
