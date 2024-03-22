@@ -63,6 +63,9 @@ import analyticsPagePlotDataReducer from './analyticsPageStates/plotData.js';
 import analyticsPageGenerateAnalyticsReducer from './analyticsPageStates/generateAnalytics.js';
 import analyticsPageFailBoxReducer from './analyticsPageStates/failBox.js';
 
+//import all the reducers for the settings page states
+import settingsPageSettingsReducer from './settingsPageStates/settings.js';
+
 const mainPageStates = combineReducers({
   selectedItem: mainPageSelectedItemReducer,
   sideBarItems: mainPageSideBarItemReducer,
@@ -131,12 +134,17 @@ const analyticsPageStates = combineReducers({
   failBox: analyticsPageFailBoxReducer,
 });
 
+const settingsPageStates = combineReducers({
+  settings: settingsPageSettingsReducer,
+});
+
 const rootReducer = combineReducers({
   mainPageStates,
   financialEntityPageStates,
   recurringEntityPageStates,
   sharedStates,
   analyticsPageStates,
+  settingsPageStates,
 });
 
 export default configureStore({
