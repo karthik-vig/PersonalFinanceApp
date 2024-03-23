@@ -125,7 +125,8 @@ function getLinePlotData(event, filterOptions) {
                 const expenditurePlotDataMap = new Map();
                 if (!Array.isArray(rows) || rows.length === 0) resolve([]);
                 rows.forEach((row) => {
-                    const date = row.transactionDate.substring(0, 10);
+                    // const date = row.transactionDate.substring(0, 10);
+                    const date = moment(row.transactionDate).tz(timeZone).format().substring(0, 10);
                     if (expenditurePlotDataMap.has(date)) {
                     //     if (row.transactionType === "In") {
                     //         expenditurePlotDataMap.get(date).In += row.value;
