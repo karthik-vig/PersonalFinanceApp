@@ -162,7 +162,7 @@ function App() {
         <SideSectionButton svgIcon="fa-redo-alt" onClickHandler={ () => dispatch(selectTab("recurringTransactionPage")) } isActive={activeTab.recurringTransactionPage}/>
         <SideSectionButton svgIcon="fa-gear" onClickHandler={ () => dispatch(selectTab("settingsPage")) } isActive={activeTab.settingsPage}/>
       </div>
-      <div className="flex flex-row flex-wrap h-[100%] min-h-[500px] min-w-[600px]" style={{ width: 'calc(100% - 50px)' }}>
+      <div id="pageContainer" className="flex flex-row flex-wrap h-[100%] min-h-[500px] min-w-[600px]">
         {activeTab.mainPage && <MainPage />}
         {activeTab.analyticPage && <AnalyticsPage />}
         {activeTab.financialEntityPage && <FinancialEntityPage />}

@@ -325,7 +325,7 @@ function Topbar() {
     return (
         <div 
             className="flex flex-col flex-nowrap items-center h-auto mx-7 mt-10 mb-4 rounded-lg border bg-surface-cl drop-shadow-lg "
-            style={{ width: 'calc(100% - 56px)' }}
+            id="analyticsTopbar"
         >
             <h2
                 className="text-bold text-xl my-1 w-[100%] h-8 text-center"

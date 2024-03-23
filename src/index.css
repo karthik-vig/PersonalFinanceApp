@@ -37,12 +37,67 @@
     font-weight: 400 400;
 }
 
+
+/*custom CSS properties*/
 * {
     font-family: "Montserrat-Medium";
 }
 
 h1, h2, h3, h4, h5, h6 {
     font-family: "Roboto-Condensed";
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+}
+
+#root {
+    height: 100vh;
+    width: 100vw;
+}
+
+#pageContainer {
+    width: calc(100% - 50px);
+}
+
+#analyticsTopbar {
+    width: calc(100% - 56px);
+}
+
+#financialEntityDetailSection {
+    height: calc(100% - 150px);
+    width: calc(75% - 92px);
+}
+
+#financialEntityTopbar {
+    width: calc(100% - 56px);
+}
+
+#mainPageDetailSection {
+    height: calc(100% - 150px);
+    width: calc(75% - 92px);
+}
+
+#mainPageTopbar {
+    width: calc(100% - 56px);
+}
+
+#recurringTransactionsDetailSection {
+    height: calc(100% - 150px);
+    width: calc(75% - 92px);
+}
+
+#recurringTransactionsTopbar {
+    width: calc(100% - 56px);
+}
+
+#genericSideBar {
+    height: calc(100% - 150px);
+}
+
+#genericSideBarSection {
+    width: calc(100% - 76px);
 }
 
 /*disabled later; for layout de-bugging*/

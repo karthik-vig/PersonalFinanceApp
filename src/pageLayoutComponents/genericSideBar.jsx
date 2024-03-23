@@ -25,7 +25,10 @@ function GenericSideBar({ items,
 
     //const dispatch = useDispatch();
     return ( 
-    <div className="w-[25%] mx-7 mt-0 mb-4 border rounded-lg bg-surface-cl drop-shadow-lg overflow-x-hidden overflow-y-scroll " style={{ height: 'calc(100% - 150px)' }}>
+    <div 
+        className="w-[25%] mx-7 mt-0 mb-4 border rounded-lg bg-surface-cl drop-shadow-lg overflow-x-hidden overflow-y-scroll "
+        id="genericSideBar"
+    >
                 <ul
                     className="w-[100%] h-[100%] flex flex-nowrap flex-col "
                 >
@@ -44,7 +47,7 @@ function GenericSideBar({ items,
                                 />
                                 <section 
                                     className="flex flex-row flex-wrap h-[100%] ml-4" 
-                                    style={{ width: 'calc(100% - 76px)' }}
+                                    id="genericSideBarSection"
                                 >
                                     <h6 
                                         className={"w-[100%] h-[60%] text-start font-bold font-serif antialiased tracking-widest truncate lg:text-lg text-base " + item.titleFontColor}

@@ -70,7 +70,8 @@ function TopBar() {
 
     return (
         <div 
-            className="flex flex-row flex-nowrap relative z-10 justify-center h-14 mx-7 mt-10 mb-4 rounded-lg border bg-surface-cl drop-shadow-lg " style={{ width: 'calc(100% - 56px)' }}
+            className="flex flex-row flex-nowrap relative z-10 justify-center h-14 mx-7 mt-10 mb-4 rounded-lg border bg-surface-cl drop-shadow-lg "
+            id="financialEntityTopbar"
         >
             <TopBarButton 
                 svgIcon="fa-plus" 

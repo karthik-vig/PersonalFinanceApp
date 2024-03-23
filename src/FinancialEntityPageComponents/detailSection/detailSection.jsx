@@ -18,8 +18,8 @@ function DetailSection() {
     if (selectedItem === null) {
         return (
             <div 
-            className="flex flex-nowrap flex-col ml-2 mr-7 mt-0 mb-4 border rounded-lg bg-surface-cl drop-shadow-lg overflow-x-hidden overflow-y-scroll px-[20%] py-[2%]" 
-            style={{ height: 'calc(100% - 150px)', width: 'calc(75% - 92px)' }}
+                className="flex flex-nowrap flex-col ml-2 mr-7 mt-0 mb-4 border rounded-lg bg-surface-cl drop-shadow-lg overflow-x-hidden overflow-y-scroll px-[20%] py-[2%]" 
+                id="financialEntityDetailSection"
             >
                 
             </div>
@@ -30,7 +30,7 @@ function DetailSection() {
     return (
         <div 
             className="flex flex-nowrap flex-col ml-2 mr-7 mt-0 mb-4 border rounded-lg bg-surface-cl drop-shadow-lg overflow-x-hidden overflow-y-scroll sm:px-[2%] md:px-[2%] lg:px-[10%] py-[2%]" 
-            style={{ height: 'calc(100% - 150px)', width: 'calc(75% - 92px)' }}
+            id="financialEntityDetailSection"
         >
             <TitleSection />
             <EntityTypeSection />
