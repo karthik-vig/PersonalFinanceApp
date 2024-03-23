@@ -41,16 +41,17 @@ H3HeadingText.propTypes = {
     additonalClasses: PropTypes.string,
 };
 
-function TextInputSection({textValue, additonalClasses, fieldName, handleValueChange}) {
+function TextInputSection({textValue, additonalClasses, fieldName, handleValueChange, textLength=30}) {
 
     if (textValue === null) textValue = "";
     const dispatch = useDispatch();
 
     return (
         <input 
-            className={"text-start font-serif antialiased tracking-widest truncate text-base text-black bg-background-cl border rounded-lg outline-1 hover:outline hover:outline-gray-500 hover:outline-offset-2 hover:bg-back" + " " + additonalClasses + " "} 
+            className={"p-1 text-start antialiased tracking-widest truncate text-base text-black bg-background-cl border rounded-lg outline-1 hover:outline hover:outline-gray-500 hover:outline-offset-2 hover:bg-back" + " " + additonalClasses + " "} 
             value={textValue} 
             type="text" 
+            maxLength={textLength}
             onChange={(event) => dispatch(handleValueChange({fieldName: fieldName, fieldValue: event.target.value}))}
         />
     );
@@ -60,19 +61,21 @@ TextInputSection.propTypes = {
     textValue: PropTypes.string,
     additonalClasses: PropTypes.string,
     handleValueChange: PropTypes.func,
+    textLength: PropTypes.number,
     fieldName: PropTypes.string,
 };
 
-function TextAreaSection({textValue, fieldName, handleValueChange}) {
+function TextAreaSection({textValue, fieldName, handleValueChange, textLength=10000}) {
 
     if (textValue === null) textValue = "";
     const dispatch = useDispatch();
 
     return (
         <textarea 
-            className="text-start font-serif antialiased tracking-widest truncate text-base text-black bg-background-cl border rounded-lg outline-1 hover:outline hover:outline-gray-500 hover:outline-offset-2 hover:bg-back overflow-y-scroll resize-y w-[100%] h-auto min-h-28 max-h-56 px-2 py-1" 
+            className="whitespace-pre-wrap text-start antialiased tracking-widest text-base text-black bg-background-cl border rounded-lg outline-1 hover:outline hover:outline-gray-500 hover:outline-offset-2 hover:bg-back overflow-y-scroll overflow-x-clip resize-y w-[100%] h-auto min-h-28 max-h-56 px-2 py-1" 
             value={textValue} 
             type="text"
+            maxLength={textLength}
             onChange={(event) => dispatch(handleValueChange({fieldName: fieldName, fieldValue: event.target.value}))}
         />
     );
@@ -82,6 +85,7 @@ TextAreaSection.propTypes = {
     textValue: PropTypes.string,
     handleValueChange: PropTypes.func,
     fieldName: PropTypes.string,
+    textLength: PropTypes.number,
 };
 
 function SelectInputSection({selectedValue, options, additonalClasses, fieldName, handleValueChange}) {
