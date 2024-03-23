@@ -40,7 +40,7 @@ function createWindow() {
 
     //win.loadFile( path.join(__dirname, '../dist/src/additionalPages/loadingIndex.html'));
     win.loadFile( path.join(__dirname, '../dist/src/index.html'));
-
+    //win.setMenu(null);
     // Open the DevTools in development mode
     if (process.env.NODE_ENV === 'development') {
         win.webContents.openDevTools();
