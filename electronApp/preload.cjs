@@ -46,6 +46,9 @@ contextBridge.exposeInMainWorld('initializeDatabase', {
     //setFileBlob: (fileName, arrayBuffer) => {ipcRenderer.invoke('setFileBlob', fileName, arrayBuffer)},
     getCurrencies: () => ipcRenderer.invoke('initializeDatabase:getCurrencies'),
     getTransactionCategories: () => ipcRenderer.invoke('initializeDatabase:getTransactionCategories'),
+    updateConfigFile: (filePath, timezone) => ipcRenderer.invoke('initializeDatabase:updateConfigFile', filePath, timezone),
+    openFilePathDialog: () => ipcRenderer.invoke('initializeDatabase:openFilePathDialog'),
+    getConfigFile: () => ipcRenderer.invoke('initializeDatabase:getConfigFile'),
 });
 
 contextBridge.exposeInMainWorld('recurringTransactionOperations', {
@@ -62,6 +65,7 @@ contextBridge.exposeInMainWorld('recurringTransactionOperations', {
 
 contextBridge.exposeInMainWorld('app', {
     refresh: (page) => ipcRenderer.invoke('refresh', page),
+    fullRefresh: () => ipcRenderer.invoke('fullRefresh'),
 });
 
 contextBridge.exposeInMainWorld('commonOperations', {

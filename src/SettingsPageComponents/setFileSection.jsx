@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { 
     toggleFileUpdate, 
-    // setFilePath,
+    setFilePath,
  } from "../stateManagement/settingsPageStates/settings";
 
 
@@ -25,6 +25,9 @@ function SelectFile(){
     useEffect(() => { 
         if (!triggerFileUpdate) return;
         //open file dialog using the back-end and get the file path and set it to the state
+        window.initializeDatabase.openFilePathDialog().then((filePath) => { 
+            dispatch(setFilePath(filePath));
+        });
         dispatch(toggleFileUpdate());
     }, [dispatch, triggerFileUpdate]);
     return (

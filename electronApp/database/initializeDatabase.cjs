@@ -1,30 +1,14 @@
 const sqlite = require('sqlite3');
 const fs = require('node:fs');
+const { dialog } = require('electron');
+const getConfigFileTemplate = require('./configFileTemplate.cjs');
 
 
 let db = null;
+let configFile = null;
 
 function getCurrencies() {
-    return (
-        [
-            "AED", "AFN", "ALL", "AMD", "ANG", "AOA", "ARS", "AUD", "AWG", "AZN", "BAM",
-            "BBD", "BDT", "BGN", "BHD", "BIF", "BMD", "BND", "BOB", "BOV", "BRL", "BSD",
-            "BTN", "BWP", "BYR", "BZD", "CAD", "CDF", "CHE", "CHF", "CHW", "CLF", "CLP",
-            "CNY", "COP", "COU", "CRC", "CUC", "CUP", "CVE", "CZK", "DJF", "DKK", "DOP",
-            "DZD", "EGP", "ERN", "ETB", "EUR", "FKP", "GBP", "GEL", "GHS", "GIP", "GMD",
-            "GNF", "GTQ", "GYD", "HKD", "HNL", "HRK", "HTG", "IDR", "ILS", "INR", "IQD",
-            "IRR", "ISK", "JMD", "JOD", "KES", "KGS", "KHR", "KMF", "KPW", "KRW", "KWD",
-            "KYD", "LAK", "LBP", "LKR", "LRD", "LSL", "LYD", "MAD", "MDL", "MGA", "MKD",
-            "MMK", "MNT", "MOP", "MRO", "MUR", "MVR", "MWK", "MXN", "MYR", "MZN", "NAD",
-            "NGN", "NIO", "NOK", "NPR", "NZD", "OMR", "PAB", "PEN", "PGK", "PHP", "PKR",
-            "PLN", "PYG", "QAR", "RON", "RSD", "RUB", "RWF", "SAR", "SBD", "SCR", "SDG",
-            "SEK", "SGD", "SHP", "SLL", "SOS", "SRD", "SSP", "STD", "SVC", "SYP", "SZL",
-            "THB", "TJS", "TMT", "TND", "TOP", "TRY", "TWD", "UAH", "UGX", "USD", "USN",
-            "UYU", "UZS", "VEF", "VND", "XAF", "XAG", "XAU", "XBA", "XBB", "XBC", "XBD",
-            "XCD", "XDR", "XOF", "XOF", "XPD", "XPF", "XPT", "XSU", "XTS", "XUA", "YER",
-            "ZAR", "ZMW", "ZWL"
-        ] 
-    ); //could also return [] if the operation fails
+    return configFile.currencies; //could also return [] if the operation fails
 }
 
 function getTransactionCategories() {
@@ -38,7 +22,7 @@ function getTransactionCategories() {
 }
 
 function openDB() {
-    const db = new sqlite.Database('../data/database.db');
+    const db = new sqlite.Database(configFile.filePath);
     return db;
 }
 
@@ -150,8 +134,38 @@ function initDatabase() {
     if (!fs.existsSync('../data')) {
         fs.mkdirSync('../data');
     }
+    switch(fs.existsSync('../data/config.json')) {
+        case false:
+            fs.writeFileSync('../data/config.json', JSON.stringify(getConfigFileTemplate(), null, 4));
+            configFile = getConfigFileTemplate();
+            break;
+        case true:
+            configFile = JSON.parse(fs.readFileSync('../data/config.json'));
+            break;
+    }
     db = setupDatabase();
-    return db;
+    return {db, configFile};
+}
+
+async function updateConfigFile(event, filePath, timezone) {
+    configFile.filePath = filePath;
+    configFile.timezone = timezone;
+    fs.writeFileSync('../data/config.json', JSON.stringify(configFile, null, 4));
+    return;
+}
+
+async function openFilePathDialog() {
+    const { filePaths } = await dialog.showOpenDialog({
+        properties: ['openFile'],
+        filters: [
+            { name: 'All Files', extensions: ['*'] }
+          ],
+    });
+    return filePaths[0];
+}
+
+async function getConfigFile() {
+    return configFile;
 }
 
 module.exports = {
@@ -159,4 +173,7 @@ module.exports = {
     getCurrencies,
     getTransactionCategories,
     closeDB,
+    updateConfigFile,
+    openFilePathDialog,
+    getConfigFile,
 }

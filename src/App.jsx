@@ -7,7 +7,7 @@ import RecurringEntityPage from './RecurringEntityPageComponents/recurringEntity
 import AnalyticsPage from './AnalyticsPageComponents/analyticsPage.jsx';
 import SettingsPage from './SettingsPageComponents/settingsPage.jsx';
 import { setRecurringTransactions } from './stateManagement/sharedStates/additionalInformation.js';
-// import { setTimezone, setFilePath } from './stateManagement/settingsPageStates/settings.js';
+import { setTimezone, setFilePath } from './stateManagement/settingsPageStates/settings.js';
 import { useSelector, useDispatch } from 'react-redux';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faExchangeAlt, 
@@ -111,10 +111,10 @@ function App() {
 
   //load the config file values into the state
   useEffect(() => {
-    // window.initializeDatabase.getConfig().then((config) => {
-    //   dispatch(setTimezone(config.timezone));
-    //   dispatch(setFilePath(config.filePath));
-    // });
+    window.initializeDatabase.getConfigFile().then((config) => {
+      dispatch(setTimezone(config.timezone));
+      dispatch(setFilePath(config.filePath));
+    });
   }, [dispatch,]);
 
   //fetch additional information from the main process

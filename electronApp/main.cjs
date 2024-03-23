@@ -48,25 +48,30 @@ function createWindow() {
     return win;
 }
 
+function setupProcess() {
+    const {db, configFile} = initializeDatabase.initDatabase();
+    transactionOperations.setDB(db);
+    transactionOperations.setTimeZone(configFile.timezone);
+    financialEntitiesOperations.setDB(db);
+    financialEntitiesOperations.setTimeZone(configFile.timezone);
+    recurringTransactionOperations.setDB(db);
+    recurringTransactionOperations.setTimeZone(configFile.timezone);
+    commonOperations.setDB(db);
+    commonOperations.setTimeZone(configFile.timezone);
+}
+
+
 app.whenReady().then(() => {
 
     let win = null;
 
-    const db = initializeDatabase.initDatabase();
-    const timeZone = 'America/New_York';
-    transactionOperations.setDB(db);
-    transactionOperations.setTimeZone(timeZone);
-    financialEntitiesOperations.setDB(db);
-    financialEntitiesOperations.setTimeZone(timeZone);
-    recurringTransactionOperations.setDB(db);
-    recurringTransactionOperations.setTimeZone(timeZone);
-    commonOperations.setDB(db);
-    commonOperations.setTimeZone(timeZone);
+    //do the setup process
+    setupProcess();
 
     //add the recurring transactions to the transaction table
     recurringTransactionOperations.enterRecurringTransactions().then( (status) => { 
         console.log("Recurring Transactions Entered: ", status);
-        win = createWindow();
+        if (status) win = createWindow();
     }).catch((err) => { 
         console.log("Recurring Transactions Entry Error: ", err);
     });
@@ -89,8 +94,21 @@ app.whenReady().then(() => {
         });
     });
 
+    //full refresh of the application
+    ipcMain.handle('fullRefresh', async () => {
+        //do the setup process
+        setupProcess();
+        recurringTransactionOperations.enterRecurringTransactions().then( (status) => {
+            console.log("Recurring Transactions Entered: ", status);
+            if (status) win.reload();
+        }).catch((err) => {
+            console.log("Recurring Transactions Entry Error: ", err);
+        });
+    });
+
     //COMMON OPERATIONS
     ipcMain.handle('commonOperations:getStatsAboutDB', commonOperations.getStatsAboutDB);
+
     
     //TRANSACTION OPERATIONS
     //ipcMain.handle('getFileBlob', getFileBlob);
@@ -125,6 +143,9 @@ app.whenReady().then(() => {
     //INITIALIZE DATABASE OPERATIONS
     ipcMain.handle('initializeDatabase:getCurrencies', initializeDatabase.getCurrencies);
     ipcMain.handle('initializeDatabase:getTransactionCategories', initializeDatabase.getTransactionCategories);
+    ipcMain.handle('initializeDatabase:updateConfigFile', initializeDatabase.updateConfigFile);
+    ipcMain.handle('initializeDatabase:openFilePathDialog', initializeDatabase.openFilePathDialog);
+    ipcMain.handle('initializeDatabase:getConfigFile', initializeDatabase.getConfigFile);
 
     //RECURRING TRANSACTION OPERATIONS
     ipcMain.handle('recurringTransactionOperations:getRecurringTransactions', recurringTransactionOperations.getRecurringTransactions);
