@@ -89,18 +89,18 @@ function getLinePlotData(event, filterOptions) {
         // }
         switch (filterOptions.transactionType) {
             case "In":
-                expenditurePlotData.datasets.push({id: 0, label: "In", data: []});
+                expenditurePlotData.datasets.push({id: 0, label: "In", data: [], backgroundColor: "#008000", borderColor:"#008000"});
                 break;
             case "Out":
-                expenditurePlotData.datasets.push({id: 1, label: "Out", data: []});
+                expenditurePlotData.datasets.push({id: 1, label: "Out", data: [], backgroundColor: "#800000", borderColor:"#800000"});
                 break;
             case "Expenditure":
-                expenditurePlotData.datasets.push({id: 2, label: "Expenditure", data: []});
+                expenditurePlotData.datasets.push({id: 2, label: "Expenditure", data: [], backgroundColor: "#ff5f1f", borderColor:"#ff5f1f"});
                 break;
             default:
-                expenditurePlotData.datasets.push({id: 0, label: "In", data: []});
-                expenditurePlotData.datasets.push({id: 1, label: "Out", data: []});
-                expenditurePlotData.datasets.push({id: 2, label: "Expenditure", data: []});
+                expenditurePlotData.datasets.push({id: 0, label: "In", data: [], backgroundColor: "#008000", borderColor:"#008000"});
+                expenditurePlotData.datasets.push({id: 1, label: "Out", data: [], backgroundColor: "#800000", borderColor:"#800000"});
+                expenditurePlotData.datasets.push({id: 2, label: "Expenditure", data: [], backgroundColor: "#ff5f1f", borderColor:"#ff5f1f"});
         }
 
         let queryStmt = `SELECT \

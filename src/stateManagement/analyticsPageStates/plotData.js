@@ -6,9 +6,9 @@ const expenditureStatsSlice = createSlice({
         expenditurePlotData : {
             labels: [""],
             datasets: [
-                        {id: 0, label: "In", data: [0]},
-                        {id: 1, label: "Out", data: [0]},
-                        {id: 2, label: "Expenditure", data: [0]},
+                        {id: 0, label: "In", data: [0], backgroundColor: "#008000", borderColor:"#008000"},
+                        {id: 1, label: "Out", data: [0], backgroundColor: "#800000", borderColor:"#800000"},
+                        {id: 2, label: "Expenditure", data: [0], backgroundColor: "#ff5f1f", borderColor:"#ff5f1f"},
                     ]
         },
         statsByCategoryPlotData: {
@@ -47,7 +47,7 @@ const expenditureStatsSlice = createSlice({
             {
               title: "Total Exp.",
               value: "N/A",
-              color: "#FF0000", // Red
+              color: "#ff5f1f", // Red
             },
             {
               title: "In - Amount",

@@ -178,7 +178,7 @@ async function getStatsAboutDB(event, filterOptions) {
             {
               title: "Total Exp.",
               value: sumOfTransactionTypeIn - sumOfTransactionTypeOut,
-              color: "#FF0000", // Red
+              color: "#ff5f1f", // Red
             },
             {
               title: "In - Amount",
