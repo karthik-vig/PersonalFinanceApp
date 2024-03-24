@@ -31,6 +31,7 @@ function createWindow() {
         height: 600,
         minHeight: 600,
         minWidth: 700,
+        icon: path.join(__dirname, 'piggyBankIcon.ico'),
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
