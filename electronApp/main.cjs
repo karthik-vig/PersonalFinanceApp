@@ -35,6 +35,10 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
+            sandbox: true,
+            experimentalFeatures: false,
+            allowRunningInsecureContent: false,
+            webSecurity: true,
             preload: path.join(__dirname, 'preload.cjs') // Replace with the actual path to your preload script
         }
     });
