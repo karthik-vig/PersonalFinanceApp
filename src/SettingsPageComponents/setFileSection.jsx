@@ -10,12 +10,13 @@ import {
 function SelectedFile(){
     const filePath = useSelector((state) => state.settingsPageStates.settings.filePath);
     return (
-        <p
-            className="text-base font-semibold text-black/75 overflow-y-scroll\
+        <input
+            type="text"
+            className="text-base font-semibold text-black/75 overflow-x-auto \
                         w-[100%] h-8 p-1 bg-background-cl border rounded-md"
-        >
-            {filePath}
-        </p>
+            readOnly={true}
+            value={filePath}
+        />
     );
 }
 
