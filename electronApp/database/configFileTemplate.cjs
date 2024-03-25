@@ -23,7 +23,7 @@ function getConfigFileTemplate() {
 
         timezone: "UTC",
 
-        filePath: "../data/database.db", //default path to the database file
+        filePath: "./data/database.db", //default path to the database file
 
     }
     return configFileTemplate;

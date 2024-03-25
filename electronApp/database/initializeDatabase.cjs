@@ -131,16 +131,16 @@ function setupDatabase() {
 }
 function initDatabase() {
     
-    if (!fs.existsSync('../data')) {
-        fs.mkdirSync('../data');
+    if (!fs.existsSync('./data')) {
+        fs.mkdirSync('./data');
     }
-    switch(fs.existsSync('../data/config.json')) {
+    switch(fs.existsSync('./data/config.json')) {
         case false:
-            fs.writeFileSync('../data/config.json', JSON.stringify(getConfigFileTemplate(), null, 4));
+            fs.writeFileSync('./data/config.json', JSON.stringify(getConfigFileTemplate(), null, 4));
             configFile = getConfigFileTemplate();
             break;
         case true:
-            configFile = JSON.parse(fs.readFileSync('../data/config.json'));
+            configFile = JSON.parse(fs.readFileSync('./data/config.json'));
             break;
     }
     db = setupDatabase();
@@ -150,7 +150,7 @@ function initDatabase() {
 async function updateConfigFile(event, filePath, timezone) {
     configFile.filePath = filePath;
     configFile.timezone = timezone;
-    fs.writeFileSync('../data/config.json', JSON.stringify(configFile, null, 4));
+    fs.writeFileSync('./data/config.json', JSON.stringify(configFile, null, 4));
     return;
 }
 
