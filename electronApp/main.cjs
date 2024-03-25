@@ -171,3 +171,17 @@ app.on('window-all-closed', function () {
         app.quit();
     }
 });
+
+app.on('web-contents-created', (event, contents) => { 
+    contents.on('will-navigate', (event) => {
+        event.preventDefault(); //prevent the window from navigating
+    });
+
+    contents.on('will-redirect', (event) => {
+        event.preventDefault(); //prevent the window from redirecting
+    });
+
+    contents.setWindowOpenHandler(() => { 
+        return { action: 'deny' }; //prevent the window from opening a new window
+    });
+});
