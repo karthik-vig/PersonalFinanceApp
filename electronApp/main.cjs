@@ -3,7 +3,7 @@ const {
     BrowserWindow, 
     ipcMain, 
     protocol, 
-    // Menu,
+    Menu,
  } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs');
@@ -48,11 +48,11 @@ function createWindow() {
     });
 
     win.loadURL('app://mainApplication/index.html');
-    //Menu.setApplicationMenu(null);
+    Menu.setApplicationMenu(null);
     // Open the DevTools in development mode
-    if (process.env.NODE_ENV === 'development') {
-        win.webContents.openDevTools();
-    }
+    // if (process.env.NODE_ENV === 'development') {
+    //     win.webContents.openDevTools();
+    // }
     return win;
 }
 
