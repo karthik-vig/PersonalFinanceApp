@@ -1,25 +1,12 @@
-const { app, BrowserWindow, ipcMain, protocol } = require('electron');
+const { 
+    app, 
+    BrowserWindow, 
+    ipcMain, 
+    protocol, 
+    // Menu,
+ } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs');
-//const fs = require('node:fs');
-/*
-import {
-        //initializeDatabase, 
-        //closeDb,
-        getFileBlob,
-        setFileBlob,
-        deleteFileBlob,
-        getAllItems,
-        getItems,
-        getSelectedItem,
-        deleteItem,
-        modifyItem,
-        createEntry,
-        getCurrencies,
-        getTransactionCategories,
-        getTransactionEntities,
-    } from './database.js';
-*/
 const initializeDatabase = require('./database/initializeDatabase.cjs');
 const transactionOperations = require('./database/transactionOperations.cjs');
 const financialEntitiesOperations = require('./database/financialEntityOperation.cjs');
@@ -34,7 +21,7 @@ protocol.registerSchemesAsPrivileged([
       secure: false,
       bypassCSP: false,
       allowServiceWorkers: false,
-      supportFetchAPI: true,
+      supportFetchAPI: false,
       corsEnabled: false,
       stream: false, 
       codeCache: false,
@@ -60,10 +47,8 @@ function createWindow() {
         }
     });
 
-    //win.loadFile( path.join(__dirname, '../dist/src/additionalPages/loadingIndex.html'));
-    //win.loadFile( path.join(__dirname, '../dist/src/index.html'));
     win.loadURL('app://mainApplication/index.html');
-    //win.setMenu(null);
+    //Menu.setApplicationMenu(null);
     // Open the DevTools in development mode
     if (process.env.NODE_ENV === 'development') {
         win.webContents.openDevTools();
@@ -88,7 +73,6 @@ app.whenReady().then(() => {
     protocol.handle('app', (req) => {
         const { host, pathname } = new URL(req.url);
         if (host !== "mainapplication") return;
-        // const somename = fs.readFileSync(path.join(__dirname, "../dist/src/index.html"), 'utf8');
         switch (pathname) {
             case "/index.html":
                 return new Response( fs.readFileSync(path.join(__dirname, "../dist/index.html"), 'utf8'),
@@ -114,6 +98,8 @@ app.whenReady().then(() => {
                 return new Response( "Error - Not Found", { status: 404 } );
         }
     });
+
+
 
     let win = null;
 
