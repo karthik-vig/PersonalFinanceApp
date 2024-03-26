@@ -23,7 +23,7 @@ export const modifyOptionsSlice = createSlice({
             return state;
         },
         toggleSelectOptions: (state, action) => {
-            console.log("toggleSelectOptions action.payload: ", action.payload);
+            // console.log("toggleSelectOptions action.payload: ", action.payload);
             state.selectOptions[action.payload] = !state.selectOptions[action.payload];
             return state;
         },

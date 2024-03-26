@@ -41,13 +41,13 @@ function SideBar() {
     //get the selecteded item data from the main process
     useEffect(() => {
         if (currentSelectedItemState === null || currentSelectedItemState === undefined) return;
-        console.log("currentSelectedItemState is not null, triggering getSelectedItem")
-        console.log(currentSelectedItemState);
+        // console.log("currentSelectedItemState is not null, triggering getSelectedItem")
+        // console.log(currentSelectedItemState);
         window.financialEntityOperations.getSelectedItem(currentSelectedItemState).then((selectedItem) => {
             dispatch(handleSelectItemClick(selectedItem));
         }).catch((err) => {
             if (err === null) {
-                console.log("selectedItem is null, triggering fail box");
+                // console.log("selectedItem is null, triggering fail box");
                 dispatch(showFailBox("Could not Load the Selected Item"));
             }
         });
@@ -61,9 +61,9 @@ function SideBar() {
         if (sideBarItem.type === "External") fontColor = "text-red-500";
         if (sideBarItem.type === "Internal") fontColor = "text-green-500";
         
-        console.log("setting sidebaritem: ", sideBarItem.id);
-        console.log("setting sidebaritem cat: ", sideBarItem.type);
-        console.log("setting svg icons cat: ", svgIcons.current[sideBarItem.type]);
+        // console.log("setting sidebaritem: ", sideBarItem.id);
+        // console.log("setting sidebaritem cat: ", sideBarItem.type);
+        // console.log("setting svg icons cat: ", svgIcons.current[sideBarItem.type]);
 
         let icon = faTimes;
         let iconColor = "#FF0000";
@@ -91,8 +91,8 @@ function SideBar() {
         <GenericSideBar 
             items={genericItems} 
             handleItemClick={(uuid) => { //dispatch(triggerSearch());
-                 console.log('financialEntityPage: currentSelectedState is: ', currentSelectedItemState);
-                 console.log("dispatching setCurrentSelectedItem in financialEntityPage in sideBar.jsx; the uuid is: ", uuid);
+                 // console.log('financialEntityPage: currentSelectedState is: ', currentSelectedItemState);
+                 // console.log("dispatching setCurrentSelectedItem in financialEntityPage in sideBar.jsx; the uuid is: ", uuid);
                  dispatch(setCurrentSelectedItem(uuid));  
                 }}
             currentSelectedItemState={currentSelectedItemState}

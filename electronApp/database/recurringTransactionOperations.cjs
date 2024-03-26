@@ -14,7 +14,7 @@ function getIdFromTitle(event, title) {
     return new Promise((resolve, reject) => { 
         db.get(`SELECT id FROM recurringTransactions WHERE title = ?`, title, (err, row) => { 
             if (err) { 
-                console.log("Recurring Entity: In getIdFromTitle: err: ", err);
+                // console.log("Recurring Entity: In getIdFromTitle: err: ", err);
                 reject(true);
             }
             resolve(row? row.id: null);
@@ -27,7 +27,7 @@ function getRecurringTransactions() {
     return new Promise((resolve, reject) => {
         db.all(`SELECT title FROM recurringTransactions`, (err, rows) => { 
             if (err) { 
-                console.log("Recurring Entity: In getRecurringTransactions: err: ", err);
+                // console.log("Recurring Entity: In getRecurringTransactions: err: ", err);
                 reject(true);
             } else {
                 resolve(rows && rows.length > 0? rows.map((row) => row.title): []);
@@ -40,7 +40,7 @@ function getRecurringTransactions() {
 function setDB(database) {
     //set the database to be used by the module
     db = database;
-    console.log("In setDB: db: " + db);
+    // console.log("In setDB: db: " + db);
 }
 
 function setTimeZone(selectedTimeZone) {
@@ -78,8 +78,8 @@ function updateFinancialEntityReferenceID(event,
 
         Promise.all([upateFromReferenceID, upateToReferenceID]).then(() => {
             resolve();
-        }).catch((err) => {
-            console.log(`Update Financial Entity Reference ID Error ${err}`);
+        }).catch(() => {
+            // console.log(`Update Financial Entity Reference ID Error ${err}`);
             reject(true);
         });
     });
@@ -340,17 +340,17 @@ function calculateDailyRecurringTransactions(recurringTransactionStartDatetime,
 }
 
 function enterRecurringTransactions() {
-    console.log("In enterRecurringTransactions");
+    // console.log("In enterRecurringTransactions");
     return new Promise((resolve, reject) => {
         db.all(`SELECT *
                 FROM recurringTransactions`, (err, rows) => { 
                     if (err) { 
-                        console.log(`Error getting recurring transactions ${err}`); 
+                        // console.log(`Error getting recurring transactions ${err}`); 
                         reject(true);
                     }
                     
-                    console.log("Recurring transactions retrieved successfully");
-                    //console.log(rows);
+                    // console.log("Recurring transactions retrieved successfully");
+                    //// console.log(rows);
                     let newLastRecurringTransactionDatetime = null;
                     rows.forEach( (row) => {
                         newLastRecurringTransactionDatetime = row.lastRecurringTransactionDate;
@@ -429,7 +429,7 @@ function enterRecurringTransactions() {
                         });
                         transactionTableInsertionStmt.finalize((err) => {
                             if (err) {
-                                console.log(`Error inserting recurring transaction ${err}`);
+                                // console.log(`Error inserting recurring transaction ${err}`);
                                 reject(true);
                             }
                         });
@@ -439,7 +439,7 @@ function enterRecurringTransactions() {
                                 row.id, 
                                 (err) => { 
                                     if (err) { 
-                                        console.log(`Error updating lastRecurringTransactionDate ${err}`); 
+                                        // console.log(`Error updating lastRecurringTransactionDate ${err}`); 
                                         reject(true);
                                     }
                         });
@@ -598,7 +598,7 @@ function getAllItems() {
                 FROM recurringTransactions
                 ORDER BY createdDate ASC`, (err, rows) => {
             if (err) {
-                console.log("Recurring Entity: In getAllItems: err: ", err);
+                // console.log("Recurring Entity: In getAllItems: err: ", err);
                 reject(true);
             } else {
                 resolve(rows? rows : []);
@@ -641,7 +641,7 @@ function getAllItems() {
 
 function getItems(event, searchParams, filterParamsVisibility) {
     if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(true); });
-    console.log("In getItems: searchParams: ", searchParams, " filterParamsVisibility: ", filterParamsVisibility)
+    // console.log("In getItems: searchParams: ", searchParams, " filterParamsVisibility: ", filterParamsVisibility)
     searchParams = JSON.parse(JSON.stringify(searchParams));
     searchParams = convertDataToDBFormat(searchParams);
     return new Promise((resolve, reject) => { 
@@ -649,7 +649,7 @@ function getItems(event, searchParams, filterParamsVisibility) {
             const fetchFromReferenceID = new Promise((resolve, reject) => { 
                 db.get(`SELECT id FROM financialEntities WHERE title = ?`, searchParams.fromEntity, (err, row) => { 
                     if (err) { 
-                        console.log("Recurring Entity: In getItems: fetchFromReferenceID: err: ", err);
+                        // console.log("Recurring Entity: In getItems: fetchFromReferenceID: err: ", err);
                         reject(true);
                     } else {
                         resolve(row && row.length > 0 ? row.id : null);
@@ -660,7 +660,7 @@ function getItems(event, searchParams, filterParamsVisibility) {
             const fetchToReferenceID = new Promise((resolve, reject) => { 
                 db.get(`SELECT id FROM financialEntities WHERE title = ?`, searchParams.toEntity, (err, row) => { 
                     if (err) { 
-                        console.log("Recurring Entity: In getItems: fetchToReferenceID: err: ", err);
+                        // console.log("Recurring Entity: In getItems: fetchToReferenceID: err: ", err);
                         reject(true);
                     } else {
                         resolve(row && row.length > 0 ? row.id : null);
@@ -713,14 +713,14 @@ function getItems(event, searchParams, filterParamsVisibility) {
                 //query and get the information from the database
                 db.all(query, (err, rows) => {
                     if (err) {
-                        console.log("Recurring Entity: In getItems: err: ", err);
+                        // console.log("Recurring Entity: In getItems: err: ", err);
                         reject(true);
                     } else {
                         resolve(rows? rows : []);
                     }
                 });
-             }).catch((err) => { 
-                console.log("Recurring Entity: In getItems: err: ", err);
+             }).catch(() => { 
+                // console.log("Recurring Entity: In getItems: err: ", err);
                 reject(true);
              });
         });
@@ -782,7 +782,7 @@ function createEntry() {
                     ) VALUES (?, "NEW Entry", NULL, NULL, NULL, NULL, NULL, NULL, NULL, ?, ?, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)`, 
                     uuid, currentDateTime, currentDateTime, (err) => {
                         if (err) {
-                            console.log("Recurring Entity: In createEntry: err: ", err);
+                            // console.log("Recurring Entity: In createEntry: err: ", err);
                             reject(true);
                         } else {
                             resolve({
@@ -810,14 +810,14 @@ function createEntry() {
 
 function modifyItem(event, selectedItem) {
     if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(true); });
-    console.log("In modifyItem: selectedItem: ", selectedItem);
+    // console.log("In modifyItem: selectedItem: ", selectedItem);
     selectedItem = convertDataToDBFormat(selectedItem);
     return new Promise((resolve, reject) => {
         db.serialize(() => {
             const getFromFinancialEntityID = new Promise((resolve, reject) => { 
                 db.all(`SELECT id FROM financialEntities WHERE title = ?`, selectedItem.fromEntity, (err, row) => { 
                     if (err) { 
-                        console.log("Recurring Entity: In modifyItem: getFromFinancialEntityID: err: ", err);
+                        // console.log("Recurring Entity: In modifyItem: getFromFinancialEntityID: err: ", err);
                         reject(true);
                     } else {
                         resolve(row && row.length > 0 ? row[0].id : null);
@@ -828,7 +828,7 @@ function modifyItem(event, selectedItem) {
             const getToFinancialEntityID = new Promise((resolve, reject) => { 
                 db.all(`SELECT id FROM financialEntities WHERE title = ?`, selectedItem.toEntity, (err, row) => { 
                     if (err) { 
-                        console.log("Recurring Entity: In modifyItem: getFromFinancialEntityID: err: ", err);
+                        // console.log("Recurring Entity: In modifyItem: getFromFinancialEntityID: err: ", err);
                         reject(true);
                     } else {
                         resolve(row && row.length > 0 ? row[0].id : null);
@@ -877,7 +877,7 @@ function modifyItem(event, selectedItem) {
                         selectedItem.id,
                         (err) => {
                             if (err) {
-                                console.log("Recurring Entity: In modifyItem: err: ", err);
+                                // console.log("Recurring Entity: In modifyItem: err: ", err);
                                 reject(true);
                             } else {
                                 resolve({
@@ -890,8 +890,8 @@ function modifyItem(event, selectedItem) {
                                 });
                             }
                         });
-            }).catch((err) => {
-                console.log("Recurring Entity: In modifyItem: err: ", err);
+            }).catch(() => {
+                // console.log("Recurring Entity: In modifyItem: err: ", err);
                 reject(true);
             });
         });
@@ -910,12 +910,12 @@ function modifyItem(event, selectedItem) {
 
 function deleteItem(event, uuid) {
     if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(true); });
-    console.log("In deleteItem: uuid: " + uuid);
+    // console.log("In deleteItem: uuid: " + uuid);
     return new Promise((resolve, reject) => {
         new Promise((resolve, reject) => {
             db.run(`DELETE FROM recurringTransactions WHERE id = ?`, uuid, (err) => {
                 if (err) {
-                    console.log("Recurring Entity: In deleteItem: err: ", err);
+                    // console.log("Recurring Entity: In deleteItem: err: ", err);
                     reject(true);
                 } else {
                     resolve(uuid);
@@ -925,14 +925,14 @@ function deleteItem(event, uuid) {
             db.run(`UPDATE transactions SET recurringReference = NULL \
                     WHERE recurringReference = ?`, uuid, (err) => {
                         if (err) {
-                            console.log("Recurring Entity: In deleteItem: err: ", err);
+                            // console.log("Recurring Entity: In deleteItem: err: ", err);
                             reject(true);
                         } else {
                             resolve();
                         }
                      });
-        }).catch((err) => {
-            console.log("Recurring Entity: In deleteItem: err: ", err);
+        }).catch(() => {
+            // console.log("Recurring Entity: In deleteItem: err: ", err);
             reject(true);
         });
     });
@@ -942,7 +942,7 @@ function deleteItem(event, uuid) {
 function getSelectedItem(event, uuid) {
     if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(null); });
 
-    console.log("In getSelectedItem: uuid: " + uuid);
+    // console.log("In getSelectedItem: uuid: " + uuid);
 
     return new Promise((resolve, reject) => {
 
@@ -968,7 +968,7 @@ function getSelectedItem(event, uuid) {
                     lastRecurringTransactionDate \
                     FROM recurringTransactions WHERE id = ?`, uuid, (err, row) => {
                         if (err) {
-                            console.log("Recurring Entity: In getSelectedItem: getRecurringTransactions: err: ", err);
+                            // console.log("Recurring Entity: In getSelectedItem: getRecurringTransactions: err: ", err);
                             reject(true);
                         } else {
                             resolve(row && row.length > 0 ? row[0] : null);
@@ -979,7 +979,7 @@ function getSelectedItem(event, uuid) {
             const getFromEntityTitle = new Promise((resolve, reject) => {
                 db.get(`SELECT title, type FROM financialEntities WHERE id = ?`, recurringTransactionRow.fromReference, (err, row) => { 
                     if (err) { 
-                        console.log("Recurring Entity: In getSelectedItem: getFromEntityTitle: err: ", err);
+                        // console.log("Recurring Entity: In getSelectedItem: getFromEntityTitle: err: ", err);
                         reject(true);
                     } else {
                         resolve(row ? row : null);
@@ -990,7 +990,7 @@ function getSelectedItem(event, uuid) {
             const getToEntityTitle = new Promise((resolve, reject) => {
                 db.get(`SELECT title, type FROM financialEntities WHERE id = ?`, recurringTransactionRow.toReference, (err, row) => { 
                     if (err) { 
-                        console.log("Recurring Entity: In getSelectedItem: getToEntityTitle: err: ", err);
+                        // console.log("Recurring Entity: In getSelectedItem: getToEntityTitle: err: ", err);
                         reject(true);
                     } else {
                         resolve(row ? row : null);
@@ -1032,8 +1032,8 @@ function getSelectedItem(event, uuid) {
                                                             });
                 resolve(selectedItem);
             });
-        }).catch((err) => {
-            console.log("Recurring Entity: In getSelectedItem: err: ", err);
+        }).catch(() => {
+            // console.log("Recurring Entity: In getSelectedItem: err: ", err);
             reject(null);
         });
     });

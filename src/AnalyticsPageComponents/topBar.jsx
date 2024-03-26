@@ -42,7 +42,7 @@ function Topbar() {
         window.transactionOperations.getLinePlotData(filterMenuStates).then((expenditurePlotData) => {
             dispatch(setExpenditurePlotData(expenditurePlotData));
         }).catch((err) => {
-            console.log("Error getting the plot data: ", err);
+            // console.log("Error getting the plot data: ", err);
         });
         dispatch(toggleUpdateExpenditurePlot());
     }, [generateAnalytics.updateExpenditurePlot,
@@ -57,7 +57,7 @@ function Topbar() {
         window.transactionOperations.getStatsByCategoryPlotData(filterMenuStates).then((statsByCategoryPlotData) => {
             dispatch(setStatsByCategoryPlotData(statsByCategoryPlotData));
         }).catch((err) => {
-            console.log("Error getting the plot data: ", err);
+            // console.log("Error getting the plot data: ", err);
         });
         dispatch(toggleUpdateStatsByCategoryPlot());
     }, [generateAnalytics.updateStatsByCategoryPlot,
@@ -72,7 +72,7 @@ function Topbar() {
         window.commonOperations.getStatsAboutDB(filterMenuStates).then((statBoxData) => {
             dispatch(setStatBoxData(statBoxData));
         }).catch((err) => {
-            console.log("Error getting the plot data: ", err);
+            // console.log("Error getting the plot data: ", err);
         });
         dispatch(toggleUpdateStatBox());
     }, [generateAnalytics.updateStatBox,
@@ -82,26 +82,26 @@ function Topbar() {
 
     const handleSetCurrency = (event) => {
         //dispatch set currency action
-        console.log(event.target.value);
+        // console.log(event.target.value);
         dispatch(setCurrency(event.target.value));
     };
 
     const handleSetTransactionType = (event) => {
         //dispatch set transaction type action
-        console.log(event.target.value);
+        // console.log(event.target.value);
         dispatch(setTransactionType(event.target.value));
     };
 
     const handleSetTransactionCategory = (event) => {
         //dispatch set transaction category action
-        console.log(event.target.value);
+        // console.log(event.target.value);
         dispatch(setTransactionCategory(event.target.value));
     };
 
     // const handleToggleDateRangeSelection = () => {
     //     //dispatch toggle date range selection action
-    //     // console.log(event.target.checked);
-    //     console.log("toggle date range selection: ", filterMenuStates.dateRangeSelection);
+    //     // // console.log(event.target.checked);
+    //     // console.log("toggle date range selection: ", filterMenuStates.dateRangeSelection);
     //     if (filterMenuStates.dateRangeSelection) {
     //         dispatch(setStartDate("yyyy-mm-ddThh:mm"));
     //         dispatch(setEndDate("yyyy-mm-ddThh:mm"));
@@ -111,19 +111,19 @@ function Topbar() {
 
     const handleSetStartDate = (event) => {
         //dispatch set start date action
-        console.log(event.target.value);
+        // console.log(event.target.value);
         dispatch(setStartDate(event.target.value + ":00"));
     };
 
     const handleSetEndDate = (event) => {
         //dispatch set end date action
-        console.log(event.target.value);
+        // console.log(event.target.value);
         dispatch(setEndDate(event.target.value + ":00"));
     };
 
     const handleGenerateAnalytics = () => {
         //dispatch generate analytics action
-        console.log("generate analytics");
+        // console.log("generate analytics");
         //send the analytics States state to the backend
         //get the plot data from the backend
         if ( filterMenuStates.startDate > filterMenuStates.endDate) {

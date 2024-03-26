@@ -108,10 +108,10 @@ app.whenReady().then(() => {
 
     //add the recurring transactions to the transaction table
     recurringTransactionOperations.enterRecurringTransactions().then( (status) => { 
-        console.log("Recurring Transactions Entered: ", status);
+        // console.log("Recurring Transactions Entered: ", status);
         if (status) win = createWindow();
-    }).catch((err) => { 
-        console.log("Recurring Transactions Entry Error: ", err);
+    }).catch(() => { 
+        // console.log("Recurring Transactions Entry Error: ", err);
     });
 
     
@@ -122,13 +122,13 @@ app.whenReady().then(() => {
     });
 
     //refresh the application
-    ipcMain.handle('refresh', (event, page) => {
-        recurringTransactionOperations.enterRecurringTransactions().then( (status) => { 
-            console.log("Recurring Transactions Entered: ", status);
-            console.log("Refreshing the application, the page is: ", page);
+    ipcMain.handle('refresh', () => {
+        recurringTransactionOperations.enterRecurringTransactions().then( () => { 
+            // console.log("Recurring Transactions Entered: ", status);
+            // console.log("Refreshing the application, the page is: ", page);
             win.reload();
-        }).catch((err) => { 
-            console.log("Recurring Transactions Entry Error: ", err);
+        }).catch(() => { 
+            // console.log("Recurring Transactions Entry Error: ", err);
         });
     });
 
@@ -137,10 +137,10 @@ app.whenReady().then(() => {
         //do the setup process
         setupProcess();
         recurringTransactionOperations.enterRecurringTransactions().then( (status) => {
-            console.log("Recurring Transactions Entered: ", status);
+            // console.log("Recurring Transactions Entered: ", status);
             if (status) win.reload();
-        }).catch((err) => {
-            console.log("Recurring Transactions Entry Error: ", err);
+        }).catch(() => {
+            // console.log("Recurring Transactions Entry Error: ", err);
         });
     });
 

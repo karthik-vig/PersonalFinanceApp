@@ -48,8 +48,8 @@ function SelectOptionMenu({selectOptions={},
                     className="mb-6 h-auto w-auto flex flex-col flex-nowrap justify-start"
                 >
                     {Object.keys(selectOptions).map((selectOptionID) => {
-                        console.log("rendering select option");
-                        console.log(selectOptions[selectOptionID]);
+                        // console.log("rendering select option");
+                        // console.log(selectOptions[selectOptionID]);
                         return (
                             <section 
                                 className="flex flex-row flex-nowrap"

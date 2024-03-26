@@ -21,10 +21,10 @@ function getReferenceIdOnTitle(event, title) {
         if (title === "choose" || title === "Empty Value") resolve(null);
         db.get(`SELECT id FROM financialEntities WHERE title = ?`, title, (err, row) => {
             if (err) {
-                console.log("financial entity : getReferenceIdOnTitle error = ", err);
+                // console.log("financial entity : getReferenceIdOnTitle error = ", err);
                 reject(null);
             }
-            console.log("financial entity : getReferenceIdOnTitle row = ", row);
+            // console.log("financial entity : getReferenceIdOnTitle row = ", row);
             resolve(row? row.id : null);
         });
     });
@@ -35,10 +35,10 @@ function getIdFromTitle(event, title) {
     return new Promise((resolve, reject) => { 
         db.get(`SELECT id FROM financialEntities WHERE title = ?`, title, (err, row) => {
             if (err) {
-                console.log("financial entity : getIdFromTitle error = ", err);
+                // console.log("financial entity : getIdFromTitle error = ", err);
                 reject(null);
             }
-            console.log("financial entity : getIdFromTitle row = ", row);
+            // console.log("financial entity : getIdFromTitle row = ", row);
             resolve(row? row.id : null);
         });
     });
@@ -50,11 +50,11 @@ function getTransactionEntities() {
     return new Promise((resolve, reject) => {
         db.all("SELECT title AS name, type FROM financialEntities", (err, rows) => {
             if (err) {
-                console.log("financial entity : getAllItems error = ", err);
+                // console.log("financial entity : getAllItems error = ", err);
                 reject(true);
             }
             else {
-                console.log("financial entity : getAllItems rows = ", rows);
+                // console.log("financial entity : getAllItems rows = ", rows);
                 const transactionEntities = rows && rows.length > 0 ? rows : [];
                 resolve(transactionEntities);
             }
@@ -67,16 +67,16 @@ function getTransactionEntities() {
 
 function getAllItems() {
 
-    console.log("financial entity : getAllItems called");
+    // console.log("financial entity : getAllItems called");
 
     return new Promise((resolve, reject) => {
         db.all("SELECT id, title, type FROM financialEntities", [], (err, rows) => {
             if (err) {
-                console.log("financial entity : getAllItems error = ", err);
+                // console.log("financial entity : getAllItems error = ", err);
                 reject([]);
             }
             else {
-                console.log("financial entity : getAllItems rows = ", rows);
+                // console.log("financial entity : getAllItems rows = ", rows);
                 const sideBarItems = rows && rows.length > 0 ? rows : [];
                 resolve(sideBarItems);
             }
@@ -94,8 +94,8 @@ function getAllItems() {
 
 function getItems(event, searchParams, filterParamsVisibility) {
     if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject([]); });
-    console.log("searchParams = ", searchParams);
-    console.log("filterParamsVisibility = ", filterParamsVisibility);
+    // console.log("searchParams = ", searchParams);
+    // console.log("filterParamsVisibility = ", filterParamsVisibility);
 
     return new Promise((resolve, reject) => {
         let queryStmt = `SELECT id, title, type FROM financialEntities WHERE title LIKE "%${searchParams.search}%"`;
@@ -132,11 +132,11 @@ function getItems(event, searchParams, filterParamsVisibility) {
 
         db.all(queryStmt, (err, rows) => { 
             if (err) {
-                console.log("Financial Entity Operations : getItems error = ", err);
+                // console.log("Financial Entity Operations : getItems error = ", err);
                 reject([]);
             }
             else {
-                console.log("Financial Entity Operations : getItems rows = ", rows);
+                // console.log("Financial Entity Operations : getItems rows = ", rows);
                 resolve(rows && rows.length > 0 ? rows : []);
             }
          });
@@ -152,7 +152,7 @@ function getItems(event, searchParams, filterParamsVisibility) {
 
 function createEntry() {
 
-    console.log("Financial Entity Operations : createEntry called");
+    // console.log("Financial Entity Operations : createEntry called");
 
     return new Promise((resolve, reject) => {
         const uuid = uuidv4();
@@ -160,11 +160,11 @@ function createEntry() {
         db.run(`INSERT INTO financialEntities (id, title, type, createdDate, modifiedDate) \
                 VALUES (?, ?, ?, ?, ?)`, uuid, "New Entry", null, currentDate, currentDate, (err) => {
             if (err) {
-                console.log("Financial Entity Operations : createEntry error = ", err);
+                // console.log("Financial Entity Operations : createEntry error = ", err);
                 reject(null);
             }
             else {
-                console.log("Financial Entity Operations : createEntry success");
+                // console.log("Financial Entity Operations : createEntry success");
                 resolve({id: uuid, title: "New Entry", type: null});
             }
         });
@@ -175,17 +175,17 @@ function createEntry() {
 function deleteItem(event, uuid) {
 
     if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject("Error: borwser protocol, domain and path validation fail"); });
-    console.log("delete entry uuid = ", uuid);
+    // console.log("delete entry uuid = ", uuid);
 
     return new Promise((resolve, reject) => {
         const deleteFiancialEntity = new Promise((resolve, reject) => {
             db.run(`DELETE FROM financialEntities WHERE id = ?`, uuid, (err) => {
                 if (err) {
-                    console.log("Financial Entity Operations : deleteItem error = ", err);
+                    // console.log("Financial Entity Operations : deleteItem error = ", err);
                     reject(err);
                 }
                 else {
-                    console.log("Financial Entity Operations : deleteItem success");
+                    // console.log("Financial Entity Operations : deleteItem success");
                     resolve(true);
                 }
             });
@@ -194,11 +194,11 @@ function deleteItem(event, uuid) {
         const deleteTransactionsFromReference = new Promise((resolve, reject) => {
             db.run(`UPDATE transactions SET fromReference = NULL WHERE fromReference = ?`, uuid, (err) => {
                 if (err) {
-                    console.log("Financial Entity Operations : deleteItem error = ", err);
+                    // console.log("Financial Entity Operations : deleteItem error = ", err);
                     reject(err);
                 }
                 else {
-                    console.log("Financial Entity Operations : deleteItem success");
+                    // console.log("Financial Entity Operations : deleteItem success");
                     resolve(true);
                 }
             });
@@ -207,11 +207,11 @@ function deleteItem(event, uuid) {
         const deleteTransactionsToReference = new Promise((resolve, reject) => {
             db.run(`UPDATE transactions SET toReference = NULL WHERE toReference = ?`, uuid, (err) => {
                 if (err) {
-                    console.log("Financial Entity Operations : deleteItem error = ", err);
+                    // console.log("Financial Entity Operations : deleteItem error = ", err);
                     reject(err);
                 }
                 else {
-                    console.log("Financial Entity Operations : deleteItem success");
+                    // console.log("Financial Entity Operations : deleteItem success");
                     resolve(true);
                 }
             });
@@ -225,7 +225,7 @@ function deleteItem(event, uuid) {
                             deleteTransactionsFromReferenceStatus,
                             deleteTransactionsToReferenceStatus
                         ]) => {
-                            console.log("Financial Entity Operations : deleteItem all promises success");
+                            // console.log("Financial Entity Operations : deleteItem all promises success");
                             if (deleteFiancialEntityStatus && 
                                 deleteTransactionsFromReferenceStatus && 
                                 deleteTransactionsToReferenceStatus) {
@@ -233,8 +233,8 @@ function deleteItem(event, uuid) {
                                 } else {
                                     reject(true);
                                 }
-                    }).catch((err) => { 
-                        console.log("Financial Entity Operations : deleteItem error = ", err[0] || err[1] || err[2]);
+                    }).catch(() => { 
+                        // console.log("Financial Entity Operations : deleteItem error = ", err[0] || err[1] || err[2]);
                         reject(true);
                     });  
     });
@@ -244,7 +244,7 @@ function deleteItem(event, uuid) {
 function modifyItem(event, selectedItem) {
 
     if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject({ modifyStatus: false, modifiedItem: null }); });
-    console.log("modifyItem selectedItem = ", selectedItem);
+    // console.log("modifyItem selectedItem = ", selectedItem);
 
     return new Promise((resolve, reject) => {
         db.run(`UPDATE financialEntities \
@@ -256,11 +256,11 @@ function modifyItem(event, selectedItem) {
                 selectedItem.id,   
                 (err) => {
                     if (err) {
-                        console.log("Financial Entity Operations : modifyItem error = ", err);
+                        // console.log("Financial Entity Operations : modifyItem error = ", err);
                         reject({ modifyStatus: false, modifiedItem: null });
                     }
                     else {
-                        console.log("Financial Entity Operations : modifyItem success");
+                        // console.log("Financial Entity Operations : modifyItem success");
                         resolve({ modifyStatus: true, item: {
                                                                 id: selectedItem.id, 
                                                                 title: selectedItem.title, 
@@ -277,16 +277,16 @@ function modifyItem(event, selectedItem) {
 function getSelectedItem(event, uuid) {
     
     if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(null); });
-    console.log("getSelectedItem uuid = ", uuid);
+    // console.log("getSelectedItem uuid = ", uuid);
 
     return new Promise((resolve, reject) => {
         db.get(`SELECT * FROM financialEntities WHERE id = ?`, uuid, (err, row) => {
             if (err) {
-                console.log("Financial Entity Operations : getSelectedItem error = ", err);
+                // console.log("Financial Entity Operations : getSelectedItem error = ", err);
                 reject(null);
             }
             else {
-                console.log("Financial Entity Operations : getSelectedItem success");
+                // console.log("Financial Entity Operations : getSelectedItem success");
                 const selectedItem = row? row : null;
                 if(selectedItem) {
                     selectedItem.createdDate = moment(selectedItem.createdDate).tz(timeZone).format().substring(0, 19);

@@ -103,8 +103,8 @@ function MainPage() {
    useEffect(() => {
         if (!triggerModifyEntryState) return;
         //modify the database
-        console.log("The Modify Entry trigger selected item is: ");
-        console.log(selectedItem);
+        // console.log("The Modify Entry trigger selected item is: ");
+        // console.log(selectedItem);
         window.transactionOperations.modifyItem(selectedItem).then(modifiedItem => {
             dispatch(modifySideBarItem({id: selectedItem.id, modifiedItem: modifiedItem }));
             dispatch(showSuccessBox("Saved the Details to Disk"));
@@ -125,8 +125,8 @@ function MainPage() {
         if (!triggerDeleteEntryState) return;
         //delete the entry from the database
         window.transactionOperations.deleteItem(selectedItem.id).then(() => {
-            console.log("The Delete Entry trigger selected item ID is: ");
-            console.log(selectedItem.id);
+            // console.log("The Delete Entry trigger selected item ID is: ");
+            // console.log(selectedItem.id);
             dispatch(removeSideBarItem(selectedItem.id));
             dispatch(resetSelectedItem());
             dispatch(resetCurrentSelectedItem());

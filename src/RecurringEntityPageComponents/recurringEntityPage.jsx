@@ -122,11 +122,11 @@ function RecurringEntityPage() {
    //trigger on modify entry
    useEffect(() => {
         if (!triggerModifyEntryState) return;
-        console.log("The Modify Entry trigger selected item is: ");
-        console.log(selectedItem);
+        // console.log("The Modify Entry trigger selected item is: ");
+        // console.log(selectedItem);
         //modify the transaction table retroactively
         if (modifyOptionsState.selectOptions.modifyRetroactively) {
-            console.log("Modify the entry associated with the recurring transaction retroactively in the transaction table");
+            // console.log("Modify the entry associated with the recurring transaction retroactively in the transaction table");
             //back-end function to modify the transaction table retroactively
             window.transactionOperations.modifyTransactionReferenceID(selectedItem).then((status) => {
                 if (status)
@@ -165,7 +165,7 @@ function RecurringEntityPage() {
         if (!triggerDeleteEntryState) return;
         //delete the entry from transaction table retroactively the database
         if (deleteOptionsState.selectOptions.deleteRetroactively) {
-            console.log("Delete the entry associated with the recurring transaction retroactively from the transaction table");
+            // console.log("Delete the entry associated with the recurring transaction retroactively from the transaction table");
             window.transactionOperations.deleteTransactionOnRecurringReferenceID(selectedItem.id).then((status) => {
                 if (status)
                 dispatch(showSuccessBox("Deleted the Associated Transaction Entries"));
@@ -176,10 +176,10 @@ function RecurringEntityPage() {
         }
         //delete the entry from recrurring transaction table in the database
         if (deleteOptionsState.selectOptions.deleteOnlyThis) {
-            console.log("Delete the recurring transaction entry from the database");
+            // console.log("Delete the recurring transaction entry from the database");
             window.recurringTransactionOperations.deleteItem(selectedItem.id).then(() => {
-                console.log("The Delete Entry trigger selected item ID is: ");
-                console.log(selectedItem.id);
+                // console.log("The Delete Entry trigger selected item ID is: ");
+                // console.log(selectedItem.id);
                 dispatch(removeSideBarItem(selectedItem.id));
                 dispatch(resetSelectedItem());
                 dispatch(resetCurrentSelectedItem());

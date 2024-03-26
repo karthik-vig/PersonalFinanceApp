@@ -37,7 +37,7 @@ LabelText.propTypes = {
 
 function CheckboxInputField({additionalClasses, fieldName, checkedStatus, handleInputChange}){ 
     
-        console.log("filter menu section checkedStatus: ", fieldName, checkedStatus);
+        // console.log("filter menu section checkedStatus: ", fieldName, checkedStatus);
 
         return (
             <input 

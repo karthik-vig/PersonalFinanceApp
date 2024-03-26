@@ -62,7 +62,7 @@ function getStatsByCategoryPlotData(event, filterOptions) {
         db.all(queryStmt,
               (err, rows) => {
                 if (err) {
-                    console.log(`Get Stats By Category Plot Data Error ${err}`);
+                    // console.log(`Get Stats By Category Plot Data Error ${err}`);
                     reject(true);
                 }
                 rows.forEach((row) => { 
@@ -121,7 +121,7 @@ function getLinePlotData(event, filterOptions) {
         db.all(queryStmt,
             (err, rows) => {
                 if (err) {
-                    console.log(`Get Line Plot Data Error ${err}`);
+                    // console.log(`Get Line Plot Data Error ${err}`);
                     reject(true);
                 }
 
@@ -211,8 +211,8 @@ function updateFinancialEntityReferenceID(event,
 
         Promise.all([upateFromReferenceID, upateToReferenceID]).then(() => {
             resolve();
-        }).catch((err) => {
-            console.log(`Update Financial Entity Reference ID Error ${err}`);
+        }).catch(() => {
+            // console.log(`Update Financial Entity Reference ID Error ${err}`);
             reject(true);
         });
     });
@@ -266,8 +266,8 @@ function modifyTransactionReferenceID(event, recurringTransactionSelectedItem) {
                     recurringTransactionSelectedItem.id, (err) => {
                         if (err) reject(true);
                         resolve(true);
-            }).catch((err) => {
-                console.log(`Modify Transaction Reference ID Error ${err}`);
+            }).catch(() => {
+                // console.log(`Modify Transaction Reference ID Error ${err}`);
                 reject(true);
              });
         }); 
@@ -289,14 +289,14 @@ function deleteTransactionOnRecurringReferenceID(event, recurringReferenceID) {
 //file blob simulated backend functions
 function getFileBlob(fileName) {
     //communicate with backend to get the file blob
-    console.log( "get file blob fileName: ", fileName);
+    // console.log( "get file blob fileName: ", fileName);
     return currentSelectedItemFiles[fileName] ?? null; //could also return null if the operation fails
     //return  fileBufferData;
 }
 
 function setFileBlob(fileName, arrayBuffer) {
     //communicate with backend to set the file blob
-    console.log( "set file blob fileName: ", fileName, " fileBlob: ", arrayBuffer);
+    // console.log( "set file blob fileName: ", fileName, " fileBlob: ", arrayBuffer);
     currentSelectedItemFiles[fileName] = arrayBuffer;
     return true; //could also return false if the operation fails
 }
@@ -304,7 +304,7 @@ function setFileBlob(fileName, arrayBuffer) {
 function deleteFileBlob(event, fileName) {
     if (!validateBrowserWindowPath(event.senderFrame.url)) return false;
     //communicate with backend to delete the file blob
-    console.log( "delete file blob fileName: ", fileName);
+    // console.log( "delete file blob fileName: ", fileName);
     //const currentSelectedItemFiles = getCurrentSelectedItemFiles();
     const currentSelectedItemFilenames = new Set(Object.keys(currentSelectedItemFiles));
     if (currentSelectedItemFilenames.has(fileName)){
@@ -316,10 +316,10 @@ function deleteFileBlob(event, fileName) {
 
 
 //file all files entry from files table based on uuid
-function getFileEntries(event, uuid) {
+function getFileEntries(event) {
     if (!validateBrowserWindowPath(event.senderFrame.url)) return null;
     //communicate with backend to get all file entries
-    console.log("getAllFileEntries called with id: ", uuid);
+    // console.log("getAllFileEntries called with id: ", uuid);
     //specifically it fetches the data from the files table based on the uuid
     //this works as the the uuid of the files in the files table is same
     //as the uuid of the transaction in the transaction table
@@ -330,7 +330,7 @@ function getFileEntries(event, uuid) {
 //backed function to get all items for the side bar
 function getAllItems() {
     //communicate with backend to get all items
-    console.log("getAllItems called");
+    // console.log("getAllItems called");
 
     return new Promise((resolve, reject) => {
         db.all(`SELECT \
@@ -342,12 +342,12 @@ function getAllItems() {
                 transactionCategory\
                 FROM transactions`, (err, rows) => {
             if (err) {
-                console.log(`Get All Items Error ${err}`);
+                // console.log(`Get All Items Error ${err}`);
                 reject([]);
             }
             else {
-                console.log("Get All Items Success");
-                console.log(typeof rows);
+                // console.log("Get All Items Success");
+                // console.log(typeof rows);
                 if(rows && rows.length > 0) {
                     rows.forEach((row) => {
                         row.transactionDate = moment(row.transactionDate).tz(timeZone).format().substring(0, 19);
@@ -365,7 +365,7 @@ function getItems(event, searchParams, filterParamsVisibility) {
     if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(null); });
     //communicate with backend to get items
     //based on the searchParams
-    console.log("getItems called with searchParams: ", searchParams);
+    // console.log("getItems called with searchParams: ", searchParams);
     ///*
     return new Promise((resolve, reject) => {
 
@@ -373,12 +373,12 @@ function getItems(event, searchParams, filterParamsVisibility) {
             if (filterParamsVisibility.fromEntity && searchParams.filter.fromEntity && searchParams.filter.fromEntity !== "choose") {
             db.all(`SELECT id from financialEntities WHERE title = ?`, searchParams.filter.fromEntity, (err, rows) => { 
                 if (err) {
-                    console.log(`Get From Reference ID Error ${err}`);
+                    // console.log(`Get From Reference ID Error ${err}`);
                     reject(err);
                 }
                 else {
-                    console.log("Get From Reference ID Success");
-                    console.log(rows);
+                    // console.log("Get From Reference ID Success");
+                    // console.log(rows);
                     const fromReferenceID = rows && rows.length > 0 ? rows[0].id : null;
                     resolve(` AND (fromReference = "${fromReferenceID}")`);
                 }
@@ -387,8 +387,8 @@ function getItems(event, searchParams, filterParamsVisibility) {
             else {
                 resolve(``);
             }
-        }).catch((err) => {
-            console.log(`Get From Reference ID Error ${err}`);
+        }).catch(() => {
+            // console.log(`Get From Reference ID Error ${err}`);
             resolve(null);
         });
 
@@ -397,12 +397,12 @@ function getItems(event, searchParams, filterParamsVisibility) {
             if (filterParamsVisibility.toEntity && searchParams.filter.toEntity && searchParams.filter.toEntity !== "choose") {
             db.all(`SELECT id from financialEntities WHERE title = ?`, searchParams.filter.toEntity, (err, rows) => { 
                 if (err) {
-                    console.log(`Get To Reference ID Error ${err}`);
+                    // console.log(`Get To Reference ID Error ${err}`);
                     reject(err);
                 }
                 else {
-                    console.log("Get To Reference ID Success");
-                    console.log(rows);
+                    // console.log("Get To Reference ID Success");
+                    // console.log(rows);
                     const toReferenceID = rows && rows.length > 0 ? rows[0].id : null;
                     resolve(` AND (toReference = "${toReferenceID}")`);
                 }
@@ -411,8 +411,8 @@ function getItems(event, searchParams, filterParamsVisibility) {
             else {
                 resolve(``);
             }
-        }).catch((err) => {
-            console.log(`Get From Reference ID Error ${err}`);
+        }).catch(() => {
+            // console.log(`Get From Reference ID Error ${err}`);
             resolve(null);
         });
 
@@ -420,12 +420,12 @@ function getItems(event, searchParams, filterParamsVisibility) {
             if (filterParamsVisibility.recurringEntity && searchParams.filter.recurringEntity && searchParams.filter.recurringEntity !== "choose") {
                 db.all(`SELECT id from recurringTransactions WHERE title = ?`, searchParams.filter.recurringEntity, (err, rows) => {
                     if (err) {
-                        console.log(`Get Recurring Reference ID Error ${err}`);
+                        // console.log(`Get Recurring Reference ID Error ${err}`);
                         reject(err);
                     }
                     else {
-                        console.log("Get Recurring Reference ID Success");
-                        console.log(rows);
+                        // console.log("Get Recurring Reference ID Success");
+                        // console.log(rows);
                         const recurringReferenceID = rows && rows.length > 0 ? rows[0].id : null;
                         resolve(` AND (recurringReference = "${recurringReferenceID}")`);
                     }
@@ -434,8 +434,8 @@ function getItems(event, searchParams, filterParamsVisibility) {
             else {
                 resolve(``);
             }
-        }).catch((err) => {
-            console.log(`Get Recurring Reference ID Error ${err}`);
+        }).catch(() => {
+            // console.log(`Get Recurring Reference ID Error ${err}`);
             resolve(null);
         });
 
@@ -482,12 +482,12 @@ function getItems(event, searchParams, filterParamsVisibility) {
 
         db.all(queryStmt, (err, rows) => { 
             if (err) {
-                console.log(`Get Items Error ${err}`);
+                // console.log(`Get Items Error ${err}`);
                 reject(null);
             }
             else {
-                console.log("Get Items Success");
-                console.log(rows);
+                // console.log("Get Items Success");
+                // console.log(rows);
                 if(rows && rows.length > 0) {
                     rows.forEach((row) => {
                         row.transactionDate = moment(row.transactionDate).tz(timeZone).format().substring(0, 19);
@@ -497,8 +497,8 @@ function getItems(event, searchParams, filterParamsVisibility) {
             }
          });
 
-        }).catch((err) => {
-            console.log(`Get All Reference IDs Error ${err}`);
+        }).catch(() => {
+            // console.log(`Get All Reference IDs Error ${err}`);
             reject(null);
         });
     });
@@ -519,7 +519,7 @@ function getItems(event, searchParams, filterParamsVisibility) {
 function getSelectedItem(event, uuid) {
     if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(null); });
     //communicate with backend to get the selectedItem
-    console.log("getSelectedItem called with id: ", uuid);
+    // console.log("getSelectedItem called with id: ", uuid);
     //clear any cotents in the currentSelectedItemFiles
     currentSelectedItemFiles = {};
     
@@ -567,12 +567,12 @@ function getSelectedItem(event, uuid) {
                         FROM transactions \
                         WHERE id = "${uuid}"`, (err, row) => {
                     if (err) {
-                        console.log(`Get Selected Item Error ${err}`);
+                        // console.log(`Get Selected Item Error ${err}`);
                         reject(err);
                     }
                     else {
-                        console.log("Transaction Table Information (getSelectedItem):");
-                        console.log(row);
+                        // console.log("Transaction Table Information (getSelectedItem):");
+                        // console.log(row);
                         const createdDate = moment(row.createdDate).tz(timeZone).format().substring(0, 16);
                         const modifiedDate = moment(row.modifiedDate).tz(timeZone).format().substring(0, 16);
                         const transactionDate = moment(row.transactionDate).tz(timeZone).format().substring(0, 16);
@@ -600,19 +600,19 @@ function getSelectedItem(event, uuid) {
         fetchTransactionDetail.then(() => { 
 
             const fetchFromFinanaicalEntity = new Promise((resolve, reject) => {
-                console.log("fromReferenceID in fetch from financial entity promise (getSelectedItem):", fromReferenceID)
+                // console.log("fromReferenceID in fetch from financial entity promise (getSelectedItem):", fromReferenceID)
                 db.all(`SELECT \
                         title, \
                         type \
                         FROM financialEntities 
                         WHERE id = "${fromReferenceID}"`, (err, rows) => {
                             if (err) {
-                                console.log(`Get Selected Item Error ${err}`);
+                                // console.log(`Get Selected Item Error ${err}`);
                                 reject(err);
                             }
                             else {
-                                console.log("(FROM) Financial Entity Table Information (getSelectedItem):");
-                                console.log(rows);
+                                // console.log("(FROM) Financial Entity Table Information (getSelectedItem):");
+                                // console.log(rows);
                                 resolve(rows);
                             }
                 });
@@ -625,12 +625,12 @@ function getSelectedItem(event, uuid) {
                         FROM financialEntities 
                         WHERE id = "${toReferenceID}"`, (err, rows) => {
                             if (err) {
-                                console.log(`Get Selected Item Error ${err}`);
+                                // console.log(`Get Selected Item Error ${err}`);
                                 reject(err);
                             }
                             else {
-                                console.log("(TO) Financial Entity Table Information (getSelectedItem):");
-                                console.log(rows);
+                                // console.log("(TO) Financial Entity Table Information (getSelectedItem):");
+                                // console.log(rows);
                                 resolve(rows);
                             }
                 });
@@ -642,13 +642,13 @@ function getSelectedItem(event, uuid) {
                         FROM recurringTransactions \
                         WHERE id = "${recurringReferenceID}"`, (err, rows) => {
                             if (err) {
-                                console.log(`Get Recurring Transaction Reference ID in modifyItem: ${err}`);
+                                // console.log(`Get Recurring Transaction Reference ID in modifyItem: ${err}`);
                                 //reject({modifyStatus: false, item: null});
                                 reject(err);
                             }
                             else {
-                                console.log("Recurring Entity Table Information (getSelectedItem):");
-                                console.log(recurringReferenceID);
+                                // console.log("Recurring Entity Table Information (getSelectedItem):");
+                                // console.log(recurringReferenceID);
                                 resolve(rows);            
                             }
                 });
@@ -657,13 +657,13 @@ function getSelectedItem(event, uuid) {
         const fetchFileInformation = new Promise((resolve, reject) => { 
                 db.all(`SELECT filename, filedata FROM files WHERE id = "${uuid}"`, (err, rows) => {
                     if (err) {
-                        console.log(`Get Selected Item Error ${err}`);
+                        // console.log(`Get Selected Item Error ${err}`);
                         reject(err);
                         //return null;
                     }
                     else {
-                        console.log("Files Table Information (getSelectedItem):");
-                        console.log(rows);
+                        // console.log("Files Table Information (getSelectedItem):");
+                        // console.log(rows);
                         resolve(rows);
                     }
                 });
@@ -676,7 +676,7 @@ function getSelectedItem(event, uuid) {
                 fetchFileInformation
             ]);
 
-            console.log("fromReferenceID in resolved area of fetch transaction detail (getSelectedItem):", fromReferenceID)
+            // console.log("fromReferenceID in resolved area of fetch transaction detail (getSelectedItem):", fromReferenceID)
             fetchAllInformation.then(([ 
                                         fromFinancialEntityRows, 
                                         toFinancialEntityRows, 
@@ -701,16 +701,16 @@ function getSelectedItem(event, uuid) {
                                                     selectedItem.file.push(row.filename);
                                                 });
                                             } 
-                                            console.log("selectedItem created in the backend: ", selectedItem);
+                                            // console.log("selectedItem created in the backend: ", selectedItem);
                                             resolve(selectedItem);
 
-                                        }).catch((err) => {
-                                            console.log(`Get Selected Item Error ${err}`);
+                                        }).catch(() => {
+                                            // console.log(`Get Selected Item Error ${err}`);
                                             reject(null);
                                         });
             
-        }).catch((err) => {
-            console.log(`Get Selected Item Error ${err}`);
+        }).catch(() => {
+            // console.log(`Get Selected Item Error ${err}`);
             reject(null);
         });
 
@@ -722,18 +722,18 @@ function getSelectedItem(event, uuid) {
 function deleteItem(event, id) {
     if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(true); });
     //communicate with backend to delete the item
-    console.log("deleteItem called with id: ", id);
+    // console.log("deleteItem called with id: ", id);
     return new Promise((resolve, reject) => {
         db.serialize(() => {
 
             const fetchTransactionDelete = new Promise((resolve, reject) => {
                 db.run(`DELETE FROM transactions WHERE id = "${id}"`, (err) => {
                     if (err) {
-                        console.log(`Delete Item Error ${err}`);
+                        // console.log(`Delete Item Error ${err}`);
                         reject(err);
                     }
                     else {
-                        console.log("Delete transaction table entry Item Successful");
+                        // console.log("Delete transaction table entry Item Successful");
                         resolve(true);
                     }
                 });
@@ -742,11 +742,11 @@ function deleteItem(event, id) {
             const fetchFileDelete = new Promise((resolve, reject) => {
                 db.run(`DELETE FROM files WHERE id = "${id}"`, (err) => {
                     if (err) {
-                        console.log(`Delete Item Error ${err}`);
+                        // console.log(`Delete Item Error ${err}`);
                         reject(err);
                     }
                     else {
-                        console.log("Delete file table entry Item Successful");
+                        // console.log("Delete file table entry Item Successful");
                         resolve(true);
                     }
                 });
@@ -756,8 +756,8 @@ function deleteItem(event, id) {
             fetchAllDelete.then(([transactionDeleteStatus, fileDeleteStatus]) => {
                 if (transactionDeleteStatus && fileDeleteStatus) resolve();
                 else reject(true);
-            }).catch((err) => {
-                console.log(`Delete Item Error ${err}`);
+            }).catch(() => {
+                // console.log(`Delete Item Error ${err}`);
                 reject(true);
             });
         });
@@ -768,8 +768,8 @@ function deleteItem(event, id) {
 function modifyItem(event, selectedItem){
     if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject({modifyStatus: false, item: null}); });
     //communicate with backend to modify the item
-    console.log("modifyItem called with id: ", selectedItem.id);
-    console.log("modifyItem called with selectedItem: ", selectedItem);
+    // console.log("modifyItem called with id: ", selectedItem.id);
+    // console.log("modifyItem called with selectedItem: ", selectedItem);
 
     return new Promise((resolve, reject) => {
         db.serialize(() => {
@@ -780,14 +780,14 @@ function modifyItem(event, selectedItem){
                         FROM financialEntities \
                         WHERE title = ?`, selectedItem.fromEntity, (err, rows) => {
                             if (err) {
-                                console.log(`Get Financial Reference ID in modifyItem: ${err}`);
+                                // console.log(`Get Financial Reference ID in modifyItem: ${err}`);
                                 reject(err);
                             }
                             else {
-                                console.log("Get From Financial Entity Reference ID Success in modifyItem");
-                                console.log(rows);
+                                // console.log("Get From Financial Entity Reference ID Success in modifyItem");
+                                // console.log(rows);
                                 const fromReferenceID = rows && rows.length > 0 ? rows[0].id : null;
-                                console.log(fromReferenceID);
+                                // console.log(fromReferenceID);
                                 resolve(fromReferenceID);
                             }
                         });
@@ -799,13 +799,13 @@ function modifyItem(event, selectedItem){
                         FROM financialEntities \
                         WHERE title = ?`, selectedItem.toEntity, (err, rows) => {
                             if (err) {
-                                console.log(`Get Financial Reference ID in modifyItem: ${err}`);
+                                // console.log(`Get Financial Reference ID in modifyItem: ${err}`);
                                 reject(err);
                             }
                             else {
-                                console.log("Get To Financial Entity Reference ID Success in modifyItem");
+                                // console.log("Get To Financial Entity Reference ID Success in modifyItem");
                                 const toReferenceID = rows && rows.length > 0 ? rows[0].id : null;
-                                console.log(toReferenceID);
+                                // console.log(toReferenceID);
                                 resolve(toReferenceID);
                             }
                         });
@@ -817,13 +817,13 @@ function modifyItem(event, selectedItem){
                         FROM recurringTransactions \
                         WHERE title = ?`, selectedItem.recurringEntity, (err, rows) => {
                             if (err) {
-                                console.log(`Get Recurring Transaction Reference ID in modifyItem: ${err}`);
+                                // console.log(`Get Recurring Transaction Reference ID in modifyItem: ${err}`);
                                 reject(err);
                             }
                             else {
-                                console.log("Get Recurring Entity Reference ID Success in modifyItem");
+                                // console.log("Get Recurring Entity Reference ID Success in modifyItem");
                                 const recurringReferenceID = rows && rows.length > 0 ? rows[0].id : null;
-                                console.log(recurringReferenceID);
+                                // console.log(recurringReferenceID);
                                 resolve(recurringReferenceID);
                             }
                         });
@@ -843,7 +843,7 @@ function modifyItem(event, selectedItem){
                         reject(err);
                     }
                     else {
-                        console.log("Insert File Entries Success");
+                        // console.log("Insert File Entries Success");
                         resolve(true);
                     }
                 });
@@ -853,20 +853,20 @@ function modifyItem(event, selectedItem){
                 const fetchFilenamesToDelete = new Promise((resolve, reject) => {
                     db.all(`SELECT filename FROM files WHERE id = ?`, selectedItem.id, (err, rows) => {
                         if (err) {
-                            console.log(`Get Selected Item Error ${err}`);
+                            // console.log(`Get Selected Item Error ${err}`);
                             reject(err);
                         }
                         else {
-                            console.log("Files Table Information (getSelectedItem):");
-                            console.log(rows);
+                            // console.log("Files Table Information (getSelectedItem):");
+                            // console.log(rows);
                             resolve(rows);
                         }
                     });
                 });
 
                 fetchFilenamesToDelete.then((rows) => {
-                    console.log("rows from files table in deleteFileEntries: ", rows);
-                    console.log("filenames from currentSelectedItemFiles: ", Object.keys(currentSelectedItemFiles));
+                    // console.log("rows from files table in deleteFileEntries: ", rows);
+                    // console.log("filenames from currentSelectedItemFiles: ", Object.keys(currentSelectedItemFiles));
                     const deleteFileEntryStmt = db.prepare(`DELETE FROM files WHERE id = ? \
                                                             AND filename = ?`);
                     const currentSelectedItemFilenames = new Set(Object.keys(currentSelectedItemFiles));
@@ -880,12 +880,12 @@ function modifyItem(event, selectedItem){
                             resolve(false);
                         }
                         else {
-                            console.log("Delete File Entries Success");
+                            // console.log("Delete File Entries Success");
                             resolve(true);
                         }
                     });
                 }).catch((err) => {
-                    console.log(`Delete Item Error ${err}`);
+                    // console.log(`Delete Item Error ${err}`);
                     reject(err);
                 });
             });
@@ -905,10 +905,10 @@ function modifyItem(event, selectedItem){
                                         insertFileEntriesStatus,
                                         deleteFileEntiresStatus
                                     ]) => {
-                console.log("fromReferenceID in modifyItem: ");
-                console.log("fromReferenceID: ", fromReferenceID);
-                console.log("toReferenceID: ", toReferenceID);
-                console.log("recurringReferenceID: ", recurringReferenceID);
+                // console.log("fromReferenceID in modifyItem: ");
+                // console.log("fromReferenceID: ", fromReferenceID);
+                // console.log("toReferenceID: ", toReferenceID);
+                // console.log("recurringReferenceID: ", recurringReferenceID);
                 const transactionDate = moment.tz(selectedItem.transactionDate, timeZone).tz("UTC").format().substring(0, 19) + "Z";
                 const modifiedDate = new Date().toISOString().substring(0, 19) + "Z";
                 db.run(`UPDATE transactions SET \
@@ -940,13 +940,13 @@ function modifyItem(event, selectedItem){
                             selectedItem.id,
                             (err) => {
                             if (err) {
-                                console.log(`Modify Item Error ${err}`);
+                                // console.log(`Modify Item Error ${err}`);
                                 //reject({modifyStatus: false, item: null});
                                 resolve({modifyStatus: false, item: null});
                             }
                             else {
-                                console.log("Modify Item Success");
-                                console.log(fromReferenceID)
+                                // console.log("Modify Item Success");
+                                // console.log(fromReferenceID)
                                 if (insertFileEntriesStatus && deleteFileEntiresStatus) {
                                 resolve( {
                                     modifyStatus: true,
@@ -966,8 +966,8 @@ function modifyItem(event, selectedItem){
                             }
                         });
 
-                }).catch((err) => {
-                    console.log(`Modify Item Error ${err}`);
+                }).catch(() => {
+                    // console.log(`Modify Item Error ${err}`);
                     reject({modifyStatus: false, item: null})
                 });
             })
@@ -1020,11 +1020,11 @@ function createEntry() {
                     "${currentDateTime.substring(0, 16) + ":00Z"}" \
                     )`, (err) => {
                         if (err) {
-                            console.log(`Create Entry Error ${err}`);
+                            // console.log(`Create Entry Error ${err}`);
                             reject(true);
                         }
                         else {
-                            console.log("Create Entry Success");
+                            // console.log("Create Entry Success");
                             resolve({
                                 id: uuid, 
                                 title: "NEW ENTRY", 
@@ -1049,7 +1049,7 @@ async function openGetFileDialog(){
     });
     const fileNames = []
     filePaths.forEach((filePath) => {
-        console.log(path);
+        // console.log(path);
         const bufferData = fs.readFileSync(filePath);
         const fileName = path.basename(filePath);
         fileNames.push(fileName);
@@ -1073,7 +1073,7 @@ async function openSaveFileDialog(event, fileName ){
     try {
         fs.writeFileSync(saveFileResult.filePath, bufferData);
     } catch (err) {
-        console.log(err);
+        // console.log(err);
         return false;
     }
     return true;
