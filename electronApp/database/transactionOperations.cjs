@@ -3,6 +3,7 @@ const { dialog } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs');
 const moment = require('moment-timezone');
+const { validateBrowserWindowPath } = require('./commonOperations.cjs');
 
 let currentSelectedItemFiles = {};
 let db = null;
@@ -17,6 +18,7 @@ function setTimeZone(selectedTimeZone) {
 }
 
 function getStatsByCategoryPlotData(event, filterOptions) {
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(true); });
     return new Promise((resolve, reject) => {
         const statsByCategoryPlotData = {
             labels: ["Groceries", "Restaurants and Dining", "Shopping", "Utilities", "Telecommunication",
@@ -73,6 +75,7 @@ function getStatsByCategoryPlotData(event, filterOptions) {
 }
 
 function getLinePlotData(event, filterOptions) {
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(true); });
     return new Promise((resolve, reject) => { 
         const expenditurePlotData = {
             labels: [],
@@ -180,6 +183,7 @@ function getLinePlotData(event, filterOptions) {
 function updateFinancialEntityReferenceID(event, 
                                           oldFinancialEntityReferenceID, 
                                           newFinancialEntityReferenceID) {
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(true); });
     return new Promise((resolve, reject) => {
         const upateFromReferenceID = new Promise((resolve, reject) => {
             db.run(`UPDATE transactions SET \
@@ -215,6 +219,7 @@ function updateFinancialEntityReferenceID(event,
 }
 
 function modifyTransactionReferenceID(event, recurringTransactionSelectedItem) {
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(true); });
     return new Promise((resolve, reject) => {
 
         const fetchToFinanaicalEntityReferenceID = new Promise((resolve, reject) => {
@@ -270,7 +275,7 @@ function modifyTransactionReferenceID(event, recurringTransactionSelectedItem) {
 }
 
 function deleteTransactionOnRecurringReferenceID(event, recurringReferenceID) {
-
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(true); });
     return new Promise((resolve, reject) => {
         db.run(`DELETE FROM transactions WHERE recurringReference = ?`, recurringReferenceID, (err) => { 
             if (err) reject(true);
@@ -297,6 +302,7 @@ function setFileBlob(fileName, arrayBuffer) {
 }
 
 function deleteFileBlob(event, fileName) {
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return false;
     //communicate with backend to delete the file blob
     console.log( "delete file blob fileName: ", fileName);
     //const currentSelectedItemFiles = getCurrentSelectedItemFiles();
@@ -311,6 +317,7 @@ function deleteFileBlob(event, fileName) {
 
 //file all files entry from files table based on uuid
 function getFileEntries(event, uuid) {
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return null;
     //communicate with backend to get all file entries
     console.log("getAllFileEntries called with id: ", uuid);
     //specifically it fetches the data from the files table based on the uuid
@@ -355,6 +362,7 @@ function getAllItems() {
 //this should actually be a backed side function;
 //here just to simulate the effect.
 function getItems(event, searchParams, filterParamsVisibility) { 
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(null); });
     //communicate with backend to get items
     //based on the searchParams
     console.log("getItems called with searchParams: ", searchParams);
@@ -509,6 +517,7 @@ function getItems(event, searchParams, filterParamsVisibility) {
 //some other functions are:
 //for getting the selectedItem value based on id; return null if the operation fails
 function getSelectedItem(event, uuid) {
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(null); });
     //communicate with backend to get the selectedItem
     console.log("getSelectedItem called with id: ", uuid);
     //clear any cotents in the currentSelectedItemFiles
@@ -711,6 +720,7 @@ function getSelectedItem(event, uuid) {
 
 //using id to delete an entry; return false if the operation fails
 function deleteItem(event, id) {
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(true); });
     //communicate with backend to delete the item
     console.log("deleteItem called with id: ", id);
     return new Promise((resolve, reject) => {
@@ -756,6 +766,7 @@ function deleteItem(event, id) {
 
 //takes selecteItem to modify an entry; return object if the operation succes; null if failure
 function modifyItem(event, selectedItem){
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject({modifyStatus: false, item: null}); });
     //communicate with backend to modify the item
     console.log("modifyItem called with id: ", selectedItem.id);
     console.log("modifyItem called with selectedItem: ", selectedItem);
@@ -1049,6 +1060,7 @@ async function openGetFileDialog(){
 
 
 async function openSaveFileDialog(event, fileName ){
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return false;
     const bufferData = getFileBlob(fileName);
     const saveFileResult = await dialog.showSaveDialog({
         title: 'Save File',

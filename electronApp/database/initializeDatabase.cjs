@@ -2,6 +2,7 @@ const sqlite = require('sqlite3');
 const fs = require('node:fs');
 const { dialog } = require('electron');
 const getConfigFileTemplate = require('./configFileTemplate.cjs');
+const { validateBrowserWindowPath } = require('./commonOperations.cjs');
 
 
 let db = null;
@@ -148,6 +149,7 @@ function initDatabase() {
 }
 
 async function updateConfigFile(event, filePath, timezone) {
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return;
     configFile.filePath = filePath;
     configFile.timezone = timezone;
     fs.writeFileSync('./data/config.json', JSON.stringify(configFile, null, 4));

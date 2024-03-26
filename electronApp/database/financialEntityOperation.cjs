@@ -2,6 +2,7 @@
 //const fs = require('node:fs');
 const moment = require('moment-timezone');
 const { v4: uuidv4 } = require('uuid');
+const { validateBrowserWindowPath } = require('./commonOperations.cjs');
 
 let db = null;
 let timeZone = null;
@@ -15,6 +16,7 @@ function setTimeZone(selectedTimeZone) {
 }
 
 function getReferenceIdOnTitle(event, title) {
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(null); });
     return new Promise((resolve, reject) => {
         if (title === "choose" || title === "Empty Value") resolve(null);
         db.get(`SELECT id FROM financialEntities WHERE title = ?`, title, (err, row) => {
@@ -29,7 +31,7 @@ function getReferenceIdOnTitle(event, title) {
 }
 
 function getIdFromTitle(event, title) {
-
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(null); });
     return new Promise((resolve, reject) => { 
         db.get(`SELECT id FROM financialEntities WHERE title = ?`, title, (err, row) => {
             if (err) {
@@ -91,6 +93,7 @@ function getAllItems() {
 }
 
 function getItems(event, searchParams, filterParamsVisibility) {
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject([]); });
     console.log("searchParams = ", searchParams);
     console.log("filterParamsVisibility = ", filterParamsVisibility);
 
@@ -171,6 +174,7 @@ function createEntry() {
 
 function deleteItem(event, uuid) {
 
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject("Error: borwser protocol, domain and path validation fail"); });
     console.log("delete entry uuid = ", uuid);
 
     return new Promise((resolve, reject) => {
@@ -238,6 +242,8 @@ function deleteItem(event, uuid) {
 }
 
 function modifyItem(event, selectedItem) {
+
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject({ modifyStatus: false, modifiedItem: null }); });
     console.log("modifyItem selectedItem = ", selectedItem);
 
     return new Promise((resolve, reject) => {
@@ -270,6 +276,7 @@ function modifyItem(event, selectedItem) {
 
 function getSelectedItem(event, uuid) {
     
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(null); });
     console.log("getSelectedItem uuid = ", uuid);
 
     return new Promise((resolve, reject) => {

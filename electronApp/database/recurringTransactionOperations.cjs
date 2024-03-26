@@ -1,12 +1,15 @@
 //const { current } = require('immer');
 const { v4: uuidv4 } = require('uuid');
 const moment = require('moment-timezone');
+const { validateBrowserWindowPath } = require('./commonOperations.cjs');
 
 let db = null;
 let timeZone = null;
 
 
 function getIdFromTitle(event, title) {
+
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(true); });
 
     return new Promise((resolve, reject) => { 
         db.get(`SELECT id FROM recurringTransactions WHERE title = ?`, title, (err, row) => { 
@@ -47,6 +50,7 @@ function setTimeZone(selectedTimeZone) {
 function updateFinancialEntityReferenceID(event,
                                           oldFinancialEntityReferenceID,
                                           newFinancialEntityReferenceID) {
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(true); });
     return new Promise((resolve, reject) => {
         const upateFromReferenceID = new Promise((resolve, reject) => {
             db.run(`UPDATE recurringTransactions SET \
@@ -636,6 +640,7 @@ function getAllItems() {
 }
 
 function getItems(event, searchParams, filterParamsVisibility) {
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(true); });
     console.log("In getItems: searchParams: ", searchParams, " filterParamsVisibility: ", filterParamsVisibility)
     searchParams = JSON.parse(JSON.stringify(searchParams));
     searchParams = convertDataToDBFormat(searchParams);
@@ -804,6 +809,7 @@ function createEntry() {
 }
 
 function modifyItem(event, selectedItem) {
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(true); });
     console.log("In modifyItem: selectedItem: ", selectedItem);
     selectedItem = convertDataToDBFormat(selectedItem);
     return new Promise((resolve, reject) => {
@@ -903,6 +909,7 @@ function modifyItem(event, selectedItem) {
 }
 
 function deleteItem(event, uuid) {
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(true); });
     console.log("In deleteItem: uuid: " + uuid);
     return new Promise((resolve, reject) => {
         new Promise((resolve, reject) => {
@@ -933,6 +940,8 @@ function deleteItem(event, uuid) {
 }
 
 function getSelectedItem(event, uuid) {
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(null); });
+
     console.log("In getSelectedItem: uuid: " + uuid);
 
     return new Promise((resolve, reject) => {

@@ -11,6 +11,15 @@ function setTimeZone(selectedTimeZone) {
   timeZone = selectedTimeZone;
 }
 
+function validateBrowserWindowPath(url) {
+  const testURL = new URL(url);
+  if (testURL.protocol === "app:" && 
+      testURL.host === "mainapplication" && 
+      testURL.pathname === "/index.html"
+    ) return true;
+  return false;
+}
+
 function addFilterOptionsToQueryStmt(queryStmt,
                                      filterOptions,
                                      selectFilterOptions = {
@@ -165,6 +174,7 @@ function getTransactionFinancialEntityStats(filterOptions, financialEntityType, 
 }
   
 async function getStatsAboutDB(event, filterOptions) {
+        if (!validateBrowserWindowPath(event.senderFrame.url)) return [];
         const [sumOfTransactionTypeIn, numInTransactions] = await getSumOfTransactionTypeIn(filterOptions);
         const [sumOfTransactionTypeOut, numOutTransactions] = await getSumOfTransactionTypeOut(filterOptions);
         const numTransactions = await getNumberOfTransactions(filterOptions);
@@ -243,4 +253,5 @@ module.exports = {
     getStatsAboutDB,
     setDB,
     setTimeZone,
+    validateBrowserWindowPath,
 };
