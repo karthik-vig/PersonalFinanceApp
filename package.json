@@ -3,7 +3,7 @@
   "author": "KVS",
   "description": "Personal Finance App",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.9.0",
   "type": "module",
   "main": "electronApp/main.cjs",
   "scripts": {
