@@ -7,11 +7,18 @@ export default defineConfig({
   mode: 'development', // change to 'production' when ready to deploy
   build: {
     minify: false,
+    outDir: '../dist',
+    emptyOutDir: true,
     rollupOptions: {
       external: [
         '/node_modules/',
         '/src/',
-      ]
+      ],
+      output: {
+        entryFileNames: 'assets/[name].js',
+        chunkFileNames: 'assets/[name].[ext]',
+        assetFileNames: 'assets/[name].[ext]',
+      }
     }
   }
 })
