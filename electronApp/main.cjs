@@ -1,5 +1,6 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, protocol } = require('electron');
 const path = require('node:path');
+const fs = require('node:fs');
 //const fs = require('node:fs');
 /*
 import {
@@ -25,6 +26,22 @@ const financialEntitiesOperations = require('./database/financialEntityOperation
 const recurringTransactionOperations = require('./database/recurringTransactionOperations.cjs');
 const commonOperations = require('./database/commonOperations.cjs');
 
+protocol.registerSchemesAsPrivileged([
+  {
+    scheme: 'app',
+    privileges: {
+      standard: true,
+      secure: false,
+      bypassCSP: false,
+      allowServiceWorkers: false,
+      supportFetchAPI: true,
+      corsEnabled: false,
+      stream: false, 
+      codeCache: false,
+    }
+  }
+]);
+
 function createWindow() {
     const win = new BrowserWindow({
         width: 800,
@@ -44,7 +61,8 @@ function createWindow() {
     });
 
     //win.loadFile( path.join(__dirname, '../dist/src/additionalPages/loadingIndex.html'));
-    win.loadFile( path.join(__dirname, '../dist/src/index.html'));
+    //win.loadFile( path.join(__dirname, '../dist/src/index.html'));
+    win.loadURL('app://mainApplication/index.html');
     //win.setMenu(null);
     // Open the DevTools in development mode
     if (process.env.NODE_ENV === 'development') {
@@ -65,8 +83,37 @@ function setupProcess() {
     commonOperations.setTimeZone(configFile.timezone);
 }
 
-
 app.whenReady().then(() => {
+
+    protocol.handle('app', (req) => {
+        const { host, pathname } = new URL(req.url);
+        if (host !== "mainapplication") return;
+        // const somename = fs.readFileSync(path.join(__dirname, "../dist/src/index.html"), 'utf8');
+        switch (pathname) {
+            case "/index.html":
+                return new Response( fs.readFileSync(path.join(__dirname, "../dist/index.html"), 'utf8'),
+                                     { headers: { "content-type": "text/html" } }
+                                    );
+            case "/assets/index.css":
+                return new Response( fs.readFileSync(path.join(__dirname, "../dist/assets/index.css"), 'utf8'),
+                                        { headers: { "content-type": "text/css" } }
+                                    );
+            case "/assets/index.js":
+                return new Response( fs.readFileSync(path.join(__dirname, "../dist/assets/index.js"), 'utf8'),
+                                        { headers: { "content-type": "text/javascript" } }
+                                    );
+            case "/assets/Montserrat-Medium.ttf":
+                return new Response( fs.readFileSync(path.join(__dirname, "../dist/assets/Montserrat-Medium.ttf")),
+                                        { headers: { "content-type": "font/ttf" } }
+                                    );
+            case "/assets/RobotoCondensed-VariableFont_wght.ttf":
+                return new Response( fs.readFileSync(path.join(__dirname, "../dist/assets/RobotoCondensed-VariableFont_wght.ttf")),
+                                        { headers: { "content-type": "font/ttf" } }
+                                    );
+            default:
+                return new Response( "Error - Not Found", { status: 404 } );
+        }
+    });
 
     let win = null;
 
