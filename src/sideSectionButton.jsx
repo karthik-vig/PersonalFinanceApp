@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function SideSectionButton({ svgIcon, onClickHandler, isActive=false, isTop=false }) {
     
-    let currentBGColor = "bg-secondary-cl";
+    let currentBGColor = "bg-surface-cl";
     let marginTop = "mt-5";
     if (isTop) {
         marginTop = "mt-10";
@@ -15,8 +15,8 @@ function SideSectionButton({ svgIcon, onClickHandler, isActive=false, isTop=fals
     }
 
     return (
-            <button className={marginTop + " mb-0.5 mx-0.5 p-0.5 w-10 h-10 rounded-lg hover:bg-lime-100 outline outline-4 outline-cyan-500 outline-offset-2 " + currentBGColor} onClick={ onClickHandler }>
-                <FontAwesomeIcon className="m-[0%] p-[0%] w-[100%] h-[100%]" icon={svgIcon} />
+            <button className={marginTop + " mb-4 mx-0.5 p-0.5 w-8 h-8 rounded-lg hover:bg-lime-100  " + currentBGColor} onClick={ onClickHandler }>
+                <FontAwesomeIcon className="m-[0%] p-[0%] w-[100%] h-[100%]" icon={svgIcon} color={currentBGColor}/>
             </button>
     );
 }

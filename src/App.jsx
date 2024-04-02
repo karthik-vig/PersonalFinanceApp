@@ -155,7 +155,7 @@ function App() {
 
   return (
     <div className="flex flex-row flex-nowrap border-0 w-[100vw] h-[100vh]">
-      <div className="flex flex-col flex-wrap justify-start content-center h-[100%] min-h-[500px] w-[50px] bg-primary-cl">
+      <div className="flex flex-col flex-nowrap justify-center items-center content-center h-[100%] min-h-[500px] w-[50px] bg-surface-cl">
         <SideSectionButton svgIcon="fa-exchange-alt" onClickHandler={ () => dispatch(selectTab("mainPage")) } isActive={activeTab.mainPage} isTop={true} />
         <SideSectionButton svgIcon="fa-chart-line" onClickHandler={ () => dispatch(selectTab("analyticPage")) } isActive={activeTab.analyticPage}/>
         <SideSectionButton svgIcon="fa-building-columns" onClickHandler={ () => dispatch(selectTab("financialEntityPage")) } isActive={activeTab.financialEntityPage}/>
