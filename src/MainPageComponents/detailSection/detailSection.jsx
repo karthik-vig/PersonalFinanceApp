@@ -28,8 +28,15 @@ function DetailSection() {
     if (selectedItem === null) {
         return (
             <div 
-                className="flex flex-nowrap flex-col ml-2 mr-7 mt-0 mb-4 border rounded-lg bg-surface-cl drop-shadow-lg overflow-x-hidden overflow-y-scroll px-[20%] py-[2%]" 
-                id="mainPageDetailSection"
+                className="flex flex-nowrap flex-col flex-grow \
+                            border rounded-lg bg-surface-cl drop-shadow-lg \
+                            overflow-x-hidden overflow-y-scroll \
+                            sm:px-[2%] md:px-[2%] lg:px-[10%] py-[2%] \
+                            sm:w-[95%] md:w-[95%] lg:w-[70%] xl:w-auto 2xl:w-auto \
+                            sm:h-[90%] lg:h-[85%] 2xl:h-[90%] \
+                            sm:my-4 md:my-4 lg:my-2 \
+                            " 
+                //id="mainPageDetailSection"
             >
                 
             </div>
@@ -39,8 +46,15 @@ function DetailSection() {
 
     return (
         <div 
-            className="flex flex-nowrap flex-col ml-2 mr-7 mt-0 mb-4 border rounded-lg bg-surface-cl drop-shadow-lg overflow-x-hidden overflow-y-scroll md:px-[2%] sm:px-[2%] lg:px-[10%] py-[2%]" 
-            id="mainPageDetailSection"
+            className="flex flex-nowrap flex-col flex-grow \
+                        border rounded-lg bg-surface-cl drop-shadow-lg \
+                        overflow-x-hidden overflow-y-scroll \
+                        sm:px-[2%] md:px-[2%] lg:px-[10%] py-[2%] \
+                        sm:w-[95%] md:w-[95%] lg:w-[70%] xl:w-auto 2xl:w-auto \
+                        sm:h-[90%] lg:h-[85%] 2xl:h-[90%] \
+                        sm:my-4 md:my-4 lg:my-2 \
+                        " 
+            //id="mainPageDetailSection"
         >
             <TitleSection />
             <DescriptionSection />

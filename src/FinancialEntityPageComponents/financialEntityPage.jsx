@@ -222,7 +222,7 @@ function FinancialEntityPage() {
 
     return (
         <div 
-            className="relative z-0 flex flex-row flex-wrap h-[100%] w-[100%] bg-background-cl"
+            className="relative z-0 flex flex-row flex-wrap h-[100%] w-[100%] p-4 bg-background-cl overflow-x-hidden overflow-y-scroll"
         >
             <SelectOptionMenu 
                 selectOptions={deleteSettings.options}

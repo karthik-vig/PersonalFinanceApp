@@ -33,7 +33,7 @@ function createWindow() {
     const win = new BrowserWindow({
         width: 800,
         height: 600,
-        minHeight: 600,
+        minHeight: 700,
         minWidth: 700,
         icon: path.join(__dirname, 'piggyBankIcon.ico'),
         webPreferences: {

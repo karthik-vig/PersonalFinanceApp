@@ -26,8 +26,12 @@ function GenericSideBar({ items,
     //const dispatch = useDispatch();
     return ( 
     <div 
-        className="w-[25%] mx-7 mt-0 mb-4 border rounded-lg bg-surface-cl drop-shadow-lg overflow-x-hidden overflow-y-scroll "
-        id="genericSideBar"
+        className="sm:w-[100%] md:w-[100%] lg:w-[25%] xl:w-[25%] 2xl:w-[25%] \
+                   sm:mr-0 md:mr-0 lg:mr-4 sm:my-4 md:my-4 lg:my-2 \
+                   sm:h-[90%] lg:h-[85%] 2xl:h-[90%] \
+                   border rounded-lg bg-surface-cl drop-shadow-lg \
+                   overflow-x-hidden overflow-y-scroll "
+        //id="genericSideBar"
     >
                 <ul
                     className="w-[100%] h-[100%] flex flex-nowrap flex-col "

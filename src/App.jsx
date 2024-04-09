@@ -189,7 +189,7 @@ function App() {
       </div>
       <div 
         //id="pageContainer" 
-        className="flex flex-row flex-wrap h-[100%] min-h-[500px] min-w-[600px] w-auto"
+        className="flex flex-row flex-nowrap flex-grow h-[100%] min-h-[500px] min-w-[600px]"
       >
         {activeTab.mainPage && <MainPage />}
         {activeTab.analyticPage && <AnalyticsPage />}
