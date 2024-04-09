@@ -156,13 +156,41 @@ function App() {
   return (
     <div className="flex flex-row flex-nowrap border-0 w-[100vw] h-[100vh]">
       <div className="flex flex-col flex-nowrap justify-start items-center content-center h-[100%] min-h-[500px] w-[50px] bg-surface-cl drop-shadow-2xl pt-12">
-        <SideSectionButton svgIcon="fa-exchange-alt" onClickHandler={ () => dispatch(selectTab("mainPage")) } iconColour="#FFA113" isActive={activeTab.mainPage} />
-        <SideSectionButton svgIcon="fa-chart-line" onClickHandler={ () => dispatch(selectTab("analyticPage")) } iconColour="#83D234" isActive={activeTab.analyticPage}/>
-        <SideSectionButton svgIcon="fa-building-columns" onClickHandler={ () => dispatch(selectTab("financialEntityPage")) } iconColour="#EA2D31" isActive={activeTab.financialEntityPage}/>
-        <SideSectionButton svgIcon="fa-redo-alt" onClickHandler={ () => dispatch(selectTab("recurringTransactionPage")) } iconColour="#BE49E5" isActive={activeTab.recurringTransactionPage}/>
-        <SideSectionButton svgIcon="fa-gear" onClickHandler={ () => dispatch(selectTab("settingsPage")) } iconColour="#3FA6FE" isActive={activeTab.settingsPage}/>
+        <SideSectionButton 
+          svgIcon="fa-exchange-alt" 
+          onClickHandler={ () => dispatch(selectTab("mainPage")) } 
+          iconColour="#FFA113" 
+          isActive={activeTab.mainPage}
+        />
+        <SideSectionButton 
+          svgIcon="fa-chart-line" 
+          onClickHandler={ () => dispatch(selectTab("analyticPage")) } 
+          iconColour="#83D234" 
+          isActive={activeTab.analyticPage}
+        />
+        <SideSectionButton 
+          svgIcon="fa-building-columns" 
+          onClickHandler={ () => dispatch(selectTab("financialEntityPage")) } 
+          iconColour="#EA2D31" 
+          isActive={activeTab.financialEntityPage}
+        />
+        <SideSectionButton 
+          svgIcon="fa-redo-alt" 
+          onClickHandler={ () => dispatch(selectTab("recurringTransactionPage")) } 
+          iconColour="#BE49E5" 
+          isActive={activeTab.recurringTransactionPage}
+        />
+        <SideSectionButton 
+          svgIcon="fa-gear" 
+          onClickHandler={ () => dispatch(selectTab("settingsPage")) } 
+          iconColour="#3FA6FE" 
+          isActive={activeTab.settingsPage}
+        />
       </div>
-      <div id="pageContainer" className="flex flex-row flex-wrap h-[100%] min-h-[500px] min-w-[600px]">
+      <div 
+        //id="pageContainer" 
+        className="flex flex-row flex-wrap h-[100%] min-h-[500px] min-w-[600px] w-auto"
+      >
         {activeTab.mainPage && <MainPage />}
         {activeTab.analyticPage && <AnalyticsPage />}
         {activeTab.financialEntityPage && <FinancialEntityPage />}
