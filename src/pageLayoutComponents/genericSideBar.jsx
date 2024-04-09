@@ -38,20 +38,23 @@ function GenericSideBar({ items,
                 >
                     {items.map((item) => {
                         return (<li key={item.id}
-                                    className={ "hover:bg-cyan-600 w-[100%] " + (String(currentSelectedItemState) === String(item.id) ? "bg-cyan-200" : "bg-surface-cl")}
+                                    className={ "hover:bg-cyan-600 w-[100%] flex flex-row flex-nowrap " + (String(currentSelectedItemState) === String(item.id) ? "bg-cyan-200" : "bg-surface-cl")}
                                 >
                             <button  
-                                className="flex flex-row flex-nowrap justify-evenly items-center w-[100%] h-20 border-b-1 p-2" 
+                                className="flex flex-row flex-nowrap flex-grow justify-evenly items-center w-[100%] h-20 border-b-1 p-2" 
                                 onClick={() => handleItemClick(item.id)}
                             >
                                 <FontAwesomeIcon 
-                                    className="m-1 p-2 w-10 h-10 border-2 rounded-lg" 
+                                    className="m-1 p-2 \
+                                                sm:w-10 md:w-10 lg:w-8 \
+                                                sm:h-10 md:h-10 lg:h-8 \
+                                                border-2 rounded-lg" 
                                     icon={item.icon} 
                                     color={item.iconColor}
                                 />
                                 <section 
-                                    className="flex flex-row flex-wrap h-[100%] ml-4" 
-                                    id="genericSideBarSection"
+                                    className="flex flex-row flex-wrap h-[100%] ml-4 sm:w-[80%] lg:w-[70%] xl:w-[80%]" 
+                                    //id="genericSideBarSection"
                                 >
                                     <h6 
                                         className={"w-[100%] h-[60%] text-start font-bold font-serif antialiased tracking-widest truncate lg:text-lg text-base " + item.titleFontColor}
