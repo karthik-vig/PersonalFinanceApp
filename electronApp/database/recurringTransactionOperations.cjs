@@ -779,8 +779,27 @@ function createEntry() {
                     recurringTransactionStartDate, \
                     recurringTransactionEndDate, \
                     lastRecurringTransactionDate \
-                    ) VALUES (?, "NEW Entry", NULL, NULL, NULL, NULL, NULL, NULL, NULL, ?, ?, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)`, 
-                    uuid, currentDateTime, currentDateTime, (err) => {
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                    uuid, 
+                    "New Entry", 
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    currentDateTime, 
+                    currentDateTime,
+                    null, 
+                    null, 
+                    null, 
+                    null, 
+                    null, 
+                    null, 
+                    null, 
+                    null, 
+                    (err) => {
                         if (err) {
                             console.log("Recurring Entity: In createEntry: err: ", err);
                             reject(true);

@@ -1003,22 +1003,22 @@ function createEntry() {
                 createdDate, \
                 modifiedDate, \
                 transactionDate \
-                ) VALUES (\
-                    "${uuid}", \
-                    "NEW ENTRY", \
-                    NULL, \
-                    NULL, \
-                    NULL, \
-                    NULL, \
-                    NULL, \
-                    NULL, \
-                    NULL, \
-                    NULL, \
-                    0, \
-                    "${currentDateTime}", \
-                    "${currentDateTime}", \
-                    "${currentDateTime.substring(0, 16) + ":00Z"}" \
-                    )`, (err) => {
+                ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                    uuid,
+                    "NEW ENTRY",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    0,
+                    currentDateTime,
+                    currentDateTime,
+                    currentDateTime.substring(0, 16) + ":00Z", 
+                    (err) => {
                         if (err) {
                             console.log(`Create Entry Error ${err}`);
                             reject(true);
