@@ -154,7 +154,7 @@ function FilterMenu(){
                 handleInputChange={handleInputChange}
                 filterParamsVisibility={filterParamsVisibility}
                 fields={["title",
-                        "description",
+                        "type",
                         "createdDate",
                         "modifiedDate", 
                         ]}
