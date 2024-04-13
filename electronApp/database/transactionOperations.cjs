@@ -8,6 +8,19 @@ const { validateBrowserWindowPath } = require('./commonOperations.cjs');
 let currentSelectedItemFiles = {};
 let db = null;
 let timeZone = null;
+const validFilterParams = new Set([
+    "value", 
+    "currency", 
+    "transactionType", 
+    "transactionCategory",
+    "fromEntity",
+    "toEntity",
+    "recurringEntity",
+    "createdDate",
+    "modifiedDate",
+    "transactionDate",
+    "sort"
+]);
 
 function setDB(database) {
     db = database;
@@ -53,14 +66,22 @@ function getStatsByCategoryPlotData(event, filterOptions) {
                     ]
         }
         const labelIndexMap = new Map(statsByCategoryPlotData.labels.map((label, index) => [label, index]));
+        const parameters = [];
         let queryStmt = `SELECT COUNT(transactionCategory) AS transactionCount, transactionCategory FROM transactions WHERE 1=1`;
-        if (filterOptions.transactionType !== "All" && filterOptions.transactionType !== "Expenditure") queryStmt += ` AND (transactionType = "${filterOptions.transactionType}")`;
-        //if (filterOptions.transactionCategory !== "All") queryStmt += ` AND (transactionCategory = "${filterOptions.transactionCategory}")`;
-        if (filterOptions.currency !== "All") queryStmt += ` AND (currency = "${filterOptions.currency}")`;
-        if (filterOptions.startDate !== "yyyy-mm-ddThh:mm" && filterOptions.endDate !== "yyyy-mm-ddThh:mm") queryStmt += ` AND (transactionDate BETWEEN "${filterOptions.startDate}" AND "${filterOptions.endDate}")`;
+        if (filterOptions.transactionType !== "All" && filterOptions.transactionType !== "Expenditure") {
+            queryStmt += ` AND (transactionType = ?)`;
+            parameters.push(String(filterOptions.transactionType));
+        }
+        if (filterOptions.currency !== "All") {
+            queryStmt += ` AND (currency = ?)`;
+            parameters.push(String(filterOptions.currency));
+        }
+        if (filterOptions.startDate !== "yyyy-mm-ddThh:mm" && filterOptions.endDate !== "yyyy-mm-ddThh:mm") {
+            queryStmt += ` AND (transactionDate BETWEEN ? AND ?)`;
+            parameters.push(String(filterOptions.startDate), String(filterOptions.endDate));
+        }
         queryStmt += ` GROUP BY transactionCategory`;
-        db.all(queryStmt,
-              (err, rows) => {
+        db.all(queryStmt, parameters, (err, rows) => {
                 if (err) {
                     console.log(`Get Stats By Category Plot Data Error ${err}`);
                     reject(true);
@@ -81,15 +102,7 @@ function getLinePlotData(event, filterOptions) {
             labels: [],
             datasets: []
         };
-        // if (filterOptions.transactionType !== "All") { 
-        //     if (filterOptions.transactionType === "In") expenditurePlotData.datasets.push({id: 0, label: "In", data: []});
-        //     if (filterOptions.transactionType === "Out") expenditurePlotData.datasets.push({id: 1, label: "Out", data: []});
-        //     if (filterOptions.transactionType === "Expenditure") expenditurePlotData.datasets.push({id: 2, label: "Expenditure", data: []});
-        // } else {
-        //     expenditurePlotData.datasets.push({id: 0, label: "In", data: []});
-        //     expenditurePlotData.datasets.push({id: 1, label: "Out", data: []});
-        //     expenditurePlotData.datasets.push({id: 2, label: "Expenditure", data: []});
-        // }
+
         switch (filterOptions.transactionType) {
             case "In":
                 expenditurePlotData.datasets.push({id: 0, label: "In", data: [], backgroundColor: "#008000", borderColor:"#008000"});
@@ -106,6 +119,7 @@ function getLinePlotData(event, filterOptions) {
                 expenditurePlotData.datasets.push({id: 2, label: "Expenditure", data: [], backgroundColor: "#ff5f1f", borderColor:"#ff5f1f"});
         }
 
+        const parameters = [];
         let queryStmt = `SELECT \
                         transactionDate, \
                         value, \
@@ -113,13 +127,24 @@ function getLinePlotData(event, filterOptions) {
                         FROM transactions \
                         WHERE 1=1`;
         //build query based on the filter options
-        if (filterOptions.transactionType !== "All" && filterOptions.transactionType !== "Expenditure") queryStmt += ` AND (transactionType = "${filterOptions.transactionType}")`;
-        if (filterOptions.transactionCategory !== "All") queryStmt += ` AND (transactionCategory = "${filterOptions.transactionCategory}")`;
-        if (filterOptions.currency !== "All") queryStmt += ` AND (currency = "${filterOptions.currency}")`;
-        if (filterOptions.startDate !== "yyyy-mm-ddThh:mm" && filterOptions.endDate !== "yyyy-mm-ddThh:mm") queryStmt += ` AND (transactionDate BETWEEN "${filterOptions.startDate}" AND "${filterOptions.endDate}")`;
+        if (filterOptions.transactionType !== "All" && filterOptions.transactionType !== "Expenditure") {
+            queryStmt += ` AND (transactionType = ?)`;
+            parameters.push(String(filterOptions.transactionType));
+        }
+        if (filterOptions.transactionCategory !== "All") {
+            queryStmt += ` AND (transactionCategory = ?)`;
+            parameters.push(String(filterOptions.transactionCategory));
+        }
+        if (filterOptions.currency !== "All") {
+            queryStmt += ` AND (currency = ?)`;
+            parameters.push(String(filterOptions.currency));
+        }
+        if (filterOptions.startDate !== "yyyy-mm-ddThh:mm" && filterOptions.endDate !== "yyyy-mm-ddThh:mm") {
+            queryStmt += ` AND (transactionDate BETWEEN ? AND ?)`;
+            parameters.push(String(filterOptions.startDate), String(filterOptions.endDate));
+        }
         queryStmt += ` ORDER BY transactionDate ASC`;
-        db.all(queryStmt,
-            (err, rows) => {
+        db.all(queryStmt, parameters, (err, rows) => {
                 if (err) {
                     console.log(`Get Line Plot Data Error ${err}`);
                     reject(true);
@@ -128,14 +153,8 @@ function getLinePlotData(event, filterOptions) {
                 const expenditurePlotDataMap = new Map();
                 if (!Array.isArray(rows) || rows.length === 0) resolve([]);
                 rows.forEach((row) => {
-                    // const date = row.transactionDate.substring(0, 10);
                     const date = moment(row.transactionDate).tz(timeZone).format().substring(0, 10);
                     if (expenditurePlotDataMap.has(date)) {
-                    //     if (row.transactionType === "In") {
-                    //         expenditurePlotDataMap.get(date).In += row.value;
-                    //     } else if (row.transactionType === "Out"){
-                    //         expenditurePlotDataMap.get(date).Out += row.value;
-                    //     }
                         switch (filterOptions.transactionType) {
                             case "In":
                                 expenditurePlotDataMap.get(date).In += row.value;
@@ -156,9 +175,6 @@ function getLinePlotData(event, filterOptions) {
                 expenditurePlotData.datasets.push()
                  for (const [label, value] of expenditurePlotDataMap) {
                     expenditurePlotData.labels.push(label);
-                    // expenditurePlotData.datasets[0].data.push(value.In);
-                    // expenditurePlotData.datasets[1].data.push(value.Out);
-                    // expenditurePlotData.datasets[2].data.push(value.In - value.Out);
                     switch (filterOptions.transactionType) {
                         case "In":
                             expenditurePlotData.datasets[0].data.push(value.In);
@@ -363,6 +379,7 @@ function getAllItems() {
 //here just to simulate the effect.
 function getItems(event, searchParams, filterParamsVisibility) { 
     if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(null); });
+    // const validSearchParams = new Map(["search", "filter"]);
     //communicate with backend to get items
     //based on the searchParams
     console.log("getItems called with searchParams: ", searchParams);
@@ -380,12 +397,15 @@ function getItems(event, searchParams, filterParamsVisibility) {
                     console.log("Get From Reference ID Success");
                     console.log(rows);
                     const fromReferenceID = rows && rows.length > 0 ? rows[0].id : null;
-                    resolve(` AND (fromReference = "${fromReferenceID}")`);
+                    resolve({
+                        stmt: ` AND (fromReference = ?)`, 
+                        id: String(fromReferenceID) 
+                    });
                 }
              });
             }
             else {
-                resolve(``);
+                resolve({stmt: ``, id: null});
             }
         }).catch((err) => {
             console.log(`Get From Reference ID Error ${err}`);
@@ -404,12 +424,15 @@ function getItems(event, searchParams, filterParamsVisibility) {
                     console.log("Get To Reference ID Success");
                     console.log(rows);
                     const toReferenceID = rows && rows.length > 0 ? rows[0].id : null;
-                    resolve(` AND (toReference = "${toReferenceID}")`);
+                    resolve({
+                        stmt: ` AND (toReference = ?)`, 
+                        id: String(toReferenceID)
+                    });
                 }
              });
             }
             else {
-                resolve(``);
+                resolve({stmt: ``, id: null});
             }
         }).catch((err) => {
             console.log(`Get From Reference ID Error ${err}`);
@@ -427,12 +450,15 @@ function getItems(event, searchParams, filterParamsVisibility) {
                         console.log("Get Recurring Reference ID Success");
                         console.log(rows);
                         const recurringReferenceID = rows && rows.length > 0 ? rows[0].id : null;
-                        resolve(` AND (recurringReference = "${recurringReferenceID}")`);
+                        resolve({
+                            stmt: ` AND (recurringReference = ?)`, 
+                            id: String(recurringReferenceID)
+                        });
                     }
                 });
             }
             else {
-                resolve(``);
+                resolve({stmt: ``, id: null});
             }
         }).catch((err) => {
             console.log(`Get Recurring Reference ID Error ${err}`);
@@ -442,8 +468,10 @@ function getItems(event, searchParams, filterParamsVisibility) {
         const fetchAllReferenceIDs = Promise.all([fetchFromReferenceID, fetchToReferenceID, fetchRecurringReferenceIDs]);
 
         fetchAllReferenceIDs.then(([filterFromEntityStmt, filterToEntityStmt, filterRecurringEntityStmt]) => {
-
-        let queryStmt = `SELECT id, title, transactionDate, value, transactionType, transactionCategory FROM transactions WHERE (title LIKE "%${searchParams.search}%" OR description LIKE "%${searchParams.search}%")`;
+        
+        const parameters = [];
+        let queryStmt = `SELECT id, title, transactionDate, value, transactionType, transactionCategory FROM transactions WHERE (title LIKE ? OR description LIKE ?)`;
+        parameters.push(`%${searchParams.search}%`, `%${searchParams.search}%`);
         Object.keys(filterParamsVisibility).forEach((fieldname) => { 
             if (fieldname !== "sort" && 
                 filterParamsVisibility[fieldname] && 
@@ -454,33 +482,42 @@ function getItems(event, searchParams, filterParamsVisibility) {
                     searchParams.filter[fieldname].max !== null &&
                     searchParams.filter[fieldname].min !== undefined &&
                     searchParams.filter[fieldname].max !== undefined) {
-                        if (fieldname.slice(-4) === "Date"){ 
+                        if (fieldname.slice(-4) === "Date" && validFilterParams.has(fieldname)){ 
                             const minDate = moment.tz(searchParams.filter[fieldname].min + ":00", timeZone).tz("UTC").format().substring(0, 19) + "Z";
                             const maxDate = moment.tz(searchParams.filter[fieldname].max + ":00", timeZone).tz("UTC").format().substring(0, 19) + "Z";
-                            queryStmt += ` AND (${fieldname} BETWEEN "${minDate}" AND "${maxDate}")`;
-                        } else {
-                            queryStmt += ` AND (${fieldname} BETWEEN ${searchParams.filter[fieldname].min} AND ${searchParams.filter[fieldname].max})`;
+                            queryStmt += ` AND ( ${fieldname} BETWEEN ? AND ?)`;
+                            parameters.push(String(minDate), String(maxDate));
+                        } else if (fieldname === "value" && validFilterParams.has(fieldname)){
+                            queryStmt += ` AND (value BETWEEN ? AND ?)`;
+                            parameters.push(Number(searchParams.filter[fieldname].min), Number(searchParams.filter[fieldname].max));
                         }
                 } else if (fieldname !== "fromEntity" && 
                            fieldname !== "toEntity" && 
                            fieldname !== "recurringEntity") {
-                    queryStmt += ` AND (${fieldname} = "${searchParams.filter[fieldname]}")`;
+                    if (validFilterParams.has(fieldname)) {
+                        queryStmt += ` AND (${fieldname} = ?)`;
+                        parameters.push(String(searchParams.filter[fieldname]));
+                    }
                 }
             }
          });
-        queryStmt += filterFromEntityStmt;
-        queryStmt += filterToEntityStmt;
-        queryStmt += filterRecurringEntityStmt;
-         let filterSortStmt = ``;
-         if (filterParamsVisibility.sort && 
-            searchParams.filter.sort.field !== null && 
-            searchParams.filter.sort.field !== undefined) { 
-                filterSortStmt = ` ORDER BY ${searchParams.filter.sort.field}`;
-                filterSortStmt += searchParams.filter.sort.ascending === "true" ? " ASC" : searchParams.filter.sort.ascending === "false" ? " DESC" : ``;
-            }
+        queryStmt += filterFromEntityStmt.stmt;
+        queryStmt += filterToEntityStmt.stmt;
+        queryStmt += filterRecurringEntityStmt.stmt;
+        if (filterFromEntityStmt.id !== null) { parameters.push(filterFromEntityStmt.id); }
+        if (filterToEntityStmt.id !== null) { parameters.push(filterToEntityStmt.id); }
+        if (filterRecurringEntityStmt.id !== null) { parameters.push(filterRecurringEntityStmt.id); }
+        let filterSortStmt = ``;
+        if (filterParamsVisibility.sort && 
+        searchParams.filter.sort.field !== null && 
+        searchParams.filter.sort.field !== undefined) { 
+            filterSortStmt = ` ORDER BY ?`;
+            filterSortStmt += searchParams.filter.sort.ascending === "true" ? " ASC" : searchParams.filter.sort.ascending === "false" ? " DESC" : ``;
+            parameters.push(searchParams.filter.sort.field);
+        }
         queryStmt += filterSortStmt;
 
-        db.all(queryStmt, (err, rows) => { 
+        db.all(queryStmt, parameters, (err, rows) => { 
             if (err) {
                 console.log(`Get Items Error ${err}`);
                 reject(null);
@@ -565,7 +602,7 @@ function getSelectedItem(event, uuid) {
                         modifiedDate,\
                         transactionDate\
                         FROM transactions \
-                        WHERE id = "${uuid}"`, (err, row) => {
+                        WHERE id = ?`, String(uuid), (err, row) => {
                     if (err) {
                         console.log(`Get Selected Item Error ${err}`);
                         reject(err);
@@ -605,7 +642,7 @@ function getSelectedItem(event, uuid) {
                         title, \
                         type \
                         FROM financialEntities 
-                        WHERE id = "${fromReferenceID}"`, (err, rows) => {
+                        WHERE id = ?`, String(fromReferenceID), (err, rows) => {
                             if (err) {
                                 console.log(`Get Selected Item Error ${err}`);
                                 reject(err);
@@ -623,7 +660,7 @@ function getSelectedItem(event, uuid) {
                         title, \
                         type \
                         FROM financialEntities 
-                        WHERE id = "${toReferenceID}"`, (err, rows) => {
+                        WHERE id = ?`, String(toReferenceID), (err, rows) => {
                             if (err) {
                                 console.log(`Get Selected Item Error ${err}`);
                                 reject(err);
@@ -640,7 +677,7 @@ function getSelectedItem(event, uuid) {
                 db.all(`SELECT \
                         title\
                         FROM recurringTransactions \
-                        WHERE id = "${recurringReferenceID}"`, (err, rows) => {
+                        WHERE id = ?`, String(recurringReferenceID), (err, rows) => {
                             if (err) {
                                 console.log(`Get Recurring Transaction Reference ID in modifyItem: ${err}`);
                                 //reject({modifyStatus: false, item: null});
@@ -655,7 +692,7 @@ function getSelectedItem(event, uuid) {
             });
 
         const fetchFileInformation = new Promise((resolve, reject) => { 
-                db.all(`SELECT filename, filedata FROM files WHERE id = "${uuid}"`, (err, rows) => {
+                db.all(`SELECT filename, filedata FROM files WHERE id = ?`, String(uuid), (err, rows) => {
                     if (err) {
                         console.log(`Get Selected Item Error ${err}`);
                         reject(err);
@@ -727,7 +764,7 @@ function deleteItem(event, id) {
         db.serialize(() => {
 
             const fetchTransactionDelete = new Promise((resolve, reject) => {
-                db.run(`DELETE FROM transactions WHERE id = "${id}"`, (err) => {
+                db.run(`DELETE FROM transactions WHERE id = ?`, String(id), (err) => {
                     if (err) {
                         console.log(`Delete Item Error ${err}`);
                         reject(err);
@@ -740,7 +777,7 @@ function deleteItem(event, id) {
             });
 
             const fetchFileDelete = new Promise((resolve, reject) => {
-                db.run(`DELETE FROM files WHERE id = "${id}"`, (err) => {
+                db.run(`DELETE FROM files WHERE id = ?`, String(id), (err) => {
                     if (err) {
                         console.log(`Delete Item Error ${err}`);
                         reject(err);
