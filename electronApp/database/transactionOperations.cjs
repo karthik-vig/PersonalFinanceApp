@@ -21,6 +21,14 @@ const validFilterParams = new Set([
     "transactionDate",
     "sort"
 ]);
+const validSortFields = new Set([
+    "title",
+    "description",
+    "value",
+    "createdDate",
+    "modifiedDate",
+    "transactionDate"
+]);
 
 function setDB(database) {
     db = database;
@@ -510,10 +518,10 @@ function getItems(event, searchParams, filterParamsVisibility) {
         let filterSortStmt = ``;
         if (filterParamsVisibility.sort && 
         searchParams.filter.sort.field !== null && 
-        searchParams.filter.sort.field !== undefined) { 
-            filterSortStmt = ` ORDER BY ?`;
+        searchParams.filter.sort.field !== undefined &&
+        validSortFields.has(searchParams.filter.sort.field)) { 
+            filterSortStmt = ` ORDER BY ${searchParams.filter.sort.field}`;
             filterSortStmt += searchParams.filter.sort.ascending === "true" ? " ASC" : searchParams.filter.sort.ascending === "false" ? " DESC" : ``;
-            parameters.push(searchParams.filter.sort.field);
         }
         queryStmt += filterSortStmt;
 
