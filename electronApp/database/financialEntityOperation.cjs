@@ -1,11 +1,11 @@
-//const sqlite = require('sqlite3');
-//const fs = require('node:fs');
 const moment = require('moment-timezone');
 const { v4: uuidv4 } = require('uuid');
 const { validateBrowserWindowPath } = require('./commonOperations.cjs');
 
 let db = null;
 let timeZone = null;
+const validFilterParams = new Set(["type", "createdDate", "modifiedDate", "sort"]);
+const validSortFields = new Set(["title", "type", "createdDate", "modifiedDate"]);
 
 function setDB(database) {
     db = database;
@@ -70,7 +70,7 @@ function getAllItems() {
     console.log("financial entity : getAllItems called");
 
     return new Promise((resolve, reject) => {
-        db.all("SELECT id, title, type FROM financialEntities", [], (err, rows) => {
+        db.all("SELECT id, title, type FROM financialEntities", (err, rows) => {
             if (err) {
                 console.log("financial entity : getAllItems error = ", err);
                 reject([]);
@@ -98,7 +98,9 @@ function getItems(event, searchParams, filterParamsVisibility) {
     console.log("filterParamsVisibility = ", filterParamsVisibility);
 
     return new Promise((resolve, reject) => {
-        let queryStmt = `SELECT id, title, type FROM financialEntities WHERE title LIKE "%${searchParams.search}%"`;
+        const parameters = [];
+        let queryStmt = `SELECT id, title, type FROM financialEntities WHERE title LIKE ?`;
+        parameters.push(`%${searchParams.search}%`);
         Object.keys(filterParamsVisibility).forEach((fieldname) => {
             if (fieldname !== "sort" && 
                 filterParamsVisibility[fieldname] && 
@@ -109,28 +111,30 @@ function getItems(event, searchParams, filterParamsVisibility) {
                     searchParams.filter[fieldname].max !== null &&
                     searchParams.filter[fieldname].min !== undefined &&
                     searchParams.filter[fieldname].max !== undefined) {
-                        if (fieldname.slice(-4) === "Date"){ 
+                        if (fieldname.slice(-4) === "Date" && validFilterParams.has(fieldname)){ 
                             const minDate = moment.tz(searchParams.filter[fieldname].min + ":00", timeZone).tz("UTC").format().substring(0, 19) + "Z";
                             const maxDate = moment.tz(searchParams.filter[fieldname].max + ":00", timeZone).tz("UTC").format().substring(0, 19) + "Z";
-                            queryStmt += ` AND (${fieldname} BETWEEN "${minDate}" AND "${maxDate}")`;
-                        } else {
-                            queryStmt += ` AND (${fieldname} BETWEEN ${searchParams.filter[fieldname].min} AND ${searchParams.filter[fieldname].max})`;
+                            queryStmt += ` AND (${fieldname} BETWEEN ? AND ?)`;
+                            parameters.push(String(minDate), String(maxDate));
                         }
-                } else {
-                    queryStmt += ` AND (${fieldname} = "${searchParams.filter[fieldname]}")`;
+                } else if (validFilterParams.has(fieldname) && 
+                           typeof searchParams.filter[fieldname] !== "object") {
+                    queryStmt += ` AND (${fieldname} = ?)`;
+                    parameters.push(String(searchParams.filter[fieldname]));
                 }
             }
         });
         let filterSortStmt = ``;
          if (filterParamsVisibility.sort && 
             searchParams.filter.sort.field !== null && 
-            searchParams.filter.sort.field !== undefined) { 
+            searchParams.filter.sort.field !== undefined &&
+            validSortFields.has(searchParams.filter.sort.field)) { 
                 filterSortStmt = ` ORDER BY ${searchParams.filter.sort.field}`;
                 filterSortStmt += searchParams.filter.sort.ascending === "true" ? " ASC" : searchParams.filter.sort.ascending === "false" ? " DESC" : ``;
             }
         queryStmt += filterSortStmt;
 
-        db.all(queryStmt, (err, rows) => { 
+        db.all(queryStmt, parameters, (err, rows) => { 
             if (err) {
                 console.log("Financial Entity Operations : getItems error = ", err);
                 reject([]);
