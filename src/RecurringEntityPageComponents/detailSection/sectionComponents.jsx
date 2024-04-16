@@ -267,7 +267,7 @@ function FromEntitySection() {
             dispatch(financialEntitySetCurrentSelectedItem(id));
             dispatch(selectTab("financialEntityPage"));
         }).catch((err) => { 
-            if (err) dispatch(showFailBox("Entity not found"));
+            if (err) dispatch(showFailBox(err.title));
         });
     };
 
@@ -366,7 +366,7 @@ function ToEntitySection() {
             dispatch(financialEntitySetCurrentSelectedItem(id));
             dispatch(selectTab("financialEntityPage"));
         }).catch((err) => { 
-            if (err) dispatch(showFailBox("Entity not found"));
+            if (err) dispatch(showFailBox(err.title));
         });
     };
 

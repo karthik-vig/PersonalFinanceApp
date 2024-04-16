@@ -81,7 +81,7 @@ function FinancialEntityPage() {
             dispatch(setSideBarItems(items));
         }).catch((err) => {
             if (err)
-            dispatch(showFailBox("Could not load the items from the database"));
+            dispatch(showFailBox(err.title));
         });
     }, [dispatch, currentSelectedItemState]);
 
@@ -96,7 +96,7 @@ function FinancialEntityPage() {
             dispatch(setSideBarItems(items));
         }).catch((err) => {
             if (err)
-            dispatch(showFailBox("Search Operation Failed"));
+            dispatch(showFailBox(err.title));
         });
         dispatch(resetTriggerSearch());
     }, [triggerSearchState,
@@ -117,8 +117,8 @@ function FinancialEntityPage() {
             dispatch(addSideBarItem(newEntrySideBarItem));
             //dispatch(showSuccessBox());
         }).catch((err) => {
-            if (err === null)
-            dispatch(showFailBox("Could not create the entry in the database"));
+            if (err)
+            dispatch(showFailBox(err.title));
         });
         window.financialEntityOperations.getTransactionEntities().then((transactionEntities) => {
             dispatch(setTransactionEntities(transactionEntities));
@@ -141,8 +141,8 @@ function FinancialEntityPage() {
             dispatch(modifySideBarItem({id: selectedItem.id, modifiedItem: modifiedItem }));
             dispatch(showSuccessBox("Saved the Details to Disk"));
         }).catch((err) => {
-            if (err.modifyStatus === false)
-            dispatch(showFailBox("Could not Modify the Entry"));
+            if (err.additionalInfo.value.modifyStatus === false)
+            dispatch(showFailBox(err.title));
         });
         window.financialEntityOperations.getTransactionEntities().then((transactionEntities) => {
             dispatch(setTransactionEntities(transactionEntities));
@@ -191,10 +191,10 @@ function FinancialEntityPage() {
                 dispatch(showSuccessBox("Removed the Entry from Disk"));
             }).catch((err) => {
                 if (err)
-                dispatch(showFailBox("Could not Delete the Entry"));
+                dispatch(showFailBox(err.title));
             });
         }).catch((err) => { 
-            if (err) dispatch(showFailBox("Could not fetch the financial entity's reference ID"));
+            if (err) dispatch(showFailBox(err.title));
         });
         dispatch(resetDeleteSettings());
         dispatch(resetTriggerDeleteEntry());       

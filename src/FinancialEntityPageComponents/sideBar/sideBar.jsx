@@ -46,9 +46,9 @@ function SideBar() {
         window.financialEntityOperations.getSelectedItem(currentSelectedItemState).then((selectedItem) => {
             dispatch(handleSelectItemClick(selectedItem));
         }).catch((err) => {
-            if (err === null) {
+            if (err) {
                 console.log("selectedItem is null, triggering fail box");
-                dispatch(showFailBox("Could not Load the Selected Item"));
+                dispatch(showFailBox(err.title));
             }
         });
     }, [currentSelectedItemState,

@@ -1,6 +1,9 @@
 const moment = require('moment-timezone');
 const { v4: uuidv4 } = require('uuid');
-const { validateBrowserWindowPath } = require('./commonOperations.cjs');
+const { validateBrowserWindowPath, 
+        constructErrorMsgFromSQLiteError,
+        constructValidationError,
+     } = require('./commonOperations.cjs');
 
 let db = null;
 let timeZone = null;
@@ -16,13 +19,13 @@ function setTimeZone(selectedTimeZone) {
 }
 
 function getReferenceIdOnTitle(event, title) {
-    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(null); });
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(constructValidationError("URL Validation Failed", {value: null})); });
     return new Promise((resolve, reject) => {
         if (title === "choose" || title === "Empty Value") resolve(null);
         db.get(`SELECT id FROM financialEntities WHERE title = ?`, title, (err, row) => {
             if (err) {
                 console.log("financial entity : getReferenceIdOnTitle error = ", err);
-                reject(null);
+                reject(constructErrorMsgFromSQLiteError(err));
             }
             console.log("financial entity : getReferenceIdOnTitle row = ", row);
             resolve(row? row.id : null);
@@ -31,12 +34,12 @@ function getReferenceIdOnTitle(event, title) {
 }
 
 function getIdFromTitle(event, title) {
-    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(null); });
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(constructValidationError("URL Validation Failed", {value: null})); });
     return new Promise((resolve, reject) => { 
         db.get(`SELECT id FROM financialEntities WHERE title = ?`, title, (err, row) => {
             if (err) {
                 console.log("financial entity : getIdFromTitle error = ", err);
-                reject(null);
+                reject(constructErrorMsgFromSQLiteError(err, "Error in getting id from title in financialEntities table", {value: null}));
             }
             console.log("financial entity : getIdFromTitle row = ", row);
             resolve(row? row.id : null);
@@ -51,13 +54,11 @@ function getTransactionEntities() {
         db.all("SELECT title AS name, type FROM financialEntities", (err, rows) => {
             if (err) {
                 console.log("financial entity : getAllItems error = ", err);
-                reject(true);
+                reject(constructErrorMsgFromSQLiteError(err, "Error in fetching all financial entities", {value: null}));
             }
-            else {
-                console.log("financial entity : getAllItems rows = ", rows);
-                const transactionEntities = rows && rows.length > 0 ? rows : [];
-                resolve(transactionEntities);
-            }
+            console.log("financial entity : getAllItems rows = ", rows);
+            const transactionEntities = rows && rows.length > 0 ? rows : [];
+            resolve(transactionEntities); 
         });
     });
     // return (
@@ -73,13 +74,11 @@ function getAllItems() {
         db.all("SELECT id, title, type FROM financialEntities", (err, rows) => {
             if (err) {
                 console.log("financial entity : getAllItems error = ", err);
-                reject([]);
+                reject(constructErrorMsgFromSQLiteError(err, "Error in fetching all financial entities", {value: []}));
             }
-            else {
-                console.log("financial entity : getAllItems rows = ", rows);
-                const sideBarItems = rows && rows.length > 0 ? rows : [];
-                resolve(sideBarItems);
-            }
+            console.log("financial entity : getAllItems rows = ", rows);
+            const sideBarItems = rows && rows.length > 0 ? rows : [];
+            resolve(sideBarItems);     
         });
     });
     /*
@@ -93,7 +92,7 @@ function getAllItems() {
 }
 
 function getItems(event, searchParams, filterParamsVisibility) {
-    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject([]); });
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(constructValidationError("URL Validation Failed", {value: []})); });
     console.log("searchParams = ", searchParams);
     console.log("filterParamsVisibility = ", filterParamsVisibility);
 
@@ -137,12 +136,10 @@ function getItems(event, searchParams, filterParamsVisibility) {
         db.all(queryStmt, parameters, (err, rows) => { 
             if (err) {
                 console.log("Financial Entity Operations : getItems error = ", err);
-                reject([]);
+                reject(constructErrorMsgFromSQLiteError(err, "Search operation failed", {value: []}));
             }
-            else {
-                console.log("Financial Entity Operations : getItems rows = ", rows);
-                resolve(rows && rows.length > 0 ? rows : []);
-            }
+            console.log("Financial Entity Operations : getItems rows = ", rows);
+            resolve(rows && rows.length > 0 ? rows : []);
          });
     });
     /*
@@ -165,12 +162,10 @@ function createEntry() {
                 VALUES (?, ?, ?, ?, ?)`, uuid, "New Entry", null, currentDate, currentDate, (err) => {
             if (err) {
                 console.log("Financial Entity Operations : createEntry error = ", err);
-                reject(null);
+                reject(constructErrorMsgFromSQLiteError(err, "Error in creating new entry; Entry with the same title may already exist.", {value: null}));
             }
-            else {
-                console.log("Financial Entity Operations : createEntry success");
-                resolve({id: uuid, title: "New Entry", type: null});
-            }
+            console.log("Financial Entity Operations : createEntry success");
+            resolve({id: uuid, title: "New Entry", type: null});
         });
     });
     //return {id: 10, title: "entity10", type: "Internal"};
@@ -178,7 +173,7 @@ function createEntry() {
 
 function deleteItem(event, uuid) {
 
-    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject("Error: borwser protocol, domain and path validation fail"); });
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(constructValidationError("URL Validation Failed", {value: null})); });
     console.log("delete entry uuid = ", uuid);
 
     return new Promise((resolve, reject) => {
@@ -186,12 +181,10 @@ function deleteItem(event, uuid) {
             db.run(`DELETE FROM financialEntities WHERE id = ?`, uuid, (err) => {
                 if (err) {
                     console.log("Financial Entity Operations : deleteItem error = ", err);
-                    reject(err);
+                    reject(constructErrorMsgFromSQLiteError(err, "Error in deleting entry", {value: null}));
                 }
-                else {
-                    console.log("Financial Entity Operations : deleteItem success");
-                    resolve(true);
-                }
+                console.log("Financial Entity Operations : deleteItem success");
+                resolve(true);
             });
         });
 
@@ -199,12 +192,10 @@ function deleteItem(event, uuid) {
             db.run(`UPDATE transactions SET fromReference = NULL WHERE fromReference = ?`, uuid, (err) => {
                 if (err) {
                     console.log("Financial Entity Operations : deleteItem error = ", err);
-                    reject(err);
+                    reject(constructErrorMsgFromSQLiteError(err, "Error in deleting transaction table's fromReference", {value: null}));
                 }
-                else {
-                    console.log("Financial Entity Operations : deleteItem success");
-                    resolve(true);
-                }
+                console.log("Financial Entity Operations : deleteItem success");
+                resolve(true);
             });
         });
 
@@ -212,12 +203,11 @@ function deleteItem(event, uuid) {
             db.run(`UPDATE transactions SET toReference = NULL WHERE toReference = ?`, uuid, (err) => {
                 if (err) {
                     console.log("Financial Entity Operations : deleteItem error = ", err);
-                    reject(err);
+                    reject(constructErrorMsgFromSQLiteError(err, "Error in deleting transaction table's toReference", {value: null}));
                 }
-                else {
-                    console.log("Financial Entity Operations : deleteItem success");
-                    resolve(true);
-                }
+                console.log("Financial Entity Operations : deleteItem success");
+                resolve(true);
+
             });
         });
 
@@ -235,11 +225,15 @@ function deleteItem(event, uuid) {
                                 deleteTransactionsToReferenceStatus) {
                                     resolve();
                                 } else {
-                                    reject(true);
+                                    reject({
+                                        type: "Custom Error", 
+                                        message: "Error in deleting entry", 
+                                        additionalInfo: { value: null }
+                                    });
                                 }
                     }).catch((err) => { 
                         console.log("Financial Entity Operations : deleteItem error = ", err[0] || err[1] || err[2]);
-                        reject(true);
+                        reject(constructErrorMsgFromSQLiteError(err[0] || err[1] || err[2], "Error in deleting entry", {value: null}));
                     });  
     });
     //return true;
@@ -247,7 +241,7 @@ function deleteItem(event, uuid) {
 
 function modifyItem(event, selectedItem) {
 
-    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject({ modifyStatus: false, modifiedItem: null }); });
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(constructValidationError("URL Validation Failed", {value: { modifyStatus: false, modifiedItem: null }})); });
     console.log("modifyItem selectedItem = ", selectedItem);
 
     return new Promise((resolve, reject) => {
@@ -261,17 +255,15 @@ function modifyItem(event, selectedItem) {
                 (err) => {
                     if (err) {
                         console.log("Financial Entity Operations : modifyItem error = ", err);
-                        reject({ modifyStatus: false, modifiedItem: null });
+                        reject(constructErrorMsgFromSQLiteError(err, "Error in modifying entry", {value: { modifyStatus: false, modifiedItem: null } }));
                     }
-                    else {
-                        console.log("Financial Entity Operations : modifyItem success");
-                        resolve({ modifyStatus: true, item: {
-                                                                id: selectedItem.id, 
-                                                                title: selectedItem.title, 
-                                                                type: selectedItem.type,
-                                                            } 
-                                });
-                    }
+                    console.log("Financial Entity Operations : modifyItem success");
+                    resolve({ modifyStatus: true, item: {
+                                                            id: selectedItem.id, 
+                                                            title: selectedItem.title, 
+                                                            type: selectedItem.type,
+                                                        } 
+                            });
         });
     });
 
@@ -280,26 +272,24 @@ function modifyItem(event, selectedItem) {
 
 function getSelectedItem(event, uuid) {
     
-    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(null); });
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(constructValidationError("URL Validation Failed", {value: null})); });
     console.log("getSelectedItem uuid = ", uuid);
 
     return new Promise((resolve, reject) => {
         db.get(`SELECT * FROM financialEntities WHERE id = ?`, uuid, (err, row) => {
             if (err) {
                 console.log("Financial Entity Operations : getSelectedItem error = ", err);
-                reject(null);
+                reject(constructErrorMsgFromSQLiteError(err, "Error in getting selected item", {value: null}));
             }
-            else {
-                console.log("Financial Entity Operations : getSelectedItem success");
-                const selectedItem = row? row : null;
-                if(selectedItem) {
-                    selectedItem.createdDate = moment(selectedItem.createdDate).tz(timeZone).format().substring(0, 19);
-                    selectedItem.modifiedDate = moment(selectedItem.modifiedDate).tz(timeZone).format().substring(0, 19);
-                }
-                selectedItem.createdDate = selectedItem.createdDate.substring(0, 19);
-                selectedItem.modifiedDate = selectedItem.modifiedDate.substring(0, 19);
-                resolve(selectedItem);
+            console.log("Financial Entity Operations : getSelectedItem success");
+            const selectedItem = row? row : null;
+            if(selectedItem) {
+                selectedItem.createdDate = moment(selectedItem.createdDate).tz(timeZone).format().substring(0, 19);
+                selectedItem.modifiedDate = moment(selectedItem.modifiedDate).tz(timeZone).format().substring(0, 19);
             }
+            selectedItem.createdDate = selectedItem.createdDate.substring(0, 19);
+            selectedItem.modifiedDate = selectedItem.modifiedDate.substring(0, 19);
+            resolve(selectedItem);
         });
     });
     //return {id: 1, title: "entity1", type: "Internal", creatdDate: "2021-01-01T00:00", modifiedDate: "2021-01-01T00:00"};
