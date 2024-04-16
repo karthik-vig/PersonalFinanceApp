@@ -5,6 +5,37 @@ const { validateBrowserWindowPath } = require('./commonOperations.cjs');
 
 let db = null;
 let timeZone = null;
+const validFilterParams = new Set([
+    "value", 
+    "currency", 
+    "transactionType", 
+    "transactionCategory", 
+    "fromReference", 
+    "toReference", 
+    "createdDate", 
+    "modifiedDate", 
+    "recurringFrequencyType", 
+    "recurringFrequencyDayOfTheWeek", 
+    "recurringFrequencyDayOfTheMonth", 
+    "recurringFrequencyMonthOfTheYear", 
+    "recurringFrequencyTime", 
+    "recurringTransactionStartDate",
+    "recurringTransactionEndDate",
+    "sort"
+]);
+const validSortFields = new Set([
+    "title",
+    "description",
+    "value",  
+    "createdDate", 
+    "modifiedDate", 
+    "recurringTransactionStartDate",
+    "recurringTransactionEndDate",
+    "recurringFrequencyTime",
+    "recurringFrequencyMonthOfTheYear",
+    "recurringFrequencyDayOfTheMonth",
+    "recurringFrequencyDayOfTheWeek",
+]);
 
 
 function getIdFromTitle(event, title) {
@@ -644,35 +675,43 @@ function getItems(event, searchParams, filterParamsVisibility) {
     console.log("In getItems: searchParams: ", searchParams, " filterParamsVisibility: ", filterParamsVisibility)
     searchParams = JSON.parse(JSON.stringify(searchParams));
     searchParams = convertDataToDBFormat(searchParams);
-    return new Promise((resolve, reject) => { 
+    return new Promise((resolve, reject) => {
         db.serialize(() => { 
             const fetchFromReferenceID = new Promise((resolve, reject) => { 
-                db.get(`SELECT id FROM financialEntities WHERE title = ?`, searchParams.fromEntity, (err, row) => { 
+                db.get(`SELECT id FROM financialEntities WHERE title = ?`, searchParams.filter.fromEntity, (err, row) => { 
                     if (err) { 
                         console.log("Recurring Entity: In getItems: fetchFromReferenceID: err: ", err);
                         reject(true);
                     } else {
-                        resolve(row && row.length > 0 ? row.id : null);
+                        resolve(row ? row.id : null);
                     }
                 });
             });
 
             const fetchToReferenceID = new Promise((resolve, reject) => { 
-                db.get(`SELECT id FROM financialEntities WHERE title = ?`, searchParams.toEntity, (err, row) => { 
+                db.get(`SELECT id FROM financialEntities WHERE title = ?`, searchParams.filter.toEntity, (err, row) => { 
                     if (err) { 
                         console.log("Recurring Entity: In getItems: fetchToReferenceID: err: ", err);
                         reject(true);
                     } else {
-                        resolve(row && row.length > 0 ? row.id : null);
+                        resolve(row ? row.id : null);
                     }
                 });
             });
 
             Promise.all([fetchFromReferenceID, fetchToReferenceID]).then(([fromReferenceID, toReferenceID]) => { 
+                // operations to change the name of certain fields to fit the column names in the database
                 delete searchParams.filter.fromEntity;
                 delete searchParams.filter.toEntity;
+                const fromEntity = filterParamsVisibility.fromEntity;
+                const toEntity = filterParamsVisibility.toEntity;
+                delete filterParamsVisibility.fromEntity;
+                delete filterParamsVisibility.toEntity;
+                filterParamsVisibility.fromReference = fromEntity;
+                filterParamsVisibility.toReference = toEntity;
                 searchParams.filter.fromReference = fromReferenceID;
                 searchParams.filter.toReference = toReferenceID;
+                const parameters = [];
                 let query = `SELECT id, \
                             title, \
                             recurringFrequencyType as recurringFrequency, \
@@ -680,12 +719,16 @@ function getItems(event, searchParams, filterParamsVisibility) {
                             transactionType, \
                             transactionCategory \
                             FROM recurringTransactions \
-                            WHERE ((title LIKE "%${searchParams.search}%") OR (description LIKE "%${searchParams.search}%"))`;
+                            WHERE (( title LIKE ? ) OR ( description LIKE ? ))`;
+                parameters.push(`%${searchParams.search}%`, `%${searchParams.search}%`);
                 Object.keys(searchParams.filter).forEach((searchField) => { 
-                    if (searchParams.filter[searchField] === null || !filterParamsVisibility[searchField]) return;
+                    if (searchParams.filter[searchField] === null || 
+                        !filterParamsVisibility[searchField] ||
+                        !validFilterParams.has(searchField)) return;
                     //range based query construction
                     if (typeof searchParams.filter[searchField] === "object" && searchField !== "sort") {
-                        if (searchParams.filter[searchField].min !== null && searchParams.filter[searchField].max !== null) {
+                        if (searchParams.filter[searchField].min !== null && 
+                            searchParams.filter[searchField].max !== null) {
                             let minField = null;
                             let maxField = null;
                             switch(searchField.slice(-4)) {
@@ -698,25 +741,31 @@ function getItems(event, searchParams, filterParamsVisibility) {
                                     maxField = searchParams.filter[searchField].max;
                                     break;
                             }
-                            query += ` AND (${searchField} BETWEEN "${minField}" AND "${maxField}")`;
+                            query += ` AND ( ${searchField} BETWEEN ? AND ? )`;
+                            parameters.push(String(minField), String(maxField));
                         }
                         return;
                     }
                     //value based query construction
-                    if (searchParams.filter[searchField] === null || searchParams.filter[searchField] === "choose" || searchField === "sort") return;
-                    query += ` AND (${searchField} = "${searchParams.filter[searchField]}")`;
+                    if (searchParams.filter[searchField] === null || 
+                        searchParams.filter[searchField] === "choose" || 
+                        searchField === "sort") return;
+                    query += ` AND ( ${searchField} = ? )`;
+                    parameters.push(String(searchParams.filter[searchField]));
                 });
                 //construct query for sort
-                if (searchParams.filter.sort.field !== null && searchParams.filter.sort.field !== "choose") {
+                if (searchParams.filter.sort.field !== null && 
+                    searchParams.filter.sort.field !== "choose" &&
+                    validSortFields.has(searchParams.filter.sort.field)) {
                     query += ` ORDER BY ${searchParams.filter.sort.field} ${searchParams.filter.sort.ascending === "true"? "ASC": searchParams.filter.sort.ascending === "false"? "DESC" : ""}`;
                  }
                 //query and get the information from the database
-                db.all(query, (err, rows) => {
+                db.all(query, parameters, (err, rows) => {
                     if (err) {
                         console.log("Recurring Entity: In getItems: err: ", err);
                         reject(true);
                     } else {
-                        resolve(rows? rows : []);
+                        resolve(rows && rows.length > 0? rows : []);
                     }
                 });
              }).catch((err) => { 
