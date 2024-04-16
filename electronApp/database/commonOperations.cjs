@@ -23,8 +23,16 @@ function validateBrowserWindowPath(url) {
 function constructErrorMsgFromSQLiteError(sqliteErr, 
                                           title = "Data Storage Error",
                                           additionalInfo = {}) {
+  let errCode = "";
+  if (Array.isArray(sqliteErr)) {
+    sqliteErr.forEach((err) => {
+      if (err.code) errCode += err.code + " ";
+    });
+  } else {
+    errCode = sqliteErr.code ?? null;
+  }
   const errorMessage = {
-    type: sqliteErr.code,
+    type: errCode ?? sqliteErr.type ?? "Unknown Error",
     title: title,
     addtionalInfo: additionalInfo,
   }
