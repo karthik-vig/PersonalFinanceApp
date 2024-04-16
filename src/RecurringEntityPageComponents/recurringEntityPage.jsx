@@ -129,8 +129,7 @@ function RecurringEntityPage() {
                 if (status)
                 dispatch(showSuccessBox("Modified the Associated Transaction Entries"));
             }).catch((err) => {
-                if (err)
-                dispatch(showFailBox("Could not Modify the Associated Transaction Entries"));
+                if (err) dispatch(showFailBox(err.title));
             });
         }
         //modify the database
@@ -166,8 +165,7 @@ function RecurringEntityPage() {
                 if (status)
                 dispatch(showSuccessBox("Deleted the Associated Transaction Entries"));
             }).catch((err) => {
-                if (err)
-                dispatch(showFailBox("Could not Delete the Associated Transaction Entries"));
+                if (err) dispatch(showFailBox(err.title));
             });
         }
         //delete the entry from recrurring transaction table in the database

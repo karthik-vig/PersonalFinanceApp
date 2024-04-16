@@ -239,6 +239,8 @@ function Topbar() {
             dispatch(setExpenditurePlotData(expenditurePlotData));
         }).catch((err) => {
             console.log("Error getting the plot data: ", err);
+            dispatch(setFailBoxMessage(err.title));
+            dispatch(toggleFailBoxDisplay());
         });
         dispatch(toggleUpdateExpenditurePlot());
     }, [generateAnalytics.updateExpenditurePlot,
@@ -254,6 +256,8 @@ function Topbar() {
             dispatch(setStatsByCategoryPlotData(statsByCategoryPlotData));
         }).catch((err) => {
             console.log("Error getting the plot data: ", err);
+            dispatch(setFailBoxMessage(err.title));
+            dispatch(toggleFailBoxDisplay());
         });
         dispatch(toggleUpdateStatsByCategoryPlot());
     }, [generateAnalytics.updateStatsByCategoryPlot,
