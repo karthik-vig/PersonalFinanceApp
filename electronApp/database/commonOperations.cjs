@@ -20,6 +20,26 @@ function validateBrowserWindowPath(url) {
   return false;
 }
 
+function constructErrorMsgFromSQLiteError(sqliteErr, 
+                                          title = "Data Storage Error",
+                                          additionalInfo = {}) {
+  const errorMessage = {
+    type: sqliteErr.code,
+    title: title,
+    addtionalInfo: additionalInfo,
+  }
+  return errorMessage;
+}
+
+function constructValidationError(title = "", 
+                                  additionalInfo = {}) {
+  return {
+    type: "Validation Error", 
+    title: title, 
+    additionalInfo: additionalInfo
+  };
+}
+
 function addFilterOptionsToQueryStmt(queryStmt,
                                      filterOptions,
                                      selectFilterOptions = {
@@ -56,7 +76,7 @@ function getSumOfTransactionTypeIn(filterOptions) {
     queryStmt = addFilterOptionsToQueryStmt(queryStmt, filterOptions, selectFilterOptions);
     db.get(queryStmt, 
             (err, row) => { 
-                if (err) reject(err);
+                if (err) reject(constructErrorMsgFromSQLiteError(err));
                 resolve([row.sumOfTransactionTypeIn, row.numInTransactions]);
             });
 });
@@ -79,7 +99,7 @@ function getSumOfTransactionTypeOut(filterOptions) {
     queryStmt = addFilterOptionsToQueryStmt(queryStmt, filterOptions, selectFilterOptions);
     db.get(queryStmt, 
             (err, row) => { 
-                if (err) reject(err);
+                if (err) reject(constructErrorMsgFromSQLiteError(err));
                 resolve([row.sumOfTransactionTypeOut, row.numOutTransactions]);
             });
   });
@@ -99,7 +119,7 @@ function getNumberOfTransactions(filterOptions) {
     queryStmt = addFilterOptionsToQueryStmt(queryStmt, filterOptions, selectFilterOptions);
     db.get(queryStmt, 
             (err, row) => { 
-                if (err) reject(err);
+                if (err) reject(constructErrorMsgFromSQLiteError(err));
                 resolve(row.numTransactions);
             });
   });
@@ -117,7 +137,7 @@ function getNumberOfFinancialEntities(filterOptions) {
     queryStmt = addFilterOptionsToQueryStmt(queryStmt, filterOptions, selectFilterOptions);
     db.get(queryStmt, 
             (err, row) => { 
-                if (err) reject(err);
+                if (err) reject(constructErrorMsgFromSQLiteError(err));
                 resolve(row.numFinancialEntities);
             });
   });
@@ -135,7 +155,7 @@ function getNumberOfRecurringTransactionEntities(filterOptions) {
     queryStmt = addFilterOptionsToQueryStmt(queryStmt, filterOptions, selectFilterOptions);
     db.get(queryStmt, 
             (err, row) => { 
-                if (err) reject(err);
+                if (err) reject(constructErrorMsgFromSQLiteError(err));
                 resolve(row.numRecurringTransactionEntities);
             });
   });
@@ -167,7 +187,7 @@ function getTransactionFinancialEntityStats(filterOptions, financialEntityType, 
     queryStmt = addFilterOptionsToQueryStmt(queryStmt, filterOptions, selectFilterOptions);
     db.get(queryStmt, 
             (err, row) => { 
-                if (err) reject(err);
+                if (err) reject(constructErrorMsgFromSQLiteError(err));
                 resolve(row.transactionFinancialEntityStats);
             });
   });
@@ -254,4 +274,6 @@ module.exports = {
     setDB,
     setTimeZone,
     validateBrowserWindowPath,
+    constructErrorMsgFromSQLiteError,
+    constructValidationError,
 };
