@@ -418,7 +418,7 @@ function RecurringEntity() {
             dispatch(recurringTransactionSetCurrentSelectedItem(id));
             dispatch(selectTab("recurringTransactionPage"));
         }).catch((err) => { 
-            if (err) dispatch(showFailBox("Entity not found"));
+            if (err) dispatch(showFailBox(err.title));
         });
     }
 

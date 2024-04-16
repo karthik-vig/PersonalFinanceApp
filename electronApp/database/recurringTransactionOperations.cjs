@@ -1,7 +1,10 @@
 //const { current } = require('immer');
 const { v4: uuidv4 } = require('uuid');
 const moment = require('moment-timezone');
-const { validateBrowserWindowPath } = require('./commonOperations.cjs');
+const { validateBrowserWindowPath, 
+    constructErrorMsgFromSQLiteError,
+    constructValidationError,
+} = require('./commonOperations.cjs');
 
 let db = null;
 let timeZone = null;
@@ -40,13 +43,13 @@ const validSortFields = new Set([
 
 function getIdFromTitle(event, title) {
 
-    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(true); });
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(constructValidationError("URL Validation Failed", {value: null})); });
 
     return new Promise((resolve, reject) => { 
         db.get(`SELECT id FROM recurringTransactions WHERE title = ?`, title, (err, row) => { 
             if (err) { 
                 console.log("Recurring Entity: In getIdFromTitle: err: ", err);
-                reject(true);
+                reject(constructErrorMsgFromSQLiteError(err, "Error, could not get id of recurring transaction from title", {value: null}));
             }
             resolve(row? row.id: null);
         });
@@ -59,10 +62,9 @@ function getRecurringTransactions() {
         db.all(`SELECT title FROM recurringTransactions`, (err, rows) => { 
             if (err) { 
                 console.log("Recurring Entity: In getRecurringTransactions: err: ", err);
-                reject(true);
-            } else {
-                resolve(rows && rows.length > 0? rows.map((row) => row.title): []);
+                reject(constructErrorMsgFromSQLiteError(err, "Error, could not get recurring transactions", {value: null}));
             }
+            resolve(rows && rows.length > 0? rows.map((row) => row.title): []);
         });
     });
     //return ["entity1", "entity2", "entity3", "entity4"];
@@ -81,7 +83,7 @@ function setTimeZone(selectedTimeZone) {
 function updateFinancialEntityReferenceID(event,
                                           oldFinancialEntityReferenceID,
                                           newFinancialEntityReferenceID) {
-    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(true); });
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(constructValidationError("URL Validation Failed", {value: null})); });
     return new Promise((resolve, reject) => {
         const upateFromReferenceID = new Promise((resolve, reject) => {
             db.run(`UPDATE recurringTransactions SET \
@@ -90,7 +92,7 @@ function updateFinancialEntityReferenceID(event,
                     newFinancialEntityReferenceID,
                     oldFinancialEntityReferenceID,
                     (err) => {
-                        if (err) reject(true);
+                        if (err) reject(constructErrorMsgFromSQLiteError(err, "Error could not update from reference", {value: null}));
                         resolve();
                     });
         });
@@ -102,7 +104,7 @@ function updateFinancialEntityReferenceID(event,
                     newFinancialEntityReferenceID,
                     oldFinancialEntityReferenceID,
                     (err) => {
-                        if (err) reject(true);
+                        if (err) reject(constructErrorMsgFromSQLiteError(err, "Error could not update to reference", {value: null}));
                         resolve();
                     });
         });
@@ -111,7 +113,7 @@ function updateFinancialEntityReferenceID(event,
             resolve();
         }).catch((err) => {
             console.log(`Update Financial Entity Reference ID Error ${err}`);
-            reject(true);
+            reject(constructErrorMsgFromSQLiteError(err[0] || err[1], "Error could not update financial entity reference", {value: null}));
         });
     });
 }
@@ -377,7 +379,7 @@ function enterRecurringTransactions() {
                 FROM recurringTransactions`, (err, rows) => { 
                     if (err) { 
                         console.log(`Error getting recurring transactions ${err}`); 
-                        reject(true);
+                        reject(constructErrorMsgFromSQLiteError(err, "Error fetching recurring transactions", {value: null}));
                     }
                     
                     console.log("Recurring transactions retrieved successfully");
@@ -461,7 +463,7 @@ function enterRecurringTransactions() {
                         transactionTableInsertionStmt.finalize((err) => {
                             if (err) {
                                 console.log(`Error inserting recurring transaction ${err}`);
-                                reject(true);
+                                reject(constructErrorMsgFromSQLiteError(err, "Error while inserting transaction entries", {value: null}));
                             }
                         });
                         //update the lastRecurringTransactionDate in the recurringTransactions table
@@ -471,7 +473,7 @@ function enterRecurringTransactions() {
                                 (err) => { 
                                     if (err) { 
                                         console.log(`Error updating lastRecurringTransactionDate ${err}`); 
-                                        reject(true);
+                                        reject(constructErrorMsgFromSQLiteError(err, "Error while updating last recurring transaction date", {value: null}));
                                     }
                         });
                     });
@@ -630,10 +632,9 @@ function getAllItems() {
                 ORDER BY createdDate ASC`, (err, rows) => {
             if (err) {
                 console.log("Recurring Entity: In getAllItems: err: ", err);
-                reject(true);
-            } else {
-                resolve(rows? rows : []);
+                reject(constructErrorMsgFromSQLiteError(err, "Error could not get all items", {value: null}));
             }
+            resolve(rows? rows : []);
         });
     });
     /*
@@ -671,7 +672,7 @@ function getAllItems() {
 }
 
 function getItems(event, searchParams, filterParamsVisibility) {
-    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(true); });
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(constructValidationError("URL Validation Failed", {value: null})); });
     console.log("In getItems: searchParams: ", searchParams, " filterParamsVisibility: ", filterParamsVisibility)
     searchParams = JSON.parse(JSON.stringify(searchParams));
     searchParams = convertDataToDBFormat(searchParams);
@@ -681,10 +682,9 @@ function getItems(event, searchParams, filterParamsVisibility) {
                 db.get(`SELECT id FROM financialEntities WHERE title = ?`, searchParams.filter.fromEntity, (err, row) => { 
                     if (err) { 
                         console.log("Recurring Entity: In getItems: fetchFromReferenceID: err: ", err);
-                        reject(true);
-                    } else {
-                        resolve(row ? row.id : null);
+                        reject(constructErrorMsgFromSQLiteError(err, "Error, could not get from reference id", {value: null}));
                     }
+                    resolve(row ? row.id : null);
                 });
             });
 
@@ -692,10 +692,9 @@ function getItems(event, searchParams, filterParamsVisibility) {
                 db.get(`SELECT id FROM financialEntities WHERE title = ?`, searchParams.filter.toEntity, (err, row) => { 
                     if (err) { 
                         console.log("Recurring Entity: In getItems: fetchToReferenceID: err: ", err);
-                        reject(true);
-                    } else {
-                        resolve(row ? row.id : null);
+                        reject(constructErrorMsgFromSQLiteError(err, "Error, could not get to reference id", {value: null}));
                     }
+                    resolve(row ? row.id : null);
                 });
             });
 
@@ -763,14 +762,13 @@ function getItems(event, searchParams, filterParamsVisibility) {
                 db.all(query, parameters, (err, rows) => {
                     if (err) {
                         console.log("Recurring Entity: In getItems: err: ", err);
-                        reject(true);
-                    } else {
-                        resolve(rows && rows.length > 0? rows : []);
+                        reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch recurring transactions based on search parameters", {value: null}));
                     }
+                    resolve(rows && rows.length > 0? rows : []);
                 });
              }).catch((err) => { 
                 console.log("Recurring Entity: In getItems: err: ", err);
-                reject(true);
+                reject(constructErrorMsgFromSQLiteError(err[0] || err[1], "Error could not fetch recurring transactions based on search parameters", {value: null}));
              });
         });
     });
@@ -851,17 +849,16 @@ function createEntry() {
                     (err) => {
                         if (err) {
                             console.log("Recurring Entity: In createEntry: err: ", err);
-                            reject(true);
-                        } else {
-                            resolve({
-                                id: uuid, 
-                                title: "NEW Entry",
-                                recurringFrequency: null,
-                                value: null,
-                                transactionType: null,
-                                transactionCategory: null,
-                            });
+                            reject(constructErrorMsgFromSQLiteError(err, "Error could not create new entry; check whether title already exist.", {value: null}));
                         }
+                        resolve({
+                            id: uuid, 
+                            title: "NEW Entry",
+                            recurringFrequency: null,
+                            value: null,
+                            transactionType: null,
+                            transactionCategory: null,
+                        });
                     });
         });
     });
@@ -877,7 +874,7 @@ function createEntry() {
 }
 
 function modifyItem(event, selectedItem) {
-    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(true); });
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(constructValidationError("URL Validation Failed", {value: null})); });
     console.log("In modifyItem: selectedItem: ", selectedItem);
     selectedItem = convertDataToDBFormat(selectedItem);
     return new Promise((resolve, reject) => {
@@ -886,10 +883,9 @@ function modifyItem(event, selectedItem) {
                 db.all(`SELECT id FROM financialEntities WHERE title = ?`, selectedItem.fromEntity, (err, row) => { 
                     if (err) { 
                         console.log("Recurring Entity: In modifyItem: getFromFinancialEntityID: err: ", err);
-                        reject(true);
-                    } else {
-                        resolve(row && row.length > 0 ? row[0].id : null);
+                        reject(constructErrorMsgFromSQLiteError(err, "Error could not get from financial entity id", {value: null}));
                     }
+                    resolve(row && row.length > 0 ? row[0].id : null);
                 });
             });
 
@@ -897,10 +893,9 @@ function modifyItem(event, selectedItem) {
                 db.all(`SELECT id FROM financialEntities WHERE title = ?`, selectedItem.toEntity, (err, row) => { 
                     if (err) { 
                         console.log("Recurring Entity: In modifyItem: getFromFinancialEntityID: err: ", err);
-                        reject(true);
-                    } else {
-                        resolve(row && row.length > 0 ? row[0].id : null);
+                        reject(constructErrorMsgFromSQLiteError(err, "Error could not get to financial entity id", {value: null}));
                     }
+                    resolve(row && row.length > 0 ? row[0].id : null);
                 });
             });
 
@@ -946,21 +941,20 @@ function modifyItem(event, selectedItem) {
                         (err) => {
                             if (err) {
                                 console.log("Recurring Entity: In modifyItem: err: ", err);
-                                reject(true);
-                            } else {
-                                resolve({
-                                        id: selectedItem.id, 
-                                        title: selectedItem.title,
-                                        recurringFrequency: selectedItem.recurringFrequency.frequency ?? undefined,
-                                        value: selectedItem.value,
-                                        transactionType: selectedItem.transactionType,
-                                        transactionCategory: selectedItem.transactionCategory,   
-                                });
+                                reject(constructErrorMsgFromSQLiteError(err, "Error could not modify item", {value: null}));
                             }
+                            resolve({
+                                    id: selectedItem.id, 
+                                    title: selectedItem.title,
+                                    recurringFrequency: selectedItem.recurringFrequency.frequency ?? undefined,
+                                    value: selectedItem.value,
+                                    transactionType: selectedItem.transactionType,
+                                    transactionCategory: selectedItem.transactionCategory,   
+                            });
                         });
             }).catch((err) => {
                 console.log("Recurring Entity: In modifyItem: err: ", err);
-                reject(true);
+                reject(constructErrorMsgFromSQLiteError(err[0] || err[1], "Error could not modify item", {value: null}));
             });
         });
     });
@@ -977,38 +971,36 @@ function modifyItem(event, selectedItem) {
 }
 
 function deleteItem(event, uuid) {
-    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(true); });
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(constructValidationError("URL Validation Failed", {value: null})); });
     console.log("In deleteItem: uuid: " + uuid);
     return new Promise((resolve, reject) => {
         new Promise((resolve, reject) => {
             db.run(`DELETE FROM recurringTransactions WHERE id = ?`, uuid, (err) => {
                 if (err) {
                     console.log("Recurring Entity: In deleteItem: err: ", err);
-                    reject(true);
-                } else {
-                    resolve(uuid);
+                    reject(constructErrorMsgFromSQLiteError(err, "Error could not delete the recurring transaction", {value: null}));
                 }
+                resolve(uuid);
             });
         }).then((uuid) => {
             db.run(`UPDATE transactions SET recurringReference = NULL \
                     WHERE recurringReference = ?`, uuid, (err) => {
                         if (err) {
                             console.log("Recurring Entity: In deleteItem: err: ", err);
-                            reject(true);
-                        } else {
-                            resolve();
+                            reject(constructErrorMsgFromSQLiteError(err, "Error could not update the transactions table, after deleting recurring transaction", {value: null}));
                         }
+                        resolve();
                      });
         }).catch((err) => {
             console.log("Recurring Entity: In deleteItem: err: ", err);
-            reject(true);
+            reject(constructErrorMsgFromSQLiteError(err, "Error could not delete the recurring transaction", {value: null}));
         });
     });
     //return true;
 }
 
 function getSelectedItem(event, uuid) {
-    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(null); });
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(constructValidationError("URL Validation Failed", {value: null})); });
 
     console.log("In getSelectedItem: uuid: " + uuid);
 
@@ -1037,10 +1029,9 @@ function getSelectedItem(event, uuid) {
                     FROM recurringTransactions WHERE id = ?`, uuid, (err, row) => {
                         if (err) {
                             console.log("Recurring Entity: In getSelectedItem: getRecurringTransactions: err: ", err);
-                            reject(true);
-                        } else {
-                            resolve(row && row.length > 0 ? row[0] : null);
+                            reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch the details of recurring transaction", {value: null}));
                         }
+                        resolve(row && row.length > 0 ? row[0] : null);
                     });
         }).then((recurringTransactionRow) => {
 
@@ -1048,10 +1039,9 @@ function getSelectedItem(event, uuid) {
                 db.get(`SELECT title, type FROM financialEntities WHERE id = ?`, recurringTransactionRow.fromReference, (err, row) => { 
                     if (err) { 
                         console.log("Recurring Entity: In getSelectedItem: getFromEntityTitle: err: ", err);
-                        reject(true);
-                    } else {
-                        resolve(row ? row : null);
+                        reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch the from entity title", {value: null}));
                     }
+                    resolve(row ? row : null);
                 });
             });
 
@@ -1059,10 +1049,9 @@ function getSelectedItem(event, uuid) {
                 db.get(`SELECT title, type FROM financialEntities WHERE id = ?`, recurringTransactionRow.toReference, (err, row) => { 
                     if (err) { 
                         console.log("Recurring Entity: In getSelectedItem: getToEntityTitle: err: ", err);
-                        reject(true);
-                    } else {
-                        resolve(row ? row : null);
+                        reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch the to entity title", {value: null}));
                     }
+                    resolve(row ? row : null);
                 });
             });
 
@@ -1102,7 +1091,7 @@ function getSelectedItem(event, uuid) {
             });
         }).catch((err) => {
             console.log("Recurring Entity: In getSelectedItem: err: ", err);
-            reject(null);
+            reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch the details of recurring transaction", {value: null}));
         });
     });
     /*

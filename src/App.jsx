@@ -148,6 +148,8 @@ function App() {
   useEffect(() => {
     window.recurringTransactionOperations.getRecurringTransactions().then((retrievedRecurringTransactions) => {
         dispatch(setRecurringTransactions(retrievedRecurringTransactions));
+    }).catch((err) => { 
+      if (err) dispatch(setRecurringTransactions([]));
     });
   }, [dispatch,]);
 
