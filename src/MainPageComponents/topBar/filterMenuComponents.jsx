@@ -55,7 +55,7 @@ function FilterMenu(){
 
     return (
         <div 
-            className={" h-96 w-[50%] z-50 top-[65px] left-[30%] absolute rounded-lg border bg-surface-cl drop-shadow-lg overflow-x-hidden overflow-y-scroll " + displayState}
+            className={" h-auto max-h-96 sm:w-[85%] md:w-[85%] lg:w-[50%] z-50 top-[65px] sm:left-[8%] md:left-[8%] lg:left-[30%] absolute rounded-lg border bg-surface-cl drop-shadow-lg overflow-x-hidden overflow-y-scroll " + displayState}
         >
             <section 
                 className="flex justify-evenly items-center h-8 w-full"
