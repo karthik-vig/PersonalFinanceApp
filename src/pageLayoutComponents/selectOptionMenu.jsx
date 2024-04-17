@@ -28,7 +28,7 @@ function SelectOptionMenu({selectOptions={},
             className={displayState.state + " absolute z-20 top-0 left-0 flex flex-col flex-nowrap justify-center items-center w-[100%] h-[100%] opacity-100 bg-slate-950/30"}
         >
             <div
-                className="absolute top-[25%] left-[40%] p-2 h-auto w-[30%] flex flex-col flex-nowrap justify-center items-center border border-slate-400 rounded-md bg-slate-100"
+                className="absolute top-[25%] sm:left-[15%] md:left-[20%] lg:left-[40%] p-2 h-auto sm:w-[70%] md:w-[60%] lg:w-[30%] flex flex-col flex-nowrap justify-center items-center border border-slate-400 rounded-md bg-slate-100"
             > 
                 <section
                     className="flex flex-row flex-nowrap m-5 p-2 h-10 w-[90%] justify-center items-center"
