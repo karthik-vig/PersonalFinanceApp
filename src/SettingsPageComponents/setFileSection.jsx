@@ -46,7 +46,7 @@ function SetFileSection(){
     return (
         <div
             className="flex flex-col flex-nowrap \
-                        sm:w-[80%] md:w-[80%] lg:w-[80%] xl:w-[80%] 2xl:w-[80%] \
+                        w-[95%] \
                         h-auto \
                         p-2 my-4"
         >
