@@ -1,5 +1,5 @@
 //import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import '../index.css';
 //import { useImmer } from 'use-immer';
 import { useSelector,
@@ -64,6 +64,7 @@ function FinancialEntityPage() {
     const filterParamsVisibility = useSelector(state => state.financialEntityPageStates.filterParamsVisibility);   
     const currentSelectedItemState = useSelector(state => state.financialEntityPageStates.currentSelectedItemState);
     const deleteSettings = useSelector(state => state.financialEntityPageStates.deleteSettings);
+    const scrollRef = useRef(null);
     const dispatch = useDispatch();
 
 
@@ -80,8 +81,7 @@ function FinancialEntityPage() {
             if (currentSelectedItemState === null) dispatch(setCurrentSelectedItem(items && items.length > 0 ? items[0].id : null));
             dispatch(setSideBarItems(items));
         }).catch((err) => {
-            if (err)
-            dispatch(showFailBox(err.title));
+            if (err) dispatch(showFailBox(err.title));
         });
     }, [dispatch, currentSelectedItemState]);
 
@@ -117,8 +117,7 @@ function FinancialEntityPage() {
             dispatch(addSideBarItem(newEntrySideBarItem));
             //dispatch(showSuccessBox());
         }).catch((err) => {
-            if (err)
-            dispatch(showFailBox(err.title));
+            if (err) dispatch(showFailBox("Could not create a new entry; The title needs to be unique!"));
         });
         window.financialEntityOperations.getTransactionEntities().then((transactionEntities) => {
             dispatch(setTransactionEntities(transactionEntities));
@@ -134,6 +133,7 @@ function FinancialEntityPage() {
    //trigger on modify entry
    useEffect(() => {
         if (!triggerModifyEntryState) return;
+        scrollRef.current.scrollTop = 0;
         //modify the database
         console.log("The Modify Entry trigger selected item is: ");
         console.log(selectedItem);
@@ -160,6 +160,7 @@ function FinancialEntityPage() {
     //trigger on delete entry
     useEffect(() => {
         if (!triggerDeleteEntryState) return;
+        scrollRef.current.scrollTop = 0;
         if (deleteSettings.selectState.replaceOnDelete === "choose") {
             dispatch(showFailBox("Please select a value to replace the deleted entry with!"));
             return;
@@ -219,10 +220,34 @@ function FinancialEntityPage() {
         dispatch(toggleDeleteSettingsDisplayState());
     };
  
+    // function to change the scroll position of the scrollRef to the top
+    useEffect(() => {
+        if (warningBoxDisplayState.modifyBtn === "block" ||
+            warningBoxDisplayState.deleteBtn === "block" ||
+            successBoxDisplayState.state === "block" ||
+            failBoxDisplayState.state === "block" ||
+            deleteSettings.displayState.state === "block")
+            scrollRef.current.scrollTop = 0;
+    }, [warningBoxDisplayState.modifyBtn, 
+        warningBoxDisplayState.deleteBtn, 
+        successBoxDisplayState.state, 
+        failBoxDisplayState.state,
+        deleteSettings.displayState.state,
+    ]);
 
     return (
         <div 
-            className="relative z-0 flex flex-row flex-wrap h-[100%] w-[100%] p-4 bg-background-cl overflow-x-hidden overflow-y-scroll"
+            className={"relative z-0 flex flex-row flex-wrap \
+                        sm:h-auto md:h-auto lg:h-[100%] w-[100%] p-4 \
+                        bg-background-cl overflow-x-hidden \
+                         " + (warningBoxDisplayState.modifyBtn === "block" || 
+                              warningBoxDisplayState.deleteBtn === "block" ||
+                              successBoxDisplayState.state === "block" ||
+                              failBoxDisplayState.state === "block" ||
+                              deleteSettings.displayState.state === "block"
+                              ? " overflow-y-hidden" : " overflow-y-scroll")
+                        }
+            ref={scrollRef}
         >
             <SelectOptionMenu 
                 selectOptions={deleteSettings.options}
