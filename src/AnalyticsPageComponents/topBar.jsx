@@ -239,6 +239,7 @@ function Topbar() {
             dispatch(setExpenditurePlotData(expenditurePlotData));
         }).catch((err) => {
             console.log("Error getting the plot data: ", err);
+            dispatch(setExpenditurePlotData(err.additionalInfo.value));
             dispatch(setFailBoxMessage(err.title));
             dispatch(toggleFailBoxDisplay());
         });
@@ -256,6 +257,7 @@ function Topbar() {
             dispatch(setStatsByCategoryPlotData(statsByCategoryPlotData));
         }).catch((err) => {
             console.log("Error getting the plot data: ", err);
+            dispatch(setStatsByCategoryPlotData(err.additionalInfo.value));
             dispatch(setFailBoxMessage(err.title));
             dispatch(toggleFailBoxDisplay());
         });

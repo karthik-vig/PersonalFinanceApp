@@ -42,40 +42,40 @@ function setTimeZone(selectedTimeZone) {
 }
 
 function getStatsByCategoryPlotData(event, filterOptions) {
-    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(constructValidationError("URL Validation Failed", {value: null})); });
+    const statsByCategoryPlotData = {
+        labels: ["Groceries", "Restaurants and Dining", "Shopping", "Utilities", "Telecommunication",
+                 "Transportation", "Rent or Mortgage", "Insurance", "Healthcare", "Education", "Entertainment",
+                 "Travel and Lodging", "Personal Care", "Fitness and Wellness", "Investments and Savings", "Loans and Credit Payments",
+                 "Charity and Donations", "Home Improvement and Maintenance", "Childcare and Education", "Pet Care", "Taxes", 
+                 "Legal Services", "Other"],
+        datasets: [
+                    {
+                        data: Array(23).fill(0),
+                        backgroundColor: [
+                            '#4CAF50', '#FF5722', '#9C27B0',
+                            '#607D8B', '#3F51B5', '#FFEB3B',
+                            '#795548', '#9E9E9E', '#F44336',
+                            '#03A9F4', '#E91E63', '#00BCD4',
+                            '#FFC107', '#8BC34A', '#CDDC39',
+                            '#FF9800', '#673AB7', '#9E9D24',
+                            '#2196F3', '#4CAF50', '#F44336',
+                            '#3F51B5', '#607D8B'
+                          ],
+                        hoverBackgroundColor: [
+                            '#1A7D1E', '#CD2500', '#6A007E',
+                            '#2E4B59', '#0D1F83', '#CDB909',
+                            '#472316', '#6C6C6C', '#C21104',
+                            '#0077C2', '#B70031', '#008AA2',
+                            '#CD8F00', '#599118', '#9BAA07',
+                            '#CD6600', '#350885', '#6C6B00',
+                            '#0064C1', '#1A7D1E', '#C21104',
+                            '#0D1F83', '#2E4B59'
+                          ],
+                    },
+                ]
+    }
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(constructValidationError("URL Validation Failed", {value: statsByCategoryPlotData})); });
     return new Promise((resolve, reject) => {
-        const statsByCategoryPlotData = {
-            labels: ["Groceries", "Restaurants and Dining", "Shopping", "Utilities", "Telecommunication",
-                     "Transportation", "Rent or Mortgage", "Insurance", "Healthcare", "Education", "Entertainment",
-                     "Travel and Lodging", "Personal Care", "Fitness and Wellness", "Investments and Savings", "Loans and Credit Payments",
-                     "Charity and Donations", "Home Improvement and Maintenance", "Childcare and Education", "Pet Care", "Taxes", 
-                     "Legal Services", "Other"],
-            datasets: [
-                        {
-                            data: Array(23).fill(0),
-                            backgroundColor: [
-                                '#4CAF50', '#FF5722', '#9C27B0',
-                                '#607D8B', '#3F51B5', '#FFEB3B',
-                                '#795548', '#9E9E9E', '#F44336',
-                                '#03A9F4', '#E91E63', '#00BCD4',
-                                '#FFC107', '#8BC34A', '#CDDC39',
-                                '#FF9800', '#673AB7', '#9E9D24',
-                                '#2196F3', '#4CAF50', '#F44336',
-                                '#3F51B5', '#607D8B'
-                              ],
-                            hoverBackgroundColor: [
-                                '#1A7D1E', '#CD2500', '#6A007E',
-                                '#2E4B59', '#0D1F83', '#CDB909',
-                                '#472316', '#6C6C6C', '#C21104',
-                                '#0077C2', '#B70031', '#008AA2',
-                                '#CD8F00', '#599118', '#9BAA07',
-                                '#CD6600', '#350885', '#6C6B00',
-                                '#0064C1', '#1A7D1E', '#C21104',
-                                '#0D1F83', '#2E4B59'
-                              ],
-                        },
-                    ]
-        }
         const labelIndexMap = new Map(statsByCategoryPlotData.labels.map((label, index) => [label, index]));
         const parameters = [];
         let queryStmt = `SELECT COUNT(transactionCategory) AS transactionCount, transactionCategory FROM transactions WHERE 1=1`;
@@ -95,7 +95,7 @@ function getStatsByCategoryPlotData(event, filterOptions) {
         db.all(queryStmt, parameters, (err, rows) => {
                 if (err) {
                     console.log(`Get Stats By Category Plot Data Error ${err}`);
-                    reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch data for the pie plot", {value: null}));
+                    reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch data for the pie plot", {value: statsByCategoryPlotData}));
                 }
                 rows.forEach((row) => { 
                     const index = labelIndexMap.get(row.transactionCategory);
@@ -107,28 +107,28 @@ function getStatsByCategoryPlotData(event, filterOptions) {
 }
 
 function getLinePlotData(event, filterOptions) {
-    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(constructValidationError("URL Validation Failed", {value: null})); });
-    return new Promise((resolve, reject) => { 
-        const expenditurePlotData = {
-            labels: [],
-            datasets: []
-        };
+    const expenditurePlotData = {
+        labels: [],
+        datasets: []
+    };
 
-        switch (filterOptions.transactionType) {
-            case "In":
-                expenditurePlotData.datasets.push({id: 0, label: "In", data: [], backgroundColor: "#008000", borderColor:"#008000"});
-                break;
-            case "Out":
-                expenditurePlotData.datasets.push({id: 1, label: "Out", data: [], backgroundColor: "#800000", borderColor:"#800000"});
-                break;
-            case "Expenditure":
-                expenditurePlotData.datasets.push({id: 2, label: "Expenditure", data: [], backgroundColor: "#ff5f1f", borderColor:"#ff5f1f"});
-                break;
-            default:
-                expenditurePlotData.datasets.push({id: 0, label: "In", data: [], backgroundColor: "#008000", borderColor:"#008000"});
-                expenditurePlotData.datasets.push({id: 1, label: "Out", data: [], backgroundColor: "#800000", borderColor:"#800000"});
-                expenditurePlotData.datasets.push({id: 2, label: "Expenditure", data: [], backgroundColor: "#ff5f1f", borderColor:"#ff5f1f"});
-        }
+    switch (filterOptions.transactionType) {
+        case "In":
+            expenditurePlotData.datasets.push({id: 0, label: "In", data: [], backgroundColor: "#008000", borderColor:"#008000"});
+            break;
+        case "Out":
+            expenditurePlotData.datasets.push({id: 1, label: "Out", data: [], backgroundColor: "#800000", borderColor:"#800000"});
+            break;
+        case "Expenditure":
+            expenditurePlotData.datasets.push({id: 2, label: "Expenditure", data: [], backgroundColor: "#ff5f1f", borderColor:"#ff5f1f"});
+            break;
+        default:
+            expenditurePlotData.datasets.push({id: 0, label: "In", data: [], backgroundColor: "#008000", borderColor:"#008000"});
+            expenditurePlotData.datasets.push({id: 1, label: "Out", data: [], backgroundColor: "#800000", borderColor:"#800000"});
+            expenditurePlotData.datasets.push({id: 2, label: "Expenditure", data: [], backgroundColor: "#ff5f1f", borderColor:"#ff5f1f"});
+    }
+    if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(constructValidationError("URL Validation Failed", {value: expenditurePlotData})); });
+    return new Promise((resolve, reject) => { 
 
         const parameters = [];
         let queryStmt = `SELECT \
@@ -158,7 +158,7 @@ function getLinePlotData(event, filterOptions) {
         db.all(queryStmt, parameters, (err, rows) => {
                 if (err) {
                     console.log(`Get Line Plot Data Error ${err}`);
-                    reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch data for the line plot", {value: null}));
+                    reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch data for the line plot", {value: expenditurePlotData}));
                 }
 
                 const expenditurePlotDataMap = new Map();
