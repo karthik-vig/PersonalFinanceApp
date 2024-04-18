@@ -1,5 +1,5 @@
 //import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import '../index.css';
 //import { useImmer } from 'use-immer';
 import { useSelector,
@@ -52,7 +52,8 @@ function MainPage() {
     const triggerAddEntryState = useSelector(state => state.mainPageStates.triggerAddEntryState);
     const triggerSearchState = useSelector(state => state.mainPageStates.triggerSearchState);
     const searchParams = useSelector(state => state.mainPageStates.searchParams);
-    const filterParamsVisibility = useSelector(state => state.mainPageStates.filterParamsVisibility);   
+    const filterParamsVisibility = useSelector(state => state.mainPageStates.filterParamsVisibility);  
+    const scrollRef = useRef(null); 
     const dispatch = useDispatch();
 
 
@@ -136,9 +137,31 @@ function MainPage() {
         selectedItem.id,
     ]);
 
+    // function to change the scroll position of the scrollRef to the top
+    useEffect(() => {
+        if (warningBoxDisplayState.modifyBtn === "block" ||
+            warningBoxDisplayState.deleteBtn === "block" ||
+            successBoxDisplayState.state === "block" ||
+            failBoxDisplayState.state === "block" )
+            scrollRef.current.scrollTop = 0;
+    }, [warningBoxDisplayState.modifyBtn, 
+        warningBoxDisplayState.deleteBtn, 
+        successBoxDisplayState.state, 
+        failBoxDisplayState.state,
+    ]);
+
     return (
         <div 
-            className="relative z-0 flex flex-row flex-wrap h-[100%] w-[100%] p-4 bg-background-cl overflow-x-hidden overflow-y-scroll"
+            className={"relative z-0 flex flex-row flex-wrap \
+                        sm:h-auto md:h-auto lg:h-[100%] w-[100%] p-4 \
+                        bg-background-cl overflow-x-hidden \
+                        " + (warningBoxDisplayState.modifyBtn === "block" || 
+                             warningBoxDisplayState.deleteBtn === "block" ||
+                             successBoxDisplayState.state === "block" ||
+                             failBoxDisplayState.state === "block" ?
+                             " overflow-y-hidden" : " overflow-y-scroll" )
+                      }
+            ref={scrollRef}
         >
             <GenericWarningBox 
                 warningText="Are you sure you want to modify the Entry?"

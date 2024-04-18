@@ -244,8 +244,8 @@ function FinancialEntityPage() {
                               warningBoxDisplayState.deleteBtn === "block" ||
                               successBoxDisplayState.state === "block" ||
                               failBoxDisplayState.state === "block" ||
-                              deleteSettings.displayState.state === "block"
-                              ? " overflow-y-hidden" : " overflow-y-scroll")
+                              deleteSettings.displayState.state === "block" ?
+                              " overflow-y-hidden" : " overflow-y-scroll" )
                         }
             ref={scrollRef}
         >
