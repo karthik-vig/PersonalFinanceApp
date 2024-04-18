@@ -239,8 +239,8 @@ function Topbar() {
             dispatch(setExpenditurePlotData(expenditurePlotData));
         }).catch((err) => {
             console.log("Error getting the plot data: ", err);
-            dispatch(setExpenditurePlotData(err.additionalInfo.value));
-            dispatch(setFailBoxMessage(err.title));
+            // dispatch(setExpenditurePlotData(err.additionalInfo.value));
+            dispatch(setFailBoxMessage("Could not fetch the data for the Line Plot"));
             dispatch(toggleFailBoxDisplay());
         });
         dispatch(toggleUpdateExpenditurePlot());
@@ -257,8 +257,8 @@ function Topbar() {
             dispatch(setStatsByCategoryPlotData(statsByCategoryPlotData));
         }).catch((err) => {
             console.log("Error getting the plot data: ", err);
-            dispatch(setStatsByCategoryPlotData(err.additionalInfo.value));
-            dispatch(setFailBoxMessage(err.title));
+            // dispatch(setStatsByCategoryPlotData(err.additionalInfo.value));
+            dispatch(setFailBoxMessage("Could not fetch the data for the Pie Plot"));
             dispatch(toggleFailBoxDisplay());
         });
         dispatch(toggleUpdateStatsByCategoryPlot());

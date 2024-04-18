@@ -63,7 +63,7 @@ function MainPage() {
             dispatch(setCurrentSelectedItem(items && items.length > 0 ? items[0].id : null));
             dispatch(setSideBarItems(items));
         }).catch((err) => {
-            if (err) dispatch(showFailBox(err.title));
+            if (err) dispatch(showFailBox("Could not fetch the entry list from the database"));
         });
     }, [dispatch]);
 
@@ -73,7 +73,7 @@ function MainPage() {
         window.transactionOperations.getItems(searchParams, filterParamsVisibility).then(items => {
             dispatch(setSideBarItems(items));
         }).catch((err) => {
-            if (err) dispatch(showFailBox(err.title));
+            if (err) dispatch(showFailBox("Could not fetch the search results from the database"));
         });
         dispatch(resetTriggerSearch());
     }, [triggerSearchState,
@@ -89,7 +89,7 @@ function MainPage() {
         window.transactionOperations.createEntry().then(newEntrySideBarItem => {
             dispatch(addSideBarItem(newEntrySideBarItem));
         }).catch((err) => {
-            if (err) dispatch(showFailBox(err.title));
+            if (err) dispatch(showFailBox("Could not add the entry to the database"));
         });
         dispatch(resetTriggerAddEntry());
     }, [triggerAddEntryState,
@@ -107,7 +107,7 @@ function MainPage() {
             dispatch(modifySideBarItem({id: selectedItem.id, modifiedItem: modifiedItem }));
             dispatch(showSuccessBox("Saved the Details to Disk"));
         }).catch((err) => {
-            if (err.additionalInfo.value.modifyStatus === false) dispatch(showFailBox(err.title));
+            if (err) dispatch(showFailBox("Could not save the entry to the database; either fully or completely"));
         });
         dispatch(resetTriggerModifyEntry());
    }, [triggerModifyEntryState,
@@ -129,7 +129,7 @@ function MainPage() {
             dispatch(resetCurrentSelectedItem());
             dispatch(showSuccessBox("Removed the Entry from Disk"));
         }).catch((err) => {
-            if (err) dispatch(showFailBox(err.title));
+            if (err) dispatch(showFailBox("Could not remove the entry from the database; either fully or completely"));
         });
         dispatch(resetTriggerDeleteEntry());       
     }, [triggerDeleteEntryState,
