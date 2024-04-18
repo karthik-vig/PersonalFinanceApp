@@ -418,7 +418,7 @@ function RecurringEntity() {
             dispatch(recurringTransactionSetCurrentSelectedItem(id));
             dispatch(selectTab("recurringTransactionPage"));
         }).catch((err) => { 
-            if (err) dispatch(showFailBox(err.title));
+            if (err) dispatch(showFailBox("Could not fetch the ID of the recurring transaction"));
         });
     }
 

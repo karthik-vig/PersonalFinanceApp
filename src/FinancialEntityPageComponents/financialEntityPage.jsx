@@ -164,7 +164,7 @@ function FinancialEntityPage() {
             window.recurringTransactionOperations.updateFinancialEntityReferenceID(selectedItem.id, referenceID).then(() => {
                 console.log("The Delete Entry trigger selected item ID is: ", selectedItem.id);
             }).catch((err) => {
-                if (err) dispatch(showFailBox(err.title));
+                if (err) dispatch(showFailBox("Could not update the Financial Entity reference for the selected recurring transaction"));
             });
             //delete the entry from the database
             window.financialEntityOperations.deleteItem(selectedItem.id).then(() => {

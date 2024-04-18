@@ -40,14 +40,6 @@ function FilterMenu(){
     const transactionCategories = useSelector((state) => state.sharedStates.additionalInformationState.transactionCategories);
     const transactionEntities = useSelector((state) => state.sharedStates.additionalInformationState.transactionEntities);
 
-    /*
-    useEffect(() => {
-        window.recurringTransactionOperations.getRecurringTransactions().then((retrievedRecurringTransactions) => {
-            dispatch(setRecurringTransactions(retrievedRecurringTransactions));
-        });
-    }, [dispatch,
-    ]);
-    */
 
     //convert transactionEntities to an array of transactionEntity names
     const transactionEntityNames = Object.keys(transactionEntities).map((key) => transactionEntities[key].name );

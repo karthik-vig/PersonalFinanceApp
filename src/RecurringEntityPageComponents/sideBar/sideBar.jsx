@@ -139,7 +139,7 @@ function SideBar() {
         }).catch((err) => {
             if (err) {
                 console.log("selectedItem is null, triggering fail box");
-                dispatch(showFailBox(err.title));
+                dispatch(showFailBox("Could not fetch the details of the selected item from the database"));
             }
         });
     }, [currentSelectedItemState,

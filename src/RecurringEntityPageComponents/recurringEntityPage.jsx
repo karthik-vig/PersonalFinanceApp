@@ -78,7 +78,7 @@ function RecurringEntityPage() {
             if (currentSelectedItemState === null) dispatch(setCurrentSelectedItem(items && items.length > 0 ? items[0].id : null));
             dispatch(setSideBarItems(items));
         }).catch((err) => {
-            if (err) dispatch(showFailBox(err.title));
+            if (err) dispatch(showFailBox("Could not fetch the list of recurring transaction entries from the database"));
         });
     }, [dispatch, currentSelectedItemState]);
 
@@ -88,7 +88,7 @@ function RecurringEntityPage() {
         window.recurringTransactionOperations.getItems(searchParams, filterParamsVisibility).then(items => {
             dispatch(setSideBarItems(items));
         }).catch((err) => {
-            if (err) dispatch(showFailBox(err.title));
+            if (err) dispatch(showFailBox("Could not fetch the search results from the database"));
         });
         dispatch(resetTriggerSearch());
     }, [triggerSearchState,
@@ -104,7 +104,7 @@ function RecurringEntityPage() {
         window.recurringTransactionOperations.createEntry().then(newEntrySideBarItem => {
             dispatch(addSideBarItem(newEntrySideBarItem));
         }).catch((err) => {
-            if (err) dispatch(showFailBox(err.title));
+            if (err) dispatch(showFailBox("Could not create a new recurring transaction entry in the database; the entry name may already exist"));
         });
         window.recurringTransactionOperations.getRecurringTransactions().then((retrievedRecurringTransactions) => {
             dispatch(setRecurringTransactions(retrievedRecurringTransactions));
@@ -139,7 +139,7 @@ function RecurringEntityPage() {
                 dispatch(modifySideBarItem(modifiedItem));
                 dispatch(showSuccessBox("Saved the Details to Disk"));
             }).catch((err) => {
-                if (err) dispatch(showFailBox(err.title));
+                if (err) dispatch(showFailBox("Could not update the entry's details in the database"));
             });
         }
         window.recurringTransactionOperations.getRecurringTransactions().then((retrievedRecurringTransactions) => {
@@ -180,7 +180,7 @@ function RecurringEntityPage() {
                 dispatch(resetCurrentSelectedItem());
                 dispatch(showSuccessBox("Removed the Entry from Disk"));
             }).catch((err) => {
-                if (err) dispatch(showFailBox(err.title));
+                if (err) dispatch(showFailBox("Could not remove the entry from the database; either fully or completely"));
             });
         }
         dispatch(resetDeleteOptions());
