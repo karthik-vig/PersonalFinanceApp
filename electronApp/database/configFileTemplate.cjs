@@ -25,6 +25,25 @@ function getConfigFileTemplate() {
 
         filePath: "./data/database.db", //default path to the database file
 
+        analyticsPageFilterMenuInformation: [
+            {
+                heading: "Transaction Type:",
+                content: "This filter is used by line plot and some stat boxes."
+            },
+            {
+                heading: "Transaction Category:",
+                content: "This filter is used by all the plots and stat boxes."
+            },
+            {
+                heading: "Currency:",
+                content: "This filter is used by line plot and some stat boxes."
+            },
+            {
+                heading: "Transaction Date Range:",
+                content: "This filter is used by all the plots and stat boxes."
+            },
+        ],
+
     }
     return configFileTemplate;
 }

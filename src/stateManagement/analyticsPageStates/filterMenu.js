@@ -9,6 +9,10 @@ const filterMenuSlice = createSlice({
         // dateRangeSelection: false,
         startDate: "yyyy-mm-ddThh:mm",
         endDate: "yyyy-mm-ddThh:mm",
+        informationPopUp: {
+            state: "hidden",
+            information: [],
+        },
     },
     reducers: {
         // setPlotData: (state, action) => {
@@ -39,6 +43,16 @@ const filterMenuSlice = createSlice({
             //action.payload = a string, which is a date
             state.endDate = action.payload;
         },
+        toggleInformationPopUp: (state) => {
+            if (state.informationPopUp.state === "hidden") {
+                state.informationPopUp.state = "block";
+            } else {
+                state.informationPopUp.state = "hidden";
+            }
+        },
+        setInformationPopUpInformation: (state, action) => {
+            state.informationPopUp.information = action.payload;
+        },
     },
 });
 
@@ -50,6 +64,8 @@ export const {
     // toggleDateRangeSelection,
     setStartDate,
     setEndDate,
+    toggleInformationPopUp,
+    setInformationPopUpInformation,
 } = filterMenuSlice.actions;
 
 export default filterMenuSlice.reducer;

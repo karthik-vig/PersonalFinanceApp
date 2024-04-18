@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
+import porpType from 'prop-types';
 import { useEffect } from 'react';
 import {
     // setPlotData,
@@ -8,6 +9,8 @@ import {
     // toggleDateRangeSelection,
     setStartDate,
     setEndDate,
+    toggleInformationPopUp,
+    setInformationPopUpInformation,
 } from '../stateManagement/analyticsPageStates/filterMenu.js';
 import {
     toggleUpdateExpenditurePlot, 
@@ -23,7 +26,66 @@ import {
     setFailBoxMessage,
     toggleFailBoxDisplay,
 } from '../stateManagement/analyticsPageStates/failBox.js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+
+function DisplayInformationPopUp({ 
+                                    data, 
+                                    displayState = "hidden",
+                                    toggleDisplayState,
+                                 }) {
+
+    const dispatch = useDispatch();
+
+    return (
+        <div
+            className={"absolute z-10 \
+                        top-[20%] sm:left-[15%] md:left[20%] lg:left-[30%] \
+                        flex flex-col flex-nowrap sm:w-[80%] md:w-[70%] lg:w-[40%] \
+                        h-auto max-h-96 p-2 \
+                        rounded-lg border bg-surface-cl drop-shadow-2xl overflow-y-scroll " + displayState 
+                    }
+        >
+            <button
+                className="flex flex-row flex-nowarp justify-end items-center"
+                onClick={() => dispatch(toggleDisplayState())}
+            >
+                <FontAwesomeIcon
+                    className="m-1 h-4 w-4"
+                    icon="fa-times"
+                    color="#FF0000"
+                />
+            </button>
+            {   
+                data.map((info, index) => {
+                    return (
+                        <div
+                            key={index}
+                            className="flex flex-col flex-nowrap items-start justify-start w-auto h-auto p-1 my-2"
+                        >
+                            <h3
+                                className="text-semibold text-xl my-1"
+                            >
+                                {info.heading}
+                            </h3>
+                            <p
+                                className="flex flex-wrap text-justify text-black text-base my-1"
+                            >
+                                {info.content}
+                            </p>
+                        </div>
+                    );
+                })
+            }
+        </div>
+    );
+}
+
+DisplayInformationPopUp.propTypes = {
+    data: porpType.array.isRequired,
+    displayState: porpType.string,
+    toggleDisplayState: porpType.func.isRequired,
+};
 
 function TransactionTypeSection() {
 
@@ -284,16 +346,43 @@ function Topbar() {
         dispatch,
     ]);
 
+
+    // set the information pop up information
+    useEffect(() => { 
+        window.initializeDatabase.getConfigFile().then((configFile) => {
+            dispatch(setInformationPopUpInformation(configFile.analyticsPageFilterMenuInformation));
+        });
+    }, [dispatch,]);
+    
+    
     return (
         <div 
-            className="flex flex-col flex-nowrap items-center h-auto mx-7 mt-10 mb-4 rounded-lg border bg-surface-cl drop-shadow-lg w-auto "
-            //id="analyticsTopbar"
+        className="relative z-10 flex flex-col flex-nowrap items-center h-auto mx-7 mt-10 mb-4 rounded-lg border bg-surface-cl drop-shadow-lg w-auto "
+        //id="analyticsTopbar"
         >
-            <h2
-                className="text-bold text-xl my-1 w-[100%] h-8 text-center"
+            <DisplayInformationPopUp 
+                data={filterMenuStates.informationPopUp.information}
+                displayState={filterMenuStates.informationPopUp.state}
+                toggleDisplayState={toggleInformationPopUp}
+            />
+            <section
+                className="flex flex-row flex-nowrap justify-center items-center w-auto h-auto p-1"
             >
-                Filter Menu
-            </h2>
+                <h2
+                    className="text-bold text-xl my-1 w-auto h-8 text-center"
+                >
+                    Filter Menu
+                </h2>
+                <button
+                    onClick={() => dispatch(toggleInformationPopUp())}
+                >
+                    <FontAwesomeIcon 
+                        className="m-1 h-4 w-4"
+                        icon="fa-circle-info"
+                        color="#FFB818"
+                    />
+                </button>
+            </section>
             <section
                 className="flex flex-row flex-wrap justify-evenly w-[100%] h-auto p-1"
             >
