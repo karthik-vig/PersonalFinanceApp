@@ -1,20 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-//import  { useDispatch } from "react-redux";
 
-//console.log("calling window.transactionOperations.getAllItems() from sideBarItems.js");
-/*
-async function getAllItems() {
-    const allItems = await window.transactionOperations.getAllItems();
-    console.log("allItems in getAllItems= ", allItems);
-    return allItems;
-}
-
-let allItems = [];
-getAllItems().then((result) => {
-    console.log("allItems = ", result);
-    allItems = [...result];
-});
-*/
 
 export const sideBarItemSlice = createSlice({
     name: "recurringEntityPage/sideBarItems",
