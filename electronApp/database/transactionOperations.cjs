@@ -162,7 +162,7 @@ function getLinePlotData(event, filterOptions) {
                 }
 
                 const expenditurePlotDataMap = new Map();
-                if (!Array.isArray(rows) || rows.length === 0) resolve([]);
+                if (!Array.isArray(rows) || rows.length === 0) resolve(expenditurePlotData);
                 rows.forEach((row) => {
                     const date = moment(row.transactionDate).tz(timeZone).format().substring(0, 10);
                     if (expenditurePlotDataMap.has(date)) {
@@ -183,7 +183,7 @@ function getLinePlotData(event, filterOptions) {
                 });
    
 
-                expenditurePlotData.datasets.push()
+                // expenditurePlotData.datasets.push()
                  for (const [label, value] of expenditurePlotDataMap) {
                     expenditurePlotData.labels.push(label);
                     switch (filterOptions.transactionType) {
