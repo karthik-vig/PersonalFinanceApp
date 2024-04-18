@@ -48,7 +48,7 @@ function SideBar() {
         }).catch((err) => {
             if (err) {
                 console.log("selectedItem is null, triggering fail box");
-                dispatch(showFailBox(err.title));
+                dispatch(showFailBox("Could not fetch the selected item's data"));
             }
         });
     }, [currentSelectedItemState,

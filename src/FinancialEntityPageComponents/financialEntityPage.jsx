@@ -71,17 +71,11 @@ function FinancialEntityPage() {
     //tigger getAllItems on page load
     useEffect(() => {
         window.financialEntityOperations.getAllItems().then(items => {
-            /*
-            if (items === null) {
-                dispatch(showFailBox("Could not load the items from the database"));
-                return;
-            }
-            */
             console.log("financialEntity page : currentSelectedItem is: ", currentSelectedItemState);
             if (currentSelectedItemState === null) dispatch(setCurrentSelectedItem(items && items.length > 0 ? items[0].id : null));
             dispatch(setSideBarItems(items));
         }).catch((err) => {
-            if (err) dispatch(showFailBox(err.title));
+            if (err) dispatch(showFailBox("Could not load the list of entries from the database"));
         });
     }, [dispatch, currentSelectedItemState]);
 
@@ -89,14 +83,9 @@ function FinancialEntityPage() {
     useEffect(() => {
         if (!triggerSearchState) return;
         window.financialEntityOperations.getItems(searchParams, filterParamsVisibility).then(items => {
-            /*if (items === null) {
-                dispatch(showFailBox("Search Operation Failed"));
-                return;
-            }*/
             dispatch(setSideBarItems(items));
         }).catch((err) => {
-            if (err)
-            dispatch(showFailBox(err.title));
+            if (err) dispatch(showFailBox("Could not retrieve the search results from the database"));
         });
         dispatch(resetTriggerSearch());
     }, [triggerSearchState,
@@ -110,10 +99,6 @@ function FinancialEntityPage() {
     useEffect(() => {
         if (!triggerAddEntryState) return;
         window.financialEntityOperations.createEntry().then(newEntrySideBarItem => {
-            /*if (newEntrySideBarItem === null) {
-                dispatch(showFailBox("Could not create the entry in the database"));
-                return;
-            }*/
             dispatch(addSideBarItem(newEntrySideBarItem));
             //dispatch(showSuccessBox());
         }).catch((err) => {
@@ -141,8 +126,7 @@ function FinancialEntityPage() {
             dispatch(modifySideBarItem({id: selectedItem.id, modifiedItem: modifiedItem }));
             dispatch(showSuccessBox("Saved the Details to Disk"));
         }).catch((err) => {
-            if (err.additionalInfo.value.modifyStatus === false)
-            dispatch(showFailBox(err.title));
+            if (err) dispatch(showFailBox("Could not update the entry, in the database"));
         });
         window.financialEntityOperations.getTransactionEntities().then((transactionEntities) => {
             dispatch(setTransactionEntities(transactionEntities));
@@ -174,7 +158,7 @@ function FinancialEntityPage() {
                 console.log("The Delete Entry trigger selected item ID is: ", selectedItem.id);
                 //dispatch(showSuccessBox("Updated the Financial Entity reference for all transactions"));
             }).catch((err) => {
-                if (err) dispatch(showFailBox(err.title));
+                if (err) dispatch(showFailBox("Could not update the Financial Entity reference for all transactions"));
             });
             //give both the selected item id and the id to be replace with to the recurringTransactionOperations
             window.recurringTransactionOperations.updateFinancialEntityReferenceID(selectedItem.id, referenceID).then(() => {
@@ -192,7 +176,7 @@ function FinancialEntityPage() {
                 dispatch(showSuccessBox("Removed the Entry from Disk"));
             }).catch((err) => {
                 if (err)
-                dispatch(showFailBox(err.title));
+                dispatch(showFailBox("Could not delete the financial entity from the database"));
             });
         }).catch((err) => { 
             if (err) dispatch(showFailBox(err.title));

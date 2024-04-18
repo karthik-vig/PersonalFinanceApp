@@ -271,7 +271,7 @@ function FromEntitySection() {
             dispatch(financialEntitySetCurrentSelectedItem(id));
             dispatch(selectTab("financialEntityPage"));
         }).catch((err) => { 
-            if (err) dispatch(showFailBox(err.title));
+            if (err) dispatch(showFailBox("Could not fetch the ID of the financial entity"));
         });
     };
 
@@ -370,7 +370,7 @@ function ToEntitySection() {
             dispatch(financialEntitySetCurrentSelectedItem(id));
             dispatch(selectTab("financialEntityPage"));
         }).catch((err) => { 
-            if (err) dispatch(showFailBox(err.title));
+            if (err) dispatch(showFailBox("Could not fetch the ID of the financial entity"));
         });
     };
 
