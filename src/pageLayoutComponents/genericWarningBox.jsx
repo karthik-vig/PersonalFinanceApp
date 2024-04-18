@@ -18,9 +18,9 @@ function GenericWarningBox({warningText,
         <div 
             className={"absolute z-20 top-0 left-0 w-[100%] h-[100%] flex flex-col flex-nowrap justify-center opacity-100 bg-slate-950/30 " + displayState }
         >
-            <div className={"absolute top-[40%] sm:left-[15%] md:left-[20%] lg:left-[40%] h-auto sm:w-[70%] md:w-[60%] lg:w-[30%] flex flex-col flex-nowrap justify-start bg-yellow-100 border border-yellow-300 rounded-md p-2 " + additionalClasses}>
-                <p className="text-sm font-semibold text-yellow-800 my-2">{warningText}</p>
-                <section className="flex flex-row flex-nowrap justify-evenly">
+            <div className={"absolute top-[40%] sm:left-[15%] md:left-[20%] lg:left-[40%] h-auto sm:w-[70%] md:w-[60%] lg:w-[30%] flex flex-col flex-nowrap justify-center items-center bg-yellow-100 border border-yellow-300 rounded-md p-2 " + additionalClasses}>
+                <p className="flex flex-wrap h-auto w-[90%] text-sm font-semibold text-yellow-800 my-2">{warningText}</p>
+                <section className="flex flex-row flex-nowrap justify-evenly w-[100%]">
                     <button 
                         className="flex flex-row flex-nowrap justify-center items-center w-20 h-8 border rounded-md bg-lime-500 hover:bg-lime-700 border-lime-600"
                         onClick={() => { dispatch(setState()); dispatch(changeDisplayState()) } }
