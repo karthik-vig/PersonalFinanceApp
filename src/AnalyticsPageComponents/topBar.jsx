@@ -275,6 +275,8 @@ function Topbar() {
             dispatch(setStatBoxData(statBoxData));
         }).catch((err) => {
             console.log("Error getting the plot data: ", err);
+            dispatch(setFailBoxMessage("Could not fetch the data for the Stat Box"));
+            dispatch(toggleFailBoxDisplay());
         });
         dispatch(toggleUpdateStatBox());
     }, [generateAnalytics.updateStatBox,
