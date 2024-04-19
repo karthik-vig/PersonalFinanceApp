@@ -2,7 +2,10 @@ import { createSlice } from '@reduxjs/toolkit';
 
 export const currentSelectedItemSlice = createSlice({
     name: "financialEntityPage/currentSelectedItemState",
-    initialState: null,
+    initialState: {
+        itemId: null,
+        focusOnItem: false,
+    },
     reducers: {
         setCurrentSelectedItem: (state, action) => {
             //action.payload = {display: boolean, message: string}
@@ -11,7 +14,10 @@ export const currentSelectedItemSlice = createSlice({
         },
         resetCurrentSelectedItem: (state) => {
             //action.payload = {display: boolean, message: string}
-            state = null;
+            state = {
+                itemId: null,
+                focusOnItem: false,
+            };
             return state;
         },
     }

@@ -264,7 +264,7 @@ function FromEntitySection() {
             return;
         }
         window.financialEntityOperations.getIdFromTitle(fromEntity).then((id) => {
-            dispatch(financialEntitySetCurrentSelectedItem(id));
+            dispatch(financialEntitySetCurrentSelectedItem({ itemId: id, focusOnItem: true }));
             dispatch(selectTab("financialEntityPage"));
         }).catch((err) => { 
             if (err) dispatch(showFailBox("Could not fetch the ID of the financial entity"));
@@ -363,7 +363,7 @@ function ToEntitySection() {
             return;
         }
         window.financialEntityOperations.getIdFromTitle(toEntity).then((id) => {
-            dispatch(financialEntitySetCurrentSelectedItem(id));
+            dispatch(financialEntitySetCurrentSelectedItem({ itemId: id, focusOnItem: true }));
             dispatch(selectTab("financialEntityPage"));
         }).catch((err) => { 
             if (err) dispatch(showFailBox("Could not fetch the ID of the financial entity"));

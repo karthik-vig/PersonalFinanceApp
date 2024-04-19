@@ -72,7 +72,7 @@ function FinancialEntityPage() {
     useEffect(() => {
         window.financialEntityOperations.getAllItems().then(items => {
             console.log("financialEntity page : currentSelectedItem is: ", currentSelectedItemState);
-            if (currentSelectedItemState === null) dispatch(setCurrentSelectedItem(items && items.length > 0 ? items[0].id : null));
+            if (currentSelectedItemState.itemId === null) dispatch(setCurrentSelectedItem(items && items.length > 0 ? { itemId: items[0].id, focusOnItem: false }: { itemId: null, focusOnItem: false }));
             dispatch(setSideBarItems(items));
         }).catch((err) => {
             if (err) dispatch(showFailBox("Could not load the list of entries from the database"));

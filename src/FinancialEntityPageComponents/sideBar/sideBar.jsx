@@ -36,14 +36,20 @@ function SideBar() {
 
     const sideBarItems = useSelector((state) => state.financialEntityPageStates.sideBarItems);
     const currentSelectedItemState = useSelector((state) => state.financialEntityPageStates.currentSelectedItemState);
+    
     const dispatch = useDispatch();
+
+    // set the sidebar scroll position
+    useEffect(() => {
+
+    }, []);
 
     //get the selecteded item data from the main process
     useEffect(() => {
-        if (currentSelectedItemState === null || currentSelectedItemState === undefined) return;
+        if (currentSelectedItemState.itemId === null || currentSelectedItemState === undefined) return;
         console.log("currentSelectedItemState is not null, triggering getSelectedItem")
         console.log(currentSelectedItemState);
-        window.financialEntityOperations.getSelectedItem(currentSelectedItemState).then((selectedItem) => {
+        window.financialEntityOperations.getSelectedItem(currentSelectedItemState.itemId).then((selectedItem) => {
             dispatch(handleSelectItemClick(selectedItem));
         }).catch((err) => {
             if (err) {
@@ -93,9 +99,10 @@ function SideBar() {
             handleItemClick={(uuid) => { //dispatch(triggerSearch());
                  console.log('financialEntityPage: currentSelectedState is: ', currentSelectedItemState);
                  console.log("dispatching setCurrentSelectedItem in financialEntityPage in sideBar.jsx; the uuid is: ", uuid);
-                 dispatch(setCurrentSelectedItem(uuid));  
+                 dispatch(setCurrentSelectedItem({ itemId: uuid, focusOnItem: false }));  
                 }}
-            currentSelectedItemState={currentSelectedItemState}
+            currentSelectedItemState={currentSelectedItemState.itemId}
+            focusCurrentSelectedItem={currentSelectedItemState.focusOnItem}
         />
     
     );

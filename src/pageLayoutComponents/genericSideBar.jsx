@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import PropTypes from 'prop-types';
 import '../index.css';
+import { useEffect, useRef } from 'react';
 //import { useDispatch } from 'react-redux';
 //import { useImmer } from 'use-immer'; //will be used later when we will have to handle the click event on the side bar items
 
@@ -21,9 +22,30 @@ import '../index.css';
 function GenericSideBar({ items, 
                           handleItemClick,
                           currentSelectedItemState,
+                          focusCurrentSelectedItem=false,
                         }) {
 
     //const dispatch = useDispatch();
+    const manipulateListRef = useRef(null);
+
+    // set the sidebar scroll position
+    useEffect(() => {
+        if (!focusCurrentSelectedItem ||
+            manipulateListRef.current === null) return;
+        const listElementHeight = manipulateListRef.current.children[0].children[0]?.offsetHeight;
+        items.some((item, index) => { 
+            if (String(currentSelectedItemState) !== String(item.id)) return false;
+            manipulateListRef.current.scrollTop =  index * listElementHeight;
+            return true;
+        });
+    }, [
+        focusCurrentSelectedItem, 
+        currentSelectedItemState, 
+        manipulateListRef,
+        items,
+    ]);
+
+
     return ( 
     <div 
         className="sm:w-[100%] md:w-[100%] lg:w-[25%] xl:w-[25%] 2xl:w-[25%] \
@@ -31,6 +53,7 @@ function GenericSideBar({ items,
                    sm:h-[90%] lg:h-[85%] 2xl:h-[90%] \
                    border rounded-lg bg-surface-cl drop-shadow-lg \
                    overflow-x-hidden overflow-y-scroll "
+        ref={manipulateListRef}
         //id="genericSideBar"
     >
                 <ul
@@ -79,6 +102,7 @@ GenericSideBar.propTypes = {
     items: PropTypes.array,
     handleItemClick: PropTypes.func,
     currentSelectedItemState: PropTypes.string,
+    focusCurrentSelectedItem: PropTypes.bool,
 };
 
 export default GenericSideBar;
