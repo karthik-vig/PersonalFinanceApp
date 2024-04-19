@@ -75,7 +75,7 @@ function RecurringEntityPage() {
     //tigger getAllItems on page load
     useEffect(() => {
         window.recurringTransactionOperations.getAllItems().then(items => {
-            if (currentSelectedItemState === null) dispatch(setCurrentSelectedItem(items && items.length > 0 ? items[0].id : null));
+            if (currentSelectedItemState.itemId === null) dispatch(setCurrentSelectedItem(items && items.length > 0 ? { itemId: items[0].id, focusOnItem: false } : { itemId: null, focusOnItem: false }));
             dispatch(setSideBarItems(items));
         }).catch((err) => {
             if (err) dispatch(showFailBox("Could not fetch the list of recurring transaction entries from the database"));

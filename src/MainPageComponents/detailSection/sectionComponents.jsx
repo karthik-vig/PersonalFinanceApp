@@ -415,7 +415,7 @@ function RecurringEntity() {
     const handlePopOut = () => {
         console.log("External Link Clicked");
         window.recurringTransactionOperations.getIdFromTitle(recurringEntity).then((id) => {
-            dispatch(recurringTransactionSetCurrentSelectedItem(id));
+            dispatch(recurringTransactionSetCurrentSelectedItem({ itemId: id, focusOnItem: true }));
             dispatch(selectTab("recurringTransactionPage"));
         }).catch((err) => { 
             if (err) dispatch(showFailBox("Could not fetch the ID of the recurring transaction"));

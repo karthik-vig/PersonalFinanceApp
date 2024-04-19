@@ -131,10 +131,10 @@ function SideBar() {
 
     //get the selecteded item data from the main process
     useEffect(() => {
-        if (currentSelectedItemState === null) return;
+        if (currentSelectedItemState.itemId === null) return;
         console.log("currentSelectedItemState is not null, triggering getSelectedItem")
         console.log(currentSelectedItemState);
-        window.recurringTransactionOperations.getSelectedItem(currentSelectedItemState).then((selectedItem) => {
+        window.recurringTransactionOperations.getSelectedItem(currentSelectedItemState.itemId).then((selectedItem) => {
             dispatch(handleSelectItemClick(selectedItem));
         }).catch((err) => {
             if (err) {
@@ -194,9 +194,10 @@ function SideBar() {
         <GenericSideBar 
             items={genericItems} 
             handleItemClick={(uuid) => { //dispatch(triggerSearch());
-                 dispatch(setCurrentSelectedItem(uuid));  
+                 dispatch(setCurrentSelectedItem({itemId: uuid, focusOnItem: false}));  
                 }}
-            currentSelectedItemState={currentSelectedItemState}
+            currentSelectedItemState={currentSelectedItemState.itemId}
+            focusCurrentSelectedItem={currentSelectedItemState.focusOnItem}
         />
     
     );
