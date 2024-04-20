@@ -27,21 +27,62 @@ function getConfigFileTemplate() {
 
         analyticsPageFilterMenuInformation: [
             {
-                heading: "Transaction Type:",
-                content: "This filter is used by line plot and some stat boxes."
+                heading: "Expenditure - Line Plot:",
+                content: "Affected by: Transaction Type, Transaction Category, Currency, Transaction Date Range."
             },
             {
-                heading: "Transaction Category:",
-                content: "This filter is used by all the plots and stat boxes."
+                heading: "Number of Transactoins By Category - Doughnut Plot:",
+                content: "Affected by: Transaction Type, Currency, Transaction Date Range."
             },
             {
-                heading: "Currency:",
-                content: "This filter is used by line plot and some stat boxes."
+                heading: "Total Expenditure - Stat Box:",
+                content: "Affected by: Transaction Category, Currency, Transaction Date Range."
             },
             {
-                heading: "Transaction Date Range:",
-                content: "This filter is used by all the plots and stat boxes."
+                heading: "In Amount - Stat Box:",
+                content: "Affected by: Transaction Category, Currency, Transaction Date Range."
             },
+            {
+                heading: "Out Amount - Stat Box:",
+                content: "Affected by: Transaction Category, Currency, Transaction Date Range."
+            },
+            {
+                heading: "In Number - Stat Box:",
+                content: "Affected by: Transaction Category, Currency, Transaction Date Range."
+            },
+            {
+                heading: "Out Number - Stat Box:",
+                content: "Affected by: Transaction Category, Currency, Transaction Date Range."
+            },
+            {
+                heading: "Number of Transactions - Stat Box:",
+                content: "Affected by: Transaction Category, Currency, Transaction Date Range."
+            },
+            {
+                heading: "Number of Financial Entities - Stat Box:",
+                content: "Affected by: None."
+            },
+            {
+                heading: "Number of Recurring Transactions - Stat Box:",
+                content: "Affected by: Transaction Type, Transaction Category, Currency."
+            },
+            {
+                heading: "Number of Transactions by Internal as Source - Stat Box:",
+                content: "Affected by: Transaction Type, Transaction Category, Currency, Transaction Date Range."
+            },
+            {
+                heading: "Number of Transactions by Internal as Destination - Stat Box:",
+                content: "Affected by: Transaction Type, Transaction Category, Currency, Transaction Date Range."
+            },
+            {
+                heading: "Number of Transactions by External as Source - Stat Box:",
+                content: "Affected by: Transaction Type, Transaction Category, Currency, Transaction Date Range."
+            },
+            {
+                heading: "Number of Transactions by External as Destination - Stat Box:",
+                content: "Affected by: Transaction Type, Transaction Category, Currency, Transaction Date Range."
+            },
+
         ],
 
     }
