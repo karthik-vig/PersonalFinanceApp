@@ -343,15 +343,10 @@ function deleteFileBlob(event, fileName) {
 
 
 //file all files entry from files table based on uuid
-function getFileEntries(event, uuid) {
-    if (!validateBrowserWindowPath(event.senderFrame.url)) return null;
-    //communicate with backend to get all file entries
-    console.log("getAllFileEntries called with id: ", uuid);
-    //specifically it fetches the data from the files table based on the uuid
-    //this works as the the uuid of the files in the files table is same
-    //as the uuid of the transaction in the transaction table
-    return currentSelectedItemFiles; //could also return null if the operation fails
-}
+// function getFileEntries(event) {
+//     if (!validateBrowserWindowPath(event.senderFrame.url)) return null;
+//     return currentSelectedItemFiles; //could also return null if the operation fails
+// }
 
 
 //backed function to get all items for the side bar
@@ -1096,7 +1091,7 @@ module.exports = {
     setDB,
     setTimeZone,
     deleteFileBlob,
-    getFileEntries,
+    //getFileEntries,
     getAllItems,
     getItems,
     getSelectedItem,
