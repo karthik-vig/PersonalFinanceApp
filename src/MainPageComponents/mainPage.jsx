@@ -159,7 +159,7 @@ function MainPage() {
                              warningBoxDisplayState.deleteBtn === "block" ||
                              successBoxDisplayState.state === "block" ||
                              failBoxDisplayState.state === "block" ?
-                             " overflow-y-hidden" : " overflow-y-scroll" )
+                             " overflow-y-hidden" : " sm:overflow-y-scroll md:overflow-y-scroll lg:overflow-y-hidden" )
                       }
             ref={scrollRef}
         >

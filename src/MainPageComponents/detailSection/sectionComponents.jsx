@@ -468,18 +468,22 @@ function FileInput() {
                     return (
                         <li 
                             key={fileName}
-                            className="list-decimal h-10 w-auto mx-4 my-1"
-                        >
-                            <GetFileSection
-                                additonalClasses="h-10 w-auto p-2"
-                                fileName={fileName}
-                            />
-                            <DeleteFileButtonSection
-                                additonalClasses="h-10 w-auto p-2"
-                                fileName={fileName}
-                                files={files}
-                                handleValueChange={handleItemClick}
-                            />
+                            className="list-decimal h-auto w-auto mx-4 my-1"
+                        >   
+                            <section
+                                className="flex flex-row flex-nowrap items-center h-auto w-auto"
+                            >
+                                <GetFileSection
+                                    additonalClasses="h-auto w-auto p-2"
+                                    fileName={fileName}
+                                />
+                                <DeleteFileButtonSection
+                                    additonalClasses="h-10 w-auto p-2"
+                                    fileName={fileName}
+                                    files={files}
+                                    handleValueChange={handleItemClick}
+                                />
+                            </section>
                         </li>
                     );
                     } )

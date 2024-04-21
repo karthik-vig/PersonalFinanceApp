@@ -32,7 +32,7 @@ function DetailSection() {
                             border rounded-lg bg-surface-cl drop-shadow-lg \
                             overflow-x-hidden sm:overflow-y-visible md:overflow-y-visible lg:overflow-y-scroll \
                             sm:px-[2%] md:px-[2%] lg:px-[10%] py-[2%] \
-                            sm:w-[95%] md:w-[95%] lg:w-[70%] xl:w-auto 2xl:w-auto \
+                            sm:w-[95%] md:w-[95%] lg:w-[70%] xl:w-[70%] 2xl:w-[70%] \
                             sm:h-auto md:h-auto lg:h-[85%] 2xl:h-[90%] \
                             sm:my-4 md:my-4 lg:my-2 \
                             " 
@@ -49,8 +49,8 @@ function DetailSection() {
             className="flex flex-nowrap flex-col flex-grow \
                         border rounded-lg bg-surface-cl drop-shadow-lg \
                         overflow-x-hidden sm:overflow-y-visible md:overflow-y-visible lg:overflow-y-scroll \
-                        sm:px-[2%] md:px-[2%] lg:px-[10%] py-[2%] \
-                        sm:w-[95%] md:w-[95%] lg:w-[70%] xl:w-auto 2xl:w-auto \
+                        sm:px-[2%] md:px-[2%] lg:px-[10%] \
+                        sm:w-[95%] md:w-[95%] lg:w-[70%] xl:w-[70%] 2xl:w-[70%] \
                         sm:h-auto md:h-auto lg:h-[85%] 2xl:h-[90%] \
                         sm:my-4 md:my-4 lg:my-2 \
                         " 

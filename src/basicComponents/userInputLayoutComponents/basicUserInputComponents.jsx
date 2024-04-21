@@ -241,10 +241,14 @@ function GetFileSection({ additonalClasses, fileName }) {
 
     return (
         <button
-            className={"underline text-blue-300 hover:text-blue-500 min-w-20 min-h-20" + " " + additonalClasses + " "}
+            className={" " + additonalClasses + " "}
             onClick={() => { dispatch(triggerGetFile(fileName)); } }
         >
-            {fileName}
+            <p
+                className="text-wrap underline text-blue-300 hover:text-blue-500"
+            >
+                {fileName}
+            </p>        
         </button>
     );
 }

@@ -251,7 +251,7 @@ function RecurringEntityPage() {
                 successBoxDisplayState.state === "block" ||
                 failBoxDisplayState.state === "block" ||
                 deleteOptionsState.displayState.state === "block" ?
-                " overflow-y-hidden" : " overflow-y-scroll" )
+                " overflow-y-hidden" : " sm:overflow-y-scroll md:overflow-y-scroll lg:overflow-y-hidden" )
             }
             ref={scrollRef}
         >
