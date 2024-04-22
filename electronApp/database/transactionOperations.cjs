@@ -556,189 +556,52 @@ function getSelectedItem(event, uuid) {
     //clear any cotents in the currentSelectedItemFiles
     currentSelectedItemFiles = {};
     
-    return new Promise((resolve, reject) => {
-        db.serialize(() => {
-
-            const selectedItem = {
-                id: null, //uuidv4 template
-                title: null,
-                description: null,
-                value: null,
-                currency: null,
-                transactionType: null,
-                transactionCategory: null,
-                fromEntity: null, //computed by backend
-                fromType: null,
-                toEntity: null, //computed by backend
-                toType: null,
-                recurringEntity: null, //computed by backend, could be null
-                file: [],
-                createdDate: "yyyy-MM-ddThh:mm:ss",
-                modifiedDate: "yyyy-MM-ddThh:mm:ss",
-                transactionDate: "yyyy-MM-ddThh:mm:ss",
-            };
-
-            let fromReferenceID = null;
-            let toReferenceID = null;
-            let recurringReferenceID = null;
-
-            const fetchTransactionDetail = new Promise((resolve, reject) => {
-                db.get(`SELECT \
-                        title,\
-                        description,\
-                        value,\
-                        currency,\
-                        transactionType,\
-                        transactionCategory,\
-                        fromReference,\
-                        toReference,\
-                        recurringReference,\
-                        file,\
-                        createdDate,\
-                        modifiedDate,\
-                        transactionDate\
-                        FROM transactions \
-                        WHERE id = ?`, String(uuid), (err, row) => {
+    return new Promise ((resolve, reject) => { 
+        db.get(`SELECT \
+                id , \
+                title, \
+                description, \
+                value, \
+                currency, \
+                transactionType, \
+                transactionCategory, \
+                (SELECT title FROM financialEntities WHERE id = fromReference) AS fromEntity, \
+                (SELECT type FROM financialEntities WHERE id = fromReference) AS fromType, \
+                (SELECT title FROM financialEntities WHERE id = toReference) AS toEntity, \
+                (SELECT type FROM financialEntities WHERE id = toReference) AS toType, \
+                (SELECT title FROM recurringTransactions WHERE id = recurringReference) AS recurringEntity, \
+                file, \
+                createdDate, \
+                modifiedDate, \
+                transactionDate \
+                FROM transactions \
+                WHERE id = ?`, [ String(uuid), ], (err, row) => {
                     if (err) {
-                        console.log(`Get Selected Item Error ${err}`);
-                        reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch the selected item", {value: null}));
+                        reject(constructErrorMsgFromSQLiteError(err, "Could not fetch the selected item", {value: null}));
+                        return;
                     }
-                    console.log("Transaction Table Information (getSelectedItem):");
-                    console.log(row);
-                    const createdDate = moment(row.createdDate).tz(timeZone).format().substring(0, 16);
-                    const modifiedDate = moment(row.modifiedDate).tz(timeZone).format().substring(0, 16);
-                    const transactionDate = moment(row.transactionDate).tz(timeZone).format().substring(0, 16);
-                    if (row) {
-                        selectedItem.id = uuid;
-                        selectedItem.title = row.title;
-                        selectedItem.description = row.description;
-                        selectedItem.value = row.value;
-                        selectedItem.currency = row.currency;
-                        selectedItem.transactionType = row.transactionType;
-                        selectedItem.transactionCategory = row.transactionCategory;
-                        selectedItem.createdDate = createdDate;
-                        selectedItem.modifiedDate = modifiedDate;
-                        selectedItem.transactionDate = transactionDate;
-        
-                        fromReferenceID = row.fromReference;
-                        toReferenceID = row.toReference;
-                        recurringReferenceID = row.recurringReference;
-                    }
-                    resolve();
+                    // conver the datetime from UTC to local selected timezone.
+                    row.createdDate = moment(row.createdDate).tz(timeZone).format().substring(0, 16);
+                    row.modifiedDate = moment(row.modifiedDate).tz(timeZone).format().substring(0, 16);
+                    row.transactionDate = moment(row.transactionDate).tz(timeZone).format().substring(0, 16);
+                    // check if there are any files associated with the transaction and fetch them too before resolving the promise
+                    if (row.file === 0) {
+                        row.file = [];
+                        resolve(row);
+                        return;
+                    } 
+                    row.file = [];
+                    db.all(`SELECT filename, filedata FROM files WHERE id = ?`, [ String(uuid), ], (err, filerows) => { 
+                        if (err) reject(constructErrorMsgFromSQLiteError(err, "Could not fetch the file details for the selected item", {value: null}));
+                        filerows.forEach((filerow) => {
+                            row.file.push(filerow.filename);
+                            currentSelectedItemFiles[filerow.filename] = filerow.filedata;
+                        });
+                        resolve(row);
+                    });
+                    //resolve(row);
                 });
-            });
-
-        fetchTransactionDetail.then(() => { 
-
-            const fetchFromFinanaicalEntity = new Promise((resolve, reject) => {
-                console.log("fromReferenceID in fetch from financial entity promise (getSelectedItem):", fromReferenceID)
-                db.all(`SELECT \
-                        title, \
-                        type \
-                        FROM financialEntities 
-                        WHERE id = ?`, String(fromReferenceID), (err, rows) => {
-                            if (err) {
-                                console.log(`Get Selected Item Error ${err}`);
-                                reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch the from financial entity", {value: null}));
-                            }
-                            console.log("(FROM) Financial Entity Table Information (getSelectedItem):");
-                            console.log(rows);
-                            resolve(rows);
-                });
-            });
-
-            const fetchToFinanaicalEntity = new Promise((resolve, reject) => {
-                db.all(`SELECT \
-                        title, \
-                        type \
-                        FROM financialEntities 
-                        WHERE id = ?`, String(toReferenceID), (err, rows) => {
-                            if (err) {
-                                console.log(`Get Selected Item Error ${err}`);
-                                reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch the to financial entity", {value: null}));
-                            }
-                            console.log("(TO) Financial Entity Table Information (getSelectedItem):");
-                            console.log(rows);
-                            resolve(rows);
-                });
-            });
-
-            const fetchRecurringTransaction = new Promise((resolve, reject) => {
-                db.all(`SELECT \
-                        title\
-                        FROM recurringTransactions \
-                        WHERE id = ?`, String(recurringReferenceID), (err, rows) => {
-                            if (err) {
-                                console.log(`Get Recurring Transaction Reference ID in modifyItem: ${err}`);
-                                //reject({modifyStatus: false, item: null});
-                                reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch the recurring transaction", {value: null}));
-                            }
-                            console.log("Recurring Entity Table Information (getSelectedItem):");
-                            console.log(recurringReferenceID);
-                            resolve(rows);            
-                });
-            });
-
-        const fetchFileInformation = new Promise((resolve, reject) => { 
-                db.all(`SELECT filename, filedata FROM files WHERE id = ?`, String(uuid), (err, rows) => {
-                    if (err) {
-                        console.log(`Get Selected Item Error ${err}`);
-                        reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch the file information", {value: null}));
-                        //return null;
-                    }
-                    console.log("Files Table Information (getSelectedItem):");
-                    console.log(rows);
-                    resolve(rows);
-                });
-        });
-
-            const fetchAllInformation = Promise.all([ 
-                fetchFromFinanaicalEntity, 
-                fetchToFinanaicalEntity, 
-                fetchRecurringTransaction, 
-                fetchFileInformation
-            ]);
-
-            console.log("fromReferenceID in resolved area of fetch transaction detail (getSelectedItem):", fromReferenceID)
-            fetchAllInformation.then(([ 
-                                        fromFinancialEntityRows, 
-                                        toFinancialEntityRows, 
-                                        recurringEntityrows, 
-                                        fileInformationRows]) => { 
-                                            
-                                            if (fromFinancialEntityRows && fromFinancialEntityRows.length > 0) {
-                                                selectedItem.fromEntity = fromFinancialEntityRows[0].title;
-                                                selectedItem.fromType = fromFinancialEntityRows[0].type;
-                                            }
-
-                                            if (toFinancialEntityRows && toFinancialEntityRows.length > 0) {
-                                                selectedItem.toEntity = toFinancialEntityRows[0].title;
-                                                selectedItem.toType = toFinancialEntityRows[0].type;
-                                            }
-
-                                            selectedItem.recurringEntity = recurringEntityrows && recurringEntityrows.length > 0 ? recurringEntityrows[0].title : null;
-
-                                            if (fileInformationRows && fileInformationRows.length > 0) {
-                                                fileInformationRows.forEach((row) => {
-                                                    currentSelectedItemFiles[row.filename] = row.filedata;
-                                                    selectedItem.file.push(row.filename);
-                                                });
-                                            } 
-                                            console.log("selectedItem created in the backend: ", selectedItem);
-                                            resolve(selectedItem);
-
-                                        }).catch((err) => {
-                                            console.log(`Get Selected Item Error ${err}`);
-                                            reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch the selected item", {value: null}));
-                                        });
-            
-        }).catch((err) => {
-            console.log(`Get Selected Item Error ${err}`);
-            reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch the selected item", {value: null}));
-        });
-
-        });
-    }); //could also return null if the operation fails 
+    }); // could also return null if the operation fails
 }
 
 //using id to delete an entry; return false if the operation fails
@@ -746,41 +609,28 @@ function deleteItem(event, id) {
     if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(constructValidationError("URL Validation Failed", {value: null})); });
     //communicate with backend to delete the item
     console.log("deleteItem called with id: ", id);
-    return new Promise((resolve, reject) => {
-        db.serialize(() => {
-
-            const fetchTransactionDelete = new Promise((resolve, reject) => {
-                db.run(`DELETE FROM transactions WHERE id = ?`, String(id), (err) => {
-                    if (err) {
-                        console.log(`Delete Item Error ${err}`);
-                        reject(constructErrorMsgFromSQLiteError(err, "Error could not delete the transaction entry", {value: null}));
+    return new Promise((resolve, reject) => { 
+            db.run(`BEGIN TRANSACTION`);
+            db.run(`DELETE FROM transactions WHERE id = ?`, [ String(id), ], (err) => {
+                if (err) { 
+                    reject(constructErrorMsgFromSQLiteError(err, "Error could not delete the transacton entry", {value: null}));
+                    return;
+                }
+                db.run(`DELETE FROM files WHERE id = ?`, [ String(id), ], (err) => { 
+                    if (err) { 
+                        reject(constructErrorMsgFromSQLiteError(err, "Error could not delete the file entries associated with the transaction entry", {value: null}));
+                        return;
                     }
-                    console.log("Delete transaction table entry Item Successful");
-                    resolve(true);
+                    db.run(`COMMIT`, (err) => { 
+                        if (err) {
+                            reject(constructErrorMsgFromSQLiteError(err, "Error could not commit the transaction", {value: null}));
+                            return;
+                        }
+                        resolve(true);
+                    });
                 });
             });
-
-            const fetchFileDelete = new Promise((resolve, reject) => {
-                db.run(`DELETE FROM files WHERE id = ?`, String(id), (err) => {
-                    if (err) {
-                        console.log(`Delete Item Error ${err}`);
-                        reject(constructErrorMsgFromSQLiteError(err, "Error could not delete the corresponsding file entry for the given transaction entry", {value: null}));
-                    }
-                    console.log("Delete file table entry Item Successful");
-                    resolve(true);
-                });
-            });
-
-            const fetchAllDelete = Promise.all([fetchTransactionDelete, fetchFileDelete]);
-            fetchAllDelete.then(([transactionDeleteStatus, fileDeleteStatus]) => {
-                if (transactionDeleteStatus && fileDeleteStatus) resolve();
-                else reject({type: "Custom Error", title: "Error could not delete the transaction entry", additionalInfo: {value: null}});
-            }).catch((err) => {
-                console.log(`Delete Item Error ${err}`);
-                reject(constructErrorMsgFromSQLiteError(err, "Error could not delete the transaction entry", {value: null}));
-            });
-        });
-    }); // return true; //could also return false if the operation fails
+    }); //could also return false if the operation fails
 }
 
 //takes selecteItem to modify an entry; return object if the operation succes; null if failure
