@@ -249,57 +249,34 @@ function updateFinancialEntityReferenceID(event,
 
 function modifyTransactionReferenceID(event, recurringTransactionSelectedItem) {
     if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(constructValidationError("URL Validation Failed", {value: null})); });
-    return new Promise((resolve, reject) => {
-
-        const fetchToFinanaicalEntityReferenceID = new Promise((resolve, reject) => {
-            db.get(`SELECT id from financialEntities WHERE title = ?`, 
-                    recurringTransactionSelectedItem.toEntity, 
-                    (err, row) => {
-                        if (err) reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch the to reference", {value: null}));
-                        resolve(row.id);
-                });
-        });
-
-        const fetchFromFinanaicalEntityReferenceID = new Promise((resolve, reject) => {
-            db.get(`SELECT id from financialEntities WHERE title = ?`, 
-                    recurringTransactionSelectedItem.fromEntity, 
-                    (err, row) => {
-                        if (err) reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch the from reference", {value: null}));
-                        resolve(row.id);
-                });
-        });
-
-        Promise.all([fetchToFinanaicalEntityReferenceID, 
-                    fetchFromFinanaicalEntityReferenceID]).then(([toReferenceID, fromReferenceID]) => {
-
-            db.run(`UPDATE transactions SET \
+    return new Promise((resolve, reject) => { 
+        db.run(`UPDATE transactions SET \
                     title = ?, \
                     description = ?, \
                     value = ?, \
                     currency = ?, \
                     transactionType = ?, \
                     transactionCategory = ?, \
-                    fromReference = ?, \
-                    toReference = ?, \
+                    fromReference = ( SELECT id FROM financialEntities WHERE title = ? ), \
+                    toReference = ( SELECT id FROM financialEntities WHERE title = ? ), \
                     modifiedDate = ? \
-                    WHERE recurringReference = ?`,
+                    WHERE recurringReference = ?`, [
                     recurringTransactionSelectedItem.title,
                     recurringTransactionSelectedItem.description,
                     recurringTransactionSelectedItem.value,
                     recurringTransactionSelectedItem.currency,
                     recurringTransactionSelectedItem.transactionType,
                     recurringTransactionSelectedItem.transactionCategory,
-                    fromReferenceID,
-                    toReferenceID,
+                    recurringTransactionSelectedItem.fromEntity,
+                    recurringTransactionSelectedItem.toEntity,
                     new Date().toISOString().substring(0, 19) + "Z",
-                    recurringTransactionSelectedItem.id, (err) => {
-                        if (err) reject(constructErrorMsgFromSQLiteError(err, "Error could not update the finanacial entity reference in transactions", {value: null}));
+                    recurringTransactionSelectedItem.id, ], (err) => {
+                        if (err) {
+                            reject(constructErrorMsgFromSQLiteError(err, "Error could not update the finanacial entity reference in transactions", {value: null}));
+                            return;
+                        }
                         resolve(true);
-            }).catch((err) => {
-                console.log(`Modify Transaction Reference ID Error ${err}`);
-                reject(constructErrorMsgFromSQLiteError(err, "Error could not update the finanacial entity reference in transactions", {value: null}));
-             });
-        }); 
+                    });
     });
 }
 
