@@ -551,11 +551,9 @@ function getItems(event, searchParams, filterParamsVisibility) {
 //for getting the selectedItem value based on id; return null if the operation fails
 function getSelectedItem(event, uuid) {
     if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(constructValidationError("URL Validation Failed", {value: null})); });
-    //communicate with backend to get the selectedItem
-    console.log("getSelectedItem called with id: ", uuid);
-    //clear any cotents in the currentSelectedItemFiles
-    //currentSelectedItemFiles = {};
-    
+    //reset the files to delete and new file entry
+    newFileEntry = new Map();
+    filesToDelete = new Set();
     return new Promise ((resolve, reject) => { 
         db.get(`SELECT \
                 id , \
