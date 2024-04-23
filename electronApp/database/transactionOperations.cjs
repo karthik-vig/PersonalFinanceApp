@@ -383,90 +383,7 @@ function getAllItems() {
 //here just to simulate the effect.
 function getItems(event, searchParams, filterParamsVisibility) { 
     if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(constructValidationError("URL Validation Failed", {value: null})); });
-    // const validSearchParams = new Map(["search", "filter"]);
-    //communicate with backend to get items
-    //based on the searchParams
-    console.log("getItems called with searchParams: ", searchParams);
-    ///*
-    return new Promise((resolve, reject) => {
-
-        const fetchFromReferenceID = new Promise((resolve, reject) => {
-            if (filterParamsVisibility.fromEntity && searchParams.filter.fromEntity && searchParams.filter.fromEntity !== "choose") {
-            db.all(`SELECT id from financialEntities WHERE title = ?`, searchParams.filter.fromEntity, (err, rows) => { 
-                if (err) {
-                    console.log(`Get From Reference ID Error ${err}`);
-                    reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch the from reference", {value: null}));
-                }
-                console.log("Get From Reference ID Success");
-                console.log(rows);
-                const fromReferenceID = rows && rows.length > 0 ? rows[0].id : null;
-                resolve({
-                    stmt: ` AND (fromReference = ?)`, 
-                    id: String(fromReferenceID) 
-                });
-             });
-            }
-            else {
-                resolve({stmt: ``, id: null});
-            }
-        }).catch((err) => {
-            console.log(`Get From Reference ID Error ${err}`);
-            resolve(null);
-        });
-
-
-        const fetchToReferenceID = new Promise((resolve, reject) => {
-            if (filterParamsVisibility.toEntity && searchParams.filter.toEntity && searchParams.filter.toEntity !== "choose") {
-            db.all(`SELECT id from financialEntities WHERE title = ?`, searchParams.filter.toEntity, (err, rows) => { 
-                if (err) {
-                    console.log(`Get To Reference ID Error ${err}`);
-                    reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch the to reference", {value: null}));
-                }
-                console.log("Get To Reference ID Success");
-                console.log(rows);
-                const toReferenceID = rows && rows.length > 0 ? rows[0].id : null;
-                resolve({
-                    stmt: ` AND (toReference = ?)`, 
-                    id: String(toReferenceID)
-                });
-             });
-            }
-            else {
-                resolve({stmt: ``, id: null});
-            }
-        }).catch((err) => {
-            console.log(`Get From Reference ID Error ${err}`);
-            resolve(null);
-        });
-
-        const fetchRecurringReferenceIDs = new Promise((resolve, reject) => {
-            if (filterParamsVisibility.recurringEntity && searchParams.filter.recurringEntity && searchParams.filter.recurringEntity !== "choose") {
-                db.all(`SELECT id from recurringTransactions WHERE title = ?`, searchParams.filter.recurringEntity, (err, rows) => {
-                    if (err) {
-                        console.log(`Get Recurring Reference ID Error ${err}`);
-                        reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch the recurring reference", {value: null}));
-                    }
-                    console.log("Get Recurring Reference ID Success");
-                    console.log(rows);
-                    const recurringReferenceID = rows && rows.length > 0 ? rows[0].id : null;
-                    resolve({
-                        stmt: ` AND (recurringReference = ?)`, 
-                        id: String(recurringReferenceID)
-                    });
-                });
-            }
-            else {
-                resolve({stmt: ``, id: null});
-            }
-        }).catch((err) => {
-            console.log(`Get Recurring Reference ID Error ${err}`);
-            resolve(null);
-        });
-
-        const fetchAllReferenceIDs = Promise.all([fetchFromReferenceID, fetchToReferenceID, fetchRecurringReferenceIDs]);
-
-        fetchAllReferenceIDs.then(([filterFromEntityStmt, filterToEntityStmt, filterRecurringEntityStmt]) => {
-        
+    return new Promise((resolve, reject) => { 
         const parameters = [];
         let queryStmt = `SELECT id, title, transactionDate, value, transactionType, transactionCategory FROM transactions WHERE (title LIKE ? OR description LIKE ?)`;
         parameters.push(`%${searchParams.search}%`, `%${searchParams.search}%`);
@@ -499,12 +416,24 @@ function getItems(event, searchParams, filterParamsVisibility) {
                 }
             }
          });
-        queryStmt += filterFromEntityStmt.stmt;
-        queryStmt += filterToEntityStmt.stmt;
-        queryStmt += filterRecurringEntityStmt.stmt;
-        if (filterFromEntityStmt.id !== null) { parameters.push(filterFromEntityStmt.id); }
-        if (filterToEntityStmt.id !== null) { parameters.push(filterToEntityStmt.id); }
-        if (filterRecurringEntityStmt.id !== null) { parameters.push(filterRecurringEntityStmt.id); }
+        if (filterParamsVisibility.fromEntity && 
+            searchParams.filter.fromEntity && 
+            searchParams.filter.fromEntity !== "choose") {
+            queryStmt += ` AND ( fromReference = (SELECT id FROM financialEntities WHERE title = ? ) )`;
+            parameters.push(String(searchParams.filter.fromEntity));
+        }
+        if (filterParamsVisibility.toEntity && 
+            searchParams.filter.toEntity && 
+            searchParams.filter.toEntity !== "choose") {
+            queryStmt += ` AND ( toReference = (SELECT id FROM financialEntities WHERE title = ? ) )`;
+            parameters.push(String(searchParams.filter.toEntity));
+        }
+        if (filterParamsVisibility.recurringEntity && 
+            searchParams.filter.recurringEntity && 
+            searchParams.filter.recurringEntity !== "choose") {
+            queryStmt += ` AND ( recurringReference = (SELECT id FROM recurringTransactions WHERE title = ? ) )`;
+            parameters.push(String(searchParams.filter.recurringEntity));
+        }
         let filterSortStmt = ``;
         if (filterParamsVisibility.sort && 
         searchParams.filter.sort.field !== null && 
@@ -519,6 +448,7 @@ function getItems(event, searchParams, filterParamsVisibility) {
             if (err) {
                 console.log(`Get Items Error ${err}`);
                 reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch items based on the search parameters", {value: null}));
+                return;
             }
             console.log("Get Items Success");
             console.log(rows);
@@ -529,13 +459,7 @@ function getItems(event, searchParams, filterParamsVisibility) {
             }
             resolve(rows && rows.length > 0 ? rows : []);
          });
-
-        }).catch((err) => {
-            console.log(`Get All Reference IDs Error ${err}`);
-            reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch items based on the search parameters", {value: null}));
-        });
     });
-    //*/
     /*
     return [
         {id: 1, title: "someName", transactionDate: "2023.08.11", value: 2000, transactionType:"out", transactionCategory: "Groceries"},
