@@ -4,8 +4,8 @@ export const triggerUpdateFileSlice = createSlice({
     name: "mainPage/triggerUpdateFileState",
     initialState: {
         addFile: false,
-        deleteFile: {status: false, fileName: null},
-        getFile: {status: false, fileName: null},
+        deleteFile: {status: false, fileid: null},
+        getFile: {status: false, fileid: null},
     },
     reducers: {
         triggerAddFile: (state) => {
@@ -18,22 +18,22 @@ export const triggerUpdateFileSlice = createSlice({
         },
         triggerDeleteFile: (state, action) => {
             state.deleteFile.status = true;
-            state.deleteFile.fileName = action.payload;
+            state.deleteFile.fileid = action.payload;
             return state;
         },
         resetTriggerDeleteFile: (state) => {
             state.deleteFile.status = false;
-            state.deleteFile.fileName = null;
+            state.deleteFile.fileid = null;
             return state;
         },
         triggerGetFile: (state, action) => {
             state.getFile.status = true;
-            state.getFile.fileName = action.payload;
+            state.getFile.fileid = action.payload;
             return state;
         },
         resetTriggerGetFile: (state) => {
             state.getFile.status = false;
-            state.getFile.fileName = null;
+            state.getFile.fileid = null;
             return state;
         }
     }

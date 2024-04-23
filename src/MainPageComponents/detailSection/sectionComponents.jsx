@@ -463,11 +463,11 @@ function FileInput() {
             <ul
                 className="flex flex-row flex-wrap h-auto w-[100%]"
             >
-                {files.map((fileName) => {
+                {files.map((fileDetail) => {
 
                     return (
                         <li 
-                            key={fileName}
+                            key={fileDetail.fileid}
                             className="list-decimal h-auto w-auto mx-4 my-1"
                         >   
                             <section
@@ -475,11 +475,13 @@ function FileInput() {
                             >
                                 <GetFileSection
                                     additonalClasses="h-auto w-auto p-2"
-                                    fileName={fileName}
+                                    fileName={fileDetail.filename}
+                                    fileid={fileDetail.fileid}
                                 />
                                 <DeleteFileButtonSection
                                     additonalClasses="h-10 w-auto p-2"
-                                    fileName={fileName}
+                                    fileName={fileDetail.filename}
+                                    fileid={fileDetail.fileid}
                                     files={files}
                                     handleValueChange={handleItemClick}
                                 />

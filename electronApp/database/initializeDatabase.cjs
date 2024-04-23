@@ -64,9 +64,9 @@ function setupDatabase() {
         //make sure fileName is unique for a given uuid
         db.run('CREATE TABLE IF NOT EXISTS files (\
                 id TEXT NOT NULL, \
+                fileid TEXT PRIMARY KEY, \
                 filename TEXT NOT NULL, \
-                filedata BLOB, \
-                PRIMARY KEY (id, filename) \
+                filedata BLOB \
                 )', (err) => { 
                     if (err) { 
                         console.log(`Files table creation ${err}`); 

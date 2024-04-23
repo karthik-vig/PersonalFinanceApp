@@ -189,13 +189,14 @@ function FileInputSection({additonalClasses, files, handleValueChange}) {
 
     useEffect(() => {
         if (!triggerUpdateFilesState.addFile) return;
-        window.transactionOperations.openFileDialog().then((fileNames) => {
-            if(fileNames.length > 0) {
-                let filesCopy = [...files];
-                fileNames.forEach((fileName) => {
-                    if (!filesCopy.includes(fileName)) filesCopy.push(fileName);
+        window.transactionOperations.openFileDialog().then((fileDetails) => {
+            if(fileDetails.length > 0) {
+                let filesCopy = new Map(files.map((fileDetail) => [fileDetail.fileid, fileDetail.filename]));
+                fileDetails.forEach((fileDetail) => {
+                    if (!filesCopy.has(fileDetail.fileid)) filesCopy.set(fileDetail.fileid, fileDetail.filename);
                 });
-                dispatch(handleValueChange({fieldName: "file", fieldValue: filesCopy}))
+                const newFilesCopy = Array.from(filesCopy).map(([fileid, filename]) => ({fileid: fileid, filename: filename}));
+                dispatch(handleValueChange({fieldName: "file", fieldValue: newFilesCopy}))
             }
             dispatch(resetTriggerAddFile());
         });
@@ -225,16 +226,17 @@ FileInputSection.propTypes = {
     handleValueChange: PropTypes.func,
 };
 
-function GetFileSection({ additonalClasses, fileName }) {
+function GetFileSection({ additonalClasses, fileName, fileid }) {
 
     const triggerUpdateFilesState = useSelector((state) => state.mainPageStates.triggerUpdateFileState);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (!(triggerUpdateFilesState.getFile.status && triggerUpdateFilesState.getFile.fileName === fileName)) return;
-        window.transactionOperations.saveFileDialog(fileName);
+        if (!(triggerUpdateFilesState.getFile.status && triggerUpdateFilesState.getFile.fileid === fileid)) return;
+        window.transactionOperations.saveFileDialog(fileid);
         dispatch(resetTriggerGetFile());
     }, [triggerUpdateFilesState,
+        fileid,
         fileName,
         dispatch,
     ]);
@@ -242,7 +244,7 @@ function GetFileSection({ additonalClasses, fileName }) {
     return (
         <button
             className={" " + additonalClasses + " "}
-            onClick={() => { dispatch(triggerGetFile(fileName)); } }
+            onClick={() => { dispatch(triggerGetFile(fileid)); } }
         >
             <p
                 className="text-wrap underline text-blue-300 hover:text-blue-500"
@@ -256,25 +258,27 @@ function GetFileSection({ additonalClasses, fileName }) {
 GetFileSection.propTypes = {
     additonalClasses: PropTypes.string,
     fileName: PropTypes.string,
+    fileid: PropTypes.string,
 };
 
-function DeleteFileButtonSection({additonalClasses, fileName, files, handleValueChange}) {
+function DeleteFileButtonSection({additonalClasses, fileName, fileid, files, handleValueChange}) {
 
     const triggerUpdateFilesState = useSelector((state) => state.mainPageStates.triggerUpdateFileState);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (!(triggerUpdateFilesState.deleteFile.status && triggerUpdateFilesState.deleteFile.fileName === fileName)) return;
-        window.transactionOperations.deleteFileBlob(fileName).then((deleteFileBlobStatus) => {
+        if (!(triggerUpdateFilesState.deleteFile.status && triggerUpdateFilesState.deleteFile.fileid === fileid)) return;
+        window.transactionOperations.deleteFileBlob(fileid).then((deleteFileBlobStatus) => {
             if (deleteFileBlobStatus) {
                 //let filesCopy = [...files];
-                const filesCopy = files.filter((file) => file !== fileName);
+                const filesCopy = files.filter((fileDetail) => fileDetail.fileid !== fileid);
                 dispatch(handleValueChange({fieldName: "file", fieldValue: filesCopy}));
             }
             dispatch(resetTriggerDeleteFile());
         });
     }, [triggerUpdateFilesState,
         fileName,
+        fileid,
         files,
         dispatch,
         handleValueChange,
@@ -283,7 +287,7 @@ function DeleteFileButtonSection({additonalClasses, fileName, files, handleValue
     return (
         <button 
             className={ " " + additonalClasses + " "}
-            onClick={() => { dispatch(triggerDeleteFile(fileName)); } }
+            onClick={() => { dispatch(triggerDeleteFile(fileid)); } }
         >
             <FontAwesomeIcon icon="fa-trash-alt" color='#ff0000'/>
         </button>
@@ -293,6 +297,7 @@ function DeleteFileButtonSection({additonalClasses, fileName, files, handleValue
 DeleteFileButtonSection.propTypes = {
     additonalClasses: PropTypes.string,
     fileName: PropTypes.string,
+    fileid: PropTypes.string,
     files: PropTypes.array,
     handleValueChange: PropTypes.func,
 };

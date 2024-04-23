@@ -8,7 +8,9 @@ const { validateBrowserWindowPath,
         constructValidationError,
 } = require('./commonOperations.cjs');
 
-let currentSelectedItemFiles = {};
+//let currentSelectedItemFiles = {};
+let newFileEntry = new Map(); // format: { fileid: { filename: string, filedata: ArrayBuffer}, ...}
+let filesToDelete = new Set();
 let db = null;
 let timeZone = null;
 const validFilterParams = new Set([
@@ -314,39 +316,37 @@ function deleteTransactionOnRecurringReferenceID(event, recurringReferenceID) {
 //when we get selectedItem from the database, we set a object in the
 //nodejs to store the fileName and the fileBlob
 //file blob simulated backend functions
-function getFileBlob(fileName) {
+function getFileDetail(fileid) {
     //communicate with backend to get the file blob
-    console.log( "get file blob fileName: ", fileName);
-    return currentSelectedItemFiles[fileName] ?? null; //could also return null if the operation fails
+    return new Promise((resolve, reject) => {
+        if (newFileEntry.has(fileid)) {
+            const fileDetail = newFileEntry.get(fileid);
+            resolve({ filename: fileDetail.filename, filedata: fileDetail.filedata });
+            return;
+        }
+        db.get(`SELECT filename, filedata  FROM files WHERE fileid = ?`, [ String(fileid), ], (err, row) => { 
+            if (err) {
+                reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch the file details", {value: null}));
+                return;
+            }
+            if (row) resolve(row);
+            reject(constructValidationError("File Detail Not Found", {value: null}));
+            return;
+        });
+    });
     //return  fileBufferData;
 }
 
-function setFileBlob(fileName, arrayBuffer) {
-    //communicate with backend to set the file blob
-    console.log( "set file blob fileName: ", fileName, " fileBlob: ", arrayBuffer);
-    currentSelectedItemFiles[fileName] = arrayBuffer;
-    return true; //could also return false if the operation fails
-}
 
-function deleteFileBlob(event, fileName) {
+async function deleteFileBlob(event, fileid) { // was filename
     if (!validateBrowserWindowPath(event.senderFrame.url)) return false;
-    //communicate with backend to delete the file blob
-    console.log( "delete file blob fileName: ", fileName);
-    //const currentSelectedItemFiles = getCurrentSelectedItemFiles();
-    const currentSelectedItemFilenames = new Set(Object.keys(currentSelectedItemFiles));
-    if (currentSelectedItemFilenames.has(fileName)){
-        delete currentSelectedItemFiles[fileName];
-        return true;
-    }
-    return false; //could also return false if the operation fails
+    // check if the fileid is in the newFileEntry map and if it is delete it
+    newFileEntry.has(fileid) && newFileEntry.delete(fileid);
+    // else add the fileid to the filesToDelete set
+    newFileEntry.has(fileid) || filesToDelete.add(fileid);
+    return true;
 }
 
-
-//file all files entry from files table based on uuid
-// function getFileEntries(event) {
-//     if (!validateBrowserWindowPath(event.senderFrame.url)) return null;
-//     return currentSelectedItemFiles; //could also return null if the operation fails
-// }
 
 
 //backed function to get all items for the side bar
@@ -554,7 +554,7 @@ function getSelectedItem(event, uuid) {
     //communicate with backend to get the selectedItem
     console.log("getSelectedItem called with id: ", uuid);
     //clear any cotents in the currentSelectedItemFiles
-    currentSelectedItemFiles = {};
+    //currentSelectedItemFiles = {};
     
     return new Promise ((resolve, reject) => { 
         db.get(`SELECT \
@@ -591,11 +591,11 @@ function getSelectedItem(event, uuid) {
                         return;
                     } 
                     row.file = [];
-                    db.all(`SELECT filename, filedata FROM files WHERE id = ?`, [ String(uuid), ], (err, filerows) => { 
+                    db.all(`SELECT fileid, filename, filedata FROM files WHERE id = ?`, [ String(uuid), ], (err, filerows) => { 
                         if (err) reject(constructErrorMsgFromSQLiteError(err, "Could not fetch the file details for the selected item", {value: null}));
                         filerows.forEach((filerow) => {
-                            row.file.push(filerow.filename);
-                            currentSelectedItemFiles[filerow.filename] = filerow.filedata;
+                            row.file.push({fileid: filerow.fileid, filename: filerow.filename});
+                            //currentSelectedItemFiles[filerow.filename] = filerow.filedata;
                         });
                         resolve(row);
                     });
@@ -613,16 +613,19 @@ function deleteItem(event, id) {
             db.run(`BEGIN TRANSACTION`);
             db.run(`DELETE FROM transactions WHERE id = ?`, [ String(id), ], (err) => {
                 if (err) { 
+                    db.run(`ROLLBACK`);
                     reject(constructErrorMsgFromSQLiteError(err, "Error could not delete the transacton entry", {value: null}));
                     return;
                 }
                 db.run(`DELETE FROM files WHERE id = ?`, [ String(id), ], (err) => { 
                     if (err) { 
+                        db.run(`ROLLBACK`);
                         reject(constructErrorMsgFromSQLiteError(err, "Error could not delete the file entries associated with the transaction entry", {value: null}));
                         return;
                     }
                     db.run(`COMMIT`, (err) => { 
                         if (err) {
+                            db.run(`ROLLBACK`);
                             reject(constructErrorMsgFromSQLiteError(err, "Error could not commit the transaction", {value: null}));
                             return;
                         }
@@ -640,197 +643,85 @@ function modifyItem(event, selectedItem){
     console.log("modifyItem called with id: ", selectedItem.id);
     console.log("modifyItem called with selectedItem: ", selectedItem);
 
+    const selectedItemFilesToDelete = filesToDelete;
+    filesToDelete = new Set();
+    const selectedItemNewFilesEntry = newFileEntry;
+    newFileEntry = new Map();
+
     return new Promise((resolve, reject) => {
-        db.serialize(() => {
-
-            const fetchFromReferenceID = new Promise((resolve, reject) => {
-                db.all(`SELECT \
-                        id\
-                        FROM financialEntities \
-                        WHERE title = ?`, selectedItem.fromEntity, (err, rows) => {
-                            if (err) {
-                                console.log(`Get Financial Reference ID in modifyItem: ${err}`);
-                                reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch the from reference", {value: null}));
-                            }
-                            console.log("Get From Financial Entity Reference ID Success in modifyItem");
-                            console.log(rows);
-                            const fromReferenceID = rows && rows.length > 0 ? rows[0].id : null;
-                            console.log(fromReferenceID);
-                            resolve(fromReferenceID);
-                        });
-            });
-
-            const fetchToReferenceID = new Promise((resolve, reject) => {
-                db.all(`SELECT \
-                        id\
-                        FROM financialEntities \
-                        WHERE title = ?`, selectedItem.toEntity, (err, rows) => {
-                            if (err) {
-                                console.log(`Get Financial Reference ID in modifyItem: ${err}`);
-                                reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch the to reference", {value: null}));
-                            }
-                            console.log("Get To Financial Entity Reference ID Success in modifyItem");
-                            const toReferenceID = rows && rows.length > 0 ? rows[0].id : null;
-                            console.log(toReferenceID);
-                            resolve(toReferenceID);
-                        });
-            });
-               
-            const fetchRecurringReferenceIDs = new Promise((resolve, reject) => {
-                db.all(`SELECT \
-                        id\
-                        FROM recurringTransactions \
-                        WHERE title = ?`, selectedItem.recurringEntity, (err, rows) => {
-                            if (err) {
-                                console.log(`Get Recurring Transaction Reference ID in modifyItem: ${err}`);
-                                reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch the recurring reference", {value: null}));
-                            }
-                            console.log("Get Recurring Entity Reference ID Success in modifyItem");
-                            const recurringReferenceID = rows && rows.length > 0 ? rows[0].id : null;
-                            console.log(recurringReferenceID);
-                            resolve(recurringReferenceID);
-                        });
-            });
-
-            
-            const insertFileEntries = new Promise((resolve, reject) => {
-                const fileInformationInsertStmt = db.prepare(`INSERT OR REPLACE INTO files \
-                                                            (id, filename, filedata) \
-                                                            VALUES (?, ?, ?)`);
-                Object.keys(currentSelectedItemFiles).forEach((filename) => {
-                    fileInformationInsertStmt.run(selectedItem.id, filename, currentSelectedItemFiles[filename]);
-                });
-                fileInformationInsertStmt.finalize((err) => {
-                    if (err) {
-                        console.error(err);
-                        reject(constructErrorMsgFromSQLiteError(err, "Error could not insert the file entries", {value: null}));
-                    }
-                    console.log("Insert File Entries Success");
-                    resolve(true);
-                });
-            });
-            
-            const deleteFileEntires = new Promise((resolve, reject) => {
-                const fetchFilenamesToDelete = new Promise((resolve, reject) => {
-                    db.all(`SELECT filename FROM files WHERE id = ?`, selectedItem.id, (err, rows) => {
+        db.run(`BEGIN TRANSACTION`, (err) => {
+            if (err) {
+                db.run(`ROLLBACK`);
+                reject(constructErrorMsgFromSQLiteError(err, "Error could not begin the transaction", {value: null}));
+                return;
+            }
+            db.run(`UPDATE transactions SET \
+                    title = ?, \
+                    description = ?, \
+                    value = ?, \
+                    currency = ?, \
+                    transactionType = ?, \
+                    transactionCategory = ?, \
+                    fromReference = (SELECT id FROM financialEntities WHERE title = ?), \
+                    toReference = (SELECT id FROM financialEntities WHERE title = ?), \
+                    recurringReference = (SELECT id FROM recurringTransactions WHERE title = ?), \
+                    file = ?, \
+                    modifiedDate = ?, \
+                    transactionDate = ? \
+                    WHERE id = ?`, [ 
+                    selectedItem.title,
+                    selectedItem.description,
+                    selectedItem.value,
+                    selectedItem.currency === "choose"? null: selectedItem.currency,
+                    selectedItem.transactionType,
+                    selectedItem.transactionCategory !== "choose"? selectedItem.transactionCategory : null,
+                    selectedItem.fromEntity,
+                    selectedItem.toEntity,
+                    selectedItem.recurringEntity,
+                    selectedItem.file.length > 0,
+                    new Date().toISOString().substring(0, 19) + "Z",
+                    moment.tz(selectedItem.transactionDate, timeZone).tz("UTC").format().substring(0, 19) + "Z",
+                    selectedItem.id, ], (err) => { 
                         if (err) {
-                            console.log(`Get Selected Item Error ${err}`);
-                            reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch the file information to delete", {value: null}));
+                            db.run(`ROLLBACK`);
+                            reject(constructErrorMsgFromSQLiteError(err, "Error could not modify the transaction entry", {value: null}));
+                            return;
                         }
-                        console.log("Files Table Information (getSelectedItem):");
-                        console.log(rows);
-                        resolve(rows);
-                    });
-                });
-
-                fetchFilenamesToDelete.then((rows) => {
-                    console.log("rows from files table in deleteFileEntries: ", rows);
-                    console.log("filenames from currentSelectedItemFiles: ", Object.keys(currentSelectedItemFiles));
-                    const deleteFileEntryStmt = db.prepare(`DELETE FROM files WHERE id = ? \
-                                                            AND filename = ?`);
-                    const currentSelectedItemFilenames = new Set(Object.keys(currentSelectedItemFiles));
-                    rows.forEach((row) => {
-                        if (!currentSelectedItemFilenames.has(row.filename))
-                            deleteFileEntryStmt.run(selectedItem.id, row.filename);
-                    });
-                    deleteFileEntryStmt.finalize((err) => {
-                        if (err) {
-                            console.error(err);
-                            resolve(false);
-                        }
-                        else {
-                            console.log("Delete File Entries Success");
-                            resolve(true);
-                        }
-                    });
-                }).catch((err) => {
-                    console.log(`Delete Item Error ${err}`);
-                    reject(constructErrorMsgFromSQLiteError(err, "Error could not delete the file entries", {value: null}));
-                });
-            });
-
-            const fetchAllReferenceIDs = Promise.all([
-                                                        fetchFromReferenceID, 
-                                                        fetchToReferenceID, 
-                                                        fetchRecurringReferenceIDs, 
-                                                        insertFileEntries,
-                                                        deleteFileEntires
-                                                    ]);
-
-            fetchAllReferenceIDs.then(([
-                                        fromReferenceID, 
-                                        toReferenceID, 
-                                        recurringReferenceID, 
-                                        insertFileEntriesStatus,
-                                        deleteFileEntiresStatus
-                                    ]) => {
-                console.log("fromReferenceID in modifyItem: ");
-                console.log("fromReferenceID: ", fromReferenceID);
-                console.log("toReferenceID: ", toReferenceID);
-                console.log("recurringReferenceID: ", recurringReferenceID);
-                const transactionDate = moment.tz(selectedItem.transactionDate, timeZone).tz("UTC").format().substring(0, 19) + "Z";
-                const modifiedDate = new Date().toISOString().substring(0, 19) + "Z";
-                db.run(`UPDATE transactions SET \
-                        title = ?, \
-                        description = ?, \
-                        value = ?, \
-                        currency = ?, \
-                        transactionType = ?, \
-                        transactionCategory = ?, \
-                        fromReference = ?, \
-                        toReference = ?, \
-                        recurringReference = ?, \
-                        file = ?, \
-                        modifiedDate = ?, \
-                        transactionDate = ? \
-                        WHERE id = ?`, 
-                            selectedItem.title,
-                            selectedItem.description,
-                            selectedItem.value,
-                            selectedItem.currency === "choose"? null: selectedItem.currency,
-                            selectedItem.transactionType,
-                            selectedItem.transactionCategory !== "choose"? selectedItem.transactionCategory : null,
-                            fromReferenceID,
-                            toReferenceID,
-                            recurringReferenceID,
-                            selectedItem.file.length > 0,
-                            modifiedDate,
-                            transactionDate,
-                            selectedItem.id,
-                            (err) => {
-                            if (err) {
-                                console.log(`Modify Item Error ${err}`);
-                                //reject({modifyStatus: false, item: null});
-                                reject(constructErrorMsgFromSQLiteError(err, "Error could not update transactions entry", {value: {modifyStatus: false, item: null}}));
-                            }
-                            else {
-                                console.log("Modify Item Success");
-                                console.log(fromReferenceID)
-                                if (insertFileEntriesStatus && deleteFileEntiresStatus) {
-                                resolve( {
-                                    modifyStatus: true,
-                                    item: {
-                                            id: selectedItem.id, 
-                                            title: selectedItem.title, 
-                                            transactionDate: selectedItem.transactionDate, 
-                                            value: selectedItem.value, 
-                                            transactionType: selectedItem.transactionType, 
-                                            transactionCategory: selectedItem.transactionCategory,
-                                        },
-                                    });
-                                }
-                                else {
-                                    reject(constructErrorMsgFromSQLiteError(err, "Error could not update transactions entry", {value: {modifyStatus: false, item: null}}));
-                                }
-                            }
+                        // delete files from the files table that were marked for deletion
+                        const fileDeleteStmt = db.prepare(`DELETE FROM files WHERE fileid = ?`);
+                        selectedItemFilesToDelete.forEach((fileid) => {
+                            fileDeleteStmt.run(fileid);
                         });
-
-                }).catch((err) => {
-                    console.log(`Modify Item Error ${err}`);
-                    reject(constructErrorMsgFromSQLiteError(err, "Error could not update transactions entry", {value: {modifyStatus: false, item: null}}));
-                });
-            })
-    }); //could also return null if the operation fails
+                        fileDeleteStmt.finalize((err) => {
+                            if (err) {
+                                db.run(`ROLLBACK`);
+                                reject(constructErrorMsgFromSQLiteError(err, "Error could not delete the file entries associated with the transaction entry", {value: null}));
+                                return;
+                            }
+                            // insert new files into the files table
+                            const insertNewFilesStmt = db.prepare(`INSERT OR REPLACE INTO files (id, fileid, filename, filedata) VALUES (?, ?, ?, ?)`);
+                            selectedItemNewFilesEntry.forEach((fileDetail, fileid) => {
+                                insertNewFilesStmt.run(selectedItem.id, fileid, fileDetail.filename, fileDetail.filedata);
+                            });
+                            insertNewFilesStmt.finalize((err) => {
+                                if (err) {
+                                    db.run(`ROLLBACK`);
+                                    reject(constructErrorMsgFromSQLiteError(err, "Error could not insert the file entries associated with the transaction entry", {value: null}));
+                                    return;
+                                }
+                                db.run(`COMMIT`, (err) => {
+                                    if (err) {
+                                        db.run(`ROLLBACK`);
+                                        reject(constructErrorMsgFromSQLiteError(err, "Error could not commit the transaction", {value: null}));
+                                        return;
+                                    }
+                                    resolve({modifyStatus: true, item: selectedItem});
+                                });
+                            });
+                        });
+                    });
+        });
+    });
 }
 
 
@@ -904,36 +795,43 @@ async function openGetFileDialog(){
             { name: 'All Files', extensions: ['*'] }
           ],
     });
-    const fileNames = []
+    const fileDetails = [];
     filePaths.forEach((filePath) => {
         console.log(path);
         const bufferData = fs.readFileSync(filePath);
         const fileName = path.basename(filePath);
-        fileNames.push(fileName);
-        setFileBlob(fileName, bufferData);
+        const fileid = uuidv4();
+        fileDetails.push({fileid: fileid, filename: fileName})
+        newFileEntry.set(fileid, {filename: fileName, filedata: bufferData});
     });
-    return fileNames;
+    return fileDetails;
 }
 
 
-async function openSaveFileDialog(event, fileName ){
+async function openSaveFileDialog(event, fileid ){
     if (!validateBrowserWindowPath(event.senderFrame.url)) return false;
-    const bufferData = getFileBlob(fileName);
-    const saveFileResult = await dialog.showSaveDialog({
-        title: 'Save File',
-        defaultPath: path.join(__dirname, fileName),
-        filters: [
-            { name: 'All Files', extensions: ['*'] }
-          ],
-    });
-    if (saveFileResult.canceled || !saveFileResult.filePath || !bufferData) return false;
-    try {
-        fs.writeFileSync(saveFileResult.filePath, bufferData);
-    } catch (err) {
-        console.log(err);
+    let fileName, bufferData;
+    getFileDetail(fileid).then(async (fileDetail) => { 
+        fileName = fileDetail.filename;
+        bufferData = fileDetail.filedata;
+        const saveFileResult = await dialog.showSaveDialog({
+            title: 'Save File',
+            defaultPath: path.join(__dirname, fileName),
+            filters: [
+                { name: 'All Files', extensions: ['*'] }
+              ],
+        });
+        if (saveFileResult.canceled || !saveFileResult.filePath || !bufferData) return false;
+        try {
+            fs.writeFileSync(saveFileResult.filePath, bufferData);
+        } catch (err) {
+            console.log(err);
+            return false;
+        }
+        return true;
+    }).catch(() => {
         return false;
-    }
-    return true;
+    });
 }
 
 
