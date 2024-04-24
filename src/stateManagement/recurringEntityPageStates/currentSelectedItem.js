@@ -9,16 +9,15 @@ export const currentSelectedItemSlice = createSlice({
     reducers: {
         setCurrentSelectedItem: (state, action) => {
             //action.payload = {display: boolean, message: string}
-            state = action.payload;
-            return state;
+            state.itemId = action.payload.itemId;
+            state.focusOnItem = action.payload.focusOnItem;
+            // return state;
         },
         resetCurrentSelectedItem: (state) => {
             //action.payload = {display: boolean, message: string}
-            state = {
-                itemId: null,
-                focusOnItem: false,
-            };
-            return state;
+            state.itemId = null;
+            state.focusOnItem = false;
+            // return state;
         },
     }
 });
