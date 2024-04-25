@@ -509,29 +509,35 @@ function deleteItem(event, id) {
     //communicate with backend to delete the item
     console.log("deleteItem called with id: ", id);
     return new Promise((resolve, reject) => { 
-            db.run(`BEGIN TRANSACTION`);
-            db.run(`DELETE FROM transactions WHERE id = ?`, [ String(id), ], (err) => {
-                if (err) { 
+            db.run(`BEGIN TRANSACTION`, (err) => {
+                if (err) {
                     db.run(`ROLLBACK`);
-                    reject(constructErrorMsgFromSQLiteError(err, "Error could not delete the transacton entry", {value: null}));
+                    reject(constructErrorMsgFromSQLiteError(err, "Error could not begin the transaction", {value: null}));
                     return;
                 }
-                db.run(`DELETE FROM files WHERE id = ?`, [ String(id), ], (err) => { 
+                db.run(`DELETE FROM transactions WHERE id = ?`, [ String(id), ], (err) => {
                     if (err) { 
                         db.run(`ROLLBACK`);
-                        reject(constructErrorMsgFromSQLiteError(err, "Error could not delete the file entries associated with the transaction entry", {value: null}));
+                        reject(constructErrorMsgFromSQLiteError(err, "Error could not delete the transacton entry", {value: null}));
                         return;
                     }
-                    db.run(`COMMIT`, (err) => { 
-                        if (err) {
+                    db.run(`DELETE FROM files WHERE id = ?`, [ String(id), ], (err) => { 
+                        if (err) { 
                             db.run(`ROLLBACK`);
-                            reject(constructErrorMsgFromSQLiteError(err, "Error could not commit the transaction", {value: null}));
+                            reject(constructErrorMsgFromSQLiteError(err, "Error could not delete the file entries associated with the transaction entry", {value: null}));
                             return;
                         }
-                        resolve(true);
+                        db.run(`COMMIT`, (err) => { 
+                            if (err) {
+                                db.run(`ROLLBACK`);
+                                reject(constructErrorMsgFromSQLiteError(err, "Error could not commit the transaction", {value: null}));
+                                return;
+                            }
+                            resolve(true);
+                        });
                     });
                 });
-            });
+            });      
     }); //could also return false if the operation fails
 }
 
