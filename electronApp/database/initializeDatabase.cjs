@@ -53,10 +53,10 @@ function setupDatabase() {
                 transactionDate DATETIME \
                 )', (err) => { 
                     if (err) { 
-                        console.log(`Transaction table creation ${err}`); 
+                        // console.log(`Transaction table creation ${err}`); 
                     }
                     else {
-                        console.log("Transactions table created successfully");
+                        // console.log("Transactions table created successfully");
                     }
 
             });
@@ -69,10 +69,10 @@ function setupDatabase() {
                 filedata BLOB \
                 )', (err) => { 
                     if (err) { 
-                        console.log(`Files table creation ${err}`); 
+                        // console.log(`Files table creation ${err}`); 
                     }
                     else {
-                        console.log("Files table created successfully");
+                        // console.log("Files table created successfully");
                     } 
             });
         
@@ -84,10 +84,10 @@ function setupDatabase() {
                 modifiedDate DATETIME \
                 )', (err) => { 
                     if (err) { 
-                        console.log(`financialEntities table creation ${err}`); 
+                        // console.log(`financialEntities table creation ${err}`); 
                     }
                     else {
-                        console.log("financialEntities table created successfully");
+                        // console.log("financialEntities table created successfully");
                     }
             });
 
@@ -120,10 +120,10 @@ function setupDatabase() {
                 lastRecurringTransactionDate DATETIME \
                 )', (err) => { 
                     if (err) { 
-                        console.log(`recurringTransactions table creation ${err}`); 
+                        // console.log(`recurringTransactions table creation ${err}`); 
                     }
                     else {
-                        console.log("recurringTransactions table created successfully");
+                        // console.log("recurringTransactions table created successfully");
                     }
             });
     });

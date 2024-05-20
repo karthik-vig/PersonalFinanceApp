@@ -132,13 +132,13 @@ function SideBar() {
     //get the selecteded item data from the main process
     useEffect(() => {
         if (currentSelectedItemState.itemId === null) return;
-        console.log("currentSelectedItemState is not null, triggering getSelectedItem")
-        console.log(currentSelectedItemState);
+        // console.log("currentSelectedItemState is not null, triggering getSelectedItem")
+        // console.log(currentSelectedItemState);
         window.recurringTransactionOperations.getSelectedItem(currentSelectedItemState.itemId).then((selectedItem) => {
             dispatch(handleSelectItemClick(selectedItem));
         }).catch((err) => {
             if (err) {
-                console.log("selectedItem is null, triggering fail box");
+                // console.log("selectedItem is null, triggering fail box");
                 dispatch(showFailBox("Could not fetch the details of the selected item from the database"));
             }
         });
@@ -152,9 +152,9 @@ function SideBar() {
         if (sideBarItem.transactionType === "Out") fontColor = "text-red-500";
         if (sideBarItem.transactionType === "In") fontColor = "text-green-500";
         
-        console.log("setting sidebaritem: ", sideBarItem.id);
-        console.log("setting sidebaritem cat: ", sideBarItem.transactionCategory);
-        console.log("setting svg icons cat: ", svgIcons.current[sideBarItem.transactionCategory]);
+        // console.log("setting sidebaritem: ", sideBarItem.id);
+        // console.log("setting sidebaritem cat: ", sideBarItem.transactionCategory);
+        // console.log("setting svg icons cat: ", svgIcons.current[sideBarItem.transactionCategory]);
 
         let icon = "fa-times";
         let iconColor = "#FF0000";

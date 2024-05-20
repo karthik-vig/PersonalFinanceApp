@@ -96,7 +96,7 @@ function getStatsByCategoryPlotData(event, filterOptions) {
         queryStmt += ` GROUP BY transactionCategory`;
         db.all(queryStmt, parameters, (err, rows) => {
                 if (err) {
-                    console.log(`Get Stats By Category Plot Data Error ${err}`);
+                    // console.log(`Get Stats By Category Plot Data Error ${err}`);
                     reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch data for the pie plot", {value: statsByCategoryPlotData}));
                 }
                 rows.forEach((row) => { 
@@ -159,7 +159,7 @@ function getLinePlotData(event, filterOptions) {
         queryStmt += ` ORDER BY transactionDate ASC`;
         db.all(queryStmt, parameters, (err, rows) => {
                 if (err) {
-                    console.log(`Get Line Plot Data Error ${err}`);
+                    // console.log(`Get Line Plot Data Error ${err}`);
                     reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch data for the line plot", {value: expenditurePlotData}));
                 }
 
@@ -241,7 +241,7 @@ function updateFinancialEntityReferenceID(event,
         Promise.all([upateFromReferenceID, upateToReferenceID]).then(() => {
             resolve();
         }).catch((err) => {
-            console.log(`Update Financial Entity Reference ID Error ${err}`);
+            // console.log(`Update Financial Entity Reference ID Error ${err}`);
             reject(constructErrorMsgFromSQLiteError(err, "Error could not update the financial entity reference(s)", {value: null}));
         });
     });
@@ -329,7 +329,7 @@ async function deleteFileBlob(event, fileid) { // was filename
 //backed function to get all items for the side bar
 function getAllItems() {
     //communicate with backend to get all items
-    console.log("getAllItems called");
+    // console.log("getAllItems called");
 
     return new Promise((resolve, reject) => {
         db.all(`SELECT \
@@ -341,11 +341,11 @@ function getAllItems() {
                 transactionCategory\
                 FROM transactions`, (err, rows) => {
             if (err) {
-                console.log(`Get All Items Error ${err}`);
+                // console.log(`Get All Items Error ${err}`);
                 reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch all items", {value: []}));
             }
-            console.log("Get All Items Success");
-            console.log(typeof rows);
+            // console.log("Get All Items Success");
+            // console.log(typeof rows);
             if(rows && rows.length > 0) {
                 rows.forEach((row) => {
                     row.transactionDate = moment(row.transactionDate).tz(timeZone).format().substring(0, 19);
@@ -423,12 +423,12 @@ function getItems(event, searchParams, filterParamsVisibility) {
 
         db.all(queryStmt, parameters, (err, rows) => { 
             if (err) {
-                console.log(`Get Items Error ${err}`);
+                // console.log(`Get Items Error ${err}`);
                 reject(constructErrorMsgFromSQLiteError(err, "Error could not fetch items based on the search parameters", {value: null}));
                 return;
             }
-            console.log("Get Items Success");
-            console.log(rows);
+            // console.log("Get Items Success");
+            // console.log(rows);
             if(rows && rows.length > 0) {
                 rows.forEach((row) => {
                     row.transactionDate = moment(row.transactionDate).tz(timeZone).format().substring(0, 19);
@@ -507,7 +507,7 @@ function getSelectedItem(event, uuid) {
 function deleteItem(event, id) {
     if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(constructValidationError("URL Validation Failed", {value: null})); });
     //communicate with backend to delete the item
-    console.log("deleteItem called with id: ", id);
+    // console.log("deleteItem called with id: ", id);
     return new Promise((resolve, reject) => { 
             db.run(`BEGIN TRANSACTION`, (err) => {
                 if (err) {
@@ -545,8 +545,8 @@ function deleteItem(event, id) {
 function modifyItem(event, selectedItem){
     if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(constructValidationError("URL Validation Failed", {value: {modifyStatus: false, item: null}})); });
     //communicate with backend to modify the item
-    console.log("modifyItem called with id: ", selectedItem.id);
-    console.log("modifyItem called with selectedItem: ", selectedItem);
+    // console.log("modifyItem called with id: ", selectedItem.id);
+    // console.log("modifyItem called with selectedItem: ", selectedItem);
 
     const selectedItemFilesToDelete = filesToDelete;
     filesToDelete = new Set();
@@ -675,10 +675,10 @@ function createEntry() {
                     currentDateTime.substring(0, 16) + ":00Z", 
                     (err) => {
                         if (err) {
-                            console.log(`Create Entry Error ${err}`);
+                            // console.log(`Create Entry Error ${err}`);
                             reject(constructErrorMsgFromSQLiteError(err, "Error could not create new transactions entry", {value: null}));
                         }
-                        console.log("Create Entry Success");
+                        // console.log("Create Entry Success");
                         resolve({
                             id: uuid, 
                             title: "NEW ENTRY", 
@@ -702,7 +702,7 @@ async function openGetFileDialog(){
     });
     const fileDetails = [];
     filePaths.forEach((filePath) => {
-        console.log(path);
+        // console.log(path);
         const bufferData = fs.readFileSync(filePath);
         const fileName = path.basename(filePath);
         const fileid = uuidv4();
@@ -730,7 +730,7 @@ async function openSaveFileDialog(event, fileid ){
         try {
             fs.writeFileSync(saveFileResult.filePath, bufferData);
         } catch (err) {
-            console.log(err);
+            // console.log(err);
             return false;
         }
         return true;

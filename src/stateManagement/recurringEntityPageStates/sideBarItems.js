@@ -7,16 +7,16 @@ export const sideBarItemSlice = createSlice({
     reducers: {
         removeSideBarItem: (state, action) => {
             //action.payload = uuid
-            console.log("The State of Side Bar Items before removal = ");
-            console.log(state);
+            // console.log("The State of Side Bar Items before removal = ");
+            // console.log(state);
             state = state.filter(item => String(item.id) !== String(action.payload));
-            console.log("The State of Side Bar Items after removal = ");
-            console.log(state);
+            // console.log("The State of Side Bar Items after removal = ");
+            // console.log(state);
             return state;
         },
         modifySideBarItem: (state, action) => {
             //action.payload = {id: string, modifiedItem: object}
-            console.log("Attempting to modify sideBarItem with id = ", action.payload.id);
+            // console.log("Attempting to modify sideBarItem with id = ", action.payload.id);
             state = state.map(item => {
                 if (String(item.id) === String(action.payload.id)) {
                     return action.payload;
@@ -25,7 +25,7 @@ export const sideBarItemSlice = createSlice({
                     return item;
                 }
             });
-            console.log("No error in modifySideBarItem");
+            // console.log("No error in modifySideBarItem");
             return state;
         },
         addSideBarItem: (state, action) => {

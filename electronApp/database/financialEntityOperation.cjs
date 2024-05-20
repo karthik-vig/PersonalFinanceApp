@@ -24,10 +24,10 @@ function getReferenceIdOnTitle(event, title) {
         if (title === "choose" || title === "Empty Value") resolve(null);
         db.get(`SELECT id FROM financialEntities WHERE title = ?`, title, (err, row) => {
             if (err) {
-                console.log("financial entity : getReferenceIdOnTitle error = ", err);
+                // console.log("financial entity : getReferenceIdOnTitle error = ", err);
                 reject(constructErrorMsgFromSQLiteError(err));
             }
-            console.log("financial entity : getReferenceIdOnTitle row = ", row);
+            // console.log("financial entity : getReferenceIdOnTitle row = ", row);
             resolve(row? row.id : null);
         });
     });
@@ -38,10 +38,10 @@ function getIdFromTitle(event, title) {
     return new Promise((resolve, reject) => { 
         db.get(`SELECT id FROM financialEntities WHERE title = ?`, title, (err, row) => {
             if (err) {
-                console.log("financial entity : getIdFromTitle error = ", err);
+                // console.log("financial entity : getIdFromTitle error = ", err);
                 reject(constructErrorMsgFromSQLiteError(err, "Error in getting id from title in financialEntities table", {value: null}));
             }
-            console.log("financial entity : getIdFromTitle row = ", row);
+            // console.log("financial entity : getIdFromTitle row = ", row);
             resolve(row? row.id : null);
         });
     });
@@ -53,10 +53,10 @@ function getTransactionEntities() {
     return new Promise((resolve, reject) => {
         db.all("SELECT title AS name, type FROM financialEntities", (err, rows) => {
             if (err) {
-                console.log("financial entity : getAllItems error = ", err);
+                // console.log("financial entity : getAllItems error = ", err);
                 reject(constructErrorMsgFromSQLiteError(err, "Error in fetching all financial entities", {value: null}));
             }
-            console.log("financial entity : getAllItems rows = ", rows);
+            // console.log("financial entity : getAllItems rows = ", rows);
             const transactionEntities = rows && rows.length > 0 ? rows : [];
             resolve(transactionEntities); 
         });
@@ -68,15 +68,15 @@ function getTransactionEntities() {
 
 function getAllItems() {
 
-    console.log("financial entity : getAllItems called");
+    // console.log("financial entity : getAllItems called");
 
     return new Promise((resolve, reject) => {
         db.all("SELECT id, title, type FROM financialEntities", (err, rows) => {
             if (err) {
-                console.log("financial entity : getAllItems error = ", err);
+                // console.log("financial entity : getAllItems error = ", err);
                 reject(constructErrorMsgFromSQLiteError(err, "Error in fetching all financial entities", {value: []}));
             }
-            console.log("financial entity : getAllItems rows = ", rows);
+            // console.log("financial entity : getAllItems rows = ", rows);
             const sideBarItems = rows && rows.length > 0 ? rows : [];
             resolve(sideBarItems);     
         });
@@ -93,8 +93,8 @@ function getAllItems() {
 
 function getItems(event, searchParams, filterParamsVisibility) {
     if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(constructValidationError("URL Validation Failed", {value: []})); });
-    console.log("searchParams = ", searchParams);
-    console.log("filterParamsVisibility = ", filterParamsVisibility);
+    // console.log("searchParams = ", searchParams);
+    // console.log("filterParamsVisibility = ", filterParamsVisibility);
 
     return new Promise((resolve, reject) => {
         const parameters = [];
@@ -135,10 +135,10 @@ function getItems(event, searchParams, filterParamsVisibility) {
 
         db.all(queryStmt, parameters, (err, rows) => { 
             if (err) {
-                console.log("Financial Entity Operations : getItems error = ", err);
+                // console.log("Financial Entity Operations : getItems error = ", err);
                 reject(constructErrorMsgFromSQLiteError(err, "Search operation failed", {value: []}));
             }
-            console.log("Financial Entity Operations : getItems rows = ", rows);
+            // console.log("Financial Entity Operations : getItems rows = ", rows);
             resolve(rows && rows.length > 0 ? rows : []);
          });
     });
@@ -153,7 +153,7 @@ function getItems(event, searchParams, filterParamsVisibility) {
 
 function createEntry() {
 
-    console.log("Financial Entity Operations : createEntry called");
+    // console.log("Financial Entity Operations : createEntry called");
 
     return new Promise((resolve, reject) => {
         const uuid = uuidv4();
@@ -161,10 +161,10 @@ function createEntry() {
         db.run(`INSERT INTO financialEntities (id, title, type, createdDate, modifiedDate) \
                 VALUES (?, ?, ?, ?, ?)`, uuid, "New Entry", null, currentDate, currentDate, (err) => {
             if (err) {
-                console.log("Financial Entity Operations : createEntry error = ", err);
+                // console.log("Financial Entity Operations : createEntry error = ", err);
                 reject(constructErrorMsgFromSQLiteError(err, "Error in creating new entry; Entry with the same title may already exist.", {value: null}));
             }
-            console.log("Financial Entity Operations : createEntry success");
+            // console.log("Financial Entity Operations : createEntry success");
             resolve({id: uuid, title: "New Entry", type: null});
         });
     });
@@ -174,16 +174,16 @@ function createEntry() {
 function deleteItem(event, uuid) {
 
     if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(constructValidationError("URL Validation Failed", {value: null})); });
-    console.log("delete entry uuid = ", uuid);
+    // console.log("delete entry uuid = ", uuid);
 
     return new Promise((resolve, reject) => {
         const deleteFiancialEntity = new Promise((resolve, reject) => {
             db.run(`DELETE FROM financialEntities WHERE id = ?`, uuid, (err) => {
                 if (err) {
-                    console.log("Financial Entity Operations : deleteItem error = ", err);
+                    // console.log("Financial Entity Operations : deleteItem error = ", err);
                     reject(constructErrorMsgFromSQLiteError(err, "Error in deleting entry", {value: null}));
                 }
-                console.log("Financial Entity Operations : deleteItem success");
+                // console.log("Financial Entity Operations : deleteItem success");
                 resolve(true);
             });
         });
@@ -191,10 +191,10 @@ function deleteItem(event, uuid) {
         const deleteTransactionsFromReference = new Promise((resolve, reject) => {
             db.run(`UPDATE transactions SET fromReference = NULL WHERE fromReference = ?`, uuid, (err) => {
                 if (err) {
-                    console.log("Financial Entity Operations : deleteItem error = ", err);
+                    // console.log("Financial Entity Operations : deleteItem error = ", err);
                     reject(constructErrorMsgFromSQLiteError(err, "Error in deleting transaction table's fromReference", {value: null}));
                 }
-                console.log("Financial Entity Operations : deleteItem success");
+                // console.log("Financial Entity Operations : deleteItem success");
                 resolve(true);
             });
         });
@@ -202,10 +202,10 @@ function deleteItem(event, uuid) {
         const deleteTransactionsToReference = new Promise((resolve, reject) => {
             db.run(`UPDATE transactions SET toReference = NULL WHERE toReference = ?`, uuid, (err) => {
                 if (err) {
-                    console.log("Financial Entity Operations : deleteItem error = ", err);
+                    // console.log("Financial Entity Operations : deleteItem error = ", err);
                     reject(constructErrorMsgFromSQLiteError(err, "Error in deleting transaction table's toReference", {value: null}));
                 }
-                console.log("Financial Entity Operations : deleteItem success");
+                // console.log("Financial Entity Operations : deleteItem success");
                 resolve(true);
 
             });
@@ -219,7 +219,7 @@ function deleteItem(event, uuid) {
                             deleteTransactionsFromReferenceStatus,
                             deleteTransactionsToReferenceStatus
                         ]) => {
-                            console.log("Financial Entity Operations : deleteItem all promises success");
+                            // console.log("Financial Entity Operations : deleteItem all promises success");
                             if (deleteFiancialEntityStatus && 
                                 deleteTransactionsFromReferenceStatus && 
                                 deleteTransactionsToReferenceStatus) {
@@ -232,7 +232,7 @@ function deleteItem(event, uuid) {
                                     });
                                 }
                     }).catch((err) => { 
-                        console.log("Financial Entity Operations : deleteItem error = ", err[0] || err[1] || err[2]);
+                        // console.log("Financial Entity Operations : deleteItem error = ", err[0] || err[1] || err[2]);
                         reject(constructErrorMsgFromSQLiteError(err[0] || err[1] || err[2], "Error in deleting entry", {value: null}));
                     });  
     });
@@ -242,7 +242,7 @@ function deleteItem(event, uuid) {
 function modifyItem(event, selectedItem) {
 
     if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(constructValidationError("URL Validation Failed", {value: { modifyStatus: false, modifiedItem: null }})); });
-    console.log("modifyItem selectedItem = ", selectedItem);
+    // console.log("modifyItem selectedItem = ", selectedItem);
 
     return new Promise((resolve, reject) => {
         db.run(`UPDATE financialEntities \
@@ -254,10 +254,10 @@ function modifyItem(event, selectedItem) {
                 selectedItem.id,   
                 (err) => {
                     if (err) {
-                        console.log("Financial Entity Operations : modifyItem error = ", err);
+                        // console.log("Financial Entity Operations : modifyItem error = ", err);
                         reject(constructErrorMsgFromSQLiteError(err, "Error in modifying entry", {value: { modifyStatus: false, modifiedItem: null } }));
                     }
-                    console.log("Financial Entity Operations : modifyItem success");
+                    // console.log("Financial Entity Operations : modifyItem success");
                     resolve({ modifyStatus: true, item: {
                                                             id: selectedItem.id, 
                                                             title: selectedItem.title, 
@@ -273,15 +273,15 @@ function modifyItem(event, selectedItem) {
 function getSelectedItem(event, uuid) {
     
     if (!validateBrowserWindowPath(event.senderFrame.url)) return new Promise((resolve, reject) => { reject(constructValidationError("URL Validation Failed", {value: null})); });
-    console.log("getSelectedItem uuid = ", uuid);
+    // console.log("getSelectedItem uuid = ", uuid);
 
     return new Promise((resolve, reject) => {
         db.get(`SELECT * FROM financialEntities WHERE id = ?`, uuid, (err, row) => {
             if (err) {
-                console.log("Financial Entity Operations : getSelectedItem error = ", err);
+                // console.log("Financial Entity Operations : getSelectedItem error = ", err);
                 reject(constructErrorMsgFromSQLiteError(err, "Error in getting selected item", {value: null}));
             }
-            console.log("Financial Entity Operations : getSelectedItem success");
+            // console.log("Financial Entity Operations : getSelectedItem success");
             const selectedItem = row? row : null;
             if(selectedItem) {
                 selectedItem.createdDate = moment(selectedItem.createdDate).tz(timeZone).format().substring(0, 19);

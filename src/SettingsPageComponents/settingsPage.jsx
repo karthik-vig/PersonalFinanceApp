@@ -26,7 +26,7 @@ function SaveButton(){
         //contact the back-end; save the config to the config file
         //filePath and timezone are the values to be send to the back-end; to be saved to the config file
         window.initializeDatabase.updateConfigFile(filePath, timezone).then(() => {
-            console.log("Config file updated successfully");
+            // console.log("Config file updated successfully");
             window.app.fullRefresh();
         });
         dispatch(toggleConfigUpdate());

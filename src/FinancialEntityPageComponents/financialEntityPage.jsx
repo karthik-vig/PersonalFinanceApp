@@ -71,7 +71,7 @@ function FinancialEntityPage() {
     //tigger getAllItems on page load
     useEffect(() => {
         window.financialEntityOperations.getAllItems().then(items => {
-            console.log("financialEntity page : currentSelectedItem is: ", currentSelectedItemState);
+            // console.log("financialEntity page : currentSelectedItem is: ", currentSelectedItemState);
             if (currentSelectedItemState.itemId === null) dispatch(setCurrentSelectedItem(items && items.length > 0 ? { itemId: items[0].id, focusOnItem: false }: { itemId: null, focusOnItem: false }));
             dispatch(setSideBarItems(items));
         }).catch((err) => {
@@ -120,8 +120,8 @@ function FinancialEntityPage() {
         if (!triggerModifyEntryState) return;
         scrollRef.current.scrollTop = 0;
         //modify the database
-        console.log("The Modify Entry trigger selected item is: ");
-        console.log(selectedItem);
+        // console.log("The Modify Entry trigger selected item is: ");
+        // console.log(selectedItem);
         window.financialEntityOperations.modifyItem(selectedItem).then(modifiedItem => {
             dispatch(modifySideBarItem({id: selectedItem.id, modifiedItem: modifiedItem }));
             dispatch(showSuccessBox("Saved the Details to Disk"));
@@ -150,26 +150,26 @@ function FinancialEntityPage() {
             return;
         }
         //replace the entry with the selected option in the necessary transaction rows/entries
-        console.log("The Delete Entry trigger selected item is: ", deleteSettings.selectState.replaceOnDelete);
+        // console.log("The Delete Entry trigger selected item is: ", deleteSettings.selectState.replaceOnDelete);
         //get id of the selected item from financialEntities table
         window.financialEntityOperations.getReferenceIdOnTitle(deleteSettings.selectState.replaceOnDelete).then((referenceID) => { 
             //give both the current selected item id and the id to be replace with to the transactionOperations
             window.transactionOperations.updateFinancialEntityReferenceID(selectedItem.id, referenceID).then(() => {
-                console.log("The Delete Entry trigger selected item ID is: ", selectedItem.id);
+                // console.log("The Delete Entry trigger selected item ID is: ", selectedItem.id);
                 //dispatch(showSuccessBox("Updated the Financial Entity reference for all transactions"));
             }).catch((err) => {
                 if (err) dispatch(showFailBox("Could not update the Financial Entity reference for all transactions"));
             });
             //give both the selected item id and the id to be replace with to the recurringTransactionOperations
             window.recurringTransactionOperations.updateFinancialEntityReferenceID(selectedItem.id, referenceID).then(() => {
-                console.log("The Delete Entry trigger selected item ID is: ", selectedItem.id);
+                // console.log("The Delete Entry trigger selected item ID is: ", selectedItem.id);
             }).catch((err) => {
                 if (err) dispatch(showFailBox("Could not update the Financial Entity reference for the selected recurring transaction"));
             });
             //delete the entry from the database
             window.financialEntityOperations.deleteItem(selectedItem.id).then(() => {
-                console.log("The Delete Entry trigger selected item ID is: ");
-                console.log(selectedItem.id);
+                // console.log("The Delete Entry trigger selected item ID is: ");
+                // console.log(selectedItem.id);
                 dispatch(removeSideBarItem(selectedItem.id));
                 dispatch(resetSelectedItem());
                 dispatch(resetCurrentSelectedItem());

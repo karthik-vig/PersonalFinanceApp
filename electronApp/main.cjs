@@ -3,7 +3,7 @@ const {
     BrowserWindow, 
     ipcMain, 
     protocol, 
-    // Menu,
+    Menu,
  } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs');
@@ -48,11 +48,13 @@ function createWindow() {
     });
 
     win.loadURL('app://mainApplication/index.html');
-    //Menu.setApplicationMenu(null);
+    Menu.setApplicationMenu(null);
     // Open the DevTools in development mode
+    /*
     if (process.env.NODE_ENV === 'development') {
         win.webContents.openDevTools();
     }
+    */
     return win;
 }
 
@@ -108,10 +110,10 @@ app.whenReady().then(() => {
 
     //add the recurring transactions to the transaction table
     recurringTransactionOperations.enterRecurringTransactions().then( (status) => { 
-        console.log("Recurring Transactions Entered: ", status);
+        // console.log("Recurring Transactions Entered: ", status);
         if (status) win = createWindow();
     }).catch((err) => { 
-        console.log("Recurring Transactions Entry Error: ", err);
+         console.log("Recurring Transactions Entry Error: ", err);
     });
 
     
@@ -128,7 +130,7 @@ app.whenReady().then(() => {
             console.log("Refreshing the application, the page is: ", page);
             win.reload();
         }).catch((err) => { 
-            console.log("Recurring Transactions Entry Error: ", err);
+             console.log("Recurring Transactions Entry Error: ", err);
         });
     });
 
@@ -137,10 +139,10 @@ app.whenReady().then(() => {
         //do the setup process
         setupProcess();
         recurringTransactionOperations.enterRecurringTransactions().then( (status) => {
-            console.log("Recurring Transactions Entered: ", status);
+            // console.log("Recurring Transactions Entered: ", status);
             if (status) win.reload();
         }).catch((err) => {
-            console.log("Recurring Transactions Entry Error: ", err);
+             console.log("Recurring Transactions Entry Error: ", err);
         });
     });
 

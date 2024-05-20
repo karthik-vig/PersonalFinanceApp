@@ -262,7 +262,7 @@ function FromEntitySection() {
     const dispatch = useDispatch();
 
     const handlePopOut = () => { 
-        console.log("External Link Clicked");
+        // console.log("External Link Clicked");
         if (fromEntity === "" || fromEntity === null || fromEntity === undefined) { 
             dispatch(showFailBox("No Entity Selected!"));
             return;
@@ -361,7 +361,7 @@ function ToEntitySection() {
     const dispatch = useDispatch();
 
     const handlePopOut = () => { 
-        console.log("External Link Clicked");
+        // console.log("External Link Clicked");
         if (toEntity === "" || toEntity === null || toEntity === undefined) { 
             dispatch(showFailBox("No Entity Selected!"));
             return;
@@ -413,7 +413,7 @@ function RecurringEntity() {
     const dispatch = useDispatch();
 
     const handlePopOut = () => {
-        console.log("External Link Clicked");
+        // console.log("External Link Clicked");
         window.recurringTransactionOperations.getIdFromTitle(recurringEntity).then((id) => {
             dispatch(recurringTransactionSetCurrentSelectedItem({ itemId: id, focusOnItem: true }));
             dispatch(selectTab("recurringTransactionPage"));

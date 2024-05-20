@@ -258,7 +258,7 @@ function FromEntitySection() {
     const dispatch = useDispatch();
 
     const handlePopOut = () => { 
-        console.log("External Link Clicked");
+        // console.log("External Link Clicked");
         if (fromEntity === "" || fromEntity === null || fromEntity === undefined) { 
             dispatch(showFailBox("No Entity Selected!"));
             return;
@@ -357,7 +357,7 @@ function ToEntitySection() {
     const dispatch = useDispatch();
 
     const handlePopOut = () => { 
-        console.log("External Link Clicked");
+        // console.log("External Link Clicked");
         if (toEntity === "" || toEntity === null || toEntity === undefined) { 
             dispatch(showFailBox("No Entity Selected!"));
             return;
@@ -439,7 +439,7 @@ function RecurringFrequencyInput() {
 
     const recurringFrequency = useSelector((state) => state.recurringEntityPageStates.selectedItem.recurringFrequency);
     const dispatch = useDispatch();
-    //console.log(recurringFrequency)
+    //// console.log(recurringFrequency)
     
     return (
         <SectionContainer additonalClasses="w-auto sm:h-40 md:h-40 lg:h-40 pb-4 min-w-80">
@@ -500,7 +500,7 @@ function RecurringFrequencyInput() {
                         className="w-[50%] h-[100%] "
                         type="time"
                         value={recurringFrequency.time ?? "HH:MM:SS"}
-                        onChange={(event) => { console.log("time changed, time is: ", event.target.value)
+                        onChange={(event) => { // console.log("time changed, time is: ", event.target.value)
                                             dispatch(handleItemClick({fieldName: "recurringFrequency/time", fieldValue: event.target.value}))
                                             }
                                 }

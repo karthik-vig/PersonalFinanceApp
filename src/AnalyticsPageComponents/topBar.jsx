@@ -94,7 +94,7 @@ function TransactionTypeSection() {
 
     const handleSetTransactionType = (event) => {
         //dispatch set transaction type action
-        console.log(event.target.value);
+        // console.log(event.target.value);
         dispatch(setTransactionType(event.target.value));
     };
 
@@ -130,7 +130,7 @@ function TransactionCategorySection() {
     
     const handleSetTransactionCategory = (event) => {
         //dispatch set transaction category action
-        console.log(event.target.value);
+        // console.log(event.target.value);
         dispatch(setTransactionCategory(event.target.value));
     };
     
@@ -166,7 +166,7 @@ function TransactionCurrencySection() {
 
     const handleSetCurrency = (event) => {
         //dispatch set currency action
-        console.log(event.target.value);
+        // console.log(event.target.value);
         dispatch(setCurrency(event.target.value));
     };
 
@@ -200,13 +200,13 @@ function DateRangeSelectionSection() {
 
     const handleSetStartDate = (event) => {
         //dispatch set start date action
-        console.log(event.target.value);
+        // console.log(event.target.value);
         dispatch(setStartDate(event.target.value + ":00"));
     };
 
     const handleSetEndDate = (event) => {
         //dispatch set end date action
-        console.log(event.target.value);
+        // console.log(event.target.value);
         dispatch(setEndDate(event.target.value + ":00"));
     };
 
@@ -261,7 +261,7 @@ function GenerateAnalyticsButtonSection() {
 
     const handleGenerateAnalytics = () => {
         //dispatch generate analytics action
-        console.log("generate analytics");
+        // console.log("generate analytics");
         //send the analytics States state to the backend
         //get the plot data from the backend
         if ( filterMenuStates.startDate > filterMenuStates.endDate) {
@@ -300,7 +300,7 @@ function Topbar() {
         window.transactionOperations.getLinePlotData(filterMenuStates).then((expenditurePlotData) => {
             dispatch(setExpenditurePlotData(expenditurePlotData));
         }).catch((err) => {
-            console.log("Error getting the plot data: ", err);
+            // console.log("Error getting the plot data: ", err);
             // dispatch(setExpenditurePlotData(err.additionalInfo.value));
             dispatch(setFailBoxMessage("Could not fetch the data for the Line Plot"));
             dispatch(toggleFailBoxDisplay());
@@ -318,7 +318,7 @@ function Topbar() {
         window.transactionOperations.getStatsByCategoryPlotData(filterMenuStates).then((statsByCategoryPlotData) => {
             dispatch(setStatsByCategoryPlotData(statsByCategoryPlotData));
         }).catch((err) => {
-            console.log("Error getting the plot data: ", err);
+            // console.log("Error getting the plot data: ", err);
             // dispatch(setStatsByCategoryPlotData(err.additionalInfo.value));
             dispatch(setFailBoxMessage("Could not fetch the data for the Pie Plot"));
             dispatch(toggleFailBoxDisplay());
@@ -336,7 +336,7 @@ function Topbar() {
         window.commonOperations.getStatsAboutDB(filterMenuStates).then((statBoxData) => {
             dispatch(setStatBoxData(statBoxData));
         }).catch((err) => {
-            console.log("Error getting the plot data: ", err);
+            // console.log("Error getting the plot data: ", err);
             dispatch(setFailBoxMessage("Could not fetch the data for the Stat Box"));
             dispatch(toggleFailBoxDisplay());
         });

@@ -4,9 +4,9 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   root: './src/',
-  mode: 'development', // change to 'production' when ready to deploy
+  mode: 'production', // change to 'production' when ready to deploy
   build: {
-    minify: false,
+    minify: true,
     outDir: '../dist',
     emptyOutDir: true,
     rollupOptions: {
